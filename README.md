@@ -62,7 +62,7 @@ ___
   <p>➡ Vá no cmd dele(no Vscode o nome é "terminal") ou abra o cmd da sua máquina, digite e execute: </p>
   <p> 
 
-    git clone 'url do github'
+    git clone https://github.com/projects-to-client/monkeynauts
   </p>
 	<p>➡ Você precisa ter o Nodejs instalado na sua máquina.</p>
 
