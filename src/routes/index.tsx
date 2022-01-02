@@ -4,7 +4,8 @@ import { CustomRouter } from './CustomRouter';
 
 import {
   Login,
-  Register
+  Register,
+  Dashboard
 } from '../pages';
 
 export function AppRoutes() {
@@ -14,6 +15,8 @@ export function AppRoutes() {
         <CustomRouter component={Login} exact path="/" />
         <CustomRouter component={Login} path="/login" />
         <CustomRouter component={Register} path="/register" />
+
+        <CustomRouter component={Dashboard} path="/dashboard" />
       </Switch>
     </BrowserRouter>
   )
