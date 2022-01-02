@@ -1,5 +1,5 @@
 import { useBoolean } from '@/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { TabTitle } from '../TabTitle';
@@ -7,7 +7,8 @@ import { TabTitle } from '../TabTitle';
 import {
   Container,
 	Menu,
-	MenuContent
+	MenuContent,
+	TabChange
 } from './styles';
 
 export type DashboardTabProps = {
@@ -18,40 +19,56 @@ export function Tabs({ children }: DashboardTabProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const menuActive = useBoolean(false);
 
+	function handleChangeSelected(index: number) {
+		menuActive.changeToFalse();
+
+		setSelectedTab(index)
+	}
+
+	useEffect(() => {
+		window.addEventListener('resize', () => {
+			if(window.innerWidth > 1024 && menuActive.state) {
+				menuActive.changeToFalse();
+			}
+		})
+	})
+
 	return (
-		<Container>
-			{!menuActive.state ? (
-				<>
-					<TabTitle
-						menu={menuActive}
-						children={children}
-						setSelectedTab={setSelectedTab}
-						selectedTab={selectedTab}
-					/>
-							
-					{Array.isArray(children) && children[selectedTab]}
-				</>
-			) : (
-				<Menu>
-					<button 
-						onClick={menuActive.changeToFalse}
-						className="close_menu" 
-						title="Fechar menu"
-					>
-						<AiOutlineClose />
-					</button>
-					<MenuContent>
-						{Array.isArray(children) && children.map((item, index) => (
+		<Container
+		>
+			<TabTitle
+				menu={menuActive}
+				children={children}
+				setSelectedTab={setSelectedTab}
+				selectedTab={selectedTab}
+			/>
+			<Menu
+				isClosed={menuActive.state}
+			>
+				<button 
+					onClick={menuActive.changeToFalse}
+					className="close_menu" 
+					title="Fechar menu"
+				>
+					<AiOutlineClose />
+				</button>
+				<MenuContent>
+					{Array.isArray(children) && children.map((item, index) => (
+						<TabChange
+							selected={index === selectedTab}
+						>
 							<button 
-								onClick={() => setSelectedTab(index)}
+								onClick={() => handleChangeSelected(index)}
 								className="tab_title"
-							>
+								>
 								{item.props.title}
 							</button>
-						))}
-					</MenuContent>
-				</Menu>
-			)}
+						</TabChange>
+					))}
+				</MenuContent>
+			</Menu>
+
+			{!menuActive.state && Array.isArray(children) && children[selectedTab]}
 		</Container>
 	);
 }
