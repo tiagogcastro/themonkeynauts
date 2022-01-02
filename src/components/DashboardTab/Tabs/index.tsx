@@ -39,7 +39,6 @@ export function Tabs({ children }: DashboardTabProps) {
 			<TabTitle
 				menu={menuActive}
 				children={children}
-				setSelectedTab={setSelectedTab}
 				selectedTab={selectedTab}
 			/>
 			<Menu
