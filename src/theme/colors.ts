@@ -7,6 +7,7 @@ export const COLORS = {
     primary_0: '#60b2ff',
     secondary_50: '#2697FF',
     tertiary_100: '#062043',
+    quartenary_75: '#0C3A6A',
 
     gray_blue: '#51779A',
   },
