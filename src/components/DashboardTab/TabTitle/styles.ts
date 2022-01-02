@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+type ContainerProps = {
+  isShow: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   justify-content: center;
 
@@ -10,6 +14,13 @@ export const Container = styled.div`
 
   padding-top: 4.2rem;
 
+  ${props => props.isShow && css`
+    display: none;
+  `}
+
+  @media(min-width: 1024px) {
+    display: none;
+  }
 `;
 
 export const Content = styled.div`
