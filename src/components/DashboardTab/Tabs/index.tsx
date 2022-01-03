@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { TabTitle } from '../TabTitle';
+import { Tab } from '../Tab';
 
 import {
   Container,
@@ -40,6 +41,11 @@ export function Tabs({ children }: DashboardTabProps) {
 				menu={menuActive}
 				children={children}
 				selectedTab={selectedTab}
+				hasButtonToBack={
+					Array.isArray(children) && 
+					children[selectedTab].props.hasButtonToBack &&
+					children[selectedTab].props.hasButtonToBack
+				}
 			/>
 			<Menu
 				isClosed={menuActive.state}

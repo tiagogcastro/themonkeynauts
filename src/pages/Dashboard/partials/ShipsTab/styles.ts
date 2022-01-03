@@ -119,7 +119,9 @@ export const TbodyCustom = styled.div`
   }
 `;
 
-export const TbodyTrCustom = styled(Link)`
+export const TbodyTrCustom = styled.div`
+  cursor: pointer;
+  
   display: grid;
   grid-template-areas:
     "name name"

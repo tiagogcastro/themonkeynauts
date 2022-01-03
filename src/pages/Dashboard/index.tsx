@@ -2,6 +2,7 @@ import {
   Tab,
   Tabs
 } from '@/components/DashboardTab';
+import { useBoolean } from '@/hooks';
 
 import { ShipsTab } from './partials';
 
@@ -12,13 +13,15 @@ import {
 } from './styles';
 
 export function Dashboard() {
+  const shipIsShow = useBoolean(false);
+
   return (
     <Container>
       <Content>
         <MainContent>
           <Tabs>
-            <Tab title="Ships">
-              <ShipsTab />
+            <Tab title="Ships" hasButtonToBack={shipIsShow}>
+              <ShipsTab shipIsShow={shipIsShow} />
             </Tab>
             <Tab title="Monkeynauts">
               <div>Monkeynauts</div>

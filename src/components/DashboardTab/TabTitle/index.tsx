@@ -1,7 +1,9 @@
+import { AiOutlineArrowLeft } from 'react-icons/ai';
+
 import { UseBooleanTypes } from '@/hooks';
 
 import {
-  Container,
+	Container,
 	Content,
 } from './styles';
 
@@ -11,12 +13,14 @@ export type TabTitleProps = {
 	selectedTab: number;
 	children: React.ReactElement[] | React.ReactElement;
 	menu: UseBooleanTypes;
+	hasButtonToBack: UseBooleanTypes;
 };
 
 export function TabTitle({
 	selectedTab,
 	children,
-	menu
+	menu,
+	hasButtonToBack
 }: TabTitleProps) {
 	return (
 		<Container 
@@ -25,6 +29,14 @@ export function TabTitle({
 		>
 			{Array.isArray(children) && children[selectedTab] && (
 				<Content>
+					{hasButtonToBack.state && (
+						<button
+							className="back_page" 
+							onClick={hasButtonToBack.changeToFalse}
+						>
+							<AiOutlineArrowLeft />
+						</button>
+					)}
 					<h1 className="tab_title">{children[selectedTab].props.title}</h1>
 					<button 
 						onClick={menu.changeToTrue}

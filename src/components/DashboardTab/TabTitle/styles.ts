@@ -1,3 +1,4 @@
+import { COLORS } from '@/theme';
 import styled, { css } from 'styled-components';
 
 type ContainerProps = {
@@ -33,6 +34,20 @@ export const Content = styled.div`
 
     width: 100%;
   } 
+
+  .back_page {
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    padding: 1.4rem 1.4rem 0 1.4rem;
+
+    svg {
+      width: 2.2rem;
+      height: 2.2rem;
+
+      color: ${COLORS.colors.secondary_50};
+    }
+  }
 
   .open_menu {
     position: absolute;
