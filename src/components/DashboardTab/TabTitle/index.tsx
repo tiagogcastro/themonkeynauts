@@ -1,4 +1,4 @@
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+import { BsArrowLeft } from 'react-icons/bs';
 
 import { UseBooleanTypes } from '@/hooks';
 
@@ -34,7 +34,7 @@ export function TabTitle({
 							className="back_page" 
 							onClick={hasButtonToBack.changeToFalse}
 						>
-							<AiOutlineArrowLeft />
+							<BsArrowLeft />
 						</button>
 					)}
 					<h1 className="tab_title">{children[selectedTab].props.title}</h1>
