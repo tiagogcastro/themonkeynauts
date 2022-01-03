@@ -1,15 +1,11 @@
 import { useBoolean } from '@/hooks';
 import { useEffect, useState } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
 
+import { Menu } from '../Menu';
 import { TabTitle } from '../TabTitle';
-import { Tab } from '../Tab';
 
 import {
   Container,
-	Menu,
-	MenuContent,
-	TabChange
 } from './styles';
 
 export type DashboardTabProps = {
@@ -23,7 +19,7 @@ export function Tabs({ children }: DashboardTabProps) {
 	function handleChangeSelected(index: number) {
 		menuActive.changeToFalse();
 
-		setSelectedTab(index)
+		setSelectedTab(index);
 	}
 
 	useEffect(() => {
@@ -31,8 +27,8 @@ export function Tabs({ children }: DashboardTabProps) {
 			if(window.innerWidth > 1024 && menuActive.state) {
 				menuActive.changeToFalse();
 			}
-		})
-	})
+		});
+	});
 
 	return (
 		<Container
@@ -47,31 +43,12 @@ export function Tabs({ children }: DashboardTabProps) {
 					children[selectedTab].props.hasButtonToBack
 				}
 			/>
-			<Menu
-				isClosed={menuActive.state}
-			>
-				<button 
-					onClick={menuActive.changeToFalse}
-					className="close_menu" 
-					title="Fechar menu"
-				>
-					<AiOutlineClose />
-				</button>
-				<MenuContent>
-					{Array.isArray(children) && children.map((item, index) => (
-						<TabChange
-							selected={index === selectedTab}
-						>
-							<button 
-								onClick={() => handleChangeSelected(index)}
-								className="tab_title"
-								>
-								{item.props.title}
-							</button>
-						</TabChange>
-					))}
-				</MenuContent>
-			</Menu>
+			<Menu 
+				selectedTab={selectedTab}
+				menu={menuActive}
+				children={children}
+				changeSelected={handleChangeSelected}
+			/>
 
 			{!menuActive.state && Array.isArray(children) && children[selectedTab]}
 		</Container>
