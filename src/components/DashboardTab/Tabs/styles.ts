@@ -52,7 +52,8 @@ export const Menu = styled.div<MenuProps>`
   @media(min-width: 1024px) {
     display: inline-block;
     position: initial;
-    padding-top: 0;
+    padding: 0;
+    margin-top: 3.2rem;
 
     .close_menu {
       display: none;
