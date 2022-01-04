@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { COLORS } from '@/theme';
 
 import bg_items from '@/assets/images/bg_items.png';
-import bg_item_title from '@/assets/images/bg_item_title.png';
 
 export const Container = styled.div`
   .tab_title {
@@ -15,19 +13,10 @@ export const Container = styled.div`
     .tab_title {
       display: block;
       
-      width: 100%;
       margin: 6.4rem 0;
       
-      text-align: center;
-      text-transform: uppercase;
       font-size: 3.2rem;
-      line-height: 4rem;
-      letter-spacing: 0;
-
-      background: url(${bg_item_title}) no-repeat center;
-      background-size: contain;
     }
-
   }
 `;
 
@@ -162,11 +151,6 @@ export const TbodyTdCustom = styled.div`
 
     h1 {
       font-size: 1.1rem;
-      padding: 0.8rem;
-      width: 100%;
-      text-align: center;
-
-      background: url(${bg_item_title}) no-repeat center;
     }
 
     span {
@@ -243,7 +227,6 @@ export const TbodyTdCustom = styled.div`
 
       h1 {
         background: none;
-        text-align: center;
         padding: 0;
       }
 
