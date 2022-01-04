@@ -29,7 +29,7 @@ export function TabTitle({
 		>
 			{Array.isArray(children) && children[selectedTab] && (
 				<Content>
-					{hasButtonToBack.state && (
+					{hasButtonToBack && hasButtonToBack.state && (
 						<button
 							className="back_page" 
 							onClick={hasButtonToBack.changeToFalse}
