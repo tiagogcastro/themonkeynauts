@@ -1,5 +1,8 @@
-import { COLORS, FONTS } from '@/theme';
 import styled, { createGlobalStyle, css } from 'styled-components';
+
+import { COLORS, FONTS } from '@/theme';
+
+import bg_item_title from '@/assets/images/bg_item_title.png';
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -98,4 +101,19 @@ export const AppContainer = styled.div<AppContainerProps>`
     
     height: 100vh;
   `};
+`;
+
+export const Title_1 = styled.h1`
+  display: block;
+    
+  width: 100%;
+  
+  padding: 0.8rem;
+  
+  text-align: center;
+  font-size: 1.4rem;
+  letter-spacing: 0;
+
+  background: url(${bg_item_title}) no-repeat center;
+  background-size: contain;
 `;
