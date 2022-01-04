@@ -39,17 +39,7 @@ export const Container = styled.div<MenuProps>`
     }
   }
 
-  .tab_title {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 2.3rem;
-    letter-spacing: 0.035em;
-    text-align: left;
-
-    padding: 1.6rem;
-    padding-left: 2.4rem;
-  }
-
+ 
   @media(min-width: 768px) {
     .close_menu {
       position: absolute;
@@ -84,7 +74,9 @@ export const Content = styled.div`
   }
 `;
 
-export const TabChange = styled.div<TabChangeProps>`
+export const TabChange = styled.button<TabChangeProps>`
+  display: flex;
+
   @media(min-width: 1024px) {
     max-width: max-content;
     border: 3px solid #298DF1;
@@ -92,20 +84,6 @@ export const TabChange = styled.div<TabChangeProps>`
     transform: skew(21deg);
 
     background: ${COLORS.colors.quartenary_75};
-
-    .tab_title { 
-      display: inline-block; 
-
-      transform: skew(-21deg);
-
-      padding: 0.4rem 4.8rem;
-
-      text-transform: uppercase;
-      font-size: 1.6rem;
-      font-weight: 700;
-      line-height: 2.3rem;
-      letter-spacing: 0;
-    }
 
     ${props => props.selected && css`
       background: #298DF1;
@@ -119,4 +97,38 @@ export const TabChange = styled.div<TabChangeProps>`
         margin-left: 4px;
       }
     }
+`;
+
+export const TabTitle = styled.span<TabChangeProps>`
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 2.3rem;
+  letter-spacing: 0.035em;
+  text-align: left;
+
+  border-bottom: 2px solid transparent;
+
+  margin-bottom: 16px;
+
+  ${props => props.selected && css`
+    border-bottom: 2px solid ${COLORS.colors.primary_0};
+  `};
+
+  @media(min-width: 1024px) {
+    display: inline-block; 
+
+    margin-bottom: 0;
+
+    transform: skew(-21deg);
+
+    padding: 0.4rem 4.8rem;
+
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    letter-spacing: 0;
+
+    ${props => props.selected && css`
+      border-bottom: none;
+    `};
+  }
 `;

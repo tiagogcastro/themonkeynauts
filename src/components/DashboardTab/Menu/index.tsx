@@ -4,7 +4,8 @@ import { AiOutlineClose } from 'react-icons/ai'
 import {
   Container,
   Content,
-  TabChange
+  TabChange,
+  TabTitle,
 } from './styles';
 
 export type TabMenuProps = {
@@ -33,15 +34,17 @@ export function Menu({
       </button>
       <Content>
         {Array.isArray(children) && children.map((item, index) => (
-          <TabChange
+          <TabChange 
+            key={index} 
             selected={index === selectedTab}
           >
-            <button 
+            <TabTitle 
               onClick={() => changeSelected(index)}
+              selected={index === selectedTab}
               className="tab_title"
-              >
+            >
               {item.props.title}
-            </button>
+            </TabTitle>
           </TabChange>
         ))}
       </Content>
