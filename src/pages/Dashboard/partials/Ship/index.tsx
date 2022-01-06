@@ -1,5 +1,7 @@
 import { AiOutlineClose } from 'react-icons/ai';
 
+import { UseBooleanTypes } from '@/hooks';
+
 import {
   Title_1
 } from '@/styles/global';
@@ -24,7 +26,13 @@ import {
   CrewToSelect,
 } from './styles';
 
-export function Ship() {
+export type ShipProps = {
+  shipIsShow: UseBooleanTypes;
+}
+
+export function Ship({
+  shipIsShow
+}: ShipProps) {
   return (
     <Container>
       <Content>
@@ -33,6 +41,7 @@ export function Ship() {
           <PrincipalDetails>
             <img className="ship_image" src={fighter_2} alt="" />
             <ShipInformation>
+              <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
                 <span>Ship ID</span>
                 <strong>625...dwc</strong>
@@ -75,7 +84,7 @@ export function Ship() {
             </ShipInformation>
           </PrincipalDetails>
           <CrewContainer>
-            <InfoTitle_1>Crew</InfoTitle_1>
+            <InfoTitle_1 className="crew_title">Crew</InfoTitle_1>
 
             <CrewContent>
               <CrewSelected>
@@ -96,6 +105,12 @@ export function Ship() {
             </CrewContent>
           </CrewContainer>
         </Details>
+        <button 
+          onClick={shipIsShow.changeToFalse}
+          className="back_page"
+        >
+          Back
+        </button>
       </Content>
     </Container>
   );
