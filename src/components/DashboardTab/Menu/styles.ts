@@ -70,7 +70,12 @@ export const Content = styled.div`
 
   @media(min-width: 1024px) {
     flex-direction: row;
-    margin-top: 1.6rem;
+    margin-top: 0;
+  }
+
+  @media(min-width: 1400px) {
+    max-width: 80%;
+    margin: 0 auto;
   }
 `;
 
@@ -79,18 +84,12 @@ export const TabChange = styled.button<TabChangeProps>`
 
   @media(min-width: 1024px) {
     max-width: max-content;
-    border: 3px solid #298DF1;
+    border: 1px solid #1F8EFF;
 
-    transform: skew(21deg);
-
-    background: ${COLORS.colors.quartenary_75};
+    background: linear-gradient(180deg, #071D46 0%, #144B97 100%);
 
     ${props => props.selected && css`
-      background: #298DF1;
-
-      &:hover {
-        background: #298df1;
-      }
+      background: linear-gradient(180deg, #0267C9 0%, #023886 100%);
     `};
 
       &:not(:first-child) {
@@ -119,9 +118,7 @@ export const TabTitle = styled.span<TabChangeProps>`
 
     margin-bottom: 0;
 
-    transform: skew(-21deg);
-
-    padding: 0.4rem 4.8rem;
+    padding: 1rem 4.8rem;
 
     text-transform: uppercase;
     font-size: 1.6rem;
