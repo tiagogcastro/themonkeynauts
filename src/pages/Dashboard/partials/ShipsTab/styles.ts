@@ -5,35 +5,21 @@ import { COLORS } from '@/theme';
 import bg_items from '@/assets/images/bg_items.png';
 
 export const Container = styled.div`
-  .tab_title {
-    display: none;
-  }
+  margin-top: 32px;
+`;
 
-  @media(min-width: 1024px) {
-    .tab_title {
-      display: block;
-      
-      margin: 6.4rem 0;
-      
-      font-size: 3.2rem;
-    }
-  }
+export const ListShipsContainer = styled.div`
+  max-width: 80%;
+  margin: 0 auto;
 `;
 
 export const Content = styled.section`
   overflow: auto;
-  max-height: 540px;
+  overflow-x: hidden;
+  max-height: 40rem;
 
-  ::-webkit-scrollbar {
-    width: 2px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #555;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #298df1;
+  @media(min-width: 1024px) {
+    max-height: 70rem;
   }
 `;
 
