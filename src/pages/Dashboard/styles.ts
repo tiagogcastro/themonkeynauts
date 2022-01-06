@@ -23,11 +23,9 @@ export const Content = styled.div`
   max-width: 32rem;
   width: 100%;
 
-  max-height: 100%;
-  height: 100%;
+  margin: 0 auto 24px;
 
-  padding: 0 3.2rem 32px;
-  margin: 0 auto;
+  padding: 0 3.2rem 128px;
 
   background: url(${dashboard_bg_1}) no-repeat top;
 
@@ -40,7 +38,7 @@ export const Content = styled.div`
     max-width: 102.4rem;
     max-height: 90rem;
 
-    padding: 3.2rem;
+    padding-top: 32px;
     
     background: url(${dashboard_bg_3}) no-repeat top;
   }

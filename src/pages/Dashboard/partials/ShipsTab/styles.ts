@@ -14,12 +14,14 @@ export const ListShipsContainer = styled.div`
 `;
 
 export const Content = styled.section`
-  overflow: auto;
-  overflow-x: hidden;
-  max-height: 40rem;
+  padding-bottom: 32px;
 
   @media(min-width: 1024px) {
     max-height: 70rem;
+    padding-bottom: 0;
+
+    overflow: auto;
+    overflow-x: hidden;
   }
 `;
 
@@ -81,9 +83,9 @@ export const TbodyCustom = styled.div`
   max-height: 42rem;
   overflow: auto;
 
-  padding-bottom: 1.6rem;
+  padding: 0 8px 16px;
 
-  @media(min-width: 768px) {
+  @media(min-width: 768px) {  
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.6rem;
@@ -91,6 +93,7 @@ export const TbodyCustom = styled.div`
 
   @media(min-width: 1024px) {
     display: table-row-group;
+    padding: 0 0 16px;
   }
 `;
 
