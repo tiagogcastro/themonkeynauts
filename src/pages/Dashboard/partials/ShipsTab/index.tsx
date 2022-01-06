@@ -1,5 +1,6 @@
 import { 
   Container,
+  ListShipsContainer,
   Content, 
   TableCustom, 
   TheadCustom, 
@@ -27,9 +28,7 @@ export function ShipsTab({
   return (
     <Container>
       {!shipIsShow.state ? (
-        <>
-          <Title_1 className="tab_title">My Ships</Title_1>
-
+        <ListShipsContainer>
           <Content>
             <TableCustom className="table_custom">
               <TheadCustom>
@@ -86,12 +85,507 @@ export function ShipsTab({
                     </div>
                   </TbodyTdCustom>
                 </TbodyTrCustom>
+                <TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom>
+                <TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom>
+                <TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom><TbodyTrCustom onClick={shipIsShow.changeToTrue}>
+                  <TbodyTdCustom className="avatar">
+                    <div className="info">
+                      <img src={fighter} />
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="name">
+                    <div className="info">
+                      <Title_1>Valkyrie</Title_1>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="id">
+                    <div className="info">
+                      <span>Ship id</span>
+                      <strong>6423...4</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="role">
+                    <div className="info">
+                      <span>Role</span>
+                      <strong>fighter</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="rank">
+                    <div className="info">
+                      <span>Rank</span>
+                      <strong>5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="crew">
+                    <div className="info">
+                      <span>Crew</span>
+                      <strong>2/5</strong>
+                    </div>
+                  </TbodyTdCustom>
+                  <TbodyTdCustom className="fuel">
+                    <div className="info">
+                      <span>Fuel</span>
+                      <strong>400/400</strong>
+                    </div>
+                  </TbodyTdCustom>
+                </TbodyTrCustom>
               </TbodyCustom>
             </TableCustom>
           </Content>
-        </>
+        </ListShipsContainer>
       ): (
-        <Ship />
+        <Ship shipIsShow={shipIsShow} />
       )}
      
     </Container>
