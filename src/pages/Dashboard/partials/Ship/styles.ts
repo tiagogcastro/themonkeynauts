@@ -4,13 +4,46 @@ import { COLORS } from '@/theme';
 
 export const Container = styled.div`
   padding: 1.6rem;
-  max-height: 44rem;
+  max-height: 40rem;
   overflow: auto;
+
+  @media(min-width: 1024px) {
+    max-height: 100%;
+  }
 `;
 
 export const Content = styled.div`
+  .back_page {
+    display: none;
+  }
+
   .ship_name {
     margin-bottom: 16px;
+  }
+
+  @media(min-width: 1024px) {
+    .ship_name {
+      margin: 32px 0 40px;
+
+      font-size: 3.2rem;
+      line-height: 40px;
+    }
+
+    .back_page {
+      display: block;
+
+      margin: 0 auto;
+      padding: 8px 14px;
+
+      background: #072347;
+      border: 1px solid #2A72B3;
+      color: ${COLORS.fonts.primary};
+
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 23px;
+      text-align: center;
+    }
   }
 `;
 
@@ -20,12 +53,52 @@ export const Details = styled.main`
 
   .ship_image {
     margin: 8px auto 0;
+    
+    max-width: 170px;
+    max-height: 100px;
+    width: 100%;
+
+    object-fit: contain;
+  }
+
+  @media(min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+
+    .ship_image {
+      margin-top: 64px;
+    }
+  }
+  
+  @media(min-width: 1024px) {
+    .ship_image {
+      max-width: 300px;
+      max-height: 260px;
+    }
+  }
+
+  @media(min-width: 1400px) {
+    max-width: 90%;
+    margin: 0 auto;
+
+    .ship_image {
+      max-width: 430px;
+    }
   }
 `;
 
 export const PrincipalDetails = styled.section`
   display: flex;
   flex-direction: column;
+
+  @media(min-width: 768px) {
+    flex-direction: row-reverse;
+    gap: 24px;
+  }
+
+  @media(min-width: 1024px) {
+    width: 100%;
+  }
 `;
 
 export const ShipInformation = styled.aside`
@@ -35,6 +108,18 @@ export const ShipInformation = styled.aside`
     gap: 1.6rem;
     
     margin-bottom: 24px;
+  }
+
+  .details_title {
+    display: none;
+  }
+
+  @media(min-width: 1024px) {
+    
+    .details_title {
+      display: block;
+      margin-bottom: 50px;
+    }
   }
 `;
 
@@ -58,6 +143,27 @@ export const UniqueInfo = styled.div`
     color: ${COLORS.fonts.primary};
     margin-top: 0.4rem;
   }
+
+  @media(min-width: 1024px) {
+    span {
+      font-size: 1.2rem;
+    }
+
+    strong {
+      font-size: 1.8rem;
+      margin-top: 0.8rem;
+    }
+  }
+
+  @media(min-width: 1400px) {
+    span {
+      font-size: 1.4rem;
+    }
+
+    strong {
+      font-size: 2.4rem;
+    }
+  }
 `;
 
 export const PveBonusInfo = styled.div`
@@ -75,6 +181,17 @@ export const PveBonusInfo = styled.div`
     font-size: 1.1rem;
     line-height: 1.6rem;
     letter-spacing: 0.035em;
+  }
+
+  @media(min-width: 1024px) {
+    margin-top: 42px;
+
+    .pve_detail {
+      font-size: 1.8rem;
+      line-height: 23px;
+      
+      margin-top: 24px;
+    }
   }
 `;
 
@@ -122,6 +239,11 @@ export const InfoTitle_1 = styled.h1`
   &:after {
     bottom: 0;
   }
+
+  @media(min-width: 1400px) {
+    font-size: 2.4rem;
+    line-height: 30px;
+  }
 `;
 
 export const CrewContainer = styled.section`
@@ -129,49 +251,22 @@ export const CrewContainer = styled.section`
   align-items: center;
   flex-direction: column;
 
+  width: 100%;
+
   .crew_title {
-    font-size: 1.4rem;
-    color: ${COLORS.colors.primary_0};
-    text-transform: uppercase;
-    line-height: 1.8rem;
-    letter-spacing: 0.035em;
-    text-align: center;
-    
-    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  @media(min-width: 768px) {
+    margin: 0 0 0 auto;
+    max-width: 220px;
+  }
 
-    padding: 4px;
+  @media(min-width: 1400px) {
+    max-width: 300px;
 
-    background: 
-    linear-gradient(90deg, 
-      rgba(0, 146, 249, 0) 5.52%, 
-      #041937 50.86%, 
-      rgba(0, 146, 249, 0) 91.71%
-    );
-
-    position: relative;
-
-    &:before, &:after {
-      content: '';
-      position: absolute;
-      left: 0;
-
-      width: 100%;
-      height: 2px;
-
-      background: 
-      linear-gradient(90deg, 
-        rgba(0, 146, 249, 0) 5.52%, 
-        #0092F9 50.86%, 
-        rgba(0, 146, 249, 0) 91.71%
-      );
-    }
-
-    &:before {
-      top: 0;
-    }
-
-    &:after {
-      bottom: 0;
+    .crew_title {
+      margin-bottom: 50px;
     }
   }
 `;
