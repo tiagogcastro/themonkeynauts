@@ -29,8 +29,8 @@ export function Dashboard() {
             <Tab title="Equipament">
               <div>Equipament</div>
             </Tab>
-            <Tab title="Resources">
-              <div>Resources</div>
+            <Tab title="Account">
+              <div>Account</div>
             </Tab>
           </Tabs>
         </MainContent>
