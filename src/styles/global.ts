@@ -87,6 +87,18 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 1.4rem;
     }
   }
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #555;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #298df1;
+  }
 `; 
 
 export type AppContainerProps = {
@@ -94,6 +106,8 @@ export type AppContainerProps = {
 }
 
 export const AppContainer = styled.div<AppContainerProps>`
+  height: 100%;
+
   ${props => props.isLoading && css`
     display: flex;
     align-items: center;
