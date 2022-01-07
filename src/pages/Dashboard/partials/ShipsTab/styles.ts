@@ -9,8 +9,11 @@ export const Container = styled.div`
 `;
 
 export const ListShipsContainer = styled.div`
-  max-width: 80%;
   margin: 0 auto;
+
+  @media(min-width: 1400px) {
+    max-width: 80%;
+  }
 `;
 
 export const Content = styled.section`
