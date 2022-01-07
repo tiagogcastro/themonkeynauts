@@ -4,7 +4,10 @@ import {
 } from '@/components/DashboardTab';
 import { useBoolean } from '@/hooks';
 
-import { ShipsTab } from './partials';
+import { 
+  ShipsTab,
+  MonkeynautsTab
+} from './partials';
 
 import {
   Container,
@@ -14,6 +17,7 @@ import {
 
 export function Dashboard() {
   const shipIsShow = useBoolean(false);
+  const monekeynautIsShow = useBoolean(false);
 
   return (
     <Container>
@@ -23,8 +27,8 @@ export function Dashboard() {
             <Tab title="Ships" hasButtonToBack={shipIsShow}>
               <ShipsTab shipIsShow={shipIsShow} />
             </Tab>
-            <Tab title="Monkeynauts">
-              <div>Monkeynauts</div>
+            <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
+              <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
             </Tab>
             <Tab title="Equipament">
               <div>Equipament</div>
