@@ -23,6 +23,8 @@ export const Content = styled.div`
   max-width: 32rem;
   width: 100%;
 
+  height: 100%;
+
   margin: 0 auto 24px;
 
   padding: 0 3.2rem 128px;
