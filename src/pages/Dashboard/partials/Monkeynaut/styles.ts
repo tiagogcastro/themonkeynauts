@@ -32,7 +32,7 @@ export const Content = styled.div`
     .back_page {
       display: block;
 
-      margin: 0 auto;
+      margin: 32px auto 0;
       padding: 8px 14px;
 
       background: #072347;
