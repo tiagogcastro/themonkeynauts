@@ -7,7 +7,8 @@ import { useBoolean } from '@/hooks';
 import { 
   ShipsTab,
   MonkeynautsTab,
-  EquipamentsTab
+  EquipamentsTab,
+  AccountTab
 } from './partials';
 
 import {
@@ -20,6 +21,7 @@ export function Dashboard() {
   const shipIsShow = useBoolean(false);
   const monekeynautIsShow = useBoolean(false);
   const equipamentIsShow = useBoolean(false);
+  const accountIsShow = useBoolean(false);
 
   return (
     <Container>
@@ -32,11 +34,11 @@ export function Dashboard() {
             <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
               <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
             </Tab>
-            <Tab title="Equipament" hasButtonToBack={equipamentIsShow}>
+            <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
               <EquipamentsTab />
             </Tab>
-            <Tab title="Account">
-              <div>Account</div>
+            <Tab title="Account" hasButtonToBack={accountIsShow}>
+              <AccountTab />
             </Tab>
           </Tabs>
         </MainContent>
