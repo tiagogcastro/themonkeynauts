@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
       
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -22,10 +22,14 @@ import {
   FormContainer
 } from './styles';
 
+const schema = Yup.object().shape({
+  email: Yup.string().required('This field is required').email('Enter a valid email address'),
+  password: Yup.string().required('This field is required'),
+});
+
 export function Login() {
   const { signIn } = useAuth();
   const formRef = useRef<FormHandles>(null);
-  const history = useHistory();
 
   const loadingSignIn = useBoolean(false);
 
@@ -34,31 +38,21 @@ export function Login() {
 
     try {
       formRef.current?.setErrors({});
-
-      const schema = Yup.object().shape({
-        email: Yup.string().required('This field is required').email('Enter a valid email address'),
-        password: Yup.string().required('This field is required'),
-      });
   
       await schema.validate(data, {
         abortEarly: false
       });
 
-      await signIn(data);
-
       loadingSignIn.changeToFalse();
 
-      history.push('/dashboard');
-
+      await signIn(data);
     } catch(err) {
       loadingSignIn.changeToFalse();
 
       if(err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
         
-        formRef.current?.setErrors(errors);
-
-        return;
+        return formRef.current?.setErrors(errors);
       }
 
       formRef.current?.setErrors({

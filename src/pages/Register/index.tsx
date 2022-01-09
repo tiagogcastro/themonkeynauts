@@ -49,8 +49,6 @@ export function Register() {
 
       loadingRegister.changeToFalse();
 
-      history.push('/dashboard');
-
     } catch(err) {
       loadingRegister.changeToFalse();
 
