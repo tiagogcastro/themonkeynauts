@@ -5,6 +5,10 @@ export type User = {
   roles: string[];
 }
 
+export type GetUser = {
+  user: User;
+}
+
 export type AppRegisterResponse = {
   player: User;
   token: string;
