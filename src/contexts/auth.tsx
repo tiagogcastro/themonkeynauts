@@ -1,18 +1,21 @@
-import { createContext, useState } from 'react';
+import { useBoolean } from '@/hooks';
+import { createContext, useEffect, useState } from 'react';
 
 import {
   UserType,
   api,
-  monkeynautsApiToken
+  monkeynautsApiToken,
+  baseApi
 } from '../services/api';
 
 export type AuthContextData = {
   signIn: (credentials: UserType.AppLoginParams) => Promise<UserType.AppLoginResponse | undefined>;
   register: (credentials: UserType.AppRegisterParams) => Promise<UserType.AppRegisterResponse | undefined>;
 
-  user: UserType.User | null;
+  user: UserType.GetUser | null;
   token: string | null;
   tokenIsValid: boolean;
+  loading: boolean;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -22,9 +25,43 @@ export type AuthProviderProps = {
 }
 
 export function AuthProvider({children}: AuthProviderProps) {
-  const [user, setUser] = useState<UserType.User | null>(null);
-  const [token, setToken] = useState<string | null>('');
-  const [tokenIsValid, setTokenIsValid] = useState(true);
+  const [user, setUser] = useState<UserType.GetUser | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem(monkeynautsApiToken));
+
+  const tokenIsValid = useBoolean(true);
+  const loading = useBoolean(true);
+
+  useEffect(() => {
+    if(!token) {
+      tokenIsValid.changeToFalse();
+      loading.changeToFalse();
+
+      return;
+    }
+
+    baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    async function getUser() {
+      try {
+        const response = await api.user.geral.getUser();
+
+        setUser(response.data);
+
+        loading.changeToFalse();
+        
+        tokenIsValid.changeToTrue();
+      } catch(err) {
+        tokenIsValid.changeToFalse();
+        loading.changeToFalse();
+
+        setToken(null);
+
+        localStorage.removeItem(monkeynautsApiToken);
+      }
+    }
+
+    getUser();
+  }, []);
 
   async function signIn(credentials: UserType.AppLoginParams): Promise<UserType.AppLoginResponse | undefined> {
     const response = await api.user.geral.authenticate.app_login(credentials);
@@ -32,7 +69,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     const { token } = response.data;
 
     localStorage.setItem(monkeynautsApiToken, token);
-    setTokenIsValid(true);
+    tokenIsValid.changeToTrue();
     setToken(token);
 
     return response.data || undefined;
@@ -44,8 +81,11 @@ export function AuthProvider({children}: AuthProviderProps) {
     const { player, token } = response.data;
 
     localStorage.setItem(monkeynautsApiToken, token);
-    setUser(player);
-    setTokenIsValid(true);
+    setUser({
+      user: player
+    });
+
+    tokenIsValid.changeToTrue();
     setToken(token);
 
     return response.data || undefined;
@@ -57,8 +97,9 @@ export function AuthProvider({children}: AuthProviderProps) {
         signIn, 
         register,
         token,
-        tokenIsValid,
-        user
+        tokenIsValid: tokenIsValid.state,
+        loading: loading.state,
+        user,
       }}
     >
       {children}

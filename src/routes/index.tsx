@@ -1,23 +1,26 @@
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { Loading } from '@/components';
+import { useAuth } from '@/hooks';
 
-import { CustomRouter } from './CustomRouter';
+import { AppContainer } from '@/styles/global';
 
-import {
-  Login,
-  Register,
-  Dashboard
-} from '../pages';
+import { PrivateRouters } from './PrivateRouters';
+import { PublicRouters } from './PublicRouters';
 
 export function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <CustomRouter component={Login} exact path="/" />
-        <CustomRouter component={Login} path="/login" />
-        <CustomRouter component={Register} path="/register" />
+  const { loading, tokenIsValid } = useAuth();
 
-        <CustomRouter component={Dashboard} path="/dashboard" />
-      </Switch>
-    </BrowserRouter>
-  )
+  return (
+    <AppContainer isLoading={loading}>
+      {loading ? (
+        <Loading size={7.2} />
+      ) : (
+        <>
+          {tokenIsValid 
+            ? <PrivateRouters /> 
+            : <PublicRouters />
+          }
+        </>
+      )}
+    </AppContainer>
+  );
 }
