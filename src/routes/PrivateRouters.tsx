@@ -10,6 +10,8 @@ export function PrivateRouters() {
 
         <Redirect from='/login' to='/dashboard' />
         <Redirect exact from='/' to='/dashboard' />
+        
+        <Redirect from='/register' to='/dashboard' />
       </Switch>
     </BrowserRouter>
   );
