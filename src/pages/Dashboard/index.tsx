@@ -2,6 +2,7 @@ import {
   Tab,
   Tabs
 } from '@/components/DashboardTab';
+import { DashboardTabsProvider } from '@/contexts/DashboardTabs';
 import { useBoolean } from '@/hooks';
 
 import { 
@@ -27,20 +28,22 @@ export function Dashboard() {
     <Container>
       <Content>
         <MainContent>
-          <Tabs>
-            <Tab title="Ships" hasButtonToBack={shipIsShow}>
-              <ShipsTab shipIsShow={shipIsShow} />
-            </Tab>
-            <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
-              <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
-            </Tab>
-            <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
-              <EquipamentsTab />
-            </Tab>
-            <Tab title="Account" hasButtonToBack={accountIsShow}>
-              <AccountTab />
-            </Tab>
-          </Tabs>
+          <DashboardTabsProvider>
+            <Tabs>
+              <Tab title="Ships" hasButtonToBack={shipIsShow}>
+                <ShipsTab shipIsShow={shipIsShow} />
+              </Tab>
+              <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
+                <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
+              </Tab>
+              <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
+                <EquipamentsTab />
+              </Tab>
+              <Tab title="Account" hasButtonToBack={accountIsShow}>
+                <AccountTab />
+              </Tab>
+            </Tabs>
+          </DashboardTabsProvider>
         </MainContent>
       </Content>
     </Container>
