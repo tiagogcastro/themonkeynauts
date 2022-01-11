@@ -31,36 +31,36 @@ export function AuthProvider({children}: AuthProviderProps) {
   const tokenIsValid = useBoolean(true);
   const loading = useBoolean(true);
 
+  function signOut() {
+    tokenIsValid.changeToFalse();
+    loading.changeToFalse();
+    setToken(null);
+    localStorage.removeItem(monkeynautsApiToken);
+  }
+
+  async function getUser() {
+    try {
+      const response = await api.user.geral.getUser();
+
+      setUser(response.data);
+
+      loading.changeToFalse();
+      
+      tokenIsValid.changeToTrue();
+    } catch(err) {
+      return signOut();
+    }
+  }
+
   useEffect(() => {
     if(!token) {
-      tokenIsValid.changeToFalse();
-      loading.changeToFalse();
-
-      return;
+      return signOut();
     }
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    async function getUser() {
-      try {
-        const response = await api.user.geral.getUser();
-
-        setUser(response.data);
-
-        loading.changeToFalse();
-        
-        tokenIsValid.changeToTrue();
-      } catch(err) {
-        tokenIsValid.changeToFalse();
-        loading.changeToFalse();
-
-        setToken(null);
-
-        localStorage.removeItem(monkeynautsApiToken);
-      }
-    }
-
     getUser();
+   
   }, []);
 
   async function signIn(credentials: UserType.AppLoginParams): Promise<UserType.AppLoginResponse | undefined> {
@@ -68,9 +68,13 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     const { token } = response.data;
 
+    baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     localStorage.setItem(monkeynautsApiToken, token);
     tokenIsValid.changeToTrue();
     setToken(token);
+
+    getUser();
 
     return response.data || undefined;
   }
@@ -81,12 +85,14 @@ export function AuthProvider({children}: AuthProviderProps) {
     const { player, token } = response.data;
 
     localStorage.setItem(monkeynautsApiToken, token);
-    setUser({
-      user: player
-    });
+    
+    baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     tokenIsValid.changeToTrue();
     setToken(token);
+    setUser({
+      user: player
+    });
 
     return response.data || undefined;
   }
