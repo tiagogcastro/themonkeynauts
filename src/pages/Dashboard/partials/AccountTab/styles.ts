@@ -108,6 +108,7 @@ export const Info = styled.div`
     .info_separator {
       display: flex;
       justify-content: flex-start;
+      align-items: flex-start;
       gap: 72px;
     }
 
@@ -148,6 +149,14 @@ export const UniqueInfo = styled.div`
     letter-spacing: 0.035em;
     color: ${COLORS.fonts.primary};
     margin-top: 0.4rem;
+  }
+
+  .info_id {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    line-height: 18px;
   }
 
   @media(min-width: 1024px) {

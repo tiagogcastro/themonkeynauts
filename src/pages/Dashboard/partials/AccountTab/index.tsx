@@ -22,8 +22,11 @@ import {
   Spc,
 } from './styles';
 import { Button } from '@/components';
+import { useAuth } from '@/hooks';
 
 export function AccountTab() {
+  const { user } = useAuth();
+  
   return (
     <Container>
       <Content>
@@ -38,17 +41,17 @@ export function AccountTab() {
               </UniqueInfo>
               <UniqueInfo>
                 <span>Your ID</span>
-                <strong>625...dwc</strong>
+                <strong title={user?.user.id} className="info_id">{user?.user.id}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>E-mail</span>
-                <strong>test@gmail.com</strong>
+                <strong>{user?.user.email}</strong>
               </UniqueInfo>
             </div>
             <div className="info_separator">
               <UniqueInfo>
                 <span>Nickname</span>
-                <strong>Text</strong>
+                <strong>{user?.user.nickname}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>Wallet</span>
