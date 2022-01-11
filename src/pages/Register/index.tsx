@@ -44,11 +44,10 @@ export function Register() {
       await schema.validate(data, {
         abortEarly: false
       });
-
-      await register(data);
-
+      
       loadingRegister.changeToFalse();
 
+      await register(data);
     } catch(err) {
       loadingRegister.changeToFalse();
 
