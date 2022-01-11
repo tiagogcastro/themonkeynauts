@@ -1,15 +1,25 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { COLORS } from '@/theme';
 
 import bg_items from '@/assets/images/bg_items.png';
 
+export type ListShipsPropsContainer = {
+  loadingShips: boolean;
+}
+
 export const Container = styled.div`
   margin-top: 32px;
 `;
 
-export const ListShipsContainer = styled.div`
+export const ListShipsContainer = styled.div<ListShipsPropsContainer>`
   margin: 0 auto;
+
+  ${props => props.loadingShips && css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `}
 
   @media(min-width: 1400px) {
     max-width: 80%;
@@ -170,6 +180,12 @@ export const TbodyTdCustom = styled.div`
   &.id {
     grid-area: id;
     margin: 6px 0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    line-height: 18px;
   }
 
   &.role {

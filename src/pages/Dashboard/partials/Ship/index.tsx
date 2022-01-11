@@ -1,6 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai';
-
-import { UseBooleanTypes } from '@/hooks';
+import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
 import {
   Title_1
@@ -31,12 +30,14 @@ export type ShipProps = {
 }
 
 export function Ship({
-  shipIsShow
+  shipIsShow,
 }: ShipProps) {
+  const { ship } = useDashboardTabs();
+
   return (
     <Container>
       <Content>
-        <Title_1 className="ship_name">Valkyrie</Title_1>
+        <Title_1 className="ship_name">{ship.name}</Title_1>
         <Details>
           <PrincipalDetails>
             <img className="ship_image" src={fighter_2} alt="" />
@@ -44,32 +45,32 @@ export function Ship({
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
                 <span>Ship ID</span>
-                <strong>625...dwc</strong>
+                <strong title={ship.id} className="ship_id">{ship.id}</strong>
               </UniqueInfo>
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>You</strong>
+                <strong>Text</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>Fighter</strong>
+                    <strong>{ship.class}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>2/4</strong>
+                    <strong>Text</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>5</strong>
+                    <strong>{ship.rank}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Fuel</span>
-                    <strong>400/400</strong>
+                    <strong>{ship.finalAttributes.fuel}</strong>
                   </UniqueInfo>
                 </div>
               </div>
