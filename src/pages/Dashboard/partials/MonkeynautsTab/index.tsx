@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { 
   Container,
   ListMonkeynautsContainer,
@@ -13,9 +15,10 @@ import {
 
 import fighter from '@/assets/fighter.png';
 
-import { UseBooleanTypes } from '@/hooks';
+import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 import { Monkeynaut } from '../Monkeynaut';
 import { Title_1 } from '@/styles/global';
+import { api, MonkeynautType } from '@/services/api';
 
 export type MonkeynautsTabProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -24,6 +27,28 @@ export type MonkeynautsTabProps = {
 export function MonkeynautsTab({
   monkeynautIsShow
 }: MonkeynautsTabProps) {
+  const { setMonkeynaut } = useDashboardTabs();
+  const [monkeynauts, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
+
+  function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
+    setMonkeynaut(monkeynaut);
+
+    monkeynautIsShow.changeToTrue();
+  }
+
+  useEffect(() => {
+    async function getMonkeynauts() {
+      try {
+        const response = await api.monkeynauts.geral.getMonkeynauts();
+
+        setMonkeynauts(response.data);
+      } catch(err) {
+        
+      }
+    }
+
+    getMonkeynauts();
+  }, []);
   
   return (
     <Container>
@@ -43,54 +68,58 @@ export function MonkeynautsTab({
               </TheadCustom>
                 
               <TbodyCustom>
-                <TbodyTrCustom onClick={monkeynautIsShow.changeToTrue}>
-                  <TbodyTdCustom className="avatar">
-                    <div className="info">
-                      <img src={fighter} />
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="name">
-                    <div className="info">
-                      <Title_1>Monkeynaut</Title_1>
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="id">
-                    <div className="info">
-                      <span>Monkeynaut id</span>
-                      <strong>6423...4</strong>
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="role">
-                    <div className="info">
-                      <span>Role</span>
-                      <strong>Text</strong>
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="rank">
-                    <div className="info">
-                      <span>Rank</span>
-                      <strong>5</strong>
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="energy">
-                    <div className="info">
-                      <span>Energy</span>
-                      <strong>Text</strong>
-                    </div>
-                  </TbodyTdCustom>
-                  <TbodyTdCustom className="breed">
-                    <div className="info">
-                      <span>Breed Count</span>
-                      <strong>Text</strong>
-                    </div>
-                  </TbodyTdCustom>
-                </TbodyTrCustom>
+                {monkeynauts.monkeynauts && monkeynauts.monkeynauts.map((monkeynaut) => (
+                  <TbodyTrCustom onClick={() => selectMonkeynaut(monkeynaut)} key={monkeynaut.id}>
+                    <TbodyTdCustom className="avatar">
+                      <div className="info">
+                        <img src={fighter} />
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="name">
+                      <div className="info">
+                        <Title_1>{monkeynaut.firstName}</Title_1>
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="id">
+                      <div className="info">
+                        <span>Monkeynaut id</span>
+                        <strong>{monkeynaut.id}</strong>
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="role">
+                      <div className="info">
+                        <span>Role</span>
+                        <strong>{monkeynaut.class}</strong>
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="rank">
+                      <div className="info">
+                        <span>Rank</span>
+                        <strong>{monkeynaut.rank}</strong>
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="energy">
+                      <div className="info">
+                        <span>Energy</span>
+                        <strong>{monkeynaut.finalAttributes.energy}</strong>
+                      </div>
+                    </TbodyTdCustom>
+                    <TbodyTdCustom className="breed">
+                      <div className="info">
+                        <span>Breed Count</span>
+                        <strong>{monkeynaut.breedCount}</strong>
+                      </div>
+                    </TbodyTdCustom>
+                  </TbodyTrCustom>
+                ))}
               </TbodyCustom>
             </TableCustom>
           </Content>
         </ListMonkeynautsContainer>
       ): (
-        <Monkeynaut monkeynautIsShow={monkeynautIsShow} />
+        <Monkeynaut 
+          monkeynautIsShow={monkeynautIsShow} 
+        />
       )}
      
     </Container>

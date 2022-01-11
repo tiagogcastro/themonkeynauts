@@ -52,7 +52,7 @@ export const Details = styled.main`
   flex-direction: column;
 
   .monkeynaut_image {
-    margin: 8px auto 0;
+    margin: 8px 48px 0 0;
     
     max-width: 170px;
     max-height: 100px;
@@ -74,11 +74,12 @@ export const Details = styled.main`
     .monkeynaut_image {
       max-width: 300px;
       max-height: 260px;
+      margin-top: 0;
     }
   }
 
   @media(min-width: 1400px) {
-    max-width: 90%;
+    max-width: 85%;
     margin: 0 auto;
 
     .monkeynaut_image {
@@ -98,6 +99,8 @@ export const PrincipalDetails = styled.section`
 
   @media(min-width: 1024px) {
     width: 100%;
+    align-items: center;
+    justify-content: flex-end;
   }
 `;
 
@@ -144,6 +147,14 @@ export const UniqueInfo = styled.div`
     letter-spacing: 0.035em;
     color: ${COLORS.fonts.primary};
     margin-top: 0.4rem;
+
+    &.monkeynaut_id {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+      line-height: 18px;
+    }
   }
 
   @media(min-width: 1024px) {

@@ -82,7 +82,6 @@ export const TheadTdCustom = styled.div`
 
 export const TbodyCustom = styled.div`
   max-height: 42rem;
-  overflow: auto;
 
   padding-bottom: 1.6rem;
 
@@ -166,7 +165,13 @@ export const TbodyTdCustom = styled.div`
 
   &.id {
     grid-area: id;
-    margin: 6px 0;
+    margin: 6px auto;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    line-height: 18px;
   }
 
   &.role {

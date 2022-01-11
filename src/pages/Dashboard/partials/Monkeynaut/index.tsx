@@ -2,7 +2,7 @@ import { AiFillHeart } from 'react-icons/ai';
 import { GiBroadsword } from 'react-icons/gi';
 import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
 
-import { UseBooleanTypes } from '@/hooks';
+import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
 import {
   Title_1
@@ -36,18 +36,20 @@ import {
   EquipamentsContent,
   EquipamentToSelect,
 } from './styles';
+import { MonkeynautType } from '@/services/app_api';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
 }
 
 export function Monkeynaut({
-  monkeynautIsShow
-}: MonkeynautProps) {
+  monkeynautIsShow,
+}: MonkeynautProps) { 
+  const { monkeynaut } = useDashboardTabs();
   return (
     <Container>
       <Content>
-        <Title_1 className="monkeynaut_name">Monkeynaut</Title_1>
+        <Title_1 className="monkeynaut_name">{monkeynaut.firstName}</Title_1>
         <Details>
           <PrincipalDetails>
             <img className="monkeynaut_image" src={fighter_2} alt="" />
@@ -55,32 +57,32 @@ export function Monkeynaut({
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
                 <span>Monkeynaut ID</span>
-                <strong>625...dwc</strong>
+                <strong title={monkeynaut.id} className="monkeynaut_id">{monkeynaut.id}</strong>
               </UniqueInfo>
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>You</strong>
+                <strong>?????</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>Text</strong>
+                    <strong>{monkeynaut.class}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>Text</strong>
+                    <strong>{monkeynaut.rank}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Energy</span>
-                    <strong>Text</strong>
+                    <strong>{monkeynaut.finalAttributes.energy}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Breed Count</span>
-                    <strong>Text</strong>
+                    <strong>{monkeynaut.breedCount}</strong>
                   </UniqueInfo>
                 </div>
               </div>
@@ -105,19 +107,19 @@ export function Monkeynaut({
               <Attributes>
                 <Attribute>
                   <GiBroadsword />
-                  <strong>20</strong>
+                  <strong>{monkeynaut.finalAttributes.skill}</strong>
                 </Attribute>
                 <Attribute>
                   <BiRun />
-                  <strong>20</strong>
-                </Attribute>
-                <Attribute>
-                  <AiFillHeart />
-                  <strong>20</strong>
+                  <strong>{monkeynaut.finalAttributes.speed}</strong>
                 </Attribute>
                 <Attribute>
                   <BiShieldQuarter />
-                  <strong>20</strong>
+                  <strong>{monkeynaut.finalAttributes.resistance}</strong>
+                </Attribute>
+                <Attribute>
+                  <AiFillHeart />
+                  <strong>{monkeynaut.finalAttributes.life}</strong>
                 </Attribute>
               </Attributes>
             </AttributesContainer>
@@ -129,7 +131,7 @@ export function Monkeynaut({
               </p>
             </PveBonusInfo>
             <EquipamentsContainer>
-              <InfoTitle_1 className="equipament_title">Equipaments</InfoTitle_1>
+              <InfoTitle_1 className="equipament_title">Equipments</InfoTitle_1>
 
               <EquipamentsContent>
                 <EquipamentToSelect>
