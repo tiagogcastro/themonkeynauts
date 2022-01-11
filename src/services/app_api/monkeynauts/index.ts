@@ -1,0 +1,1 @@
+export { geral } from './geral/routes';
