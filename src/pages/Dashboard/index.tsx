@@ -4,6 +4,7 @@ import {
 } from '@/components/DashboardTab';
 import { DashboardTabsProvider } from '@/contexts/DashboardTabs';
 import { useBoolean } from '@/hooks';
+import { MetaMaskProvider } from 'metamask-react';
 
 import { 
   ShipsTab,
@@ -28,22 +29,27 @@ export function Dashboard() {
     <Container>
       <Content>
         <MainContent>
-          <DashboardTabsProvider>
-            <Tabs>
-              <Tab title="Ships" hasButtonToBack={shipIsShow}>
-                <ShipsTab shipIsShow={shipIsShow} />
-              </Tab>
-              <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
-                <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
-              </Tab>
-              <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
-                <EquipamentsTab />
-              </Tab>
-              <Tab title="Account" hasButtonToBack={accountIsShow}>
-                <AccountTab />
-              </Tab>
-            </Tabs>
-          </DashboardTabsProvider>
+          <MetaMaskProvider>
+            <DashboardTabsProvider>
+              <Tabs>
+                <Tab title="Account" hasButtonToBack={accountIsShow}>
+                  <AccountTab />
+                </Tab>
+                <Tab title="Founder's Packs" hasButtonToBack={accountIsShow}>
+                  <AccountTab />
+                </Tab>
+                <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
+                  <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
+                </Tab>
+                <Tab title="Ships" hasButtonToBack={shipIsShow}>
+                  <ShipsTab shipIsShow={shipIsShow} />
+                </Tab>
+                <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
+                  <EquipamentsTab />
+                </Tab>
+              </Tabs>
+            </DashboardTabsProvider>
+          </MetaMaskProvider>
         </MainContent>
       </Content>
     </Container>

@@ -19,7 +19,7 @@ export const Container = styled.div<ContainerProps>`
     display: none;
   `}
 
-  @media(min-width: 1024px) {
+  @media(min-width: 1400px) {
     display: none;
   }
 `;
@@ -53,5 +53,11 @@ export const Content = styled.div`
     position: absolute;
     top: 4.8rem;
     right: 1rem;
+  }
+
+  @media(min-width: 1024px) {
+    .tab_title {
+      font-size: 1.8rem;
+    }
   }
 `;

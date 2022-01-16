@@ -48,7 +48,7 @@ export const Container = styled.div<MenuProps>`
     }
   }
 
-  @media(min-width: 1024px) {
+  @media(min-width: 1400px) {
     display: inline-block;
 
     position: initial;
@@ -68,13 +68,10 @@ export const Content = styled.div`
 
   margin-top: 6.4rem;
 
-  @media(min-width: 1024px) {
-    flex-direction: row;
-    margin-top: 0;
-  }
-
   @media(min-width: 1400px) {
     max-width: 80%;
+    flex-direction: row;
+
     margin: 0 auto;
   }
 `;
@@ -82,7 +79,7 @@ export const Content = styled.div`
 export const TabChange = styled.button<TabChangeProps>`
   display: flex;
 
-  @media(min-width: 1024px) {
+  @media(min-width: 1400px) {
     max-width: max-content;
     border: 1px solid #1F8EFF;
 
@@ -113,7 +110,7 @@ export const TabTitle = styled.span<TabChangeProps>`
     border-bottom: 2px solid ${COLORS.colors.primary_0};
   `};
 
-  @media(min-width: 1024px) {
+  @media(min-width: 1400px) {
     display: inline-block; 
 
     margin-bottom: 0;
@@ -122,7 +119,8 @@ export const TabTitle = styled.span<TabChangeProps>`
 
     text-transform: uppercase;
     font-size: 1.6rem;
-    letter-spacing: 0;
+    letter-spacing: 0;    
+    white-space: nowrap;
 
     ${props => props.selected && css`
       border-bottom: none;
