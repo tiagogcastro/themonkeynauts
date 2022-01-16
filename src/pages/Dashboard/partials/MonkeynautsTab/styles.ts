@@ -1,15 +1,25 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { COLORS } from '@/theme';
 
 import bg_items from '@/assets/images/bg_items.png';
 
+export type ListMonkeynautsPropsContainer = {
+  loadingMonkeynauts: boolean;
+}
+
 export const Container = styled.div`
   margin-top: 32px;
 `;
 
-export const ListMonkeynautsContainer = styled.div`
+export const ListMonkeynautsContainer = styled.div<ListMonkeynautsPropsContainer>`
   margin: 0 auto;
+  
+  ${props => props.loadingMonkeynauts && css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `}
 
   @media(min-width: 1400px) {
     max-width: 80%;
