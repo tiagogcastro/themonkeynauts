@@ -36,6 +36,8 @@ export function AuthProvider({children}: AuthProviderProps) {
     loading.changeToFalse();
     setToken(null);
     localStorage.removeItem(monkeynautsApiToken);
+
+    baseApi.defaults.headers.common['Authorization'] = ``;
   }
 
   async function getUser() {
