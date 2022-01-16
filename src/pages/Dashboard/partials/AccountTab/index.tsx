@@ -1,5 +1,10 @@
 import { FaReact } from 'react-icons/fa';
 
+import { useAuth, useBoolean } from '@/hooks';
+
+import { Wallet } from '@/components/modals/Wallet';
+import { Button } from '@/components';
+
 import bronze_ore from '@/assets/images/bronze_ore.png';
 import iron_ore from '@/assets/images/iron_ore.png';
 import gold_ore from '@/assets/images/gold_ore.png';
@@ -21,11 +26,11 @@ import {
 
   Spc,
 } from './styles';
-import { Button } from '@/components';
-import { useAuth } from '@/hooks';
 
 export function AccountTab() {
   const { user } = useAuth();
+
+  const walletModalIsOpen = useBoolean();
   
   return (
     <Container>
@@ -55,7 +60,11 @@ export function AccountTab() {
               </UniqueInfo>
               <UniqueInfo>
                 <span>Wallet</span>
-                <Button className="wallet_button" text="Link" />
+                <Button 
+                  className="wallet_button"
+                  text="Link"
+                  onClick={walletModalIsOpen.changeToTrue}  
+                />
               </UniqueInfo>
             </div>
           </Info>
@@ -95,9 +104,14 @@ export function AccountTab() {
             <InfoTitle_1>SPC WITHDRAW</InfoTitle_1>
             <input placeholder="Withdraw" type="text" />
             <Button type="submit" text="Withdraw"/>
+            <Button type="submit" text="Deposit"/>
           </Spc>
         </SecondaryDetails>
       </Content>
+      <Wallet 
+        isOpen={walletModalIsOpen.state} 
+        handleClose={walletModalIsOpen.changeToFalse}
+      />
     </Container>
   );
 }

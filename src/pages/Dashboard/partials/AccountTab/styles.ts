@@ -80,7 +80,7 @@ export const Details = styled.div`
     }
   }
 
-  @media(min-width: 1024px) {
+  @media(min-width: 1400px) {
     margin-top: 80px;
   }
 `;
@@ -311,6 +311,10 @@ export const Spc = styled.form`
       max-width: 204px;
       margin-bottom: 8px;
       padding: 0.8rem;
+    }
+
+    button:last-child {
+      margin-top: 8px;
     }
   } 
 `;
