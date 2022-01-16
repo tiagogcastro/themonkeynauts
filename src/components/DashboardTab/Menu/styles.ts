@@ -69,7 +69,7 @@ export const Content = styled.div`
   margin-top: 6.4rem;
 
   @media(min-width: 1400px) {
-    max-width: 80%;
+    max-width: 85%;
     flex-direction: row;
 
     margin: 0 auto;
