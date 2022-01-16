@@ -1,3 +1,5 @@
+import { MetaMaskProvider } from 'metamask-react';
+
 import { AuthProvider } from './contexts';
 
 import { AppRoutes } from './routes';
@@ -9,8 +11,10 @@ import {
 export function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
-      <GlobalStyle />
+      <MetaMaskProvider>
+        <AppRoutes />
+        <GlobalStyle />
+      </MetaMaskProvider>
     </AuthProvider>
   );
 }
