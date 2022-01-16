@@ -17,6 +17,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export function Button({text, loading, ...rest}: ButtonProps) {
   return (
     <Container
+      type="button"
       {...rest}
     >
       {loading && loading.state ? (
