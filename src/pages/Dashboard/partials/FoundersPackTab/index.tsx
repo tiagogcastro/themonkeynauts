@@ -24,14 +24,10 @@ export function FoundersPackTab() {
   const startPayment = async ({ ether, address }: MetaMaskPaymentParams) => {
     try {
       if (!ethereum) {
-        console.log({error: 'Ethereum not exist'});
+        await ethereum.request({
+          method: 'eth_requestAccounts'
+        });
       }
-
-      await ethereum.request({
-        method: 'eth_requestAccounts'
-      });
-
-      console.log({ether, address});
 
       const transactionParameters = {
         from: ethereum.selectedAddress,
@@ -39,6 +35,8 @@ export function FoundersPackTab() {
         data:
           '0x7f7465737432000000000000000000000000000000000000000000000000000000600057',
       };
+
+      console.log({ether, address});
 
       const transaction = await ethereum.request({
         method: 'eth_sendTransaction',
