@@ -35,6 +35,16 @@ export const GlobalStyle = createGlobalStyle`
     outline: 0;
   }
 
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
   body, html, #root {
     min-height: 100vh;
     width: 100%;
