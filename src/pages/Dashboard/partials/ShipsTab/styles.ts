@@ -159,6 +159,12 @@ export const TbodyTdCustom = styled.div`
       color: ${COLORS.colors.primary_0}
     }
 
+    img {
+      width: 76px;
+      height: 46px;
+      object-fit: contain;
+    }
+
     strong {
       font-size: 1.1rem;
       font-weight: 700;

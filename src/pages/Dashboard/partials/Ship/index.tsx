@@ -40,7 +40,7 @@ export function Ship({
         <Title_1 className="ship_name">{ship.name}</Title_1>
         <Details>
           <PrincipalDetails>
-            <img className="ship_image" src={fighter_2} alt="" />
+            <img className="ship_image" src={ship.avatar} alt={ship.name} />
             <ShipInformation>
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>

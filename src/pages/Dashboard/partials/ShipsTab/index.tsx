@@ -1,14 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { api, ShipType } from '@/services/api';
-import { Ship } from '../Ship';
-
-import { Title_1 } from '@/styles/global';
-
-import fighter from '@/assets/fighter.png';
 
 import { useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
+import { Loading } from '@/components';
+
+import fighter from '@/assets/images/fighter.png';
+import explorer from '@/assets/images/explorer.png';
+import miner from '@/assets/images/miner.png';
+
+import { Ship } from '../Ship';
+
+import { Title_1 } from '@/styles/global';
 import { 
   Container,
   ListShipsContainer,
@@ -21,7 +25,6 @@ import {
   TbodyTrCustom, 
   TbodyTdCustom,
 } from './styles';
-import { Loading } from '@/components';
 
 export type ShipsTabProps = {
   shipIsShow: UseBooleanTypes;
@@ -33,7 +36,7 @@ export function ShipsTab({
   const loadingShips = useBoolean(true);
   const { setShip } = useDashboardTabs();
 
-  const [ships, setShips] = useState<ShipType.GetShip>({} as ShipType.GetShip);
+  const [{ships}, setShips] = useState<ShipType.GetShip>({} as ShipType.GetShip);
 
   function selectShip(ship: ShipType.Ship) {
     setShip(ship);
@@ -57,6 +60,28 @@ export function ShipsTab({
     getShips();
   }, []);
 
+  
+  function verifyShipRole(type: ShipType.ShipRole) {
+    const roles: Record<ShipType.ShipRole, string> = {
+      explorer,
+      fighter,
+      miner  
+    };
+  
+    return roles[type.toLowerCase() as ShipType.ShipRole];
+  }
+
+  const shipsModified = useMemo(() => {
+    if(ships) {
+      return ships.map(ship => {
+        return {
+          ...ship,
+          avatar: verifyShipRole(ship.class),
+        }
+      });
+    }
+  }, [ships]);
+
   return (
     <Container>
       {!shipIsShow.state ? (
@@ -79,11 +104,11 @@ export function ShipsTab({
                   </TheadCustom>
                     
                   <TbodyCustom>
-                    {ships.ships && ships.ships.map(ship => (
+                    {shipsModified && shipsModified.map(ship => (
                       <TbodyTrCustom onClick={() => selectShip(ship)} key={ship.id}>
                         <TbodyTdCustom className="avatar">
                           <div className="info">
-                            <img src={fighter} />
+                            <img src={ship.avatar} alt={ship.name} />
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="name">
