@@ -52,7 +52,7 @@ export function Monkeynaut({
         <Title_1 className="monkeynaut_name">{monkeynaut.firstName}</Title_1>
         <Details>
           <PrincipalDetails>
-            <img className="monkeynaut_image" src={monkeynaut.avatar} alt={monkeynaut.name} />
+            <img className="monkeynaut_image" src={monkeynaut.avatar} alt={`${monkeynaut.firstName} ${monkeynaut.lastName}`} />
             <MonkeynautInformation>
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
