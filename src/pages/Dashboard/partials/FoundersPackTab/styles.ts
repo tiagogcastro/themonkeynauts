@@ -63,6 +63,8 @@ export const Card = styled.form`
 export const CardContainer = styled.div`
   border: 1px solid ${COLORS.colors.primary_0};
   background: #062043;
+ 
+  position: relative;
   
   .card_title {
     width: 100%;
@@ -76,6 +78,11 @@ export const CardContainer = styled.div`
     text-align: center;
     text-transform: uppercase;
   }
+
+  @media(min-width: 768px) {
+    width: 250px;
+    height: 390px;
+  }
 `;
 
 export const CardContent = styled.div`
@@ -86,5 +93,15 @@ export const CardContent = styled.div`
     width: 100%;
 
     object-fit: contain;
+  }
+
+  @media(min-width: 768px) {
+    .buy_pack {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 90%;
+      transform: translateX(-50%);
+    }
   }
 `;

@@ -56,6 +56,49 @@ export function FoundersPackTab() {
               <Button 
                 text="BUY PACK" 
                 type="submit"
+                className="buy_pack"
+              />
+            </CardContent>
+          </CardContainer>
+          <span className="stock">XXX Available</span>
+        </Card>
+        <Card onSubmit={handleSubmit}>
+          <CardContainer>
+            <h1 className="card_title">Pack 1</h1>
+            <CardContent>
+              <img src={notfound} />
+              <Button 
+                text="BUY PACK" 
+                type="submit"
+                className="buy_pack"
+              />
+            </CardContent>
+          </CardContainer>
+          <span className="stock">XXX Available</span>
+        </Card>
+        <Card onSubmit={handleSubmit}>
+          <CardContainer>
+            <h1 className="card_title">Pack 1</h1>
+            <CardContent>
+              <img src={notfound} />
+              <Button 
+                text="BUY PACK" 
+                type="submit"
+                className="buy_pack"
+              />
+            </CardContent>
+          </CardContainer>
+          <span className="stock">XXX Available</span>
+        </Card>
+        <Card onSubmit={handleSubmit}>
+          <CardContainer>
+            <h1 className="card_title">Pack 1</h1>
+            <CardContent>
+              <img src={notfound} />
+              <Button 
+                text="BUY PACK" 
+                type="submit"
+                className="buy_pack"
               />
             </CardContent>
           </CardContainer>
