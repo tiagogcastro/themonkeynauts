@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import {
   Container,
   Content,
-  InfoTitle_1
 } from './styles';
 
 export function PreSale() {
@@ -45,16 +44,22 @@ export function PreSale() {
   return (
     <Container>
       <Content onSubmit={handleSubmit}>
-        <InfoTitle_1>Pre sale</InfoTitle_1>
+        <div className="texts_container">
+          <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
+          <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.1 BNB and a maximum of 1 BNB, spreading the tokens among more players.</p>
+          <p className="text">In this pre-sale each SPC will be sold at a price of $0.10 and you will receive the equivalent of the deposited BNB in ​​tokens.</p>
+          <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
+
+        </div>
         <input 
           type="number"
-          placeholder="Min 0 / max 1"
-          min="0"
+          placeholder="Min 0.1 / max 1"
+          min="0.1"
           max="1"
           onChange={(event) => handleChange(event)}
           value={inputValue}
         />
-        <Button type="submit" text="Text"/>
+        <Button type="submit" text="BUY"/>
       </Content>
     </Container>
   );
