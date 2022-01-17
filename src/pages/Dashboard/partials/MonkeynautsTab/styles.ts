@@ -81,6 +81,7 @@ export const TheadTdCustom = styled.div`
     text-align: center;
     padding: 16px;
 
+    white-space: nowrap;
     font-size: 1.8rem;
     font-weight: 500;
     line-height: 2.3rem;
@@ -153,6 +154,12 @@ export const TbodyTdCustom = styled.div`
 
     span {
       color: ${COLORS.colors.primary_0}
+    }
+
+    img {
+      height: 46px;
+      width: 46px;
+      object-fit: contain;
     }
 
     strong {

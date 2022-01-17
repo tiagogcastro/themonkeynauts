@@ -1,10 +1,15 @@
+export type MonkeynautRole = 'soldier' | 'engineer' | 'scientist';
+
 export type Monkeynaut = {
   id: string;
   number: string;
   firstName: string;
   lastName: string;
-  class: string;
-  rank: string
+  class: MonkeynautRole;
+  rank: string;
+
+  avatar?: string;
+
   baseAttributes: {
     skill: number;
     speed: number;

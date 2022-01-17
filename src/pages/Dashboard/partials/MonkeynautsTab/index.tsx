@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { 
   Container,
@@ -13,7 +13,9 @@ import {
   TbodyTdCustom,
 } from './styles';
 
-import fighter from '@/assets/fighter.png';
+import engineer from '@/assets/images/engineer.png';
+import scientist from '@/assets/images/scientist.png';
+import soldier from '@/assets/images/soldier.png';
 
 import { useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 import { Monkeynaut } from '../Monkeynaut';
@@ -53,7 +55,28 @@ export function MonkeynautsTab({
 
     getMonkeynauts();
   }, []);
+
+  function verifyMonkeynautRole(type: MonkeynautType.MonkeynautRole) {
+    const roles: Record<MonkeynautType.MonkeynautRole, string> = {
+      engineer,
+      soldier,
+      scientist  
+    }
   
+    return roles[type.toLowerCase() as MonkeynautType.MonkeynautRole];
+  }
+
+  const monkeynautsModified = useMemo(() => {
+    if(monkeynauts.monkeynauts) {
+      return monkeynauts.monkeynauts.map(monkeynaut => {
+        return {
+          ...monkeynaut,
+          avatar: verifyMonkeynautRole(monkeynaut.class),
+        }
+      });
+    }
+  }, [monkeynauts]);
+
   return (
     <Container>
       {!monkeynautIsShow.state ? (
@@ -76,16 +99,16 @@ export function MonkeynautsTab({
                   </TheadCustom>
                     
                   <TbodyCustom>
-                    {monkeynauts.monkeynauts && monkeynauts.monkeynauts.map((monkeynaut) => (
+                    {monkeynautsModified && monkeynautsModified.map((monkeynaut) => (
                       <TbodyTrCustom onClick={() => selectMonkeynaut(monkeynaut)} key={monkeynaut.id}>
                         <TbodyTdCustom className="avatar">
                           <div className="info">
-                            <img src={fighter} />
+                            <img src={monkeynaut.avatar} />
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="name">
                           <div className="info">
-                            <Title_1>{monkeynaut.firstName}</Title_1>
+                            <Title_1>{monkeynaut.firstName} {monkeynaut.lastName}</Title_1>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="id">
