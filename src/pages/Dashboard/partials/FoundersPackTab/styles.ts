@@ -9,7 +9,7 @@ export const Container = styled.div`
   padding: 0 16px 16px;
 
   @media(min-width: 1024px) {
-    max-height: 96rem;
+    max-height: 72rem;
   }
 `;
 
