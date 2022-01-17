@@ -21,6 +21,8 @@ export const COLORS = {
    
     red_0: '#ef5858',
     white_0: '#fff',
+    yellow_0: '#eed202',
+    black_0: '#101010',
   },
   
   gradients: {
