@@ -101,8 +101,8 @@ export function AccountTab() {
             </Resources>
           </ResourcesDetail>
           <Spc>
-            <InfoTitle_1>SPC WITHDRAW</InfoTitle_1>
-            <input placeholder="Withdraw" type="text" />
+            <InfoTitle_1 className="spc_title">WITHDRAW/DEPOSIT SPC</InfoTitle_1>
+            <input placeholder="Withdraw/desposit spc" type="text" />
             <Button type="submit" text="Withdraw"/>
             <Button type="submit" text="Deposit"/>
           </Spc>

@@ -155,8 +155,14 @@ export const UniqueInfo = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
+    max-width: 100%;
     line-height: 18px;
+  }
+
+  @media(min-width: 768px) {
+    .info_id {
+      max-width: 200px;
+    }
   }
 
   @media(min-width: 1024px) {
@@ -259,6 +265,10 @@ export const Spc = styled.form`
   width: 100%;
 
   margin: 32px auto 0;
+
+  .spc_title {
+    width: min-content;
+  }
 
   input {
     background: ${COLORS.colors.tertiary_100};
