@@ -73,6 +73,8 @@ export const Content = styled.div`
     flex-direction: row;
 
     margin: 0 auto;
+    /* padding-bottom: 12px;
+    overflow: auto; */
   }
 `;
 
