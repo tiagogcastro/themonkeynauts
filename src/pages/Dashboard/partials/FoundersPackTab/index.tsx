@@ -1,7 +1,11 @@
 import { useMetaMask } from 'metamask-react';
-import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
+
+import { ethereum as ethereumConfig } from '@/config/ethereum';
+import { paymentByEthereum } from '@/utils';
 
 import { Button } from '@/components';
+import { COLORS } from '@/theme';
 
 import {
   Container,
@@ -13,53 +17,32 @@ import {
 
 import notfound from '@/assets/notfound.png';
 
-export type MetaMaskPaymentParams = {
-  ether: string,
-  address: string;
-}
-
 export function FoundersPackTab() {
   const { ethereum } = useMetaMask();
     
-  const startPayment = async ({ ether, address }: MetaMaskPaymentParams) => {
-    try {
-      if (!ethereum) {
-        await ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-      }
-
-      const transactionParameters = {
-        from: ethereum.selectedAddress,
-        value: ether,
-        data:
-          '0x7f7465737432000000000000000000000000000000000000000000000000000000600057',
-      };
-
-      console.log({ether, address});
-
-      const transaction = await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters]
-      });
-
-      console.log({transaction});
-
-      // const provider = new ethers.providers.Web3Provider(ethereum);
-      // const signer = provider.getSigner();
-
-      // ethers.utils.getAddress(address);
-    } catch (err) {
-    }
-  };
-
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    await startPayment({
-      address: '0x3F55866B5Fd83554843a062f8B9424aC6b9c0ccd',
-      ether: '1'
+    const response = await paymentByEthereum({
+      ethereum,
+      toAddress: ethereumConfig.sendTransaction.toAddress,
+      ether: '1',
+      dataContract: ethereumConfig.sendTransaction.dataContract,
     });
+
+    if(response.error) {
+      toast(response.error.message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
   }
 
   return (
