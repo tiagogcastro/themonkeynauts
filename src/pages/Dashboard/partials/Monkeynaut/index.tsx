@@ -52,7 +52,7 @@ export function Monkeynaut({
         <Title_1 className="monkeynaut_name">{monkeynaut.firstName}</Title_1>
         <Details>
           <PrincipalDetails>
-            <img className="monkeynaut_image" src={monkeynaut.avatar} alt="" />
+            <img className="monkeynaut_image" src={monkeynaut.avatar} alt={monkeynaut.name} />
             <MonkeynautInformation>
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
@@ -71,15 +71,16 @@ export function Monkeynaut({
                     <strong>{monkeynaut.class}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
-                    <span>Rank</span>
-                    <strong>{monkeynaut.rank}</strong>
+                    <span>Energy</span>
+                    <strong>{monkeynaut.finalAttributes.energy}/2</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
                   <UniqueInfo>
-                    <span>Energy</span>
-                    <strong>{monkeynaut.finalAttributes.energy}</strong>
+                    <span>Rank</span>
+                    <strong>{monkeynaut.rank}</strong>
                   </UniqueInfo>
+
                   <UniqueInfo>
                     <span>Breed Count</span>
                     <strong>{monkeynaut.breedCount}</strong>
@@ -98,7 +99,6 @@ export function Monkeynaut({
                   </CrewInShip>
                 </CrewInShipContainer>
               </UniqueInfo>
-
             </MonkeynautInformation>
           </PrincipalDetails>
           <OthersDetails>
