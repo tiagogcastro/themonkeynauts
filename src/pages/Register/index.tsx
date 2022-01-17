@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
       
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -12,6 +13,7 @@ import {
 
 import { getValidationErrors } from '@/utils';
 import { useAuth, useBoolean } from '@/hooks';
+import { COLORS } from '@/theme';
 
 import logo from '@/assets/images/logo.png';
 
@@ -46,6 +48,18 @@ export function Register() {
       });
       
       loadingRegister.changeToFalse();
+
+      toast('Success! You managed to create your account. Welcome!', {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0 ,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
 
       await register(data);
     } catch(err) {
