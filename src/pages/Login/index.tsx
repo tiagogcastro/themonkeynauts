@@ -21,6 +21,8 @@ import {
   MainContent,
   FormContainer
 } from './styles';
+import { toast } from 'react-toastify';
+import { COLORS } from '@/theme';
 
 const schema = Yup.object().shape({
   email: Yup.string().required('This field is required').email('Enter a valid email address'),
@@ -44,6 +46,18 @@ export function Login() {
       });
 
       loadingSignIn.changeToFalse();
+
+      toast('Success. You have accessed your account. Welcome back!', {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0 ,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
 
       await signIn(data);
     } catch(err) {
