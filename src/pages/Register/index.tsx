@@ -1,9 +1,10 @@
 import { useRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
       
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 import { Button, Input } from '@/components';
 
@@ -27,7 +28,6 @@ import {
 export function Register() {
   const { register } = useAuth();
   const formRef = useRef<FormHandles>(null);
-  const history = useHistory();
 
   const loadingRegister = useBoolean(false);
 
@@ -47,35 +47,47 @@ export function Register() {
         abortEarly: false
       });
       
-      loadingRegister.changeToFalse();
+      const response = await register(data);
+      
+      if(response) {
+        loadingRegister.changeToFalse();
 
-      toast('Success! You managed to create your account. Welcome!', {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'success',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0 ,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-
-      await register(data);
-    } catch(err) {
+        toast('Success! You managed to create your account. Welcome!', {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'success',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0 ,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+    } catch(err: any) {
       loadingRegister.changeToFalse();
 
       if(err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
         
-        formRef.current?.setErrors(errors);
-
-        return;
+        return formRef.current?.setErrors(errors);
       }
 
-      formRef.current?.setErrors({
-        nickname: 'E-mail/Nickname invalid. Please change them'
-      });
+      if(axios.isAxiosError(err)) {
+        const error_message = err?.response?.headers['grpc-message'];
+
+        toast(error_message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0 ,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
     }
   }
 

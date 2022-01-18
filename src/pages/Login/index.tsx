@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
       
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 import { Button, Input } from '@/components';
 
@@ -45,22 +46,24 @@ export function Login() {
         abortEarly: false
       });
 
-      loadingSignIn.changeToFalse();
+      const response = await signIn(data);
 
-      toast('Success. You have accessed your account. Welcome back!', {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'success',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0 ,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+      if(response) {
+        loadingSignIn.changeToFalse();
 
-      await signIn(data);
-    } catch(err) {
+        toast('Success. You have accessed your account. Welcome back!', {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'success',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0 ,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+    } catch(err: any) {
       loadingSignIn.changeToFalse();
 
       if(err instanceof Yup.ValidationError) {
@@ -69,9 +72,21 @@ export function Login() {
         return formRef.current?.setErrors(errors);
       }
 
-      formRef.current?.setErrors({
-        email: 'E-mail/password incorrect'
-      });
+      if(axios.isAxiosError(err)) {
+        const error_message = err?.response?.headers['grpc-message'];
+
+        toast(error_message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0 ,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
     }
   }
 
