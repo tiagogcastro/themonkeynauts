@@ -1,8 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import button_background_1 from '@/assets/svg/button_background_1.svg';
 
-export const Container = styled.button`
+export type ButtonContainerProps = {
+  isLoading?: boolean;
+}
+
+export const Container = styled.button<ButtonContainerProps>`
   background: url(${button_background_1}) no-repeat center;
   background-size: contain;
 
@@ -17,4 +21,9 @@ export const Container = styled.button`
   line-height: 1.5rem;
   letter-spacing: 0.035em;
   text-align: center;
+
+  ${props => props.isLoading && css`
+    cursor: no-drop;
+    opacity: 0.6;
+  `};
 `;
