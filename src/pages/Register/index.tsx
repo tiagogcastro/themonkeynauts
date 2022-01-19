@@ -47,23 +47,7 @@ export function Register() {
         abortEarly: false
       });
       
-      const response = await register(data);
-      
-      if(response) {
-        loadingRegister.changeToFalse();
-
-        toast('Success! You managed to create your account. Welcome!', {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0 ,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-      }
+      await register(data);
     } catch(err: any) {
       loadingRegister.changeToFalse();
 

@@ -46,23 +46,7 @@ export function Login() {
         abortEarly: false
       });
 
-      const response = await signIn(data);
-
-      if(response) {
-        loadingSignIn.changeToFalse();
-
-        toast('Success. You have accessed your account. Welcome back!', {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0 ,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-      }
+      await signIn(data);
     } catch(err: any) {
       loadingSignIn.changeToFalse();
 
