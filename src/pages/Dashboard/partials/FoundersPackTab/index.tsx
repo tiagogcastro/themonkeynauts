@@ -23,15 +23,15 @@ export function FoundersPackTab() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const response = await paymentByEthereum({
+    const { error, transaction } = await paymentByEthereum({
       ethereum,
       toAddress: ethereumConfig.sendTransaction.toAddress,
       ether: '1',
       dataContract: ethereumConfig.sendTransaction.dataContract,
     });
 
-    if(response.error) {
-      toast(response.error.message, {
+    if(error) {
+      toast(error.message, {
         autoClose: 5000,
         pauseOnHover: true,
         type: 'error',
