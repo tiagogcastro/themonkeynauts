@@ -1,7 +1,13 @@
-import { Button } from '@/components';
-import { COLORS } from '@/theme';
+import { useMetaMask } from 'metamask-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { ethereum as ethereumConfig } from '@/config/ethereum';
+
+import { Button } from '@/components';
+import { COLORS } from '@/theme';
+import { paymentByEthereum } from '@/utils';
+import { useAuth, useBoolean } from '@/hooks';
 
 import {
   Container,
@@ -15,15 +21,19 @@ type HandleChange = {
 }
 
 export function PreSale() {
+  const { user: {user} } = useAuth();
+  const { ethereum } = useMetaMask()
+  
   const [inputValue, setInputValue] = useState('');
+  const buttonHasBlocked = useBoolean(false);
 
   function handleChange({
     event,
     max,
     min,
   }: HandleChange) {
-    let value: string | number = event.target.value;
-    
+    let value: string | number = event.target.value.replace(/\D/g, '');
+
     if(Number(value) < 0 || Number(value) > 1) {
       toast('You can only put numbers between 0.1 and 1', {
         autoClose: 5000,
@@ -44,10 +54,75 @@ export function PreSale() {
     setInputValue(String(value));
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    console.log(inputValue);
+    if(!inputValue) {
+      return toast('You need to enter a number between 0.1 and 1 to proceed with the purchase', {
+        autoClose: 7000,
+        pauseOnHover: true,
+        type: 'warning',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0 ,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
+
+    buttonHasBlocked.changeToTrue();
+
+    toast(`${user.nickname}, please wait for the metamask window to open.`, {
+      autoClose: 7000,
+      pauseOnHover: true,
+      type: 'info',
+      style: {
+        background: COLORS.global.white_0,
+        color: COLORS.global.black_0,
+        fontSize: 14,
+        fontFamily: 'Orbitron, sans-serif',
+      }
+    });
+
+    const { transaction, error } = await paymentByEthereum({
+      ethereum,
+      toAddress: ethereumConfig.preSaleTransaction.toAddress,
+      ether: inputValue.toString(),
+      dataContract: ethereumConfig.preSaleTransaction.dataContract,
+    });
+
+    if(transaction || error) {
+      buttonHasBlocked.changeToFalse();
+    }
+
+    if(transaction) {
+      toast(`${user.nickname}, your ${inputValue} transaction was a success`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
+
+    if(error) {
+      toast(error.message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
   }
 
   return (
@@ -61,7 +136,7 @@ export function PreSale() {
 
         </div>
         <input 
-          type="number"
+          type="text"
           placeholder="Min 0.1 / max 1"
           onChange={(event) => handleChange({
             event,
@@ -70,7 +145,13 @@ export function PreSale() {
           })}
           value={inputValue}
         />
-        <Button type="submit" text="BUY"/>
+        <Button 
+          type="submit" 
+          text="BUY"
+          loading={{
+            state: buttonHasBlocked.state
+          }}
+        />
       </Content>
     </Container>
   );
