@@ -28,7 +28,7 @@ import {
 } from './styles';
 
 export function AccountTab() {
-  const { user: {user} } = useAuth();
+  const { user } = useAuth();
 
   const walletModalIsOpen = useBoolean();
   
@@ -42,15 +42,15 @@ export function AccountTab() {
             <div className="info_separator">
               <UniqueInfo>
                 <span>Your ID</span>
-                <strong title={user.id} className="info_id">{user.id_short}</strong>
+                <strong title={user?.user.id} className="info_id">{user?.user.id_short}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>Nickname</span>
-                <strong>{user.nickname}</strong>
+                <strong>{user?.user.nickname}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>E-mail</span>
-                <strong>{user.email}</strong>
+                <strong>{user?.user.email}</strong>
               </UniqueInfo>
             </div>
             <div className="info_separator">
