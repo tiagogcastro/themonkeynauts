@@ -16,7 +16,7 @@ export const geral = {
   register: (data: AppRegisterParams): Promise<AxiosResponse<AppRegisterResponse>> => {
     return baseApi.post('/players', data);
   },
-  getUser: (): Promise<AxiosResponse<GetUser | null>> => {
+  getUser: (): Promise<AxiosResponse<GetUser>> => {
     return baseApi.get('/authentication');
   },
   authenticate: {
