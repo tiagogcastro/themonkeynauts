@@ -12,7 +12,7 @@ export type AuthContextData = {
   signIn: (credentials: UserType.AppLoginParams) => Promise<UserType.AppLoginResponse | undefined>;
   register: (credentials: UserType.AppRegisterParams) => Promise<UserType.AppRegisterResponse | undefined>;
 
-  user: UserType.GetUser | null;
+  user: UserType.GetUser;
   token: string | null;
   tokenIsValid: boolean;
   loading: boolean;
@@ -25,7 +25,7 @@ export type AuthProviderProps = {
 }
 
 export function AuthProvider({children}: AuthProviderProps) {
-  const [user, setUser] = useState<UserType.GetUser | null>(null);
+  const [user, setUser] = useState<UserType.GetUser>({} as UserType.GetUser);
   const [token, setToken] = useState<string | null>(localStorage.getItem(monkeynautsApiToken));
 
   const tokenIsValid = useBoolean(true);
@@ -44,7 +44,14 @@ export function AuthProvider({children}: AuthProviderProps) {
     try {
       const response = await api.user.geral.getUser();
 
-      setUser(response.data);
+      const { user } = response.data;
+
+      setUser({
+        user: {
+          ...user,
+          id_short: user.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
+        }
+      });
 
       loading.changeToFalse();
       
@@ -93,7 +100,10 @@ export function AuthProvider({children}: AuthProviderProps) {
     tokenIsValid.changeToTrue();
     setToken(token);
     setUser({
-      user: player
+      user: {
+        ...player,
+        id_short: player.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
+      }
     });
 
     return response.data || undefined;

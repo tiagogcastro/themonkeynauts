@@ -3,6 +3,7 @@ export type User = {
   email: string;
   nickname: string;
   roles: string[];
+  id_short: string | undefined;
 }
 
 export type GetUser = {

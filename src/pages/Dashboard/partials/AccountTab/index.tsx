@@ -28,7 +28,7 @@ import {
 } from './styles';
 
 export function AccountTab() {
-  const { user } = useAuth();
+  const { user: {user} } = useAuth();
 
   const walletModalIsOpen = useBoolean();
   
@@ -41,23 +41,19 @@ export function AccountTab() {
           <Info>
             <div className="info_separator">
               <UniqueInfo>
-                <span>Rank</span>
-                <strong>Text</strong>
+                <span>Your ID</span>
+                <strong title={user.id} className="info_id">{user.id_short}</strong>
               </UniqueInfo>
               <UniqueInfo>
-                <span>Your ID</span>
-                <strong title={user?.user.id} className="info_id">{user?.user.id}</strong>
+                <span>Nickname</span>
+                <strong>{user.nickname}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>E-mail</span>
-                <strong>{user?.user.email}</strong>
+                <strong>{user.email}</strong>
               </UniqueInfo>
             </div>
             <div className="info_separator">
-              <UniqueInfo>
-                <span>Nickname</span>
-                <strong>{user?.user.nickname}</strong>
-              </UniqueInfo>
               <UniqueInfo>
                 <span>Wallet</span>
                 <Button 
@@ -76,27 +72,27 @@ export function AccountTab() {
             <Resources>
               <Resource>
                 <img src={iron_ore} />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
               <Resource>
                 <img src={gold_ore} />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
               <Resource>
                 <img src={bronze_ore} />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
               <Resource>
                 <img src={scrap} />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
               <Resource>
                 <FaReact />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
               <Resource>
                 <img src={spc} />
-                <strong>200</strong>
+                <strong>0</strong>
               </Resource>
             </Resources>
           </ResourcesDetail>
