@@ -8,15 +8,24 @@ import {
   Content,
 } from './styles';
 
+type HandleChange = {
+  event: React.ChangeEvent<HTMLInputElement>;
+  max: number;
+  min: number;
+}
+
 export function PreSale() {
   const [inputValue, setInputValue] = useState('');
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange({
+    event,
+    max,
+    min,
+  }: HandleChange) {
     let value: string | number = event.target.value;
-    let { min, max } = event.target;
     
     if(Number(value) < 0 || Number(value) > 1) {
-      toast('You can only put numbers between 0 and 1', {
+      toast('You can only put numbers between 0.1 and 1', {
         autoClose: 5000,
         pauseOnHover: true,
         type: 'warning',
@@ -54,9 +63,11 @@ export function PreSale() {
         <input 
           type="number"
           placeholder="Min 0.1 / max 1"
-          min="0.1"
-          max="1"
-          onChange={(event) => handleChange(event)}
+          onChange={(event) => handleChange({
+            event,
+            max: 1,
+            min: 0.1
+          })}
           value={inputValue}
         />
         <Button type="submit" text="BUY"/>
