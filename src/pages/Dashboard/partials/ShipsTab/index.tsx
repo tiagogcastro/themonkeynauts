@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { api, ShipType } from '@/services/api';
 
-import { useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
+import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
 import { Loading } from '@/components';
+
+import { replaceToShortString } from '@/utils';
 
 import fighter from '@/assets/images/fighter.png';
 import explorer from '@/assets/images/explorer.png';
@@ -33,13 +35,21 @@ export type ShipsTabProps = {
 export function ShipsTab({
   shipIsShow
 }: ShipsTabProps) {
+  const { user } = useAuth();
+
   const loadingShips = useBoolean(true);
   const { setShip } = useDashboardTabs();
 
   const [{ships}, setShips] = useState<ShipType.GetShip>({} as ShipType.GetShip);
 
   function selectShip(ship: ShipType.Ship) {
-    setShip(ship);
+    let shipOwnerName = ship.owner.id === user?.user.id ? 'YOU' : ship.owner.nickname;
+
+    setShip({
+      ...ship,
+      id_short: replaceToShortString(ship.id),
+      ownerName: shipOwnerName
+    });
 
     shipIsShow.changeToTrue();
   }
