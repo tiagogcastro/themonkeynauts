@@ -1,6 +1,7 @@
 import { useMetaMask } from 'metamask-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { ethers } from 'ethers';
 
 import { ethereum as ethereumConfig } from '@/config/ethereum';
 
@@ -21,7 +22,7 @@ type HandleChange = {
 }
 
 export function PreSale() {
-  const { user: {user} } = useAuth();
+  const { user } = useAuth();
   const { ethereum } = useMetaMask()
   
   const [inputValue, setInputValue] = useState('');
@@ -32,9 +33,9 @@ export function PreSale() {
     max,
     min,
   }: HandleChange) {
-    let value: string | number = event.target.value.replace(/\D/g, '');
+    let value: string | number = event.target.value.replace(/\D[.]/g, '');
 
-    if(Number(value) < 0 || Number(value) > 1) {
+    if(Number(value) < min || Number(value) > max) {
       toast('You can only put numbers between 0.1 and 1', {
         autoClose: 5000,
         pauseOnHover: true,
@@ -48,8 +49,6 @@ export function PreSale() {
       });
       return inputValue;
     }
-
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
 
     setInputValue(String(value));
   }
@@ -73,7 +72,7 @@ export function PreSale() {
 
     buttonHasBlocked.changeToTrue();
 
-    toast(`${user.nickname}, please wait for the metamask window to open.`, {
+    toast(`${user?.user.nickname}, please wait for the metamask window to open.`, {
       autoClose: 7000,
       pauseOnHover: true,
       type: 'info',
@@ -88,7 +87,7 @@ export function PreSale() {
     const { transaction, error } = await paymentByEthereum({
       ethereum,
       toAddress: ethereumConfig.preSaleTransaction.toAddress,
-      ether: inputValue.toString(),
+      ether: ethers.utils.parseEther(inputValue)._hex,
       dataContract: ethereumConfig.preSaleTransaction.dataContract,
     });
 
@@ -97,7 +96,7 @@ export function PreSale() {
     }
 
     if(transaction) {
-      toast(`${user.nickname}, your ${inputValue} transaction was a success`, {
+      toast(`${user?.user.nickname}, your ${inputValue} transaction was a success`, {
         autoClose: 5000,
         pauseOnHover: true,
         type: 'success',
