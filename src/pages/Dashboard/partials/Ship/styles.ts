@@ -287,6 +287,8 @@ export const CrewContent = styled.div`
   flex-direction: column;
 
   margin-top: 16px;
+
+  width: 100%;
 `;
 
 export const CrewSelected = styled.div`
@@ -331,24 +333,5 @@ export const CrewSelected = styled.div`
         height: 16px;
       }
     }
-  }
-`;
-
-export const CrewToSelect = styled.div`
-  width: 100%;
-
-  background: #041937;
-  border: 1px solid ${COLORS.colors.secondary_50};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:not(:first-child) {
-    margin-top: 4px;
-  }
-
-  .crew_content {
-    padding: 16px;
   }
 `;
