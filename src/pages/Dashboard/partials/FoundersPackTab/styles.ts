@@ -78,6 +78,35 @@ export const CardContainer = styled.div`
     text-align: center;
     text-transform: uppercase;
   }
+  
+  .description {
+    display: none;
+
+    color: ${COLORS.colors.primary_0};
+  }
+
+  &:hover {
+    border: 1px solid rgba(38, 151, 255, 0.4);
+
+    .card_title {
+      opacity: 0.4;
+      border-bottom: 1px solid rgba(38, 151, 255, 0.4);
+    }
+
+    .description {
+      display: initial;
+
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.035em;
+      text-align: left;
+    }
+
+    img {
+      display: none;
+    }
+  }
 
   @media(min-width: 768px) {
     width: 250px;

@@ -52,6 +52,8 @@ export function FoundersPackTab() {
           <CardContainer>
             <h1 className="card_title">Pack 1</h1>
             <CardContent>
+              <p className="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab mollitia praesentium saepe quia soluta vero atque error necessitatibus, perspiciatis cupiditate sit esse tenetur dolores sint. Explicabo doloribus fugit nesciunt? Culpa!</p>
+
               <img src={notfound} />
               <Button 
                 text="BUY PACK" 
@@ -66,6 +68,8 @@ export function FoundersPackTab() {
           <CardContainer>
             <h1 className="card_title">Pack 1</h1>
             <CardContent>
+              <p className="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab mollitia praesentium saepe quia soluta vero atque error necessitatibus, perspiciatis cupiditate sit esse tenetur dolores sint. Explicabo doloribus fugit nesciunt? Culpa!</p>
+
               <img src={notfound} />
               <Button 
                 text="BUY PACK" 
@@ -80,6 +84,8 @@ export function FoundersPackTab() {
           <CardContainer>
             <h1 className="card_title">Pack 1</h1>
             <CardContent>
+              <p className="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab mollitia praesentium saepe quia soluta vero atque error necessitatibus, perspiciatis cupiditate sit esse tenetur dolores sint. Explicabo doloribus fugit nesciunt? Culpa!</p>
+
               <img src={notfound} />
               <Button 
                 text="BUY PACK" 
@@ -94,6 +100,8 @@ export function FoundersPackTab() {
           <CardContainer>
             <h1 className="card_title">Pack 1</h1>
             <CardContent>
+              <p className="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab mollitia praesentium saepe quia soluta vero atque error necessitatibus, perspiciatis cupiditate sit esse tenetur dolores sint. Explicabo doloribus fugit nesciunt? Culpa!</p>
+
               <img src={notfound} />
               <Button 
                 text="BUY PACK" 
