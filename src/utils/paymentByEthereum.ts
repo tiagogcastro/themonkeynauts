@@ -1,5 +1,5 @@
 export type MetaMaskPaymentParams = {
-  ether: string,
+  ether: string;
   fromAddress?: string;
   dataContract: string;
   toAddress: string;
