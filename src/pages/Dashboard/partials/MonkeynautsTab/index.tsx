@@ -4,7 +4,7 @@ import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks'
 
 import { Monkeynaut } from '../Monkeynaut';
 import { api, MonkeynautType } from '@/services/api';
-import { replaceToShortString } from '@/utils';
+import { replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
 
@@ -27,17 +27,17 @@ import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
 
 export type MonkeynautsTabProps = {
-  monkeynautIsShow: UseBooleanTypes;
+  monkeynautIsShow?: UseBooleanTypes;
 }
 
 export function MonkeynautsTab({
-  monkeynautIsShow
+  monkeynautIsShow,
 }: MonkeynautsTabProps) {
   const { user } = useAuth();
   const { setMonkeynaut } = useDashboardTabs();
   const monkeynautsIsLoading = useBoolean(true);
 
-  const [monkeynauts, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
+  const [{monkeynauts}, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
 
   function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
     let monkeynautOwnerName = monkeynaut.owner.id === user?.user.id ? 'YOU' : monkeynaut.owner.nickname;
@@ -47,10 +47,10 @@ export function MonkeynautsTab({
       id_short: replaceToShortString(monkeynaut.id),
       ownerName: monkeynautOwnerName
     });
-
-    monkeynautIsShow.changeToTrue();
+    
+    monkeynautIsShow?.changeToTrue();
   }
-
+  
   useEffect(() => {
     async function getMonkeynauts() {
       try {
@@ -67,22 +67,16 @@ export function MonkeynautsTab({
     getMonkeynauts();
   }, []);
 
-  function verifyMonkeynautRole(type: MonkeynautType.MonkeynautRole) {
-    const roles: Record<MonkeynautType.MonkeynautRole, string> = {
-      engineer,
-      soldier,
-      scientist  
-    }
-  
-    return roles[type.toLowerCase() as MonkeynautType.MonkeynautRole];
-  }
-
   const monkeynautsModified = useMemo(() => {
-    if(monkeynauts.monkeynauts) {
-      return monkeynauts.monkeynauts.map(monkeynaut => {
+    if(monkeynauts) {
+      return monkeynauts.map(monkeynaut => {
         return {
           ...monkeynaut,
-          avatar: verifyMonkeynautRole(monkeynaut.class),
+          avatar: verifyRole(monkeynaut.class, {
+            engineer,
+            soldier,
+            scientist
+          }),
         }
       });
     }
@@ -90,7 +84,7 @@ export function MonkeynautsTab({
 
   return (
     <Container>
-      {!monkeynautIsShow.state ? (
+      {!monkeynautIsShow?.state ? (
         <ListMonkeynautsContainer loadingMonkeynauts={monkeynautsIsLoading.state}>
           {monkeynautsIsLoading.state ? (
             <Loading size={6.4} />
