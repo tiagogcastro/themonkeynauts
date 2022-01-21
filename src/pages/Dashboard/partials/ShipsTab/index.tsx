@@ -6,7 +6,7 @@ import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks'
 
 import { Loading } from '@/components';
 
-import { replaceToShortString } from '@/utils';
+import { replaceToShortString, verifyRole } from '@/utils';
 
 import fighter from '@/assets/images/fighter.png';
 import explorer from '@/assets/images/explorer.png';
@@ -29,11 +29,11 @@ import {
 } from './styles';
 
 export type ShipsTabProps = {
-  shipIsShow: UseBooleanTypes;
+  shipIsShow?: UseBooleanTypes;
 }
 
 export function ShipsTab({
-  shipIsShow
+  shipIsShow,
 }: ShipsTabProps) {
   const { user } = useAuth();
 
@@ -51,7 +51,7 @@ export function ShipsTab({
       ownerName: shipOwnerName
     });
 
-    shipIsShow.changeToTrue();
+    shipIsShow?.changeToTrue();
   }
 
   useEffect(() => {
@@ -70,23 +70,16 @@ export function ShipsTab({
     getShips();
   }, []);
 
-  
-  function verifyShipRole(type: ShipType.ShipRole) {
-    const roles: Record<ShipType.ShipRole, string> = {
-      explorer,
-      fighter,
-      miner  
-    };
-  
-    return roles[type.toLowerCase() as ShipType.ShipRole];
-  }
-
   const shipsModified = useMemo(() => {
     if(ships) {
       return ships.map(ship => {
         return {
           ...ship,
-          avatar: verifyShipRole(ship.class),
+          avatar: verifyRole(ship.class, {
+            explorer,
+            fighter,
+            miner
+          }),
         }
       });
     }
@@ -94,7 +87,7 @@ export function ShipsTab({
 
   return (
     <Container>
-      {!shipIsShow.state ? (
+      {!shipIsShow?.state ? (
         <ListShipsContainer loadingShips={loadingShips.state}>
           {loadingShips.state ? (
             <Loading size={6.4} />
