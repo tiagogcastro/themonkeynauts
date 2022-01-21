@@ -1,3 +1,5 @@
+import { User } from '../../user/types';
+
 export type MonkeynautRole = 'soldier' | 'engineer' | 'scientist';
 
 export type Monkeynaut = {
@@ -9,6 +11,8 @@ export type Monkeynaut = {
   rank: string;
 
   avatar?: string;
+  ownerName?: string;
+  id_short?: string;
 
   baseAttributes: {
     skill: number;
@@ -25,6 +29,9 @@ export type Monkeynaut = {
     energy: number;
   };
   breedCount: number;
+
+  owner: User;
+  operator: User;
 };
 
 export type GetMonkeynauts = {

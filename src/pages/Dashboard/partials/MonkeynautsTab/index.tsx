@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
+
+import { Monkeynaut } from '../Monkeynaut';
+import { api, MonkeynautType } from '@/services/api';
+import { replaceToShortString } from '@/utils';
+
+import { Loading } from '@/components';
+
+import { Title_1 } from '@/styles/global';
 import { 
   Container,
   ListMonkeynautsContainer,
@@ -17,12 +26,6 @@ import engineer from '@/assets/images/engineer.png';
 import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
 
-import { useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
-import { Monkeynaut } from '../Monkeynaut';
-import { Title_1 } from '@/styles/global';
-import { api, MonkeynautType } from '@/services/api';
-import { Loading } from '@/components';
-
 export type MonkeynautsTabProps = {
   monkeynautIsShow: UseBooleanTypes;
 }
@@ -30,12 +33,20 @@ export type MonkeynautsTabProps = {
 export function MonkeynautsTab({
   monkeynautIsShow
 }: MonkeynautsTabProps) {
+  const { user } = useAuth();
   const { setMonkeynaut } = useDashboardTabs();
-  const [monkeynauts, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
   const monkeynautsIsLoading = useBoolean(true);
 
+  const [monkeynauts, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
+
   function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
-    setMonkeynaut(monkeynaut);
+    let monkeynautOwnerName = monkeynaut.owner.id === user?.user.id ? 'YOU' : monkeynaut.owner.nickname;
+
+    setMonkeynaut({
+      ...monkeynaut,
+      id_short: replaceToShortString(monkeynaut.id),
+      ownerName: monkeynautOwnerName
+    });
 
     monkeynautIsShow.changeToTrue();
   }

@@ -5,7 +5,6 @@ import {
   Title_1
 } from '@/styles/global';
 
-import fighter_2 from '@/assets/fighter_2.png';
 import notfound from '@/assets/notfound.png';
 
 import {
@@ -45,12 +44,12 @@ export function Ship({
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
                 <span>Ship ID</span>
-                <strong title={ship.id} className="ship_id">{ship.id}</strong>
+                <strong title={ship.id} className="ship_id">{ship.id_short}</strong>
               </UniqueInfo>
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>Text</strong>
+                <strong>{ship.ownerName}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">

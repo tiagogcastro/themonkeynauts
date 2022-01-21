@@ -57,12 +57,12 @@ export function Monkeynaut({
               <InfoTitle_1 className="details_title">Details</InfoTitle_1>
               <UniqueInfo>
                 <span>Monkeynaut ID</span>
-                <strong title={monkeynaut.id} className="monkeynaut_id">{monkeynaut.id}</strong>
+                <strong title={monkeynaut.id} className="monkeynaut_id">{monkeynaut.id_short}</strong>
               </UniqueInfo>
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>?????</strong>
+                <strong>{monkeynaut.ownerName}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">

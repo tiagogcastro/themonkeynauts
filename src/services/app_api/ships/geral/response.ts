@@ -1,3 +1,5 @@
+import { User } from '../../user/types';
+
 export type ShipRole = 'fighter' | 'explorer' | 'miner';
 
 export type Ship = {
@@ -7,6 +9,8 @@ export type Ship = {
   rank: string;
 
   avatar?: string;
+  ownerName?: string;
+  id_short?: string;
   
   baseAttributes: {
     fuel: number;
@@ -14,6 +18,9 @@ export type Ship = {
   finalAttributes: {
     fuel: number;
   };
+  
+  owner: User;
+  operator: User;
 }
 
 export type GetShip = {
