@@ -2,6 +2,8 @@ import { useBoolean } from '@/hooks';
 import { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { replaceToShortString } from '@/utils/replaceToShortString';
+
 import { COLORS } from '@/theme';
 
 import {
@@ -117,7 +119,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     setUser({
       user: {
         ...player,
-        id_short: player.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
+        id_short: replaceToShortString(player.id)
       }
     });
     
