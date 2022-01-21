@@ -33,7 +33,7 @@ export function PreSale() {
     max,
     min,
   }: HandleChange) {
-    let value: string | number = event.target.value.replace(/\D[.]/g, '');
+    let value: string | number = event.target.value.replace(/[^0-9.]/g, '');
 
     if(Number(value) < min || Number(value) > max) {
       toast('You can only put numbers between 0.1 and 1', {
@@ -74,6 +74,18 @@ export function PreSale() {
 
     toast(`${user?.user.nickname}, please wait for the metamask window to open.`, {
       autoClose: 7000,
+      pauseOnHover: true,
+      type: 'info',
+      style: {
+        background: COLORS.global.white_0,
+        color: COLORS.global.black_0,
+        fontSize: 14,
+        fontFamily: 'Orbitron, sans-serif',
+      }
+    });
+
+    toast(`if it doesn't open a popup, check your metamask`, {
+      autoClose: 9000,
       pauseOnHover: true,
       type: 'info',
       style: {
