@@ -1,3 +1,4 @@
+import { Monkeynaut } from '../../monkeynauts/types';
 import { User } from '../../user/types';
 
 export type ShipRole = 'fighter' | 'explorer' | 'miner';
@@ -21,6 +22,8 @@ export type Ship = {
   
   owner: User;
   operator: User;
+
+  crew: Monkeynaut[];
 }
 
 export type GetShip = {
