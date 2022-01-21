@@ -109,9 +109,12 @@ export function Ship({
               {shipModified && shipModified.crew.map(crew => (
                 <CrewSelected>
                   <div className="crew_content">
-                    <div>
-                      <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
-                      <span className="crew_name">{crew.firstName} {crew.lastName}</span>
+                    <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
+                    <div className="crew_infos">
+                      <span>{crew.firstName} {crew.lastName}</span>
+                      <span>{crew.class}</span>
+                      <span>{crew.rank}</span>
+                      <span>Energy: 2/2</span>
                     </div>
                   </div>
                 </CrewSelected>

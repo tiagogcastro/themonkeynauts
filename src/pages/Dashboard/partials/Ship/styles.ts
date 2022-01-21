@@ -292,10 +292,12 @@ export const CrewContent = styled.div`
 `;
 
 export const CrewSelected = styled.div`
-  width: 100%;
 
   background: #041937;
   border: 1px solid ${COLORS.colors.secondary_50};
+  border-radius: 10px;
+
+  padding-right: 20px;
 
   &:not(:first-child) {
     margin-top: 4px;
@@ -303,34 +305,38 @@ export const CrewSelected = styled.div`
 
   .crew_content {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 
-    div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    width: 100%;
 
     img {
-      width: 52px;
-      height: 52px;
-
-      padding: 4px;
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
     }
 
-    .crew_name {
-      text-align: center;
-      padding: 4px 0; 
-      word-break: break-word;
-    }
+    .crew_infos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
 
-    .crew_remove {
-      padding: 0 8px;
-      background: ${COLORS.colors.secondary_50};
-      margin-left: 8px;
+      span {
+        text-align: center;
+        word-break: break-word;
+        padding: 2px 0;
 
-      svg {
-        width: 16px;
-        height: 16px;
+        font-weight: bold;
+
+        &:first-child {
+          padding-top: 12px;
+        }
+
+        &:last-child {
+          padding-bottom: 12px;
+        }
       }
     }
   }
