@@ -16,6 +16,9 @@ export const Container = styled.div`
   position: relative;
 
   svg {
+    width: 32px;
+    height: 32px;
+
     path {
       color: ${COLORS.global.red_0};
     }
@@ -67,5 +70,24 @@ export const Container = styled.div`
   .cubic4 {
     bottom: -2px;
     right: -2px;
+  }
+
+  @media(min-width: 1024px) {
+    padding: 32px 48px;
+
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    .texts_container {
+      .text {
+        font-size: 18px;
+      }
+    }
+
+    .buttons {
+      margin-top: 16px;
+    }
   }
 `;

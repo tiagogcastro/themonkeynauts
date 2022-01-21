@@ -52,7 +52,7 @@ export function Wallet({
         <div className="cubic cubic2" />
         <div className="cubic cubic3" />
         <div className="cubic cubic4" />
-        <RiAlertFill size={32} />
+        <RiAlertFill />
         <div className="texts_container">
           <p className="text">This action is irreversible!</p>
           <p className="text">Once you have linked the wallet, you will not be able to modify it in the future.</p>
