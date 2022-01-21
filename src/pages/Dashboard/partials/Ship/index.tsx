@@ -1,12 +1,12 @@
-import { AiOutlineClose } from 'react-icons/ai';
+import { useMemo } from 'react';
+
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
+
+import { verifyRole } from '@/utils';
 
 import {
   Title_1
 } from '@/styles/global';
-
-import notfound from '@/assets/notfound.png';
-
 import {
   Container,
   Content,
@@ -21,8 +21,11 @@ import {
   CrewContainer,
   CrewContent,
   CrewSelected,
-  CrewToSelect,
 } from './styles';
+
+import engineer from '@/assets/images/engineer.png';
+import scientist from '@/assets/images/scientist.png';
+import soldier from '@/assets/images/soldier.png';
 
 export type ShipProps = {
   shipIsShow: UseBooleanTypes;
@@ -32,6 +35,22 @@ export function Ship({
   shipIsShow,
 }: ShipProps) {
   const { ship } = useDashboardTabs();
+
+  const shipModified = useMemo(() => {
+    return {
+      ...ship,
+      crew: ship.crew && ship.crew.map(crew => {
+        return {
+          ...crew,
+          avatar: verifyRole(crew.class, {
+            engineer,
+            scientist,
+            soldier
+          })
+        }
+      })
+    }
+  }, [ship]);
 
   return (
     <Container>
@@ -59,7 +78,7 @@ export function Ship({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>Text</strong>
+                    <strong>2/2</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
@@ -87,21 +106,16 @@ export function Ship({
             <InfoTitle_1 className="crew_title">Crew</InfoTitle_1>
 
             <CrewContent>
-              <CrewSelected>
-                <div className="crew_content">
-                  <div>
-                    <img src={notfound} alt="" />
-                    <span className="crew_name">Segundo Engenner Major</span>
+              {shipModified && shipModified.crew.map(crew => (
+                <CrewSelected>
+                  <div className="crew_content">
+                    <div>
+                      <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
+                      <span className="crew_name">{crew.firstName} {crew.lastName}</span>
+                    </div>
                   </div>
-                  <button className="crew_remove"><AiOutlineClose /></button>
-                </div>
-              </CrewSelected>
-
-              <CrewToSelect>
-                <div className="crew_content">
-                  <span>Select Monkeynaut</span>
-                </div>
-              </CrewToSelect>
+                </CrewSelected>
+              ))}
             </CrewContent>
           </CrewContainer>
         </Details>
