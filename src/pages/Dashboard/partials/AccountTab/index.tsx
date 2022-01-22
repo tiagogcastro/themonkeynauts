@@ -1,11 +1,6 @@
 import { FaReact } from 'react-icons/fa';
-import { useState } from 'react';
-import { useMetaMask } from 'metamask-react';
 
-import { useAuth, useBoolean } from '@/hooks';
-
-import { Wallet } from '@/components/modals/Wallet';
-import { Button } from '@/components';
+import { useAuth } from '@/hooks';
 
 import bronze_ore from '@/assets/images/bronze_ore.png';
 import iron_ore from '@/assets/images/iron_ore.png';
@@ -36,8 +31,6 @@ export type HandleChange = {
 export function AccountTab() {
   const { user } = useAuth();
   
-  const walletModalIsOpen = useBoolean();
-
   return (
     <Container>
       <Content>
@@ -57,16 +50,6 @@ export function AccountTab() {
               <UniqueInfo>
                 <span>E-mail</span>
                 <strong>{user?.user.email}</strong>
-              </UniqueInfo>
-            </div>
-            <div className="info_separator">
-              <UniqueInfo>
-                <span>Wallet</span>
-                <Button 
-                  className="wallet_button"
-                  text="Link"
-                  onClick={walletModalIsOpen.changeToTrue}  
-                />
               </UniqueInfo>
             </div>
           </Info>
@@ -105,10 +88,6 @@ export function AccountTab() {
           
         </SecondaryDetails>
       </Content>
-      <Wallet 
-        isOpen={walletModalIsOpen.state} 
-        handleClose={walletModalIsOpen.changeToFalse}
-      />
     </Container>
   );
 }
