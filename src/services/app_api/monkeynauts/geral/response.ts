@@ -14,20 +14,16 @@ export type Monkeynaut = {
   ownerName?: string;
   id_short?: string;
 
-  baseAttributes: {
+  attributes: {
     skill: number;
     speed: number;
     resistance: number;
     life: number;
-    energy: number;
+    maxEnergy: number;
+    currentEnergy: number;
   };
-  finalAttributes: {
-    skill: number;
-    speed: number;
-    resistance: number;
-    life: number;
-    energy: number;
-  };
+  shipId: string;
+  
   breedCount: number;
 
   owner: User;

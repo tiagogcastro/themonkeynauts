@@ -57,14 +57,16 @@ export function MonkeynautsTab({
         const response = await api.monkeynauts.geral.getMonkeynauts();
 
         setMonkeynauts(response.data);
-
-        monkeynautsIsLoading.changeToFalse();
       } catch(err) {
+        
+      } finally {
         monkeynautsIsLoading.changeToFalse();
       }
     }
 
     getMonkeynauts();
+
+    return () => monkeynautsIsLoading.changeToFalse();
   }, []);
 
   const monkeynautsModified = useMemo(() => {
@@ -119,7 +121,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="id">
                           <div className="info">
                             <span>Monkeynaut id</span>
-                            <strong>{monkeynaut.id}</strong>
+                            <strong title={monkeynaut.id}>{replaceToShortString(monkeynaut.id)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">
@@ -137,7 +139,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="energy">
                           <div className="info">
                             <span>Energy</span>
-                            <strong>{monkeynaut.finalAttributes.energy}</strong>
+                            <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="breed">

@@ -88,7 +88,7 @@ export function Ship({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Fuel</span>
-                    <strong>{ship.finalAttributes.fuel}</strong>
+                    <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
                   </UniqueInfo>
                 </div>
               </div>
@@ -114,7 +114,7 @@ export function Ship({
                       <span>{crew.firstName} {crew.lastName}</span>
                       <span>{crew.class}</span>
                       <span>{crew.rank}</span>
-                      <span>Energy: 2/2</span>
+                      <span>Energy: {crew.attributes.currentEnergy}/{crew.attributes.maxEnergy}</span>
                     </div>
                   </div>
                 </CrewSelected>

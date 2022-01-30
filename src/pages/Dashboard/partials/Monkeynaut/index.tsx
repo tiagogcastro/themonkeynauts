@@ -8,9 +8,6 @@ import {
   Title_1
 } from '@/styles/global';
 
-import fighter_2 from '@/assets/fighter_2.png';
-import btn_delete from '@/assets/images/btn_delete.png';
-
 import {
   Container,
   Content,
@@ -36,7 +33,6 @@ import {
   EquipamentsContent,
   EquipamentToSelect,
 } from './styles';
-import { MonkeynautType } from '@/services/app_api';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -49,7 +45,7 @@ export function Monkeynaut({
   return (
     <Container>
       <Content>
-        <Title_1 className="monkeynaut_name">{monkeynaut.firstName}</Title_1>
+        <Title_1 className="monkeynaut_name">{monkeynaut.firstName} {monkeynaut.lastName}</Title_1>
         <Details>
           <PrincipalDetails>
             <img className="monkeynaut_image" src={monkeynaut.avatar} alt={`${monkeynaut.firstName} ${monkeynaut.lastName}`} />
@@ -72,7 +68,7 @@ export function Monkeynaut({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Energy</span>
-                    <strong>{monkeynaut.finalAttributes.energy}/2</strong>
+                    <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
@@ -92,10 +88,9 @@ export function Monkeynaut({
                 <CrewInShipContainer>
                   <CrewInShip>
                     <div>
-                      <strong>Valikirye</strong>
-                      <p>Fighter</p>
+                      <strong>Name static</strong>
+                      <p>Class static</p>
                     </div>
-                    <button><img src={btn_delete} /></button>
                   </CrewInShip>
                 </CrewInShipContainer>
               </UniqueInfo>
@@ -107,19 +102,19 @@ export function Monkeynaut({
               <Attributes>
                 <Attribute>
                   <GiBroadsword />
-                  <strong>{monkeynaut.finalAttributes.skill}</strong>
+                  <strong>{monkeynaut.attributes.skill}</strong>
                 </Attribute>
                 <Attribute>
                   <BiRun />
-                  <strong>{monkeynaut.finalAttributes.speed}</strong>
+                  <strong>{monkeynaut.attributes.speed}</strong>
                 </Attribute>
                 <Attribute>
                   <BiShieldQuarter />
-                  <strong>{monkeynaut.finalAttributes.resistance}</strong>
+                  <strong>{monkeynaut.attributes.resistance}</strong>
                 </Attribute>
                 <Attribute>
                   <AiFillHeart />
-                  <strong>{monkeynaut.finalAttributes.life}</strong>
+                  <strong>{monkeynaut.attributes.life}</strong>
                 </Attribute>
               </Attributes>
             </AttributesContainer>

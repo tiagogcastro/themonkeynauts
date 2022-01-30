@@ -13,11 +13,9 @@ export type Ship = {
   ownerName?: string;
   id_short?: string;
   
-  baseAttributes: {
-    fuel: number;
-  };
-  finalAttributes: {
-    fuel: number;
+  attributes: {
+    maxFuel: number;
+    currentFuel: number;
   };
   
   owner: User;

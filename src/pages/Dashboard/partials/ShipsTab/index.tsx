@@ -68,6 +68,8 @@ export function ShipsTab({
     }
 
     getShips();
+
+    return () => loadingShips.changeToFalse();
   }, []);
 
   const shipsModified = useMemo(() => {
@@ -146,7 +148,7 @@ export function ShipsTab({
                         <TbodyTdCustom className="fuel">
                           <div className="info">
                             <span>Fuel</span>
-                            <strong>{ship.finalAttributes.fuel}</strong>
+                            <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
                           </div>
                         </TbodyTdCustom>
                       </TbodyTrCustom>
