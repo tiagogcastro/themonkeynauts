@@ -1,14 +1,17 @@
-import { useEffect } from 'react';
 import { useMetaMask } from 'metamask-react';
-
-import { Button } from '@/components';
+import { RiAlertFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 import {
   Modal,
   ModalProps
 } from '@tg0/react-modal';
 
-import { RiAlertFill } from 'react-icons/ri';
+import { api } from '@/services/api';
+
+import { Button } from '@/components';
+
+import { COLORS } from '@/theme';
 
 import {
   Container
@@ -25,14 +28,48 @@ export function Wallet({
   const { connect } = useMetaMask();
 
   async function connectMetaMask() {
+
     try {
       const connection = await connect();
 
       if(connection) {
-        return handleClose();
-      }
-    } catch(err) {
+        const response = await api.wallet.geral.createWallet({
+          body: {
+            address: connection?.[0],
+            name: 'Metamask'
+          }
+        });
 
+        if(response) {
+          toast(`Success, you have connected your metamask account in our app.`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        }
+      }
+    } catch(err: any) {
+      const error_message = err?.response?.headers['grpc-message'];
+
+      toast(error_message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    } finally {
+      handleClose();
     }
   }
 

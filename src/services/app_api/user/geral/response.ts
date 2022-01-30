@@ -1,9 +1,13 @@
+import { Wallet } from '../../wallet/types'
+
 export type User = {
   id: string;
   email: string;
   nickname: string;
   roles: string[];
   id_short: string | undefined;
+
+  wallet: Wallet
 }
 
 export type GetUser = {

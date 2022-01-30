@@ -156,7 +156,7 @@ export function AccountTab() {
       depositButtonHasBlocked.changeToFalse();
     }
   }
-  
+
   return (
     <Container>
       <Content>
@@ -178,16 +178,18 @@ export function AccountTab() {
                 <strong>{user?.user.email}</strong>
               </UniqueInfo>
             </div>
-            <div className="info_separator">
-              <UniqueInfo>
-                <span>Wallet</span>
-                <Button 
-                  className="wallet_button"
-                  text="Link"
-                  onClick={walletModalIsOpen.changeToTrue}  
-                />
-              </UniqueInfo>
-            </div>
+            {!user?.user.wallet && (
+              <div className="info_separator">
+                <UniqueInfo>
+                  <span>Wallet</span>
+                  <Button 
+                    className="wallet_button"
+                    text="Link"
+                    onClick={walletModalIsOpen.changeToTrue}  
+                    />
+                </UniqueInfo>
+              </div>
+            )}
           </Info>
         </Details>
         <SecondaryDetails>
@@ -251,7 +253,7 @@ export function AccountTab() {
         </SecondaryDetails>
       </Content>
       <Wallet 
-        isOpen={walletModalIsOpen.state} 
+        isOpen={walletModalIsOpen.state && !user?.user.wallet} 
         handleClose={walletModalIsOpen.changeToFalse}
       />
     </Container>
