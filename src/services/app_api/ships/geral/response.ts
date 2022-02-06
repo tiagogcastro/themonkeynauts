@@ -27,3 +27,7 @@ export type Ship = {
 export type GetShip = {
   ships: Ship[];
 }
+
+export type GetUniqueShip = {
+  ship: Ship | null;
+}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
@@ -7,6 +8,8 @@ import { api, MonkeynautType } from '@/services/api';
 import { replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
+
+import { COLORS } from '@/theme';
 
 import { Title_1 } from '@/styles/global';
 import { 
@@ -39,18 +42,43 @@ export function MonkeynautsTab({
 
   const [{monkeynauts}, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
 
-  function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
+  async function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
     let monkeynautOwnerName = monkeynaut.owner.id === user?.user.id ? 'YOU' : monkeynaut.owner.nickname;
 
-    setMonkeynaut({
-      ...monkeynaut,
-      id_short: replaceToShortString(monkeynaut.id),
-      ownerName: monkeynautOwnerName
-    });
-    
-    monkeynautIsShow?.changeToTrue();
+    try {
+      const getUniqueShipResponse = await api.ships.geral.getUnique({
+        path: {
+          ship_id: monkeynaut.shipId,
+        }
+      });
+
+      setMonkeynaut({
+        ...monkeynaut,
+        id_short: replaceToShortString(monkeynaut.id),
+        ownerName: monkeynautOwnerName,
+        crew_in_ship: getUniqueShipResponse.data.ship,
+      });
+      
+    }
+    catch(err: any) {
+      const error_message = err?.response?.headers['grpc-message'];
+
+      toast(error_message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    } finally {
+      monkeynautIsShow?.changeToTrue();
+    }
   }
-  
+
   useEffect(() => {
     async function getMonkeynauts() {
       try {

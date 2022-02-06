@@ -86,12 +86,14 @@ export function Monkeynaut({
               <UniqueInfo>
                 <span>Crew in Ship</span>
                 <CrewInShipContainer>
-                  <CrewInShip>
-                    <div>
-                      <strong>Name static</strong>
-                      <p>Class static</p>
-                    </div>
-                  </CrewInShip>
+                  {monkeynaut.crew_in_ship && (
+                    <CrewInShip>
+                      <div>
+                        <strong>{monkeynaut.crew_in_ship.name}</strong>
+                        <p>{monkeynaut.crew_in_ship.class}</p>
+                      </div>
+                    </CrewInShip>
+                  )}
                 </CrewInShipContainer>
               </UniqueInfo>
             </MonkeynautInformation>
