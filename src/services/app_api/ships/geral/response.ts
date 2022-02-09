@@ -21,7 +21,10 @@ export type Ship = {
   owner: User;
   operator: User;
 
-  crew: Monkeynaut[];
+  crew: {
+    seats: number;
+    monkeynauts: Monkeynaut[];
+  };
 }
 
 export type GetShip = {
