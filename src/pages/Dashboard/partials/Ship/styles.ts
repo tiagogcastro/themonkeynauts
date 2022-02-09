@@ -52,7 +52,7 @@ export const Details = styled.main`
   flex-direction: column;
 
   .ship_image {
-    margin: 8px 48px 0 0;
+    margin: 8px auto 0;
     
     max-width: 170px;
     max-height: 100px;
