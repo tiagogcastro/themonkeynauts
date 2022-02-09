@@ -1,4 +1,5 @@
 import { FaReact } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
 import { useState } from 'react';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
@@ -41,7 +42,7 @@ export type HandleChange = {
 }
 
 export function AccountTab() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { ethereum } = useMetaMask();
   
   const walletModalIsOpen = useBoolean();
@@ -161,7 +162,15 @@ export function AccountTab() {
     <Container>
       <Content>
         <Details>
-          <InfoTitle_1 className="details_title">Details</InfoTitle_1>
+          <header className="detail_header">
+            <InfoTitle_1 className="details_title">Details</InfoTitle_1>
+            <button 
+              className="signout_button"
+              onClick={signOut}
+            >
+              <FiLogOut /> Signout
+            </button>
+          </header>
 
           <Info>
             <div className="info_separator">

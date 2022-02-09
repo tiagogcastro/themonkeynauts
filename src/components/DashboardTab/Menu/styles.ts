@@ -68,13 +68,36 @@ export const Content = styled.div`
 
   margin-top: 6.4rem;
 
+  .signout {
+    display: flex;
+
+    span {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 2.3rem;
+      letter-spacing: 0.035em;
+      text-align: left;
+
+      border-bottom: 2px solid transparent;
+
+      margin: 16px 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+  }
+
   @media(min-width: 1400px) {
     max-width: 85%;
     flex-direction: row;
 
     margin: 0 auto;
-    /* padding-bottom: 12px;
-    overflow: auto; */
+
+    .signout {
+      display: none;
+    }
   }
 `;
 

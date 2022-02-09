@@ -1,5 +1,7 @@
-import { UseBooleanTypes } from '@/hooks'
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose } from 'react-icons/ai';
+import { FiLogOut } from 'react-icons/fi';
+
+import { useAuth, UseBooleanTypes } from '@/hooks';
 
 import {
   Container,
@@ -21,6 +23,8 @@ export function Menu({
   changeSelected,
   selectedTab
 }: TabMenuProps) {
+  const { signOut } = useAuth();
+  
   return (
     <Container
       isClosed={menu.state}
@@ -47,6 +51,12 @@ export function Menu({
             </TabTitle>
           </TabChange>
         ))}
+        <button 
+          className="signout"
+          onClick={signOut}
+        >
+          <span><FiLogOut /> Signout</span>
+        </button>
       </Content>
     </Container>
   )
