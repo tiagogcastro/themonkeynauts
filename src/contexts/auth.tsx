@@ -16,6 +16,7 @@ import {
 export type AuthContextData = {
   signIn: (credentials: UserType.AppLoginParams) => Promise<UserType.AppLoginResponse | undefined>;
   register: (credentials: UserType.AppRegisterParams) => Promise<UserType.AppRegisterResponse | undefined>;
+  signOut: () => void;
 
   user: UserType.GetUser | null;
   token: string | null;
@@ -31,7 +32,7 @@ export type AuthProviderProps = {
 
 export function AuthProvider({children}: AuthProviderProps) {
   const [user, setUser] = useState<UserType.GetUser | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem(monkeynautsApiToken));
+  const [token, setToken] = useState<string | null>(sessionStorage.getItem(monkeynautsApiToken));
 
   const tokenIsValid = useBoolean(true);
   const loading = useBoolean(true);
@@ -39,8 +40,9 @@ export function AuthProvider({children}: AuthProviderProps) {
   function signOut() {
     tokenIsValid.changeToFalse();
     loading.changeToFalse();
+    sessionStorage.removeItem(monkeynautsApiToken);
+
     setToken(null);
-    localStorage.removeItem(monkeynautsApiToken);
 
     baseApi.defaults.headers.common['Authorization'] = ``;
   }
@@ -84,7 +86,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    localStorage.setItem(monkeynautsApiToken, token);
+    sessionStorage.setItem(monkeynautsApiToken, token);
     tokenIsValid.changeToTrue();
     setToken(token);
 
@@ -143,6 +145,7 @@ export function AuthProvider({children}: AuthProviderProps) {
       value={{
         signIn, 
         register,
+        signOut,
         token,
         tokenIsValid: tokenIsValid.state,
         loading: loading.state,
