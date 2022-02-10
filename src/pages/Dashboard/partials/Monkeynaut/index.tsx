@@ -60,7 +60,7 @@ export function Monkeynaut({
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>{capitalize(monkeynaut.ownerName)}</strong>
+                <strong>{capitalize(String(monkeynaut.ownerName))}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
