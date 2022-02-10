@@ -5,7 +5,7 @@ import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks'
 
 import { Monkeynaut } from '../Monkeynaut';
 import { api, MonkeynautType } from '@/services/api';
-import { replaceToShortString, verifyRole } from '@/utils';
+import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
 
@@ -155,13 +155,13 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="role">
                           <div className="info">
                             <span>Role</span>
-                            <strong>{monkeynaut.class}</strong>
+                            <strong>{capitalize(monkeynaut.class)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="rank">
                           <div className="info">
                             <span>Rank</span>
-                            <strong>{monkeynaut.rank}</strong>
+                            <strong>{capitalize(monkeynaut.rank)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="energy">
