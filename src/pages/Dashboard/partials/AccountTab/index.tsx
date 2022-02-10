@@ -28,11 +28,7 @@ export type HandleChange = {
 
 export function AccountTab() {
   const { user } = useAuth();
-<<<<<<< HEAD
     
-=======
-  
->>>>>>> 3bf12292c786a33e7e99443605f0352b1d568329
   return (
     <Container>
       <Content>
