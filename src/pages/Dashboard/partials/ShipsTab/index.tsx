@@ -6,7 +6,7 @@ import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks'
 
 import { Loading } from '@/components';
 
-import { replaceToShortString, verifyRole } from '@/utils';
+import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import fighter from '@/assets/images/fighter.png';
 import explorer from '@/assets/images/explorer.png';
@@ -128,25 +128,25 @@ export function ShipsTab({
                         <TbodyTdCustom className="role">
                           <div className="info">
                             <span>Role</span>
-                            <strong>{ship.class}</strong>
+                            <strong>{capitalize(ship.class)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="rank">
                           <div className="info">
                             <span>Rank</span>
-                            <strong>{ship.rank}</strong>
+                            <strong>{capitalize(ship.rank)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="crew">
                           <div className="info">
                             <span>Crew</span>
-                            <strong>2/5</strong>
+                            <strong>{ship.crew.monkeynauts.length || 0}/{ship.crew.seats}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="fuel">
                           <div className="info">
                             <span>Fuel</span>
-                            <strong>{ship.finalAttributes.fuel}</strong>
+                            <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
                           </div>
                         </TbodyTdCustom>
                       </TbodyTrCustom>

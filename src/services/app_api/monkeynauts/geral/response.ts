@@ -1,3 +1,4 @@
+import { Ship } from '../../ships/types';
 import { User } from '../../user/types';
 
 export type MonkeynautRole = 'soldier' | 'engineer' | 'scientist';
@@ -13,21 +14,19 @@ export type Monkeynaut = {
   avatar?: string;
   ownerName?: string;
   id_short?: string;
+  shipId: string;
 
-  baseAttributes: {
+  crew_in_ship?: Ship | null;
+
+  attributes: {
     skill: number;
     speed: number;
     resistance: number;
     life: number;
-    energy: number;
+    maxEnergy: number;
+    currentEnergy: number;
   };
-  finalAttributes: {
-    skill: number;
-    speed: number;
-    resistance: number;
-    life: number;
-    energy: number;
-  };
+  
   breedCount: number;
 
   owner: User;

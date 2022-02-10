@@ -36,7 +36,8 @@ import {
   EquipamentsContent,
   EquipamentToSelect,
 } from './styles';
-import { MonkeynautType } from '@/services/app_api';
+
+import { capitalize } from '@/utils';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -49,7 +50,7 @@ export function Monkeynaut({
   return (
     <Container>
       <Content>
-        <Title_1 className="monkeynaut_name">{monkeynaut.firstName}</Title_1>
+        <Title_1 className="monkeynaut_name">{monkeynaut.firstName} {monkeynaut.lastName}</Title_1>
         <Details>
           <PrincipalDetails>
             <img className="monkeynaut_image" src={monkeynaut.avatar} alt={`${monkeynaut.firstName} ${monkeynaut.lastName}`} />
@@ -62,23 +63,23 @@ export function Monkeynaut({
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>{monkeynaut.ownerName}</strong>
+                <strong>{capitalize(String(monkeynaut.ownerName))}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>{monkeynaut.class}</strong>
+                    <strong>{capitalize(monkeynaut.class)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Energy</span>
-                    <strong>{monkeynaut.finalAttributes.energy}/2</strong>
+                    <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>{monkeynaut.rank}</strong>
+                    <strong>{capitalize(monkeynaut.rank)}</strong>
                   </UniqueInfo>
 
                   <UniqueInfo>
@@ -90,13 +91,14 @@ export function Monkeynaut({
               <UniqueInfo>
                 <span>Crew in Ship</span>
                 <CrewInShipContainer>
-                  <CrewInShip>
-                    <div>
-                      <strong>Valikirye</strong>
-                      <p>Fighter</p>
-                    </div>
-                    <button><img src={btn_delete} /></button>
-                  </CrewInShip>
+                  {monkeynaut.crew_in_ship && (
+                    <CrewInShip>
+                      <div>
+                        <strong>{monkeynaut.crew_in_ship.name}</strong>
+                        <p>{capitalize(monkeynaut.crew_in_ship.class)}</p>
+                      </div>
+                    </CrewInShip>
+                  )}
                 </CrewInShipContainer>
               </UniqueInfo>
             </MonkeynautInformation>
@@ -107,19 +109,19 @@ export function Monkeynaut({
               <Attributes>
                 <Attribute>
                   <GiBroadsword />
-                  <strong>{monkeynaut.finalAttributes.skill}</strong>
+                  <strong>{monkeynaut.attributes.skill}</strong>
                 </Attribute>
                 <Attribute>
                   <BiRun />
-                  <strong>{monkeynaut.finalAttributes.speed}</strong>
+                  <strong>{monkeynaut.attributes.speed}</strong>
                 </Attribute>
                 <Attribute>
                   <BiShieldQuarter />
-                  <strong>{monkeynaut.finalAttributes.resistance}</strong>
+                  <strong>{monkeynaut.attributes.resistance}</strong>
                 </Attribute>
                 <Attribute>
                   <AiFillHeart />
-                  <strong>{monkeynaut.finalAttributes.life}</strong>
+                  <strong>{monkeynaut.attributes.life}</strong>
                 </Attribute>
               </Attributes>
             </AttributesContainer>

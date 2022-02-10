@@ -84,6 +84,7 @@ export const Details = styled.main`
 
     .ship_image {
       max-width: 430px;
+      margin: 0;
     }
   }
 `;

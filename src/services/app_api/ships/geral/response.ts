@@ -13,19 +13,24 @@ export type Ship = {
   ownerName?: string;
   id_short?: string;
   
-  baseAttributes: {
-    fuel: number;
-  };
-  finalAttributes: {
-    fuel: number;
+  attributes: {
+    maxFuel: number;
+    currentFuel: number;
   };
   
   owner: User;
   operator: User;
 
-  crew: Monkeynaut[];
+  crew: {
+    seats: number;
+    monkeynauts: Monkeynaut[];
+  };
 }
 
 export type GetShip = {
   ships: Ship[];
+}
+
+export type GetUniqueShip = {
+  ship: Ship | null;
 }

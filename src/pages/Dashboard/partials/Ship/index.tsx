@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
-import { verifyRole } from '@/utils';
+import { capitalize, verifyRole } from '@/utils';
 
 import {
   Title_1
@@ -39,16 +39,21 @@ export function Ship({
   const shipModified = useMemo(() => {
     return {
       ...ship,
-      crew: ship.crew && ship.crew.map(crew => {
-        return {
-          ...crew,
-          avatar: verifyRole(crew.class, {
-            engineer,
-            scientist,
-            soldier
-          })
-        }
-      })
+      crew: {
+        ...ship.crew,
+        monkeynauts: ship.crew.monkeynauts && ship.crew.monkeynauts.map(crew => {
+          return {
+            ...crew,
+            class: capitalize(crew.class),
+            rank: capitalize(crew.rank),
+            avatar: verifyRole(crew.class, {
+              engineer,
+              scientist,
+              soldier
+            }),
+          }
+        }),
+      }
     }
   }, [ship]);
 
@@ -68,27 +73,27 @@ export function Ship({
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>{ship.ownerName}</strong>
+                <strong>{capitalize(String(ship.ownerName))}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>{ship.class}</strong>
+                    <strong>{capitalize(ship.class)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>2/2</strong>
+                    <strong>{ship.crew.monkeynauts.length || 0}/{ship.crew.seats}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>{ship.rank}</strong>
+                    <strong>{capitalize(ship.rank)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Fuel</span>
-                    <strong>{ship.finalAttributes.fuel}</strong>
+                    <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
                   </UniqueInfo>
                 </div>
               </div>
@@ -106,15 +111,15 @@ export function Ship({
             <InfoTitle_1 className="crew_title">Crew</InfoTitle_1>
 
             <CrewContent>
-              {shipModified && shipModified.crew.map(crew => (
-                <CrewSelected>
+              {shipModified.crew.monkeynauts && shipModified.crew.monkeynauts.map(crew => (
+                <CrewSelected key={crew.id}>
                   <div className="crew_content">
                     <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
                     <div className="crew_infos">
                       <span>{crew.firstName} {crew.lastName}</span>
                       <span>{crew.class}</span>
                       <span>{crew.rank}</span>
-                      <span>Energy: 2/2</span>
+                      <span>Energy: {crew.attributes.currentEnergy}/{crew.attributes.maxEnergy}</span>
                     </div>
                   </div>
                 </CrewSelected>

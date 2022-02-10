@@ -4,7 +4,7 @@ import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks'
 
 import { Monkeynaut } from '../Monkeynaut';
 import { api, MonkeynautType } from '@/services/api';
-import { replaceToShortString, verifyRole } from '@/utils';
+import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
 
@@ -25,6 +25,8 @@ import {
 import engineer from '@/assets/images/engineer.png';
 import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
+import { toast } from 'react-toastify';
+import { COLORS } from '@/theme';
 
 export type MonkeynautsTabProps = {
   monkeynautIsShow?: UseBooleanTypes;
@@ -39,16 +41,40 @@ export function MonkeynautsTab({
 
   const [{monkeynauts}, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
 
-  function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
+  async function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
     let monkeynautOwnerName = monkeynaut.owner.id === user?.user.id ? 'YOU' : monkeynaut.owner.nickname;
 
-    setMonkeynaut({
-      ...monkeynaut,
-      id_short: replaceToShortString(monkeynaut.id),
-      ownerName: monkeynautOwnerName
-    });
-    
-    monkeynautIsShow?.changeToTrue();
+    try {
+      const getUniqueShipResponse = await api.ships.geral.getUnique({
+        path: {
+          ship_id: monkeynaut.shipId,
+        }
+      });
+
+      setMonkeynaut({
+        ...monkeynaut,
+        crew_in_ship: getUniqueShipResponse.data.ship,
+        id_short: replaceToShortString(monkeynaut.id),
+        ownerName: monkeynautOwnerName
+      });
+    }
+    catch(err: any) {
+      const error_message = err?.response?.headers['grpc-message'];
+
+      toast(error_message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    } finally {
+      monkeynautIsShow?.changeToTrue();
+    }
   }
   
   useEffect(() => {
@@ -125,19 +151,19 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="role">
                           <div className="info">
                             <span>Role</span>
-                            <strong>{monkeynaut.class}</strong>
+                            <strong>{capitalize(monkeynaut.class)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="rank">
                           <div className="info">
                             <span>Rank</span>
-                            <strong>{monkeynaut.rank}</strong>
+                            <strong>{capitalize(monkeynaut.rank)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="energy">
                           <div className="info">
                             <span>Energy</span>
-                            <strong>{monkeynaut.finalAttributes.energy}</strong>
+                            <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="breed">
