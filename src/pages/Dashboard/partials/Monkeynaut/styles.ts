@@ -76,7 +76,7 @@ export const Details = styled.main`
     .monkeynaut_image {
       max-width: 300px;
       max-height: 260px;
-      margin: 0 46px 0;
+      margin: 0 88px 0 0;
     }
   }
 
@@ -85,7 +85,7 @@ export const Details = styled.main`
     margin: 0 auto;
 
     .monkeynaut_image {
-      margin: 0 88px;
+      margin: 0 168px 0 0;
     }
   }
 `;
@@ -104,8 +104,10 @@ export const PrincipalDetails = styled.section`
 
   @media(min-width: 1024px) {
     width: 100%;
+
     align-items: center;
     justify-content: flex-end;
+    gap: 0;
   }
 `;
 
@@ -125,12 +127,15 @@ export const MonkeynautInformation = styled.aside`
   }
 
   @media(min-width: 1024px) {
-    
+    max-width: 400px;
+    width: 100%;
+
     .details_title {
       display: block;
       margin-bottom: 50px;
     }
   }
+
 `;
 
 export const UniqueInfo = styled.div`
