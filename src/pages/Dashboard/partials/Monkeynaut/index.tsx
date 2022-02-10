@@ -4,6 +4,8 @@ import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
+import { capitalize } from '@/utils';
+
 import {
   Title_1
 } from '@/styles/global';
@@ -58,13 +60,13 @@ export function Monkeynaut({
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>{monkeynaut.ownerName}</strong>
+                <strong>{capitalize(monkeynaut.ownerName)}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>{monkeynaut.class}</strong>
+                    <strong>{capitalize(monkeynaut.class)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Energy</span>
@@ -74,7 +76,7 @@ export function Monkeynaut({
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>{monkeynaut.rank}</strong>
+                    <strong>{capitalize(monkeynaut.rank)}</strong>
                   </UniqueInfo>
 
                   <UniqueInfo>
@@ -90,7 +92,7 @@ export function Monkeynaut({
                     <CrewInShip>
                       <div>
                         <strong>{monkeynaut.crew_in_ship.name}</strong>
-                        <p>{monkeynaut.crew_in_ship.class}</p>
+                        <p>{capitalize(monkeynaut.crew_in_ship.class)}</p>
                       </div>
                     </CrewInShip>
                   )}

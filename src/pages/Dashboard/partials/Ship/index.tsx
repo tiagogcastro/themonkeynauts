@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
-import { verifyRole } from '@/utils';
+import { capitalize, verifyRole } from '@/utils';
 
 import {
   Title_1
@@ -44,6 +44,8 @@ export function Ship({
         monkeynauts: ship.crew.monkeynauts.map(crew => {
           return {
             ...crew,
+            rank: capitalize(crew.rank),
+            class: capitalize(crew.class),
             avatar: verifyRole(crew.class, {
               engineer,
               scientist,
@@ -71,13 +73,13 @@ export function Ship({
 
               <UniqueInfo>
                 <span>Owner</span>
-                <strong>{ship.ownerName}</strong>
+                <strong>{capitalize(String(ship.ownerName))}</strong>
               </UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>{ship.class}</strong>
+                    <strong>{capitalize(ship.class)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
@@ -87,7 +89,7 @@ export function Ship({
                 <div className="info_right">
                   <UniqueInfo>
                     <span>Rank</span>
-                    <strong>{ship.rank}</strong>
+                    <strong>{capitalize(ship.rank)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Fuel</span>
