@@ -24,6 +24,12 @@ export type Monkeynaut = {
     maxEnergy: number;
     currentEnergy: number;
   };
+  
+  bonus: {
+    value: number;
+    description: string;
+  };
+
   shipId: string;
   
   breedCount: number;

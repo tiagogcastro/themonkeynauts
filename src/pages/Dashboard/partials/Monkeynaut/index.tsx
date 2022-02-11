@@ -125,8 +125,8 @@ export function Monkeynaut({
             <PveBonusInfo>
               <InfoTitle_1>PVE BONUS</InfoTitle_1>
               <p className="pve_detail">
-                + 100% PVE Bonus <br />
-                Bounty Hunting Damage
+                + {monkeynaut.bonus?.value}% <br />
+                {monkeynaut.bonus?.description}
               </p>
             </PveBonusInfo>
             <EquipamentsContainer>
