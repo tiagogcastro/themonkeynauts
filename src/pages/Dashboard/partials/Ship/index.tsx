@@ -92,8 +92,8 @@ export function Ship({
                     <strong>{capitalize(ship.rank)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
-                    <span>Fuel</span>
-                    <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
+                    <span>Durability</span>
+                    <strong>{ship.attributes.currentDurability}/{ship.attributes.maxDurability}</strong>
                   </UniqueInfo>
                 </div>
               </div>
@@ -101,8 +101,8 @@ export function Ship({
               <PveBonusInfo>
                 <InfoTitle_1>PVE BONUS</InfoTitle_1>
                 <p className="pve_detail">
-                  + 100% PVE Bonus <br />
-                  Bounty Hunting Damage
+                  + {ship.bonus.value}% PVE Bonus <br />
+                  {ship.bonus.description}
                 </p>
               </PveBonusInfo>
             </ShipInformation>

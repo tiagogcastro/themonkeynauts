@@ -14,8 +14,13 @@ export type Ship = {
   id_short?: string;
   
   attributes: {
-    maxFuel: number;
-    currentFuel: number;
+    maxDurability: number;
+    currentDurability: number;
+  };
+
+  bonus: {
+    description: string;
+    value: number;
   };
   
   owner: User;

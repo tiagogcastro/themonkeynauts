@@ -102,7 +102,7 @@ export function ShipsTab({
                       <TheadTdCustom>Role</TheadTdCustom>
                       <TheadTdCustom>Rank</TheadTdCustom>
                       <TheadTdCustom>Crew</TheadTdCustom>
-                      <TheadTdCustom>Fuel</TheadTdCustom>
+                      <TheadTdCustom>Durability</TheadTdCustom>
                     </TheadTrCustom>
                   </TheadCustom>
                     
@@ -145,8 +145,8 @@ export function ShipsTab({
                         </TbodyTdCustom>
                         <TbodyTdCustom className="fuel">
                           <div className="info">
-                            <span>Fuel</span>
-                            <strong>{ship.attributes.currentFuel}/{ship.attributes.maxFuel}</strong>
+                            <span>Durability</span>
+                            <strong>{ship.attributes.currentDurability}/{ship.attributes.maxDurability}</strong>
                           </div>
                         </TbodyTdCustom>
                       </TbodyTrCustom>
