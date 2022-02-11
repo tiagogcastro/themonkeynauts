@@ -101,7 +101,7 @@ export function Ship({
               <PveBonusInfo>
                 <InfoTitle_1>PVE BONUS</InfoTitle_1>
                 <p className="pve_detail">
-                  + {ship.bonus.value}% PVE Bonus <br />
+                  + {ship.bonus.value}% <br />
                   {ship.bonus.description}
                 </p>
               </PveBonusInfo>
