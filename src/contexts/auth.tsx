@@ -22,6 +22,9 @@ export type AuthContextData = {
   token: string | null;
   tokenIsValid: boolean;
   loading: boolean;
+
+  setUser: React.Dispatch<React.SetStateAction<UserType.GetUser | null>>;
+  getUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -150,6 +153,9 @@ export function AuthProvider({children}: AuthProviderProps) {
         tokenIsValid: tokenIsValid.state,
         loading: loading.state,
         user,
+        
+        getUser,
+        setUser,
       }}
     >
       {children}

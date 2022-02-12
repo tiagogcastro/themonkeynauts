@@ -85,16 +85,18 @@ export function Monkeynaut({
                   </UniqueInfo>
                 </div>
               </div>
-              <UniqueInfo>
+              <UniqueInfo className={`${!monkeynaut.crew_in_ship && 'none_crew'}`}>
                 <span>Crew in Ship</span>
                 <CrewInShipContainer>
-                  {monkeynaut.crew_in_ship && (
+                  {monkeynaut.crew_in_ship ? (
                     <CrewInShip>
                       <div>
                         <strong>{monkeynaut.crew_in_ship.name}</strong>
                         <p>{capitalize(monkeynaut.crew_in_ship.class)}</p>
                       </div>
                     </CrewInShip>
+                  ) : (
+                    <p>None</p>
                   )}
                 </CrewInShipContainer>
               </UniqueInfo>

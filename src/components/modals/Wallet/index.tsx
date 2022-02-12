@@ -1,6 +1,7 @@
 import { useMetaMask } from 'metamask-react';
 import { RiAlertFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import {
   Modal,
@@ -16,6 +17,7 @@ import { COLORS } from '@/theme';
 import {
   Container
 } from './styles';
+import { useAuth } from '@/hooks';
 
 export type ModalCustomProps = ModalProps & {
   handleClose: () => void;
@@ -25,6 +27,7 @@ export function Wallet({
   isOpen,
   handleClose
 }: ModalCustomProps) {
+  const { getUser } = useAuth();
   const { connect } = useMetaMask();
 
   async function connectMetaMask() {
@@ -52,22 +55,40 @@ export function Wallet({
               fontFamily: 'Orbitron, sans-serif',
             }
           });
+
+          await getUser();
         }
       }
     } catch(err: any) {
       const error_message = err?.response?.headers['grpc-message'];
 
-      toast(error_message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+      if(axios.isAxiosError(error_message)) {
+        return toast(error_message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+
+      if(err) {
+        return toast(err.message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
     } finally {
       handleClose();
     }

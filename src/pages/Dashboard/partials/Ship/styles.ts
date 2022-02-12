@@ -94,7 +94,6 @@ export const PrincipalDetails = styled.section`
 
   @media(min-width: 768px) {
     flex-direction: row-reverse;
-    gap: 24px;
   }
 
   @media(min-width: 1024px) {
@@ -114,6 +113,10 @@ export const ShipInformation = styled.aside`
 
   .details_title {
     display: none;
+  }
+
+  @media(min-width: 768px) {
+    max-width: 200px;
   }
 
   @media(min-width: 1024px) {
@@ -278,6 +281,10 @@ export const CrewContainer = styled.section`
     .crew_title {
       margin-bottom: 50px;
     }
+  }
+
+  .crew_title.none_crew_list {
+    margin-bottom: 0;
   }
 `;
 

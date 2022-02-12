@@ -6,7 +6,7 @@ import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean } from '@/hooks';
-import { paymentByEthereum } from '@/utils';
+import { paymentByEthereum, replaceToShortString } from '@/utils';
 
 import { Wallet } from '@/components/modals/Wallet';
 import { Button } from '@/components';
@@ -187,18 +187,20 @@ export function AccountTab() {
                 <strong>{user?.user.email}</strong>
               </UniqueInfo>
             </div>
-            {!user?.user.wallet && (
               <div className="info_separator">
                 <UniqueInfo>
                   <span>Wallet</span>
-                  <Button 
-                    className="wallet_button"
-                    text="Link"
-                    onClick={walletModalIsOpen.changeToTrue}  
-                    />
+                  {!user?.user.wallet ? (  
+                    <Button 
+                      className="wallet_button"
+                      text="Link"
+                      onClick={walletModalIsOpen.changeToTrue}  
+                      />
+                  ) : (
+                    <strong>{user.user.wallet.address}</strong>
+                  )}
                 </UniqueInfo>
               </div>
-            )}
           </Info>
         </Details>
         <SecondaryDetails>
