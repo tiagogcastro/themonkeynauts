@@ -280,6 +280,10 @@ export const CrewContainer = styled.section`
       margin-bottom: 50px;
     }
   }
+  
+  .crew_title.none_crew_list {
+    margin-bottom: 0;
+  }
 `;
 
 export const CrewContent = styled.div`

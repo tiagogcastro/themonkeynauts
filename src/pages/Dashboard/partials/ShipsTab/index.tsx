@@ -122,7 +122,7 @@ export function ShipsTab({
                         <TbodyTdCustom className="id">
                           <div className="info">
                             <span>Ship id</span>
-                            <strong>{ship.id}</strong>
+                            <strong>{replaceToShortString(ship.id)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">

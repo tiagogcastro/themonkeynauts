@@ -91,13 +91,15 @@ export function Monkeynaut({
               <UniqueInfo>
                 <span>Crew in Ship</span>
                 <CrewInShipContainer>
-                  {monkeynaut.crew_in_ship && (
+                  {monkeynaut.crew_in_ship ? (
                     <CrewInShip>
                       <div>
                         <strong>{monkeynaut.crew_in_ship.name}</strong>
                         <p>{capitalize(monkeynaut.crew_in_ship.class)}</p>
                       </div>
                     </CrewInShip>
+                  ) : (
+                    <p>None</p>
                   )}
                 </CrewInShipContainer>
               </UniqueInfo>
@@ -128,8 +130,8 @@ export function Monkeynaut({
             <PveBonusInfo>
               <InfoTitle_1>PVE BONUS</InfoTitle_1>
               <p className="pve_detail">
-                + 100% PVE Bonus <br />
-                Bounty Hunting Damage
+                + {monkeynaut.bonus?.value}% <br />
+                {monkeynaut.bonus?.description}
               </p>
             </PveBonusInfo>
             <EquipamentsContainer>

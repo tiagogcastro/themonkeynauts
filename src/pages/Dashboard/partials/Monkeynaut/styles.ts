@@ -71,12 +71,12 @@ export const Details = styled.main`
       max-height: 170px;
     }
   }
-  
+   
   @media(min-width: 1024px) {
     .monkeynaut_image {
       max-width: 300px;
       max-height: 260px;
-      margin: 0 88px 0 0;
+      margin: 0 126px 0 0;
     }
   }
 
@@ -85,7 +85,7 @@ export const Details = styled.main`
     margin: 0 auto;
 
     .monkeynaut_image {
-      margin: 0 168px 0 0;
+      margin: 0 178px 0 0;
     }
   }
 `;

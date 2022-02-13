@@ -108,10 +108,10 @@ export function Ship({
             </ShipInformation>
           </PrincipalDetails>
           <CrewContainer>
-            <InfoTitle_1 className="crew_title">Crew</InfoTitle_1>
+            <InfoTitle_1 className={`crew_title ${shipModified.crew.monkeynauts.length === 0 && 'none_crew_list'}`}>Crew</InfoTitle_1>
 
             <CrewContent>
-              {shipModified.crew.monkeynauts && shipModified.crew.monkeynauts.map(crew => (
+              {shipModified.crew.monkeynauts.length > 0 ? shipModified.crew.monkeynauts.map(crew => (
                 <CrewSelected key={crew.id}>
                   <div className="crew_content">
                     <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
@@ -123,7 +123,9 @@ export function Ship({
                     </div>
                   </div>
                 </CrewSelected>
-              ))}
+              )) : (
+                <p>None</p>
+              )}
             </CrewContent>
           </CrewContainer>
         </Details>

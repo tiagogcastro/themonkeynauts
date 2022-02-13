@@ -145,7 +145,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="id">
                           <div className="info">
                             <span>Monkeynaut id</span>
-                            <strong>{monkeynaut.id}</strong>
+                            <strong>{replaceToShortString(monkeynaut.id)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">

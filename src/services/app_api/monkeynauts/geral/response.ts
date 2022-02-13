@@ -27,6 +27,11 @@ export type Monkeynaut = {
     currentEnergy: number;
   };
   
+  bonus: {
+    description: string;
+    value: number;
+  };
+  
   breedCount: number;
 
   owner: User;
