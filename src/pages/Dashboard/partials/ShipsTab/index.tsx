@@ -142,7 +142,7 @@ export function ShipsTab({
                         <TbodyTdCustom className="crew">
                           <div className="info">
                             <span>Crew</span>
-                            <strong>2/5</strong>
+                            <strong>{ship.crew.monkeynauts.length || 0}/{ship.crew.seats}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="fuel">
