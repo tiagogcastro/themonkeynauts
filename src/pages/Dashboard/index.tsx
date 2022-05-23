@@ -3,7 +3,7 @@ import {
   Tabs
 } from '@/components/DashboardTab';
 import { DashboardTabsProvider } from '@/contexts/DashboardTabs';
-import { useBoolean } from '@/hooks';
+import { useAuth, useBoolean } from '@/hooks';
 
 import { 
   ShipsTab,
@@ -12,6 +12,7 @@ import {
   AccountTab,
   PreSale
 } from './partials';
+import { Admin } from './partials/admin';
 import { FoundersPackTab } from './partials/FoundersPackTab';
 
 import {
@@ -21,6 +22,8 @@ import {
 } from './styles';
 
 export function Dashboard() {
+  const { user } = useAuth();
+  
   const shipIsShow = useBoolean(false);
   const monekeynautIsShow = useBoolean(false);
   // const equipamentIsShow = useBoolean(false);
@@ -33,7 +36,13 @@ export function Dashboard() {
       <Content>
         <MainContent>
           <DashboardTabsProvider>
-            <Tabs>
+            <Tabs
+              menuContentProps={{
+                style: {
+                  overflow: 'auto',
+                }
+              }}
+            >
               <Tab title="Account" hasButtonToBack={accountIsShow}>
                 <AccountTab />
               </Tab>
@@ -51,6 +60,9 @@ export function Dashboard() {
               </Tab> */}
               <Tab title="Pre sale" hasButtonToBack={preSaleIsShow}>
                 <PreSale />
+              </Tab>
+              <Tab title="Admin">
+                <Admin />
               </Tab>
             </Tabs>
           </DashboardTabsProvider>
