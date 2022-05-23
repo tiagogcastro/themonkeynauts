@@ -16,12 +16,12 @@ import {
 export type InputProps = React.HTMLAttributes<HTMLInputElement> & {
   name: string;
   labelText?: string;
-  type: HTMLInputTypeAttribute;
+  type?: HTMLInputTypeAttribute;
   containerProps?: React.HTMLAttributes<HTMLLabelElement>
 }
 
 export function Input({
-  type,
+  type = 'text',
   name,
   labelText,
   containerProps,
