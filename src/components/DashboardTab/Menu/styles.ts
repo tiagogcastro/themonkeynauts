@@ -92,7 +92,8 @@ export const Content = styled.div`
   @media(min-width: 1400px) {
     max-width: 85%;
     flex-direction: row;
-
+    
+    padding: 0 0 6px 0;
     margin: 0 auto;
 
     .signout {

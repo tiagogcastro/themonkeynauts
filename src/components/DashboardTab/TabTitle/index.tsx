@@ -11,7 +11,7 @@ import menu_icon from '@/assets/svg/menu_icon.svg';
 
 export type TabTitleProps = {
 	selectedTab: number;
-	children: React.ReactElement[] | React.ReactElement;
+	children: React.ReactNode;
 	menu: UseBooleanTypes;
 	hasButtonToBack: UseBooleanTypes;
 };

@@ -8,5 +8,5 @@ type TabProps = {
 };
 
 export function Tab(props: TabProps) {
-	return <Container>{props.children}</Container>;
+	return <Container className="tab_item">{props.children}</Container>;
 }

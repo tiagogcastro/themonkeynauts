@@ -11,22 +11,27 @@ import {
 } from './styles';
 
 export type TabMenuProps = {
-	children: React.ReactElement[] | React.ReactElement;
+	children:  React.ReactNode;
   menu: UseBooleanTypes;
   changeSelected: (index: number) => void;
   selectedTab: number;
+  menuContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+  menuContentProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 export function Menu({
   menu,
   children,
   changeSelected,
-  selectedTab
+  selectedTab,
+  menuContentProps,
+  menuContainerProps
 }: TabMenuProps) {
   const { signOut } = useAuth();
   
   return (
     <Container
+      {...menuContainerProps}
       isClosed={menu.state}
     >
       <button 
@@ -36,11 +41,14 @@ export function Menu({
       >
         <AiOutlineClose />
       </button>
-      <Content>
+      <Content 
+        {...menuContentProps}
+      >
         {Array.isArray(children) && children.map((item, index) => (
           <TabChange 
             key={index} 
             selected={index === selectedTab}
+            className="tab_title_btn"
           >
             <TabTitle 
               onClick={() => changeSelected(index)}
