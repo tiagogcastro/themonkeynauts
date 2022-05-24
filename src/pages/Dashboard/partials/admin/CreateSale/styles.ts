@@ -108,6 +108,34 @@ export const TableCustom = styled.table`
         &:last-child {
           border-right: 1px solid ${COLORS.colors.gray_blue};
         }
+
+        &.stop {
+          padding: 2px;
+        }
+
+        button {
+          background: ${COLORS.global.red_0};
+          padding: 6px;
+          margin: 0 auto;
+            
+          width: 60%;
+
+          border-radius: 4px;
+          transition: filter 0.2s;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            filter: brightness(80%);
+          }
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
       }
     }
   }
