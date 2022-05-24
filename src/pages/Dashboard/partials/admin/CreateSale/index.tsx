@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks';
 import { getValidationErrors } from '@/utils';
 import { FormHandles } from '@unform/core';
 import { useRef } from 'react';
+import { AiOutlineStop } from 'react-icons/ai';
 import * as Yup from 'yup';
 
 import * as S from './styles';
@@ -148,6 +149,11 @@ export function AdminCreateSale() {
               type="number"
               labelText='Major (%)'
             />
+            <Input 
+              name="buy_limit"
+              type="number"
+              labelText='Buy limit'
+            />
             <Button text="Create" type="submit" />
           </S.FormContainer>
 
@@ -170,7 +176,13 @@ export function AdminCreateSale() {
                     <S.TdCustom>text</S.TdCustom>
                     <S.TdCustom>text</S.TdCustom>
                     <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom className="stop">
+                      <button
+                        type="button"
+                      >
+                        <AiOutlineStop />
+                      </button>
+                    </S.TdCustom>
                   </tr>
                 </tbody>
               </S.TableCustom>
