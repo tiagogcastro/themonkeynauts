@@ -29,7 +29,7 @@ export function Tabs({ children, menuContentProps, menuContainerProps, tabContai
 		window.addEventListener('resize', () => {
 			if(window.innerWidth > 1024 && menuActive.state) {
 				menuActive.changeToFalse();
-			}
+			}	
 		});
 	});
 
@@ -56,7 +56,7 @@ export function Tabs({ children, menuContentProps, menuContainerProps, tabContai
 				changeSelected={handleChangeSelected}
 			/>
 
-			{!menuActive.state && Array.isArray(children) ? children[selectedTab]: children}
+			{!menuActive.state && Array.isArray(children) && children[selectedTab]}
 		</Container>
 	);
 }

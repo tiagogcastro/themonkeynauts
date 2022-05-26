@@ -28,9 +28,9 @@ export function Menu({
   menuContainerProps
 }: TabMenuProps) {
   const { signOut } = useAuth();
-  
   return (
     <Container
+      className='tabmenuclasse'
       {...menuContainerProps}
       isClosed={menu.state}
     >
