@@ -1,11 +1,8 @@
 import { Tab, Tabs } from '@/components/DashboardTab';
+import { AdminAirDropNft } from './AirDropNft';
 import { AdminCreateSale } from './CreateSale';
 
 import * as S from './styles';
-
-export type HandleChange = {
-  event: React.ChangeEvent<HTMLInputElement>;
-}
 
 export function Admin() {
   return (
@@ -32,7 +29,7 @@ export function Admin() {
             <AdminCreateSale />
           </Tab>
           <Tab title="Air Drop NFTS">
-            <span>text</span>
+            <AdminAirDropNft />
           </Tab>
         </Tabs>
       </S.Content>
