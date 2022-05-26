@@ -68,7 +68,7 @@ export function Input({
   }, [fieldName, registerField]);
 
   return (
-    <Container {...containerProps} isError={!!error}>
+    <Container className="input_label" {...containerProps} isError={!!error}>
       <span className="input_text">{labelText}</span>
       <Content
         isFocused={isFocused.state}

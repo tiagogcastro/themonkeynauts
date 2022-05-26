@@ -1,5 +1,6 @@
 import { Tab, Tabs } from '@/components/DashboardTab';
 import { AdminAirDropNft } from './AirDropNft';
+import { AdminBanAccount } from './BanAccount';
 import { AdminCreateSale } from './CreateSale';
 
 import * as S from './styles';
@@ -30,6 +31,9 @@ export function Admin() {
           </Tab>
           <Tab title="Air Drop NFTS">
             <AdminAirDropNft />
+          </Tab>
+          <Tab title="Ban Account">
+            <AdminBanAccount />
           </Tab>
         </Tabs>
       </S.Content>
