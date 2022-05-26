@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   padding: 32px;
@@ -20,9 +20,13 @@ export const Content = styled.div`
     display: flex;
     width: 100%;
   }
-
+    
   @media(max-width: 1399px) {
     padding: 16px 0;
+
+    .tabcontainerclasse .tabmenuclasse {
+      top: 10%;
+    }
 
     .tabcontainerclasse {
       flex-direction: column;
@@ -55,7 +59,3 @@ export const Content = styled.div`
     }
   }
 `;
-
-export const tabContainerCss = {
-
-}

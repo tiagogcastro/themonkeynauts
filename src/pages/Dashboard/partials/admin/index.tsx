@@ -11,6 +11,7 @@ export function Admin() {
       <S.Content>
         <Tabs
           menuContentProps={{
+            className:"menucontainerclasse",
             style: {
               flexDirection: 'column',
               marginTop: 0,
