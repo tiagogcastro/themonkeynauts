@@ -18,7 +18,7 @@ export type InputProps = SelectProps & {
   fields: Array<{
     value: string;
     label?: string;
-  }>
+  }>;
 }
 
 export function InputSelect({
@@ -38,9 +38,6 @@ export function InputSelect({
       getValue: (ref: any) => ref.props.value?.value || undefined,
       setValue: (ref, value) => {
         ref.select.setValue(value || undefined);
-        if(error) {
-          clearError();
-        }
       },
       clearValue: (ref: any) => {
         ref.select.clearValue();
@@ -53,14 +50,15 @@ export function InputSelect({
       <span className="input_text">{labelText}</span>
       <Select
         ref={selectRef} 
-        name={name} 
+        name={name}
         options={fields}
+        onFocus={clearError}
         styles={{
           menu: (provided) => {
             return {
               ...provided,
               background: COLORS.colors.gray_blue,
-              border: 0
+              border: 0,
             }
           },
           container: (provided) => {
