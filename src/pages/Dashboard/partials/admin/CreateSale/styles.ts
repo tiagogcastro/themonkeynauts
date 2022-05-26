@@ -157,4 +157,17 @@ export const TdCustom = styled.td`
 export const LastSalesContainer = styled.section`
   margin-top: 32px;
   padding-right: 16px;
+
+  @media(max-width: 1399px) {
+    overflow-x: auto;
+  }
+
+  @media(min-height: 900px) {
+    .lastsales_content {
+      margin-top: 8px;
+      max-height: 920px;
+      overflow: auto;
+      position: relative;
+    }
+  }  
 `;
