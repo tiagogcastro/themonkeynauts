@@ -192,32 +192,34 @@ export function AdminCreateSale() {
         </S.MainContent>
         <S.LastSalesContainer>
           <h1>Last Sales</h1>
-            <S.TableCustom>
-              <thead>
-                <tr>
-                  <S.TdCustom>Type</S.TdCustom>
-                  <S.TdCustom>Start</S.TdCustom>
-                  <S.TdCustom>End</S.TdCustom>
-                  <S.TdCustom>Crypto</S.TdCustom>
-                  <S.TdCustom>Chests Offered</S.TdCustom>
-                  <S.TdCustom>Chests Sold</S.TdCustom>
-                  <S.TdCustom>Chests Price</S.TdCustom>
-                  <S.TdCustom>$ Total</S.TdCustom>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                  <S.TdCustom>text</S.TdCustom>
-                </tr>
-              </tbody>
-            </S.TableCustom>
+            <div className="lastsales_content">
+              <S.TableCustom>
+                <thead>
+                  <tr>
+                    <S.TdCustom>Type</S.TdCustom>
+                    <S.TdCustom>Start</S.TdCustom>
+                    <S.TdCustom>End</S.TdCustom>
+                    <S.TdCustom>Crypto</S.TdCustom>
+                    <S.TdCustom>Chests Offered</S.TdCustom>
+                    <S.TdCustom>Chests Sold</S.TdCustom>
+                    <S.TdCustom>Chests Price</S.TdCustom>
+                    <S.TdCustom>$ Total</S.TdCustom>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                    <S.TdCustom>text</S.TdCustom>
+                  </tr>
+                </tbody>
+              </S.TableCustom>
+            </div>
         </S.LastSalesContainer>
       </S.Content>
     </S.Container>
