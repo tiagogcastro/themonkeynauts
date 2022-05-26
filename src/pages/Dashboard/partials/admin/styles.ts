@@ -1,14 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
-  max-height: 42rem;
-  overflow: auto;
-
   padding: 32px;
-
-  @media(min-width: 768px) {
-    max-height: 96rem;
-  }
 
   @media(max-width: 1399px) {
     padding: 32px 0;
