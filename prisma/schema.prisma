@@ -9,12 +9,13 @@ generator client {
 
 enum PlayerRole {
   ADMIN
-  PLAYER
+  DEFAULT
 }
 
 model Log {
   id        String   @id @db.Uuid()
-  playerId  String
+  playerId  String   @db.Uuid()
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: SetNull)
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -28,9 +29,9 @@ model Player {
   email         String     @unique
   password      String
   wallet        String?    @unique
-  role          PlayerRole @default(PLAYER)
+  role          PlayerRole @default(DEFAULT)
   hasAsteroid   Boolean    @default(false)
-  canBountyHunt Boolean    @default(false)
+  canBountyHunt Boolean    @default(true)
 
   enabled   Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -40,6 +41,13 @@ model Player {
 
   ownerMonkeynauts  Monkeynaut[] @relation("owner_monkeynauts")
   playerMonkeynauts Monkeynaut[] @relation("player_monkeynauts")
+
+  resource Resource?
+
+  ownerShips  Ship[] @relation("owner_ships")
+  playerShips Ship[] @relation("player_ships")
+
+  logs Log[]
 
   @@map("players")
 }
@@ -51,7 +59,7 @@ model PlayerToken {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  player Player @relation(fields: [playerId], references: [id])
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@map("player_tokens")
 }
@@ -59,11 +67,11 @@ model PlayerToken {
 model Monkeynaut {
   id String @id @db.Uuid()
 
-  owner   Player @relation("owner_monkeynauts", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner   Player @relation("owner_monkeynauts", fields: [ownerId], references: [id], onDelete: SetNull)
   ownerId String @db.Uuid()
 
   playerId String @db.Uuid()
-  player   Player @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: Cascade)
+  player   Player @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
 
   name       String
   class      String
@@ -89,5 +97,69 @@ model Monkeynaut {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  crews Crew[]
+
   @@map("monkeynauts")
+}
+
+model Resource {
+  id       String @id @db.Uuid()
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  spc     Int @default(0)
+  gold    Int @default(0)
+  iron    Int @default(0)
+  copper  Int @default(0)
+  scrap   Int @default(0)
+  science Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resources")
+}
+
+model Ship {
+  id String @id @db.Uuid()
+
+  owner   Player @relation("owner_ships", fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String @db.Uuid()
+
+  player   Player @relation("player_ships", fields: [playerId], references: [id], onDelete: SetNull)
+  playerId String @db.Uuid()
+
+  name             String
+  class            String
+  rank             String
+  bonusValue       Int
+  bonusDescription String
+  tankCapacity     Int
+  fuel             Int
+
+  avatar     String?
+  breedCount Int
+  onSale     Boolean @default(false)
+
+  crews Crew[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ships")
+}
+
+model Crew {
+  id String @id @db.Uuid()
+
+  ship   Ship   @relation(fields: [shipId], references: [id], onDelete: SetNull)
+  shipId String @db.Uuid()
+
+  monkeynaut   Monkeynaut @relation(fields: [monkeynautId], references: [id], onDelete: SetNull)
+  monkeynautId String     @db.Uuid()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("crews")
 }
