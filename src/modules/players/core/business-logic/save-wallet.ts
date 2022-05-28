@@ -1,46 +1,31 @@
+import { Player } from '@modules/players/domain/entities/player';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { AppError } from '@shared/errors/app-error';
+import { inject, injectable } from 'tsyringe';
 
 type SaveWalletRequestDTO = {
   wallet: string;
   player_id: string;
-}
-
+};
+@injectable()
 class SaveWalletBusinessLogic {
   constructor(
+    @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
-    private hashProvider: IHashProvider
   ) {}
 
-  async execute({
-    player_id, 
-    wallet
-  }: SaveWalletRequestDTO): Promise<void> {
+  async execute({ player_id, wallet }: SaveWalletRequestDTO): Promise<Player> {
     const player = await this.playersRepository.findById(player_id);
-    
+
     if (!player) {
       throw new AppError('Player does not exist', 401);
     }
-    
-    const players = await this.playersRepository.findAllPlayers(false);
 
-    players.map(player => {
-      if(player.wallet) {
-        const matchedWallet = this.hashProvider.compareHashSync(wallet, player.wallet);
+    player.wallet = wallet;
 
-        if(matchedWallet) {
-          throw new AppError('This wallet already exists', 403);
-        }
-      }
-    })
+    await this.playersRepository.save(player);
 
-    const hashedWallet = await this.hashProvider.generateHash(wallet);
-
-    const playerUpdated = {
-      ...player,
-      wallet: hashedWallet,
-      premium_pass: undefined
-    } as Player
-
-    await this.playersRepository.save(playerUpdated)
+    return player;
   }
 }
 

@@ -1,22 +1,28 @@
+import { commons } from '@shared/helpers/commons';
+import { CreatePlayerRequestDTO } from '@modules/players/core/dtos/create-player-request';
+import { Player } from '@modules/players/domain/entities/player';
+import { Resource } from '@modules/players/domain/entities/resource';
+import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { AppError } from '@shared/errors/app-error';
-
-import { CreatePlayerRequestDTO } from '@modules/players/core/dtos/create-player-request';
-
-import { Player } from '@modules/players/domain/entities/player';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
-import { PlayersRepository } from '@modules/players/infra/database/prisma/repositories/players-repository';
-import { BCryptHashProvider } from '@shared/infra/providers/bcrypt-hash-provider';
+import { inject, injectable } from 'tsyringe';
+import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 
 type Response = {
   player: Player;
-}
+};
 
+@injectable()
 class CreatePlayerBusinessLogic {
   constructor(
+    @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
+
+    @inject('ResourcesRepository')
+    private resourcesRepository: IResourcesRepository,
+
+    @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
 
@@ -31,7 +37,7 @@ class CreatePlayerBusinessLogic {
     if (foundPlayer) {
       throw new AppError('Unable to create player', 400);
     }
-    
+
     const checkNicknameAlreadyExists =
       await this.playersRepository.findByNickname(nickname, false);
 
@@ -41,22 +47,37 @@ class CreatePlayerBusinessLogic {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    const player = await this.playersRepository.create({
+    const player = new Player({
       email,
       nickname,
       role,
+      wallet: null,
       password: hashedPassword,
+      canBountyHunt: true,
+      hasAsteroid: false,
+      enabled: true,
+      ...commons(),
     });
 
+    await this.playersRepository.create(player);
+
+    const resource = new Resource({
+      iron: 0,
+      playerId: player.id,
+      science: 0,
+      scrap: 0,
+      spc: 0,
+      copper: 0,
+      gold: 0,
+      ...commons(),
+    });
+
+    await this.resourcesRepository.create(resource);
+
     return {
-      player
+      player,
     };
   }
 }
-
-const playersRepository = new PlayersRepository;
-const hashProvider = new BCryptHashProvider;
-
-const createPlayerBusinessLogic = new CreatePlayerBusinessLogic(playersRepository., hashProvider);
 
 export { CreatePlayerBusinessLogic };

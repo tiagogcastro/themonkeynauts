@@ -1,19 +1,12 @@
-import { CreatePlayerRequestDTO } from '@modules/players/core/dtos/create-player-request';
 import { Player } from '@modules/players/domain/entities/player';
+import { AsyncMaybe } from '@shared/types/maybe';
 
 interface IPlayersRepository {
-  findByEmail(
-    email: string,
-  ): Promise<Player | null>;
-  findById(
-    id: string,
-  ): Promise<(Player) | null | null>;
-  findByNickname(
-    nickname: string,
-    enabled?: boolean,
-  ): Promise<Player | null>;
-  create(data: CreatePlayerRequestDTO): Promise<Player>;
-  save(player: Player): Promise<Player>;
+  findByEmail(email: string): AsyncMaybe<Player>;
+  findById(id: string): AsyncMaybe<Player>;
+  findByNickname(nickname: string, enabled?: boolean): AsyncMaybe<Player>;
+  create(player: Player): Promise<void>;
+  save(player: Player): Promise<void>;
   findPlayers(enabled?: boolean): Promise<Player[]>;
 }
 export { IPlayersRepository };

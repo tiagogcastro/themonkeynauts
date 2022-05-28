@@ -3,23 +3,28 @@ import { Request, Response } from 'express';
 import { instanceToInstance } from '@shared/infra/helpers/instance-to-instance';
 
 import { CreatePlayerBusinessLogic } from '@modules/players/core/business-logic/create-player';
+import { container } from 'tsyringe';
 
 class CreatePlayerController {
-  constructor(private createPlayerBusinessLogic: CreatePlayerBusinessLogic) {}
-
   async handle(request: Request, response: Response): Promise<Response> {
     const { email, nickname, password } = request.body;
 
-    const { player } = await this.createPlayerBusinessLogic.execute({
+    const createPlayerBusinessLogic = container.resolve(
+      CreatePlayerBusinessLogic,
+    );
+
+    const { player } = await createPlayerBusinessLogic.execute({
       email,
       nickname,
       password,
     });
 
     return response.status(201).json({
-      player: instanceToInstance('player', player)
+      player: instanceToInstance('player', player),
     });
   }
 }
 
-export { CreatePlayerController };
+const createPlayerController = new CreatePlayerController();
+
+export { createPlayerController };

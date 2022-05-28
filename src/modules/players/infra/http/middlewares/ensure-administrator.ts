@@ -1,6 +1,7 @@
+import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import { AppError } from '@shared/errors/app-error';
+import { prisma } from '@shared/infra/database/prisma/client';
 import { NextFunction, Request, Response } from 'express';
-import { AppError } from '../../../shared/errors/AppError';
-import { prisma } from '../../../shared/prisma/client';
 
 export default async function ensureAdministrator(
   request: Request,
@@ -17,7 +18,8 @@ export default async function ensureAdministrator(
 
   if (!player) throw new AppError('Player does not exist', 401);
 
-  if (player.role !== 'admin') throw new AppError('Only administrator can access here', 401);
+  if (player.role !== PlayerRole.ADMIN)
+    throw new AppError('Only administrator can access here', 401);
 
   return next();
 }

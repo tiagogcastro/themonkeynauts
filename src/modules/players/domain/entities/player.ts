@@ -1,33 +1,33 @@
+import { Maybe } from '@shared/types/maybe';
 import crypto from 'node:crypto';
-
-type PlayerProps = {
-  name: string;
-  email: string;
-  nickname: string;
-}
+import { PlayerRole } from '../enums/player-role';
 
 export class Player {
-  private _id: string;
-  private props: PlayerProps;
+  id: string;
 
-  get id(): string {
-    return this._id;
-  }
+  nickname: string;
 
-  get name(): string {
-    return this.props.name;
-  }
+  email: string;
 
-  get email(): string {
-    return this.props.email;
-  }
-  
-  get nickname(): string {
-    return this.props.nickname;
-  }
+  password: string;
 
-  constructor(props: PlayerProps, id?: string) {
-    this._id = id ?? crypto.randomUUID();
-    this.props = props;
+  wallet: Maybe<string>;
+
+  role: PlayerRole;
+
+  hasAsteroid: boolean;
+
+  canBountyHunt: boolean;
+
+  enabled: boolean;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor(props: Omit<Player, 'id'>, id?: string) {
+    this.id = id ?? crypto.randomUUID();
+
+    Object.assign(this, props);
   }
 }

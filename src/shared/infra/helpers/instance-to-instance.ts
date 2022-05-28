@@ -2,7 +2,6 @@ import { Player } from '@modules/players/domain/entities/player';
 
 type _Player = Player & {
   password: undefined;
-  wallet: undefined;
 };
 
 type Instance<T extends Player> = T extends Player ? _Player : never;

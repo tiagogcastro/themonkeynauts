@@ -1,8 +1,7 @@
+import { Player } from '@modules/players/domain/entities/player';
+import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { sign, verify } from 'jsonwebtoken';
 import { authConfig } from '../../../config/auth';
-
-import { IPlayer } from '../../../modules/players/domain/entities/IPlayer';
-import { ITokenProvider } from '../ITokenProvider';
 
 export class JWTokenProvider implements ITokenProvider {
   verify(token: string): void {
@@ -11,7 +10,7 @@ export class JWTokenProvider implements ITokenProvider {
     verify(token, secret);
   }
 
-  generate(player: IPlayer): string {
+  generate(player: Player): string {
     const { secret, expiresIn } = authConfig;
 
     const token = sign({}, secret, {

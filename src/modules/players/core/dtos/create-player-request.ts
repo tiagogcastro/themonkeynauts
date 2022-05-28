@@ -5,4 +5,4 @@ export type CreatePlayerRequestDTO = {
   nickname: string;
   role?: PlayerRole;
   password: string;
-}
+};

@@ -1,23 +1,24 @@
+import { SaveWalletBusinessLogic } from '@modules/players/core/business-logic/save-wallet';
+import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 
 class SaveWalletController {
-    constructor(private saveWalletBusinessLogic: SaveWalletBusinessLogic) {}
+  async handle(request: Request, response: Response): Promise<Response> {
+    const { wallet } = request.body;
 
-    async handle(request: Request, response: Response): Promise<Response> {
-        let { wallet } = request.query;
+    const player_id = request.player.id;
 
-        const player_id = request.player.id;
+    const saveWalletBusinessLogic = container.resolve(SaveWalletBusinessLogic);
 
-        await this.saveWalletBusinessLogic.execute({
-            wallet: wallet as string,
-            player_id,
-        });
+    const player = await saveWalletBusinessLogic.execute({
+      wallet: wallet as string,
+      player_id,
+    });
 
-        return response.status(204).json();
-    }
+    return response.status(200).json(player);
+  }
 }
 
-const saveWalletBusinessLogic = new SaveWalletBusinessLogic()
+const saveWalletController = new SaveWalletController();
 
-const saveWalletController = new SaveWalletController(saveWalletBusinessLogic);
-
-export { SaveWalletController };
+export { saveWalletController };

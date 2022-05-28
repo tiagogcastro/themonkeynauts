@@ -1,14 +1,14 @@
 type Variables = {
-    [key: string]: string | number
-}
+  [key: string]: string | number;
+};
 
 type ParseMailTemplateDTO = {
-    file: string
-    variables: Variables
-}
+  file: string;
+  variables: Variables;
+};
 
 interface IMailTemplateProvider {
-  parse(data: ParseMailTemplateDTO): Promise<string>
+  parse(data: ParseMailTemplateDTO): Promise<string>;
 }
 
-export { IMailTemplateProvider, ParseMailTemplateDTO }
+export { IMailTemplateProvider, ParseMailTemplateDTO };

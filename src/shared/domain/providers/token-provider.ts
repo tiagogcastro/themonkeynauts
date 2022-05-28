@@ -1,6 +1,6 @@
-import { IPlayer } from '../../modules/players/domain/entities/IPlayer'
+import { Player } from '@modules/players/domain/entities/player';
 
 export interface ITokenProvider {
-  generate(player: IPlayer): string;
+  generate(player: Player): string;
   verify(token: string): void;
 }

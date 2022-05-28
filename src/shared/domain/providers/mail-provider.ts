@@ -1,20 +1,18 @@
+import { ParseMailTemplateDTO } from './mail-template-provider';
 
 type MailContact = {
-  name: string,
-  address: string
-}
+  name: string;
+  address: string;
+};
 type SendMailDTO = {
-  to: MailContact
-  from?: MailContact
-  subject: string
-  templateData: ParseMailTemplateDTO
-}
+  to: MailContact;
+  from?: MailContact;
+  subject: string;
+  templateData: ParseMailTemplateDTO;
+};
 
 interface IMailProvider {
-  sendMail(data: SendMailDTO): Promise<void>
+  sendMail(data: SendMailDTO): Promise<void>;
 }
 
-export {
-    SendMailDTO,
-    IMailProvider,
-}
+export { SendMailDTO, IMailProvider };

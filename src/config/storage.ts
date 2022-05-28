@@ -1,6 +1,6 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { diskStorage, StorageEngine, MulterError } from 'multer';
-import path from 'path';
+import path from 'node:path';
 
 interface IStorageConfig {
   driver: 's3' | 'disk';
