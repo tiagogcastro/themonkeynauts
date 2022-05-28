@@ -1,21 +1,20 @@
-# Padrões de sintaxe para o código do projeto
 # Default code sintex to project 
 
 
 variables -> camelCase 
-  # exemple: const playerController = ''
+  # example: const playerController = ''
 
 files ->  kebab-case
-  # exemple: player-controller.ts
+  # example: player-controller.ts
 
 functions -> camelCase 
-  # exemple: function playerController() {}
+  # example: function playerController() {}
 
 class -> PascalCase 
-  # exemple: class PlayerController {}
+  # example: class PlayerController {}
 
 objects -> snake_case 
-  # exemples: 
+  # example: 
   # {
   #   property_x: 'value'
   # }
@@ -27,4 +26,4 @@ constructor params -> camelCase
   # constructor(private createPlayerBusinessLogic: CreatePlayerBusinessLogic) {}
 
 routes -> kebab-case
-  # exemple: app.post('/players/player-create')
+  # example: app.post('/players/player-create')
