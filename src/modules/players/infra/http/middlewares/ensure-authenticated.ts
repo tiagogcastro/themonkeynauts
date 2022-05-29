@@ -1,39 +1,35 @@
-import { authConfig } from '@config/auth';
+import { EnsureAuthenticatedBusinessLogic } from '@modules/players/core/business-logic/ensure-authenticated';
 import { AppError } from '@shared/errors/app-error';
 import { NextFunction, Request, Response } from 'express';
 
-import { verify } from 'jsonwebtoken';
+import { container } from 'tsyringe';
 
-type TokenPayload = {
-  exp: number;
-  iat: number;
-  sub: string;
-};
-
-export function ensureAuthenticated(
+export async function ensureAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction,
-): void {
+): Promise<void> {
   const { authorization } = request.headers;
 
-  if (!authorization) {
-    throw new AppError('JWT token is missing', 401);
+  if(!authorization) {
+    throw new AppError('Header params: authorization is missing.')
   }
 
-  const [, token] = authorization.split(' ');
+  const ensureAuthenticatedBusinessLogic = container.resolve(
+    EnsureAuthenticatedBusinessLogic
+  )
 
-  try {
-    const decoded = verify(token, authConfig.secret);
+  const execute = await ensureAuthenticatedBusinessLogic.execute({
+    authorization
+  });
 
-    const { sub } = decoded as TokenPayload;
-
+  if(execute) {
+    const { decoded } = execute;
+    
     request.player = {
-      id: sub,
+      id: decoded.playerId,
     };
-
+    
     return next();
-  } catch {
-    throw new AppError('Invalid JWT token', 401);
   }
 }
