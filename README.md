@@ -12,7 +12,7 @@
 
 **Run migrations**
 ```
-3. yarn prisma migration dev
+3. yarn prisma migrate dev
 ```
 
 **Launch application**
