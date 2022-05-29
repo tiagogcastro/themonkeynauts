@@ -49,6 +49,8 @@ model Player {
 
   logs Log[]
 
+  playerAuth PlayerAuth[] @relation("player_auth")
+
   @@map("players")
 }
 
@@ -162,4 +164,22 @@ model Crew {
   updatedAt DateTime @updatedAt
 
   @@map("crews")
+}
+
+model PlayerAuth {
+  id String @id @db.Uuid()
+
+  player   Player @relation("player_auth", fields: [playerId], references: [id], onDelete: SetNull)
+  playerId String @db.Uuid()
+
+  isLogged Boolean @default(false)
+  isValidToken Boolean @default(false)
+
+  payload String  @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expireIn DateTime
+
+  @@map("player_auth")
 }
