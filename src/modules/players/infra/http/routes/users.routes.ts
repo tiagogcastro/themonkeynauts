@@ -17,8 +17,8 @@ playersRouter.post(
   celebrate({
     [Segments.BODY]: {
       email: Joi.string().email().required(),
-      nickname: Joi.string().min(2).max(100).required(),
-      password: Joi.string().regex(passwordRegExp).min(8).max(100).required(),
+      nickname: Joi.string().min(2).max(32).required(),
+      password: Joi.string().min(6).max(100).required(),
     },
   }),
   (request, response) => createPlayerController.handle(request, response),
