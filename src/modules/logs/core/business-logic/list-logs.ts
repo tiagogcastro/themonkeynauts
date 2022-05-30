@@ -1,4 +1,4 @@
-import { ILog, Log } from '@modules/logs/domain/entities/log';
+import { ILog } from '@modules/logs/domain/entities/log';
 import { inject, injectable } from 'tsyringe';
 import { ILogsRepository } from '../../domain/repositories/logs-repositories';
 
@@ -11,15 +11,6 @@ class ListLogsBusinessLogic {
 
   async execute(player_id?: string): Promise<ILog[]> {
     let logs: ILog[] = [];
-
-    const log = new Log({
-      content: 'jhssadddfagasd',
-      createdAt: new Date(),
-      playerId: player_id || '*',
-      updatedAt: new Date(),
-    });
-
-    await this.logsRepository.create(log);
 
     if (player_id) {
       logs = await this.logsRepository.listAllLogsFromPlayer(player_id);
