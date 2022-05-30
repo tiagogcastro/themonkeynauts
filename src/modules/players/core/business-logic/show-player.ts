@@ -1,4 +1,4 @@
-import { Player } from '@modules/players/domain/entities/player';
+import { IPlayer } from '@modules/players/domain/entities/player';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
@@ -10,7 +10,7 @@ type ShowPlayerRequestDTO = {
 };
 
 type Response = {
-  player: Player;
+  player: IPlayer;
 };
 
 @injectable()

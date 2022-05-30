@@ -1,16 +1,22 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
 
-type Props = {
+type LogPropsOmittedCommons = {
   playerId: string;
   content: string;
 };
 
-type LogProps = Props & Commons;
+type LogProps = LogPropsOmittedCommons & Commons;
 
 export interface ILog extends LogProps {
   id: string;
 }
+
+type LogCommons = Partial<
+  {
+    id: string;
+  } & Commons
+>;
 
 export class Log implements ILog {
   private _id: string;
@@ -27,10 +33,10 @@ export class Log implements ILog {
     } as ILog;
   }
 
-  get props(): Props {
-    return {
-      playerId: this._props.playerId,
-      content: this._props.content,
+  set assign(props: Partial<LogProps>) {
+    this._props = {
+      ...this._props,
+      ...props,
     };
   }
 
@@ -54,9 +60,13 @@ export class Log implements ILog {
     return this._props.createdAt;
   }
 
-  constructor(props: LogProps, id?: string) {
-    this._id = id ?? crypto.randomUUID();
+  constructor(props: LogPropsOmittedCommons, commons?: LogCommons) {
+    this._id = commons?.id || crypto.randomUUID();
 
-    this._props = props;
+    this._props = {
+      ...props,
+      createdAt: commons?.createdAt || new Date(),
+      updatedAt: commons?.updatedAt || new Date(),
+    };
   }
 }

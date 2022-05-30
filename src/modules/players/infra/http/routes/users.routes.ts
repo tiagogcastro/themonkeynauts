@@ -71,7 +71,7 @@ playersRouter.put(
     [Segments.BODY]: {
       token: Joi.string().uuid().required(),
       password: Joi.string().regex(passwordRegExp).min(8).max(100).required(),
-      password_confirmation: Joi.string().required().valid(Joi.ref('password')),
+      passwordConfirmation: Joi.string().required().valid(Joi.ref('password')),
     },
   }),
   (request, response) => resetPasswordController.handle(request, response),

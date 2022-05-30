@@ -1,5 +1,8 @@
-import { Player } from '@modules/players/domain/entities/player';
-import { PlayerAuth } from '@modules/players/domain/entities/player-auth';
+import { IPlayer } from '@modules/players/domain/entities/player';
+import {
+  IPlayerAuth,
+  PlayerAuth,
+} from '@modules/players/domain/entities/player-auth';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
@@ -7,11 +10,11 @@ import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
-import { AppPlayerAuthRequestDTO } from '../dtos/auth-player-request';
+import { AppPlayerAuthRequestDTO } from '../../dtos/auth-player-request';
 
 type AppPlayerAuthResponse = {
-  player: Player;
-  token: PlayerAuth;
+  player: IPlayer;
+  token: IPlayerAuth;
 };
 
 @injectable()
@@ -56,16 +59,19 @@ export class AppPlayerAuthBusinessLogic {
     const oneDay = today.getTime() + 1000 * 60 * 60 * 24;
     const tomorrowDate = new Date(oneDay);
 
-    const authPlayer = new PlayerAuth({
+    const domainPlayerAuth = new PlayerAuth({
       isLogged: true,
       isValidToken: true,
       playerId: player.id,
       expireIn: tomorrowDate,
+      payload: '',
     });
 
-    const payload = this.tokenProvider.generate(authPlayer);
+    const payload = this.tokenProvider.generate(domainPlayerAuth.playerAuth);
 
-    authPlayer.payload = payload;
+    domainPlayerAuth.assign = {
+      payload,
+    };
 
     // TODO - CORRECT A BUG
     // adicionar algo que busque o usuario em especifico e atualizar o payload,
@@ -87,7 +93,9 @@ export class AppPlayerAuthBusinessLogic {
       }),
     );
 
-    const token = await this.appPlayerAuth.create(authPlayer);
+    await this.appPlayerAuth.create(domainPlayerAuth.playerAuth);
+
+    const token = domainPlayerAuth.playerAuth;
 
     if (!token) {
       throw new AppError('Unable to create a token');

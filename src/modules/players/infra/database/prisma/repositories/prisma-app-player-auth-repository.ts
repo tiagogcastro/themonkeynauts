@@ -1,20 +1,29 @@
-import { PlayerAuth as PrismaPlayerAuth } from '@prisma/client';
-
-import { PlayerAuth } from '@modules/players/domain/entities/player-auth';
+import {
+  IPlayerAuth,
+  PlayerAuth,
+} from '@modules/players/domain/entities/player-auth';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
-
+import { PlayerAuth as PrismaPlayerAuth } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@shared/types/maybe';
 
-const parsePlayerAuth = (player_auth: PrismaPlayerAuth): PlayerAuth => {
+const parsePlayerAuth = (player_auth: PrismaPlayerAuth): IPlayerAuth => {
   return new PlayerAuth(player_auth, {
     id: player_auth.id,
-  });
+    createdAt: player_auth.createdAt,
+    updatedAt: player_auth.updatedAt,
+  }).playerAuth;
 };
 
 export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
-  async create(player_auth: PlayerAuth): Promise<PlayerAuth> {
-    return prisma.playerAuth.create({
-      data: player_auth,
+  async create(player_auth: IPlayerAuth): Promise<void> {
+    const { id: player_auth_id, ...props } = player_auth;
+
+    await prisma.playerAuth.create({
+      data: {
+        id: player_auth_id,
+        ...props,
+      },
     });
   }
 
@@ -26,25 +35,21 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     });
   }
 
-  async update(player_auth: PlayerAuth): Promise<PlayerAuth> {
-    const { id, isLogged, updatedAt, payload, isValidToken, playerId } =
-      player_auth;
+  async update(player_auth: IPlayerAuth): Promise<void> {
+    const { id: player_auth_id, ...props } = player_auth;
 
-    return prisma.playerAuth.update({
+    await prisma.playerAuth.update({
       data: {
-        isLogged,
-        updatedAt,
-        payload,
-        isValidToken,
-        playerId,
+        ...props,
+        updatedAt: new Date(),
       },
       where: {
-        id,
+        id: player_auth_id,
       },
     });
   }
 
-  async findUniqueByPayload(payload: string): Promise<PlayerAuth | null> {
+  async findUniqueByPayload(payload: string): AsyncMaybe<IPlayerAuth> {
     const playerAuth = await prisma.playerAuth.findUnique({
       where: {
         payload,
@@ -58,8 +63,8 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findById(id: string): Promise<PlayerAuth | null> {
-    const playerAuth = await prisma.playerAuth.findUnique({
+  async findById(id: string): AsyncMaybe<IPlayerAuth> {
+    const playerAuth = await prisma.playerAuth.findFirst({
       where: {
         id,
       },
@@ -72,7 +77,7 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findFirstByPlayerId(player_id: string): Promise<PlayerAuth | null> {
+  async findFirstByPlayerId(player_id: string): AsyncMaybe<IPlayerAuth> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
         playerId: player_id,
@@ -89,7 +94,7 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
   async findByPlayerIdAndPayload(
     player_id: string,
     payload: string,
-  ): Promise<PlayerAuth | null> {
+  ): AsyncMaybe<IPlayerAuth> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
         playerId: player_id,
@@ -104,7 +109,7 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findManyByPlayerId(player_id: string): Promise<PlayerAuth[]> {
+  async findManyByPlayerId(player_id: string): Promise<IPlayerAuth[]> {
     const playerAuth = await prisma.playerAuth.findMany({
       where: {
         playerId: player_id,

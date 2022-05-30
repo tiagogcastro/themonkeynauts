@@ -1,42 +1,94 @@
 import crypto from 'node:crypto';
 
-type Data = {
+import { Commons } from '@shared/types/commons';
+
+type PlayerAuthPropsOmittedCommons = {
   playerId: string;
   isLogged: boolean;
   isValidToken: boolean;
-  payload?: string;
+  payload: string;
   expireIn: Date;
 };
 
-export class PlayerAuth {
+type PlayerAuthProps = PlayerAuthPropsOmittedCommons & Commons;
+
+type PlayerAuthCommons = Partial<
+  {
+    id: string;
+  } & Commons
+>;
+
+export interface IPlayerAuth extends PlayerAuthProps {
   id: string;
+}
 
-  playerId: string;
+export class PlayerAuth implements IPlayerAuth {
+  private _id: string;
 
-  isLogged: boolean;
+  private _props: PlayerAuthProps;
 
-  isValidToken: boolean;
+  get playerAuth(): IPlayerAuth {
+    return {
+      id: this._id,
+      playerId: this._props.playerId,
+      isLogged: this._props.isLogged,
+      isValidToken: this._props.isValidToken,
+      payload: this._props.payload,
+      expireIn: this._props.expireIn,
+      createdAt: this._props.createdAt,
+      updatedAt: this._props.updatedAt,
+    };
+  }
 
-  payload: string;
+  set assign(props: Partial<PlayerAuthProps>) {
+    this._props = {
+      ...this._props,
+      ...props,
+    };
+  }
 
-  createdAt: Date;
+  get id(): string {
+    return this._id;
+  }
 
-  updatedAt: Date;
+  get playerId(): string {
+    return this._props.playerId;
+  }
 
-  expireIn: Date;
+  get isLogged(): boolean {
+    return this._props.isLogged;
+  }
+
+  get isValidToken(): boolean {
+    return this._props.isValidToken;
+  }
+
+  get payload(): string {
+    return this._props.payload;
+  }
+
+  get expireIn(): Date {
+    return this._props.expireIn;
+  }
+
+  get updatedAt(): Date {
+    return this._props.updatedAt;
+  }
+
+  get createdAt(): Date {
+    return this._props.createdAt;
+  }
 
   constructor(
-    data: Data,
-    ommitedItens?: {
-      id?: string;
-      createdAt?: Date;
-      updatedAt?: Date;
-    },
+    props: PlayerAuthPropsOmittedCommons,
+    commons?: PlayerAuthCommons,
   ) {
-    this.id = ommitedItens?.id ?? crypto.randomUUID();
-    this.createdAt = ommitedItens?.createdAt ?? new Date();
-    this.updatedAt = ommitedItens?.updatedAt ?? new Date();
+    this._id = commons?.id || crypto.randomUUID();
 
-    Object.assign(this, data);
+    this._props = {
+      ...props,
+      createdAt: commons?.createdAt || new Date(),
+      updatedAt: commons?.updatedAt || new Date(),
+    };
   }
 }

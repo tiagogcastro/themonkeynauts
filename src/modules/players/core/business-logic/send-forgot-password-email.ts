@@ -1,12 +1,10 @@
 import { PlayerToken } from '@modules/players/domain/entities/player-token';
-
+import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { AppError } from '@shared/errors/app-error';
-import path from 'node:path';
 import crypto from 'node:crypto';
-import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
-import { commons } from '@shared/helpers/commons';
+import path from 'node:path';
 
 class SendForgotPasswordEmailBusinessLogic {
   constructor(
@@ -27,10 +25,9 @@ class SendForgotPasswordEmailBusinessLogic {
       await this.playerTokensRepository.destroy(playerTokenAlreadyExists.id);
     }
 
-    const playerToken = new PlayerToken({
+    const { playerToken } = new PlayerToken({
       playerId: player.id,
       token: crypto.randomUUID(),
-      ...commons(),
     });
 
     await this.playerTokensRepository.generate(playerToken);

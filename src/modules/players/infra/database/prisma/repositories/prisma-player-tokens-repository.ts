@@ -1,14 +1,22 @@
-import { PlayerToken } from '@modules/players/domain/entities/player-token';
+import {
+  IPlayerToken,
+  PlayerToken,
+} from '@modules/players/domain/entities/player-token';
 import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
 import { PlayerToken as PrismaPlayerToken } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@shared/types/maybe';
 
-const parsePlayerToken = (player: PrismaPlayerToken): PlayerToken => {
-  return new PlayerToken(player, player.id);
+const parsePlayerToken = (player_token: PrismaPlayerToken): IPlayerToken => {
+  return new PlayerToken(player_token, {
+    id: player_token.id,
+    createdAt: player_token.createdAt,
+    updatedAt: player_token.updatedAt,
+  }).playerToken;
 };
 
 export class PrismaPlayerTokensRepository implements IPlayerTokensRepository {
-  async findByPlayerId(player_id: string): Promise<PlayerToken | null> {
+  async findByPlayerId(player_id: string): AsyncMaybe<IPlayerToken> {
     const playerToken = await prisma.playerToken.findFirst({
       where: {
         playerId: player_id,
@@ -30,13 +38,18 @@ export class PrismaPlayerTokensRepository implements IPlayerTokensRepository {
     });
   }
 
-  async generate(playerToken: PlayerToken): Promise<void> {
+  async generate(player_token: IPlayerToken): Promise<void> {
+    const { id: player_token_id, ...props } = player_token;
+
     await prisma.playerToken.create({
-      data: playerToken,
+      data: {
+        id: player_token_id,
+        ...props,
+      },
     });
   }
 
-  async findByToken(token: string): Promise<PlayerToken | null> {
+  async findByToken(token: string): AsyncMaybe<IPlayerToken> {
     const playerToken = await prisma.playerToken.findUnique({
       where: {
         token,

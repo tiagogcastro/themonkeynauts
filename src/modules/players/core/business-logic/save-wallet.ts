@@ -1,4 +1,4 @@
-import { Player } from '@modules/players/domain/entities/player';
+import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
@@ -14,7 +14,7 @@ class SaveWalletBusinessLogic {
     private playersRepository: IPlayersRepository,
   ) {}
 
-  async execute({ player_id, wallet }: SaveWalletRequestDTO): Promise<Player> {
+  async execute({ player_id, wallet }: SaveWalletRequestDTO): Promise<IPlayer> {
     const player = await this.playersRepository.findById(player_id);
 
     if (!player) {

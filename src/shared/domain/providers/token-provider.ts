@@ -1,7 +1,7 @@
-import { Player } from '@modules/players/domain/entities/player';
-import { PlayerAuth } from '@modules/players/domain/entities/player-auth';
+import { IPlayer } from '@modules/players/domain/entities/player';
+import { IPlayerAuth } from '@modules/players/domain/entities/player-auth';
 
 export interface ITokenProvider {
-  generate(playerAuth: PlayerAuth, player?: Player): string;
+  generate(player_auth: IPlayerAuth, player?: IPlayer): string;
   verify<T = any>(token: string): T;
 }

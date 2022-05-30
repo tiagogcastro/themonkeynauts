@@ -1,23 +1,23 @@
-import { Player } from '@modules/players/domain/entities/player';
+import { IPlayer } from '@modules/players/domain/entities/player';
 
-type _Player = Player & {
+type Player = IPlayer & {
   password: undefined;
 };
 
-type Instance<T extends Player> = T extends Player ? _Player : never;
+type Instance<T extends IPlayer> = T extends IPlayer ? Player : never;
 
 type InstanceType = 'player';
 
-export function instanceToInstance<T extends Player>(
+export function instanceToInstance<T extends IPlayer>(
   instance_type: InstanceType,
   instance: T,
 ): Instance<T> {
-  const instanceFormatted = {
+  const formattedInstance = {
     player: {
-      ...(instance as Player),
+      ...(instance as IPlayer),
       password: undefined,
     } as Instance<T>,
   }[instance_type];
 
-  return instanceFormatted as Instance<T>;
+  return formattedInstance as Instance<T>;
 }

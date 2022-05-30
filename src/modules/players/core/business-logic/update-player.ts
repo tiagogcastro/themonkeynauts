@@ -1,4 +1,4 @@
-import { Player } from '@modules/players/domain/entities/player';
+import { IPlayer } from '@modules/players/domain/entities/player';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
@@ -16,7 +16,7 @@ type UpdatePlayerRequestDTO = {
 };
 
 type Response = {
-  player: Player;
+  player: IPlayer;
 };
 
 @injectable()

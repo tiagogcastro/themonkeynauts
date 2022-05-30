@@ -4,7 +4,7 @@ import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
-import { ResetPasswordRequestDTO } from '../dtos/reset-password-request';
+import { ResetPasswordRequestDTO } from '../../dtos/reset-password-request';
 
 @injectable()
 class ResetPasswordBusinessLogic {

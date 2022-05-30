@@ -4,17 +4,19 @@ import { Log as PrismaLog } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 
 const parseLog = (log: PrismaLog): ILog => {
-  return new Log(log, log.id).log;
+  return new Log(log, {
+    id: log.id,
+    createdAt: log.createdAt,
+    updatedAt: log.updatedAt,
+  }).log;
 };
 
 class PrismaLogsRepository implements ILogsRepository {
-  async create({ id, createdAt, updatedAt, props }: Log): Promise<void> {
+  async create({ id: log_id, ...props }: ILog): Promise<void> {
     await prisma.log.create({
       data: {
-        id,
+        id: log_id,
         ...props,
-        createdAt,
-        updatedAt,
       },
     });
   }

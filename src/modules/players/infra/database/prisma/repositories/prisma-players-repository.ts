@@ -1,29 +1,18 @@
-import { Player } from '@modules/players/domain/entities/player';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import { IPlayer, Player } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Player as PrismaPlayer } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 import { AsyncMaybe } from '@shared/types/maybe';
 
-const parsePlayer = (player: PrismaPlayer): Player => {
-  return new Player(
-    {
-      canBountyHunt: player.canBountyHunt,
-      createdAt: player.createdAt,
-      updatedAt: player.updatedAt,
-      email: player.email,
-      enabled: player.enabled,
-      hasAsteroid: player.hasAsteroid,
-      nickname: player.nickname,
-      password: player.password,
-      role: player.role as PlayerRole,
-      wallet: player.wallet,
-    },
-    player.id,
-  );
+const parsePlayer = (player: PrismaPlayer): IPlayer => {
+  return new Player(player as Player, {
+    id: player.id,
+    createdAt: player.createdAt,
+    updatedAt: player.updatedAt,
+  }).player;
 };
 class PrismaPlayersRepository implements IPlayersRepository {
-  async findByNickname(nickname: string, enabled = true): AsyncMaybe<Player> {
+  async findByNickname(nickname: string, enabled = true): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
         nickname,
@@ -38,7 +27,7 @@ class PrismaPlayersRepository implements IPlayersRepository {
     return parsePlayer(player);
   }
 
-  async findByEmail(email: string): AsyncMaybe<Player> {
+  async findByEmail(email: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
         email,
@@ -52,7 +41,7 @@ class PrismaPlayersRepository implements IPlayersRepository {
     return parsePlayer(player);
   }
 
-  async findById(player_id: string): AsyncMaybe<Player> {
+  async findById(player_id: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
         id: player_id,
@@ -67,34 +56,32 @@ class PrismaPlayersRepository implements IPlayersRepository {
     return parsePlayer(player);
   }
 
-  async create(player: Player): Promise<void> {
+  async create(player: IPlayer): Promise<void> {
+    const { id: player_id, ...props } = player;
+
     await prisma.player.create({
       data: {
-        id: player.id,
-        canBountyHunt: player.canBountyHunt,
-        createdAt: player.createdAt,
-        updatedAt: player.updatedAt,
-        email: player.email,
-        enabled: player.enabled,
-        hasAsteroid: player.hasAsteroid,
-        nickname: player.nickname,
-        password: player.password,
-        role: player.role as PlayerRole,
-        wallet: player.wallet,
+        id: player_id,
+        ...props,
       },
     });
   }
 
-  async save({ id: player_id, ...data }: Player): Promise<void> {
+  async save(player: IPlayer): Promise<void> {
+    const { id: player_id, ...props } = player;
+
     await prisma.player.update({
       where: {
         id: player_id,
       },
-      data,
+      data: {
+        ...props,
+        updatedAt: new Date(),
+      },
     });
   }
 
-  async findPlayers(): Promise<Player[]> {
+  async findPlayers(): Promise<IPlayer[]> {
     const players = await prisma.player.findMany();
 
     return players.map(parsePlayer);
