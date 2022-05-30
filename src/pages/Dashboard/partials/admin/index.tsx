@@ -2,6 +2,7 @@ import { Tab, Tabs } from '@/components/DashboardTab';
 import { AdminAirDropNft } from './AirDropNft';
 import { AdminBanAccount } from './BanAccount';
 import { AdminCreateSale } from './CreateSale';
+import { AdminLog } from './Log';
 
 import * as S from './styles';
 
@@ -35,6 +36,9 @@ export function Admin() {
           </Tab>
           <Tab title="Ban Account">
             <AdminBanAccount />
+          </Tab>
+          <Tab title="Log">
+            <AdminLog />
           </Tab>
         </Tabs>
       </S.Content>
