@@ -6,7 +6,7 @@ type Data = {
   isValidToken: boolean;
   payload?: string;
   expireIn: Date;
-}
+};
 
 export class PlayerAuth {
   id: string;
@@ -20,17 +20,18 @@ export class PlayerAuth {
   payload: string;
 
   createdAt: Date;
+
   updatedAt: Date;
-  
+
   expireIn: Date;
 
   constructor(
-    data: Data, 
+    data: Data,
     ommitedItens?: {
-      id?: string,
+      id?: string;
       createdAt?: Date;
       updatedAt?: Date;
-    }
+    },
   ) {
     this.id = ommitedItens?.id ?? crypto.randomUUID();
     this.createdAt = ommitedItens?.createdAt ?? new Date();

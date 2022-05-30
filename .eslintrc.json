@@ -19,6 +19,7 @@
       "prettier"
     ],
     "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
       "no-underscore-dangle": "off",
       "@typescript-eslint/no-empty-function": "off",
       "class-methods-use-this":"off",

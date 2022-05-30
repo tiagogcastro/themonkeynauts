@@ -8,7 +8,6 @@ import { instanceToInstance } from '@shared/infra/helpers/instance-to-instance';
 class AppPlayerAuthController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
-    console.log(request.ip);
 
     const appPlayerAuthBusinessLogic = container.resolve(
       AppPlayerAuthBusinessLogic,

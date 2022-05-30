@@ -14,7 +14,7 @@ const parsePlayerAuth = (player_auth: PrismaPlayerAuth): PlayerAuth => {
 export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
   async create(player_auth: PlayerAuth): Promise<PlayerAuth> {
     return prisma.playerAuth.create({
-      data: player_auth
+      data: player_auth,
     });
   }
 
@@ -27,14 +27,8 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
   }
 
   async update(player_auth: PlayerAuth): Promise<PlayerAuth> {
-    const {
-      id,
-      isLogged,
-      updatedAt,
-      payload,
-      isValidToken,
-      playerId,
-    } = player_auth;
+    const { id, isLogged, updatedAt, payload, isValidToken, playerId } =
+      player_auth;
 
     return prisma.playerAuth.update({
       data: {
@@ -45,8 +39,8 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
         playerId,
       },
       where: {
-        id
-      }
+        id,
+      },
     });
   }
 
@@ -81,7 +75,7 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
   async findFirstByPlayerId(player_id: string): Promise<PlayerAuth | null> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
-        playerId: player_id
+        playerId: player_id,
       },
     });
 
@@ -92,11 +86,14 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findByPlayerIdAndPayload(player_id: string, payload: string): Promise<PlayerAuth | null> {
+  async findByPlayerIdAndPayload(
+    player_id: string,
+    payload: string,
+  ): Promise<PlayerAuth | null> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
         playerId: player_id,
-        payload
+        payload,
       },
     });
 
@@ -124,8 +121,8 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
       },
     });
 
-    if(foundPlayerAuth?.isValidToken) {
-      return true
+    if (foundPlayerAuth?.isValidToken) {
+      return true;
     }
 
     return false;

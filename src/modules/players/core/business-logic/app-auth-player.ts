@@ -1,19 +1,15 @@
-import { inject, injectable, TokenProvider } from 'tsyringe';
-
 import { Player } from '@modules/players/domain/entities/player';
 import { PlayerAuth } from '@modules/players/domain/entities/player-auth';
-
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
-
-import { AppError } from '@shared/errors/app-error';
-
-import { AppPlayerAuthRequestDTO } from '../dtos/auth-player-request';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { IDateProvider } from '@shared/domain/providers/date-provider';
+import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
+import { AppError } from '@shared/errors/app-error';
+import { inject, injectable } from 'tsyringe';
+import { AppPlayerAuthRequestDTO } from '../dtos/auth-player-request';
 
-interface AppPlayerAuthResponse {
+type AppPlayerAuthResponse = {
   player: Player;
   token: PlayerAuth;
 };
@@ -32,9 +28,15 @@ export class AppPlayerAuthBusinessLogic {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
   ) {}
 
-  async execute({ email, password }: AppPlayerAuthRequestDTO): Promise<AppPlayerAuthResponse> {
+  async execute({
+    email,
+    password,
+  }: AppPlayerAuthRequestDTO): Promise<AppPlayerAuthResponse> {
     const player = await this.playersRepository.findByEmail(email);
 
     if (!player) {
@@ -51,44 +53,44 @@ export class AppPlayerAuthBusinessLogic {
     }
 
     const today = new Date();
-    const oneDay = today.getTime() + (1000 * 60 * 60 * 24);
+    const oneDay = today.getTime() + 1000 * 60 * 60 * 24;
     const tomorrowDate = new Date(oneDay);
 
     const authPlayer = new PlayerAuth({
       isLogged: true,
       isValidToken: true,
       playerId: player.id,
-      expireIn: tomorrowDate
+      expireIn: tomorrowDate,
     });
 
     const payload = this.tokenProvider.generate(authPlayer);
 
-    authPlayer.payload = payload
+    authPlayer.payload = payload;
 
     // TODO - CORRECT A BUG
     // adicionar algo que busque o usuario em especifico e atualizar o payload,
     // caso não exista o usuario, crie. (atualmente faz isso, porém ta dando error)
     // o usuario poderá ter varios registros, desde que acesse o app de pc diferente(estou pensando em usar o USER IP)
 
-    const foundAuthPlayer = await this.appPlayerAuth.findFirstByPlayerId(player.id);
+    const playersAuth = await this.appPlayerAuth.findManyByPlayerId(player.id);
 
-    if(foundAuthPlayer) {
-      const token = await this.appPlayerAuth.update(authPlayer);
+    await Promise.all(
+      playersAuth.map(async player_auth => {
+        const isTokenExpired = this.dateProvider.isAfter(
+          today,
+          player_auth.expireIn,
+        );
 
-      if(!token) {
-        throw new AppError('Unable to create a new token')
-      }
-    
-      return {
-        player,
-        token,
-      };
-    }
+        if (isTokenExpired) {
+          await this.appPlayerAuth.destroy(player_auth.id);
+        }
+      }),
+    );
 
     const token = await this.appPlayerAuth.create(authPlayer);
 
-    if(!token) {
-      throw new AppError('Unable to create a token')
+    if (!token) {
+      throw new AppError('Unable to create a token');
     }
 
     return {

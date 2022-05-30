@@ -11,25 +11,23 @@ export async function ensureAuthenticated(
 ): Promise<void> {
   const { authorization } = request.headers;
 
-  if(!authorization) {
-    throw new AppError('Header params: authorization is missing.')
+  if (!authorization) {
+    throw new AppError('Header params: authorization is missing.');
   }
 
   const ensureAuthenticatedBusinessLogic = container.resolve(
-    EnsureAuthenticatedBusinessLogic
-  )
+    EnsureAuthenticatedBusinessLogic,
+  );
 
   const execute = await ensureAuthenticatedBusinessLogic.execute({
-    authorization
+    authorization,
   });
 
-  if(execute) {
-    const { decoded } = execute;
-    
-    request.player = {
-      id: decoded.playerId,
-    };
-    
-    return next();
-  }
+  const { decoded } = execute;
+
+  request.player = {
+    id: decoded.playerId,
+  };
+
+  return next();
 }
