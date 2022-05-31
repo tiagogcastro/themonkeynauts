@@ -30,13 +30,6 @@ export const paymentByEthereum = async ({
   let error: any = {};
   
   try {
-    if(!ethereum) {
-      return {
-        error: 'Ethereum not allowed',
-        transaction: ''
-      }
-    }
-
     await ethereum.request({
       method: 'eth_requestAccounts'
     });
