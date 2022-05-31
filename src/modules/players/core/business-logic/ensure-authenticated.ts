@@ -7,6 +7,7 @@ import { AppError } from '@shared/errors/app-error';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 
 type EnsureAuthenticatedRequestDTO = {
   authorization: string;
@@ -29,6 +30,9 @@ export class EnsureAuthenticatedBusinessLogic {
 
     @inject('DateProvider')
     private dateProvider: IDateProvider,
+
+    @inject('PlayersRepository')
+    private playerRepository: IPlayersRepository,
 
     @inject('AppPlayerAuthRepository')
     private appPlayerAuthRepository: IAppPlayerAuthRepository,
@@ -57,16 +61,22 @@ export class EnsureAuthenticatedBusinessLogic {
 
     const { id, updatedAt, expireIn, isValidToken } = decoded;
 
-    const foundPlayer = await this.appPlayerAuthRepository.findById(id);
+    const foundPlayer = await this.playerRepository.findById(id);
 
-    if (!foundPlayer) {
-      throw new AppError('User does not exist', 403);
+    if(!foundPlayer?.enabled) {
+      throw new AppError('User does not have an activated account', 403);
     }
 
-    const foundPlayerAuth =
-      await this.appPlayerAuthRepository.findUniqueByPayload(token);
+    const foundPlayerAuth = await this.appPlayerAuthRepository.findById(id);
 
     if (!foundPlayerAuth) {
+      throw new AppError('User does not logged', 403);
+    }
+
+    const foundPlayerAuthPayload =
+      await this.appPlayerAuthRepository.findUniqueByPayload(token);
+
+    if (!foundPlayerAuthPayload) {
       throw new AppError('Token not found', 401);
     }
 
