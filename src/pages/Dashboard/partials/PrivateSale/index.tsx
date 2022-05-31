@@ -36,7 +36,7 @@ export function PrivateSale() {
     let value: string | number = event.target.value.replace(/[^0-9.]/g, '');
 
     if(Number(value) < min || Number(value) > max) {
-      toast('You can only put numbers between 0.1 and 1', {
+      toast(`You can only put numbers between ${min} and ${max}`, {
         autoClose: 5000,
         pauseOnHover: true,
         type: 'warning',
@@ -96,43 +96,45 @@ export function PrivateSale() {
       }
     });
 
-    const { transaction, error } = await paymentByEthereum({
-      ethereum,
-      toAddress: ethereumConfig.preSaleTransaction.toAddress,
-      ether: ethers.utils.parseEther(inputValue)._hex,
-      dataContract: ethereumConfig.preSaleTransaction.dataContract,
-    });
-
-    if(transaction || error) {
-      buttonHasBlocked.changeToFalse();
-    }
-
-    if(transaction) {
-      toast(`${user?.user.nickname}, your ${inputValue} transaction was a success`, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'success',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+    if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
+      const { transaction, error } = await paymentByEthereum({
+        ethereum,
+        toAddress: ethereumConfig.privateSaleTransaction.toAddress,
+        ether: ethers.utils.parseEther(inputValue)._hex,
+        dataContract: ethereumConfig.privateSaleTransaction.dataContract,
       });
-    }
 
-    if(error) {
-      toast(error.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+      if(transaction || error) {
+        buttonHasBlocked.changeToFalse();
+      }
+
+      if(transaction) {
+        toast(`${user?.user.nickname}, your ${inputValue} transaction was a success`, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'success',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+
+      if(error) {
+        toast(error.message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
     }
   }
 
@@ -148,11 +150,11 @@ export function PrivateSale() {
         </div>
         <input 
           type="text"
-          placeholder="Min 0.1 / max 1"
+          placeholder="Min 0.3 / max 3"
           onChange={(event) => handleChange({
             event,
-            max: 1,
-            min: 0.1
+            max: 3,
+            min: 0.3
           })}
           value={inputValue}
         />
