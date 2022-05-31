@@ -21,7 +21,7 @@ type HandleChange = {
   min: number;
 }
 
-export function PreSale() {
+export function PrivateSale() {
   const { user } = useAuth();
   const { ethereum } = useMetaMask()
   

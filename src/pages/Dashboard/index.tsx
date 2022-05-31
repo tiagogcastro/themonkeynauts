@@ -10,7 +10,7 @@ import {
   MonkeynautsTab,
   // EquipamentsTab,
   AccountTab,
-  PreSale
+  PrivateSale
 } from './partials';
 import { Admin } from './partials/admin';
 import { FoundersPackTab } from './partials/FoundersPackTab';
@@ -29,7 +29,7 @@ export function Dashboard() {
   // const equipamentIsShow = useBoolean(false);
   const accountIsShow = useBoolean(false);
   const foundersPackIsShow = useBoolean(false);
-  const preSaleIsShow = useBoolean(false);
+  const privateSaleIsShow = useBoolean(false);
 
   return (
     <Container>
@@ -58,8 +58,8 @@ export function Dashboard() {
               {/* <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
                 <EquipamentsTab />
               </Tab> */}
-              <Tab title="Pre sale" hasButtonToBack={preSaleIsShow}>
-                <PreSale />
+              <Tab title="Pre sale" hasButtonToBack={privateSaleIsShow}>
+                <PrivateSale />
               </Tab>
               <Tab title="Admin">
                 <Admin />

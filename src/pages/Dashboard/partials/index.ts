@@ -4,4 +4,4 @@ export * from './MonkeynautsTab';
 export * from './Monkeynaut';
 export * from './EquipamentsTab';
 export * from './AccountTab';
-export * from './PreSale';
+export * from './PrivateSale';
