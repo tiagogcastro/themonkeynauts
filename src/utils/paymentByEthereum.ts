@@ -30,9 +30,11 @@ export const paymentByEthereum = async ({
   let error: any = {};
   
   try {
-    await ethereum.request({
-      method: 'eth_requestAccounts'
-    });
+    if(!ethereum.selectedAddress) {
+      await ethereum.request({
+        method: 'eth_requestAccounts'
+      });
+    }
 
     const transactionParameters = {
       to: toAddress, 
