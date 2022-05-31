@@ -4,16 +4,17 @@ import {
   ConfirmTransactionDTO,
   IBlockchainProvider,
 } from '@shared/domain/providers/blockchain-provider';
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { AppError } from '@shared/errors/app-error';
+import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
 import { ethToWei } from '../helpers/eth-to-wei';
 
+@injectable()
 export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
 
   constructor(
-    private hashProvider: IHashProvider,
+    @inject('TransactionsRepository')
     private transactionsRepository: ITransactionsRepository,
   ) {
     this.web3 = new Web3(
