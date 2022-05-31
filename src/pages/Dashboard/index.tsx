@@ -58,7 +58,7 @@ export function Dashboard() {
               {/* <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
                 <EquipamentsTab />
               </Tab> */}
-              <Tab title="Pre sale" hasButtonToBack={privateSaleIsShow}>
+              <Tab title="Private sale" hasButtonToBack={privateSaleIsShow}>
                 <PrivateSale />
               </Tab>
               <Tab title="Admin">
