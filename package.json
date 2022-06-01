@@ -4,7 +4,7 @@
   "main": "src/shared/infra/http/server.ts",
   "license": "MIT",
   "prisma": {
-    "seed": "ts-node -r tsconfig-paths/register src/shared/infra/database/prisma/seeders"
+    "seed": "node build/shared/infra/database/prisma/seeders"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
