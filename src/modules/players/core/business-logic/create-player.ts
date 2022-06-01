@@ -1,15 +1,22 @@
 import { IPlayer, Player } from '@modules/players/domain/entities/player';
+import {
+  IPlayerAuth,
+  PlayerAuth,
+} from '@modules/players/domain/entities/player-auth';
 import { Resource } from '@modules/players/domain/entities/resource';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { CreatePlayerRequestDTO } from '@modules/players/dtos/create-player-request';
+import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
+import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
 type Response = {
   player: IPlayer;
+  token: IPlayerAuth;
 };
 
 @injectable()
@@ -23,6 +30,12 @@ class CreatePlayerBusinessLogic {
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('TokenProvider')
+    private tokenProvider: ITokenProvider,
+
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
   ) {}
 
   async execute({
@@ -71,8 +84,25 @@ class CreatePlayerBusinessLogic {
 
     await this.resourcesRepository.create(resource);
 
+    const expireIn = this.dateProvider.addHours(new Date(), 24);
+
+    const domainPlayerAuth = new PlayerAuth({
+      isLogged: true,
+      isValidToken: true,
+      playerId: player.id,
+      expireIn,
+      payload: '',
+    });
+
+    const payload = this.tokenProvider.generate(domainPlayerAuth.playerAuth);
+
+    domainPlayerAuth.assign = {
+      payload,
+    };
+
     return {
       player,
+      token: domainPlayerAuth.playerAuth,
     };
   }
 }

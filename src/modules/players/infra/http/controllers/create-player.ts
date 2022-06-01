@@ -13,7 +13,7 @@ class CreatePlayerController {
       CreatePlayerBusinessLogic,
     );
 
-    const { player } = await createPlayerBusinessLogic.execute({
+    const { player, token } = await createPlayerBusinessLogic.execute({
       email,
       nickname,
       password,
@@ -21,6 +21,7 @@ class CreatePlayerController {
 
     return response.status(201).json({
       player: instanceToInstance('player', player),
+      token,
     });
   }
 }
