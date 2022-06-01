@@ -1,5 +1,4 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
@@ -27,7 +26,7 @@ class ShowPlayerBusinessLogic {
     if (player_id) {
       const player = await this.playersRepository.findById(player_id);
 
-      if (!player || player.role === PlayerRole.ADMIN) {
+      if (!player) {
         throw new AppError('Could not show player', 401);
       }
 
@@ -40,7 +39,7 @@ class ShowPlayerBusinessLogic {
       nickname as string,
     );
 
-    if (!player || player.role === PlayerRole.ADMIN) {
+    if (!player) {
       throw new AppError('Could not show player', 401);
     }
 
