@@ -109,9 +109,9 @@ export function AccountTab() {
     try {
       const { transaction, error } = await paymentByEthereum({
         ethereum,
-        toAddress: ethereumConfig.preSaleTransaction.toAddress,
+        toAddress: ethereumConfig.privateSaleTransaction.toAddress,
         ether: ethers.utils.parseEther(inputValue)._hex,
-        dataContract: ethereumConfig.preSaleTransaction.dataContract,
+        dataContract: ethereumConfig.privateSaleTransaction.dataContract,
       });
   
       if(error) {
