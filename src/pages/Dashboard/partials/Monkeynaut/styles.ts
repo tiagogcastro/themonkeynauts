@@ -135,6 +135,7 @@ export const MonkeynautInformation = styled.aside`
       margin-bottom: 50px;
     }
   }
+
 `;
 
 export const UniqueInfo = styled.div`
@@ -203,7 +204,7 @@ export const CrewInShip = styled.div`
 
     p {
       font-size: 8px;
-      font-weight: 700;
+      font-weight: 500;
       margin-top: 4px;
       line-height: 10px;
     }
@@ -213,9 +214,14 @@ export const CrewInShip = styled.div`
     div {
       margin-top: 12px;
 
-      p {
+      strong {
         font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1.6rem;
         margin-top: 12px;
+        color: #ccc;
       }
     }
   }

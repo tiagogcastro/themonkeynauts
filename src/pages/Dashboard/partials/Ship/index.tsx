@@ -41,18 +41,18 @@ export function Ship({
       ...ship,
       crew: {
         ...ship.crew,
-        monkeynauts: ship.crew.monkeynauts && ship.crew.monkeynauts.map(crew => {
+        monkeynauts: ship.crew.monkeynauts.map(crew => {
           return {
             ...crew,
-            class: capitalize(crew.class),
             rank: capitalize(crew.rank),
+            class: capitalize(crew.class),
             avatar: verifyRole(crew.class, {
               engineer,
               scientist,
               soldier
-            }),
+            })
           }
-        }),
+        })
       }
     }
   }, [ship]);
@@ -83,7 +83,7 @@ export function Ship({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>{ship.crew.monkeynauts.length || 0}/{ship.crew.seats}</strong>
+                    <strong>{shipModified.crew.monkeynauts.length}/{shipModified.crew.seats}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
@@ -101,8 +101,8 @@ export function Ship({
               <PveBonusInfo>
                 <InfoTitle_1>PVE BONUS</InfoTitle_1>
                 <p className="pve_detail">
-                  + {ship.bonus.value}% <br />
-                  {ship.bonus.description}
+                  {ship.class.toLowerCase() !== 'explorer' && '+ '}{ship.bonus?.value}% <br />
+                  {ship.bonus?.description}
                 </p>
               </PveBonusInfo>
             </ShipInformation>

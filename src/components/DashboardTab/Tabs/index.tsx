@@ -9,10 +9,13 @@ import {
 } from './styles';
 
 export type DashboardTabProps = {
-	children: React.ReactElement[] | React.ReactElement;
+	children:  React.ReactNode;
+  menuContentProps?: React.HTMLAttributes<HTMLDivElement>;
+  menuContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+  tabContainerProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
-export function Tabs({ children }: DashboardTabProps) {
+export function Tabs({ children, menuContentProps, menuContainerProps, tabContainerProps }: DashboardTabProps) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const menuActive = useBoolean(false);
 
@@ -26,12 +29,13 @@ export function Tabs({ children }: DashboardTabProps) {
 		window.addEventListener('resize', () => {
 			if(window.innerWidth > 1024 && menuActive.state) {
 				menuActive.changeToFalse();
-			}
+			}	
 		});
 	});
 
 	return (
 		<Container
+			{...tabContainerProps}
 		>
 			<TabTitle
 				menu={menuActive}
@@ -43,7 +47,9 @@ export function Tabs({ children }: DashboardTabProps) {
 					children[selectedTab].props.hasButtonToBack
 				}
 			/>
-			<Menu 
+			<Menu
+				menuContainerProps={menuContainerProps}
+				menuContentProps={menuContentProps}
 				selectedTab={selectedTab}
 				menu={menuActive}
 				children={children}

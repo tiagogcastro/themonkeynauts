@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
@@ -7,6 +8,8 @@ import { api, MonkeynautType } from '@/services/api';
 import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
+
+import { COLORS } from '@/theme';
 
 import { Title_1 } from '@/styles/global';
 import { 
@@ -25,8 +28,6 @@ import {
 import engineer from '@/assets/images/engineer.png';
 import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
-import { toast } from 'react-toastify';
-import { COLORS } from '@/theme';
 
 export type MonkeynautsTabProps = {
   monkeynautIsShow?: UseBooleanTypes;
@@ -53,10 +54,11 @@ export function MonkeynautsTab({
 
       setMonkeynaut({
         ...monkeynaut,
-        crew_in_ship: getUniqueShipResponse.data.ship,
         id_short: replaceToShortString(monkeynaut.id),
-        ownerName: monkeynautOwnerName
+        ownerName: monkeynautOwnerName,
+        crew_in_ship: getUniqueShipResponse.data.ship,
       });
+      
     }
     catch(err: any) {
       const error_message = err?.response?.headers['grpc-message'];
@@ -76,21 +78,23 @@ export function MonkeynautsTab({
       monkeynautIsShow?.changeToTrue();
     }
   }
-  
+
   useEffect(() => {
     async function getMonkeynauts() {
       try {
         const response = await api.monkeynauts.geral.getMonkeynauts();
 
         setMonkeynauts(response.data);
-
-        monkeynautsIsLoading.changeToFalse();
       } catch(err) {
+        
+      } finally {
         monkeynautsIsLoading.changeToFalse();
       }
     }
 
     getMonkeynauts();
+
+    return () => monkeynautsIsLoading.changeToFalse();
   }, []);
 
   const monkeynautsModified = useMemo(() => {
@@ -145,7 +149,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="id">
                           <div className="info">
                             <span>Monkeynaut id</span>
-                            <strong>{replaceToShortString(monkeynaut.id)}</strong>
+                            <strong title={monkeynaut.id}>{replaceToShortString(monkeynaut.id)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">

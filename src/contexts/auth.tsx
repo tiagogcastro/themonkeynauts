@@ -22,6 +22,9 @@ export type AuthContextData = {
   token: string | null;
   tokenIsValid: boolean;
   loading: boolean;
+
+  setUser: React.Dispatch<React.SetStateAction<UserType.GetUser | null>>;
+  getUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -40,8 +43,9 @@ export function AuthProvider({children}: AuthProviderProps) {
   function signOut() {
     tokenIsValid.changeToFalse();
     loading.changeToFalse();
-    setToken(null);
     sessionStorage.removeItem(monkeynautsApiToken);
+
+    setToken(null);
 
     baseApi.defaults.headers.common['Authorization'] = ``;
   }
@@ -111,7 +115,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     const { player, token } = response.data;
 
-    sessionStorage.setItem(monkeynautsApiToken, token);
+    localStorage.setItem(monkeynautsApiToken, token);
     
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -149,6 +153,9 @@ export function AuthProvider({children}: AuthProviderProps) {
         tokenIsValid: tokenIsValid.state,
         loading: loading.state,
         user,
+        
+        getUser,
+        setUser,
       }}
     >
       {children}

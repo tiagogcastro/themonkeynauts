@@ -16,12 +16,12 @@ import {
 export type InputProps = React.HTMLAttributes<HTMLInputElement> & {
   name: string;
   labelText?: string;
-  type: HTMLInputTypeAttribute;
+  type?: HTMLInputTypeAttribute;
   containerProps?: React.HTMLAttributes<HTMLLabelElement>
 }
 
 export function Input({
-  type,
+  type = 'text',
   name,
   labelText,
   containerProps,
@@ -68,7 +68,7 @@ export function Input({
   }, [fieldName, registerField]);
 
   return (
-    <Container {...containerProps} isError={!!error}>
+    <Container className="input_label" {...containerProps} isError={!!error}>
       <span className="input_text">{labelText}</span>
       <Content
         isFocused={isFocused.state}

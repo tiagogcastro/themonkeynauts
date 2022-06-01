@@ -12,7 +12,7 @@ export const Container = styled.label<InputContainerTagProps>`
   width: 100%;
 
   .input_text {
-    margin-bottom: 1.2rem;
+    margin-bottom: 4px;
     font-weight: bold;
     line-height: 1.5rem;
     letter-spacing: 0;

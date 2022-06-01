@@ -68,6 +68,7 @@ export const InfoTitle_1 = styled.h1`
 `;
 
 export const Details = styled.div`
+
   .detail_header {
     width: 100%;
     position: relative;
@@ -76,6 +77,7 @@ export const Details = styled.div`
       display: none;
     }
   }
+
   @media(min-width: 768px) {
     display: flex;
     flex-direction: column;
@@ -87,6 +89,7 @@ export const Details = styled.div`
       margin-bottom: 16px;
     }
   }
+
   @media(min-width: 1400px) {
     margin-top: 80px;
 
@@ -98,9 +101,12 @@ export const Details = styled.div`
         align-items: center;
         justify-content: center;
         gap: 8px;
+
         padding: 8px 12px;
         border-radius: 6px;
+
         border: 2px solid #0092F9;
+
         position: absolute;
         top: 0;
         right: 0;

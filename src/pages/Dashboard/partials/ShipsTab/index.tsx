@@ -68,6 +68,8 @@ export function ShipsTab({
     }
 
     getShips();
+
+    return () => loadingShips.changeToFalse();
   }, []);
 
   const shipsModified = useMemo(() => {
@@ -134,7 +136,7 @@ export function ShipsTab({
                         <TbodyTdCustom className="rank">
                           <div className="info">
                             <span>Rank</span>
-                            <strong>{capitalize(ship.rank)}</strong>
+                            <strong>{ship.rank}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="crew">

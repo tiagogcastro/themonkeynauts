@@ -52,7 +52,7 @@ export const Details = styled.main`
   flex-direction: column;
 
   .ship_image {
-    margin: 8px 48px 0 0;
+    margin: 8px auto 0;
     
     max-width: 170px;
     max-height: 100px;
@@ -84,7 +84,6 @@ export const Details = styled.main`
 
     .ship_image {
       max-width: 430px;
-      margin: 0;
     }
   }
 `;
@@ -95,7 +94,6 @@ export const PrincipalDetails = styled.section`
 
   @media(min-width: 768px) {
     flex-direction: row-reverse;
-    gap: 24px;
   }
 
   @media(min-width: 1024px) {
@@ -115,6 +113,10 @@ export const ShipInformation = styled.aside`
 
   .details_title {
     display: none;
+  }
+
+  @media(min-width: 768px) {
+    max-width: 200px;
   }
 
   @media(min-width: 1024px) {
@@ -280,7 +282,6 @@ export const CrewContainer = styled.section`
       margin-bottom: 50px;
     }
   }
-  
   .crew_title.none_crew_list {
     margin-bottom: 0;
   }

@@ -19,8 +19,8 @@ export type Ship = {
   };
 
   bonus: {
-    description: string;
     value: number;
+    description: string;
   };
   
   owner: User;

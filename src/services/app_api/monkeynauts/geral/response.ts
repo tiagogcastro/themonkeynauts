@@ -14,8 +14,6 @@ export type Monkeynaut = {
   avatar?: string;
   ownerName?: string;
   id_short?: string;
-  shipId: string;
-
   crew_in_ship?: Ship | null;
 
   attributes: {
@@ -28,9 +26,11 @@ export type Monkeynaut = {
   };
   
   bonus: {
-    description: string;
     value: number;
+    description: string;
   };
+
+  shipId: string;
   
   breedCount: number;
 

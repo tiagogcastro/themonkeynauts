@@ -4,12 +4,11 @@ import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
+import { capitalize } from '@/utils';
+
 import {
   Title_1
 } from '@/styles/global';
-
-import fighter_2 from '@/assets/fighter_2.png';
-import btn_delete from '@/assets/images/btn_delete.png';
 
 import {
   Container,
@@ -36,8 +35,6 @@ import {
   EquipamentsContent,
   EquipamentToSelect,
 } from './styles';
-
-import { capitalize } from '@/utils';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -88,7 +85,7 @@ export function Monkeynaut({
                   </UniqueInfo>
                 </div>
               </div>
-              <UniqueInfo>
+              <UniqueInfo className={`${!monkeynaut.crew_in_ship && 'none_crew'}`}>
                 <span>Crew in Ship</span>
                 <CrewInShipContainer>
                   {monkeynaut.crew_in_ship ? (
