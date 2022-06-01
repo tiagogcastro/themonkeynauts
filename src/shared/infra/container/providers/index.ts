@@ -1,4 +1,5 @@
 import { mailConfig } from '@config/mail';
+import { IBlockchainProvider } from '@shared/domain/providers/blockchain-provider';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
@@ -12,6 +13,7 @@ import { EtherealMailProvider } from '@shared/infra/providers/ethereal-mail-prov
 import { HandlebarsMailTemplateProvider } from '@shared/infra/providers/handlebars-mail-template-provider';
 import { JWTokenProvider } from '@shared/infra/providers/jwt-token-provider';
 import { SESMailProvider } from '@shared/infra/providers/ses-mail-provider';
+import { Web3jsBlockchainProvider } from '@shared/infra/providers/web3js-blockchain-provider';
 import { container } from 'tsyringe';
 
 container.registerSingleton<ITokenProvider>('TokenProvider', JWTokenProvider);
@@ -35,4 +37,9 @@ container.registerSingleton<IMailProvider>('MailProvider', MailProvider);
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   DiskStorageProvider,
+);
+
+container.registerSingleton<IBlockchainProvider>(
+  'BlockchainProvider',
+  Web3jsBlockchainProvider,
 );

@@ -1,39 +1,43 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
 
-type TransactionPropsOmittedCommons = {
+type PrivateSalePropsOmittedCommons = {
+  playerId: string;
   wallet: string;
   txHash: string;
+  bnbAmount: number;
 };
 
-type TransactionProps = TransactionPropsOmittedCommons & Commons;
+type PrivateSaleProps = PrivateSalePropsOmittedCommons & Commons;
 
-export interface ITransaction extends TransactionProps {
+export interface IPrivateSale extends PrivateSaleProps {
   id: string;
 }
 
-type TransactionCommons = Partial<
+type PrivateSaleCommons = Partial<
   {
     id: string;
   } & Commons
 >;
 
-export class Transaction implements ITransaction {
+export class PrivateSale implements IPrivateSale {
   private _id: string;
 
-  private _props: TransactionProps;
+  private _props: PrivateSaleProps;
 
-  get transaction(): ITransaction {
+  get privateSale(): IPrivateSale {
     return {
       id: this._id,
+      playerId: this._props.playerId,
       wallet: this._props.wallet,
       txHash: this._props.txHash,
+      bnbAmount: this._props.bnbAmount,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
-    } as ITransaction;
+    } as IPrivateSale;
   }
 
-  set assign(props: Partial<TransactionProps>) {
+  set assign(props: Partial<PrivateSaleProps>) {
     this._props = {
       ...this._props,
       ...props,
@@ -44,12 +48,20 @@ export class Transaction implements ITransaction {
     return this._id;
   }
 
+  get playerId(): string {
+    return this._props.playerId;
+  }
+
   get wallet(): string {
     return this._props.wallet;
   }
 
   get txHash(): string {
     return this._props.txHash;
+  }
+
+  get bnbAmount(): number {
+    return this._props.bnbAmount;
   }
 
   get updatedAt(): Date {
@@ -61,8 +73,8 @@ export class Transaction implements ITransaction {
   }
 
   constructor(
-    props: TransactionPropsOmittedCommons,
-    commons?: TransactionCommons,
+    props: PrivateSalePropsOmittedCommons,
+    commons?: PrivateSaleCommons,
   ) {
     this._id = commons?.id || crypto.randomUUID();
 

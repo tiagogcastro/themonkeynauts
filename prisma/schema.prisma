@@ -50,7 +50,6 @@ model Player {
   logs Log[]
 
   playerAuth    PlayerAuth[]  @relation("player_auth")
-  transactions  Transaction[]
   private_sales PrivateSale[]
 
   @@map("players")
@@ -186,27 +185,15 @@ model PlayerAuth {
   @@map("player_auth")
 }
 
-model Transaction {
-  id        String   @id @db.Uuid()
-  wallet    String
-  txHash    String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  player Player @relation(fields: [wallet], references: [wallet], onDelete: NoAction)
-
-  @@map("transactions")
-}
-
 model PrivateSale {
   id        String   @id @db.Uuid()
   playerId  String   @db.Uuid()
   player    Player   @relation(fields: [playerId], references: [id], onDelete: SetNull)
   wallet    String
-  bnbAmount Int
+  txHash    String   @unique
+  bnbAmount Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 
   @@map("private_sales")
 }
