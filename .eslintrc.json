@@ -45,7 +45,7 @@
       "@typescript-eslint/no-use-before-define": [
         "error"
       ],
-      "prettier/prettier": "off",
+      "prettier/prettier": "error",
       "import/extensions": [
         "error",
         "ignorePackages",
