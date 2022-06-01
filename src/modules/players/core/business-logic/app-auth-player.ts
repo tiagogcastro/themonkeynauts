@@ -73,11 +73,6 @@ export class AppPlayerAuthBusinessLogic {
       payload,
     };
 
-    // TODO - CORRECT A BUG
-    // adicionar algo que busque o usuario em especifico e atualizar o payload,
-    // caso não exista o usuario, crie. (atualmente faz isso, porém ta dando error)
-    // o usuario poderá ter varios registros, desde que acesse o app de pc diferente(estou pensando em usar o USER IP)
-
     const playersAuth = await this.appPlayerAuth.findManyByPlayerId(player.id);
 
     await Promise.all(

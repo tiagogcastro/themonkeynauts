@@ -41,11 +41,11 @@
         }
       ],
       "no-useless-constructor": "off",
-      "prettier/prettier": "error",
       "no-use-before-define": "off",
       "@typescript-eslint/no-use-before-define": [
         "error"
       ],
+      "prettier/prettier": "off",
       "import/extensions": [
         "error",
         "ignorePackages",
