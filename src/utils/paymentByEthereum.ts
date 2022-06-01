@@ -1,8 +1,8 @@
 export type MetaMaskPaymentParams = {
   ether: string;
   fromAddress?: string;
-  dataContract: string;
-  toAddress: string;
+  dataContract?: string;
+  toAddress?: string;
   ethereum: any;
 }
 
@@ -28,6 +28,20 @@ export const paymentByEthereum = async ({
 }: MetaMaskPaymentParams): Promise<PaymentByEthereumResponse> => {
   let transaction = '';
   let error: any = {};
+
+  if(!toAddress) {
+    return {
+      error: '[internal error]: toAddress not found',
+      transaction: ''
+    }
+  }
+
+  if(!dataContract) {
+    return {
+      error: '[internal error]: dataContract not found',
+      transaction: ''
+    }
+  }
   
   try {
     if(!ethereum.selectedAddress) {
