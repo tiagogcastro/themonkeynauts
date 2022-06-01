@@ -10,6 +10,8 @@ import { ILogsRepository } from '@modules/logs/domain/repositories/logs-reposito
 import { PrismaLogsRepository } from '@modules/logs/infra/database/prisma/repositories/prisma-logs-repositories';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { PrismaAppPlayerAuthRepository } from '@modules/players/infra/database/prisma/repositories/prisma-app-player-auth-repository';
+import { IPrivateSaleRepository } from '@modules/private-sales/domain/repositories/private-sales-repositories';
+import { PrismaPrivateSalesRepository } from '@modules/private-sales/infra/database/prisma/repositories/prisma-private-sale-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -34,4 +36,9 @@ container.registerSingleton<ILogsRepository>(
 container.registerSingleton<IAppPlayerAuthRepository>(
   'AppPlayerAuthRepository',
   PrismaAppPlayerAuthRepository,
+);
+
+container.registerSingleton<IPrivateSaleRepository>(
+  'PrivateSaleRepository',
+  PrismaPrivateSalesRepository,
 );

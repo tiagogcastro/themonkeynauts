@@ -59,9 +59,9 @@ export class EnsureAuthenticatedBusinessLogic {
       throw new AppError('Token is not valid', 401);
     }
 
-    const { id, updatedAt, expireIn, isValidToken } = decoded;
+    const { id, playerId, updatedAt, expireIn, isValidToken } = decoded;
 
-    const foundPlayer = await this.playerRepository.findById(id);
+    const foundPlayer = await this.playerRepository.findById(playerId);
 
     if(!foundPlayer?.enabled) {
       throw new AppError('User does not have an activated account', 403);
