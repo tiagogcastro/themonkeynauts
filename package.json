@@ -56,7 +56,8 @@
     "nodemailer": "^6.7.2",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.6.0",
-    "web3": "^1.7.1"
+    "web3": "^1.7.1",
+    "web3-core": "^1.7.3"
   },
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --exit-child --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
