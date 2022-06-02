@@ -80,7 +80,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     getPlayer();
    
-  }, []);
+  }, [token]);
 
   async function signIn(credentials: PlayerType.AppLoginParams): Promise<PlayerType.AppLoginResponse | undefined> {
     const response = await api.player.geral.authenticate.app_login(credentials);
@@ -115,18 +115,13 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     const { player, token: { payload: token } } = response.data;
 
-    sessionStorage.setItem(monkeynautsApiToken, token);
-    
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+    
+    sessionStorage.setItem(monkeynautsApiToken, token);
     tokenIsValid.changeToTrue();
     setToken(token);
-    setPlayer({
-      player: {
-        ...player,
-        id_short: replaceToShortString(player.id)
-      }
-    });
+
+    getPlayer();
     
     toast('Success! You managed to create your account. Welcome!', {
       autoClose: 5000,

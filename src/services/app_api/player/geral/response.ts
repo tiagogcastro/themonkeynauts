@@ -7,7 +7,7 @@ export type Player = {
   roles: string[];
   id_short: string | undefined;
 
-  wallet: Wallet
+  wallet: string;
 }
 
 export type GetPlayer = {

@@ -29,14 +29,6 @@ export const paymentByEthereum = async ({
   let transaction = '';
   let error: any = {};
 
-  console.log({
-    ether, 
-  fromAddress, 
-  toAddress, 
-  dataContract,
-  ethereum,
-  })
-
   if(!toAddress) {
     return {
       error: '[internal error]: toAddress not found',
