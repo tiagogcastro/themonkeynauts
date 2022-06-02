@@ -35,8 +35,6 @@ export function Wallet({
     try {
       const connection = await connect();
 
-      console.log({connection});
-
       if(connection) {
         const response = await api.wallet.geral.saveWallet({
           wallet: connection?.[0]
