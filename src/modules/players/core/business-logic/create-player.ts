@@ -5,6 +5,7 @@ import {
 } from '@modules/players/domain/entities/player-auth';
 import { Resource } from '@modules/players/domain/entities/resource';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { CreatePlayerRequestDTO } from '@modules/players/dtos/create-player-request';
@@ -36,6 +37,9 @@ class CreatePlayerBusinessLogic {
 
     @inject('DateProvider')
     private dateProvider: IDateProvider,
+
+    @inject('AppPlayerAuthRepository')
+    private appPlayerAuthRepository: IAppPlayerAuthRepository,
   ) {}
 
   async execute({
@@ -99,6 +103,8 @@ class CreatePlayerBusinessLogic {
     domainPlayerAuth.assign = {
       payload,
     };
+
+    await this.appPlayerAuthRepository.create(domainPlayerAuth.playerAuth);
 
     return {
       player,
