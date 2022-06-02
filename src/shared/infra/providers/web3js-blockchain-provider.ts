@@ -10,8 +10,6 @@ import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
 import { Transaction } from 'web3-core';
 
-import { ethToWei } from '../helpers/eth-to-wei';
-
 @injectable()
 export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
@@ -87,7 +85,6 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       );
     }
 
-    console.log(transaction.from, from);
     if (transaction.from !== from) {
       throw new AppError(
         'The transaction origin is not the same as the user wallet',
