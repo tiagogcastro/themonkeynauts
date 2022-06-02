@@ -74,15 +74,8 @@ export function PrivateSale() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-<<<<<<< HEAD
-    const validatedInput = handleClick({
-      max: 3,
-      min: 0.3
-    })
-=======
     try {
       await verifyWallet();
->>>>>>> ad9522cb0ff27663892d9c6d650bb8e6ce9cb721
 
       const validatedInput = handleClick({
         max: 3,
@@ -203,8 +196,6 @@ export function PrivateSale() {
         }
       });
     }
-
-    
   }
 
   return (
