@@ -115,6 +115,7 @@ export function PrivateSale() {
         }
       });
   
+      
       toast(`if it doesn't open a popup, check your metamask`, {
         autoClose: 9000,
         pauseOnHover: true,
