@@ -12,11 +12,10 @@ const parsePlayer = (player: PrismaPlayer): IPlayer => {
   }).player;
 };
 class PrismaPlayersRepository implements IPlayersRepository {
-  async findByNickname(nickname: string, enabled = true): AsyncMaybe<IPlayer> {
+  async findByNickname(nickname: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
         nickname,
-        enabled,
       },
     });
 

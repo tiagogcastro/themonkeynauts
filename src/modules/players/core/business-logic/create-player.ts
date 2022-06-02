@@ -51,7 +51,7 @@ class CreatePlayerBusinessLogic {
     }
 
     const checkNicknameAlreadyExists =
-      await this.playersRepository.findByNickname(nickname, false);
+      await this.playersRepository.findByNickname(nickname);
 
     if (checkNicknameAlreadyExists) {
       throw new AppError('Nickname entered already exists', 400);
