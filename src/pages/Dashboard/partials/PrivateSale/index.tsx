@@ -121,6 +121,11 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
+
+      console.log(
+        ethereumConfig.privateSaleTransaction.toAddress,  
+        ethereumConfig.privateSaleTransaction.dataContract
+        )
   
       if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
         const { transaction, error } = await paymentByEthereum({
