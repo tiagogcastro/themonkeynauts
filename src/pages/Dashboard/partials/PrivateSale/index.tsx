@@ -97,7 +97,10 @@ export function PrivateSale() {
       }
   
       buttonHasBlocked.changeToTrue();
-  
+      console.log(
+        ethereumConfig.privateSaleTransaction.toAddress,  
+        ethereumConfig.privateSaleTransaction.dataContract
+      )
       toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
         autoClose: 7000,
         pauseOnHover: true,
@@ -122,10 +125,7 @@ export function PrivateSale() {
         }
       });
 
-      console.log(
-        ethereumConfig.privateSaleTransaction.toAddress,  
-        ethereumConfig.privateSaleTransaction.dataContract
-        )
+      
   
       if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
         const { transaction, error } = await paymentByEthereum({
