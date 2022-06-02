@@ -35,6 +35,8 @@ export function Wallet({
     try {
       const connection = await connect();
 
+      console.log({connection});
+
       if(connection) {
         const response = await api.wallet.geral.saveWallet({
           wallet: connection?.[0]
@@ -57,7 +59,7 @@ export function Wallet({
         }
       }
     } catch(err: any) {
-      const error_message = err?.response?.headers['grpc-message'];
+      const error_message = err?.response?.data.message;
 
       if(axios.isAxiosError(error_message)) {
         return toast(error_message, {
