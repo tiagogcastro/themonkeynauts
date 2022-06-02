@@ -80,6 +80,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       );
     }
 
+    console.log(transaction.to, process.env.WALLET_TO);
     if (transaction.to !== process.env.WALLET_TO) {
       throw new AppError(
         'The transaction destination is not the same as the wallet address',
