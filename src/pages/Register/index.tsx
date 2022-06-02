@@ -58,7 +58,7 @@ export function Register() {
       }
 
       if(axios.isAxiosError(err)) {
-        const error_message = err?.response?.headers['grpc-message'];
+        const error_message = err?.response?.data.message;
 
         toast(error_message, {
           autoClose: 5000,
