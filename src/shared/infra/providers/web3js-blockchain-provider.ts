@@ -38,13 +38,12 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       try {
         const receipt = await this.web3.eth.getTransactionReceipt(tx_hash);
 
-        if (!receipt.status) {
+        if (!receipt || !receipt.status) {
           return RETRY;
         }
 
         return !RETRY;
-      } catch (error) {
-        console.log(error);
+      } catch {
         throw new AppError('The transaction could not be confirmed', 400);
       }
     }, 500);
@@ -68,9 +67,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     try {
       transaction = await this.web3.eth.getTransaction(tx_hash);
-    } catch (error) {
-      console.log(error);
-      throw new AppError('The get transaction could not be confirmed', 400);
+    } catch {
+      throw new AppError('The transaction could not be confirmed', 400);
     }
 
     const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
