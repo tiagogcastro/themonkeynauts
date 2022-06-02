@@ -103,7 +103,7 @@ export function AuthProvider({children}: AuthProviderProps) {
         background: COLORS.global.white_0,
         color: COLORS.global.black_0 ,
         fontSize: 14,
-        fontFamily: 'Orbitron, sans-serif',
+        fontFamily: 'Orbitron, sans-serif', 
       }
     });
 
@@ -115,7 +115,7 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     const { player, token: { payload: token } } = response.data;
 
-    localStorage.setItem(monkeynautsApiToken, token);
+    sessionStorage.setItem(monkeynautsApiToken, token);
     
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
