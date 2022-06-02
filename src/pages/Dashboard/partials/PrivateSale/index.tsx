@@ -196,8 +196,6 @@ export function PrivateSale() {
         }
       });
     }
-
-    
   }
 
   return (
