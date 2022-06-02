@@ -71,7 +71,7 @@ export const Details = styled.main`
       max-height: 170px;
     }
   }
-  
+   
   @media(min-width: 1024px) {
     .monkeynaut_image {
       max-width: 300px;

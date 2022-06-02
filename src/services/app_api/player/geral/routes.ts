@@ -9,19 +9,19 @@ import {
 import {
   AppLoginResponse, 
   AppRegisterResponse,
-  GetUser,
+  GetPlayer,
 } from './response';
 
 export const geral = {
   register: (data: AppRegisterParams): Promise<AxiosResponse<AppRegisterResponse>> => {
-    return baseApi.post('/players', data);
+    return baseApi.post('/players/create', data);
   },
-  getUser: (): Promise<AxiosResponse<GetUser>> => {
-    return baseApi.get('/authentication');
+  getPlayer: (): Promise<AxiosResponse<GetPlayer>> => {
+    return baseApi.get('/players/show');
   },
   authenticate: {
     app_login: (data: AppLoginParams): Promise<AxiosResponse<AppLoginResponse>> => {
-      return baseApi.post('/authentication', data);
+      return baseApi.post('/auth/app', data);
     },
   }
 }

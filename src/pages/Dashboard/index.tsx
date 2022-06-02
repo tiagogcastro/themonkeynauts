@@ -22,7 +22,7 @@ import {
 } from './styles';
 
 export function Dashboard() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   
   const shipIsShow = useBoolean(false);
   const monekeynautIsShow = useBoolean(false);

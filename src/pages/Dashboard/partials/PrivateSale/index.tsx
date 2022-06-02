@@ -14,28 +14,29 @@ import {
   Container,
   Content,
 } from './styles';
+import { baseApi } from '@/services/api';
 
-type HandleChange = {
-  event: React.ChangeEvent<HTMLInputElement>;
+type HandleClick = {
   max: number;
   min: number;
 }
 
 export function PrivateSale() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const { ethereum } = useMetaMask()
   
   const [inputValue, setInputValue] = useState('');
   const buttonHasBlocked = useBoolean(false);
 
-  function handleChange({
-    event,
+  function handleClick({
     max,
     min,
-  }: HandleChange) {
-    let value: string | number = event.target.value.replace(/[^0-9.]/g, '');
+  }: HandleClick) {
+    let value: string | number = inputValue.replace(/[^0-9.]/g, '');
 
-    if(Number(value) < min || Number(value) > max) {
+    setInputValue(String(value));
+
+    if(!inputValue || Number(value) < min || Number(value) > max || value.length > 7) {
       toast(`You can only put numbers between ${min} and ${max}`, {
         autoClose: 5000,
         pauseOnHover: true,
@@ -47,32 +48,29 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
-      return inputValue;
-    }
 
-    setInputValue(String(value));
+      return false
+    }
+    
+
+    return true;
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if(!inputValue) {
-      return toast('You need to enter a number between 0.1 and 1 to proceed with the purchase', {
-        autoClose: 7000,
-        pauseOnHover: true,
-        type: 'warning',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0 ,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+    const validatedInput = handleClick({
+      max: 3,
+      min: 0.00000001
+    })
+
+    if(!validatedInput) {
+      return
     }
 
     buttonHasBlocked.changeToTrue();
 
-    toast(`${user?.user.nickname}, please wait for the metamask window to open.`, {
+    toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
       autoClose: 7000,
       pauseOnHover: true,
       type: 'info',
@@ -108,18 +106,39 @@ export function PrivateSale() {
         buttonHasBlocked.changeToFalse();
       }
 
-      if(transaction) {
-        toast(`${user?.user.nickname}, your ${inputValue} transaction was a success`, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
+      if(transaction && player) {
+        try {
+          await baseApi.post('/sales/create-private-sale', {
+            player_id: player.player.id,
+            wallet: player.player.wallet,
+            bnb_amount: Number(inputValue),
+            tx_hash: transaction,
+          })
+
+          toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        } catch {
+          toast(error.message, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'error',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.red_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        }
       }
 
       if(error) {
@@ -151,11 +170,7 @@ export function PrivateSale() {
         <input 
           type="text"
           placeholder="Min 0.3 / max 3"
-          onChange={(event) => handleChange({
-            event,
-            max: 3,
-            min: 0.3
-          })}
+          onChange={(event) => setInputValue(event.target.value)}
           value={inputValue}
         />
         <Button 

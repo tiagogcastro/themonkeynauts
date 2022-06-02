@@ -5,6 +5,6 @@ export type Wallet = {
   balance: number;
 };
 
-export type CreateWalletResponse = {
+export type SaveWalletResponse = {
   wallet: Wallet;
 }

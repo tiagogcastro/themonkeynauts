@@ -1,7 +1,6 @@
-import { AiOutlineClose } from 'react-icons/ai';
+import { useAuth, UseBooleanTypes } from '@/hooks'
+import { AiOutlineClose } from 'react-icons/ai'
 import { FiLogOut } from 'react-icons/fi';
-
-import { useAuth, UseBooleanTypes } from '@/hooks';
 
 import {
   Container,

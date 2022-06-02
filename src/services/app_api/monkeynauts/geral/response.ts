@@ -1,5 +1,5 @@
 import { Ship } from '../../ships/types';
-import { User } from '../../user/types';
+import { Player } from '../../player/types';
 
 export type MonkeynautRole = 'soldier' | 'engineer' | 'scientist';
 
@@ -34,8 +34,8 @@ export type Monkeynaut = {
   
   breedCount: number;
 
-  owner: User;
-  operator: User;
+  owner: Player;
+  operator: Player;
 };
 
 export type GetMonkeynauts = {

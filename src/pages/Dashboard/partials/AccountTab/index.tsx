@@ -42,7 +42,7 @@ export type HandleChange = {
 }
 
 export function AccountTab() {
-  const { user, signOut } = useAuth();
+  const { player, signOut } = useAuth();
   const { ethereum } = useMetaMask();
   
   const walletModalIsOpen = useBoolean();
@@ -82,7 +82,7 @@ export function AccountTab() {
 
     depositButtonHasBlocked.changeToTrue();
     
-    toast(`${user?.user.nickname}, please wait for the metamask window to open.`, {
+    toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
       autoClose: 7000,
       pauseOnHover: true,
       type: 'info',
@@ -129,7 +129,7 @@ export function AccountTab() {
       }
 
       if(transaction) {
-        toast(`${user?.user.nickname}, your ${inputValue} deposit was a success`, {
+        toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
           autoClose: 5000,
           pauseOnHover: true,
           type: 'success',
@@ -176,28 +176,28 @@ export function AccountTab() {
             <div className="info_separator">
               <UniqueInfo>
                 <span>Your ID</span>
-                <strong title={user?.user.id} className="info_id">{user?.user.id_short}</strong>
+                <strong title={player?.player.id} className="info_id">{player?.player.id_short}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>Nickname</span>
-                <strong>{user?.user.nickname}</strong>
+                <strong>{player?.player.nickname}</strong>
               </UniqueInfo>
               <UniqueInfo>
                 <span>E-mail</span>
-                <strong>{user?.user.email}</strong>
+                <strong>{player?.player.email}</strong>
               </UniqueInfo>
             </div>
               <div className="info_separator">
                 <UniqueInfo>
                   <span>Wallet</span>
-                  {!user?.user.wallet ? (  
+                  {!player?.player.wallet ? (  
                     <Button 
                       className="wallet_button"
                       text="Link"
                       onClick={walletModalIsOpen.changeToTrue}  
                       />
                   ) : (
-                    <strong>{user.user.wallet.address}</strong>
+                    <strong>{player.player.wallet}</strong>
                   )}
                 </UniqueInfo>
               </div>
@@ -264,7 +264,7 @@ export function AccountTab() {
         </SecondaryDetails>
       </Content>
       <Wallet 
-        isOpen={walletModalIsOpen.state && !user?.user.wallet} 
+        isOpen={walletModalIsOpen.state && !player?.player.wallet} 
         handleClose={walletModalIsOpen.changeToFalse}
       />
     </Container>

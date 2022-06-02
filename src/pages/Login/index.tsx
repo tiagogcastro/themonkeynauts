@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Button, Input } from '@/components';
 
 import {
-  UserType,
+  PlayerType,
 } from '@/services/api';
 
 import { getValidationErrors } from '@/utils';
@@ -36,7 +36,7 @@ export function Login() {
 
   const loadingSignIn = useBoolean(false);
 
-  async function handleSignInUser(data: UserType.AppLoginParams) {
+  async function handleSignInPlayer(data: PlayerType.AppLoginParams) {
     loadingSignIn.changeToTrue();
 
     try {
@@ -79,7 +79,7 @@ export function Login() {
       <Content>
         <MainContent>
           <img src={logo} alt="App Logo" className="app_logo"/>
-          <FormContainer ref={formRef} onSubmit={handleSignInUser}>
+          <FormContainer ref={formRef} onSubmit={handleSignInPlayer}>
             <h1 className="page_title">Login</h1>
             <div className="inputs">
               <Input 

@@ -39,7 +39,7 @@ const schema = Yup.object().shape({
 });
 
 export function AdminCreateSale() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const formRef = useRef<FormHandles>(null);
 
   const types = [

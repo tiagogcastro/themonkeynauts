@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Button, Input } from '@/components';
 
 import {
-  UserType,
+  PlayerType,
 } from '@/services/api';
 
 import { getValidationErrors } from '@/utils';
@@ -31,7 +31,7 @@ export function Register() {
 
   const loadingRegister = useBoolean(false);
 
-  async function handleRegisterUser(data: UserType.AppRegisterParams) {
+  async function handleRegisterPlayer(data: PlayerType.AppRegisterParams) {
     loadingRegister.changeToTrue();
 
     try {
@@ -80,7 +80,7 @@ export function Register() {
       <Content>
         <MainContent>
           <img src={logo} alt="App Logo" className="app_logo"/>
-          <FormContainer ref={formRef} onSubmit={handleRegisterUser}>
+          <FormContainer ref={formRef} onSubmit={handleRegisterPlayer}>
             <h1 className="page_title">Sign up</h1>
             <div className="inputs">
               <Input 

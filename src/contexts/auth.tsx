@@ -7,24 +7,24 @@ import { replaceToShortString } from '@/utils/replaceToShortString';
 import { COLORS } from '@/theme';
 
 import {
-  UserType,
+  PlayerType,
   api,
   monkeynautsApiToken,
   baseApi
 } from '../services/api';
 
 export type AuthContextData = {
-  signIn: (credentials: UserType.AppLoginParams) => Promise<UserType.AppLoginResponse | undefined>;
-  register: (credentials: UserType.AppRegisterParams) => Promise<UserType.AppRegisterResponse | undefined>;
+  signIn: (credentials: PlayerType.AppLoginParams) => Promise<PlayerType.AppLoginResponse | undefined>;
+  register: (credentials: PlayerType.AppRegisterParams) => Promise<PlayerType.AppRegisterResponse | undefined>;
   signOut: () => void;
 
-  user: UserType.GetUser | null;
+  player: PlayerType.GetPlayer | null;
   token: string | null;
   tokenIsValid: boolean;
   loading: boolean;
 
-  setUser: React.Dispatch<React.SetStateAction<UserType.GetUser | null>>;
-  getUser: () => Promise<void>;
+  setPlayer: React.Dispatch<React.SetStateAction<PlayerType.GetPlayer | null>>;
+  getPlayer: () => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -34,7 +34,7 @@ export type AuthProviderProps = {
 }
 
 export function AuthProvider({children}: AuthProviderProps) {
-  const [user, setUser] = useState<UserType.GetUser | null>(null);
+  const [player, setPlayer] = useState<PlayerType.GetPlayer | null>(null);
   const [token, setToken] = useState<string | null>(sessionStorage.getItem(monkeynautsApiToken));
 
   const tokenIsValid = useBoolean(true);
@@ -50,16 +50,16 @@ export function AuthProvider({children}: AuthProviderProps) {
     baseApi.defaults.headers.common['Authorization'] = ``;
   }
 
-  async function getUser() {
+  async function getPlayer() {
     try {
-      const response = await api.user.geral.getUser();
+      const response = await api.player.geral.getPlayer();
       
-      let { user } = response.data;
+      let { player } = response.data;
       
-      setUser({
-        user: {
-          ...user,
-          id_short: user.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
+      setPlayer({
+        player: {
+          ...player,
+          id_short: player.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
         }
       });
 
@@ -78,14 +78,14 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    getUser();
+    getPlayer();
    
   }, []);
 
-  async function signIn(credentials: UserType.AppLoginParams): Promise<UserType.AppLoginResponse | undefined> {
-    const response = await api.user.geral.authenticate.app_login(credentials);
+  async function signIn(credentials: PlayerType.AppLoginParams): Promise<PlayerType.AppLoginResponse | undefined> {
+    const response = await api.player.geral.authenticate.app_login(credentials);
 
-    const { token } = response.data;
+    const { token: { payload: token } } = response.data;
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -93,7 +93,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     tokenIsValid.changeToTrue();
     setToken(token);
 
-    getUser();
+    getPlayer();
 
     toast('Success. You have accessed your account. Welcome back!', {
       autoClose: 5000,
@@ -110,10 +110,10 @@ export function AuthProvider({children}: AuthProviderProps) {
     return response.data || undefined;
   }
 
-  async function register(credentials: UserType.AppRegisterParams): Promise<UserType.AppRegisterResponse | undefined> {
-    const response = await api.user.geral.register(credentials);
+  async function register(credentials: PlayerType.AppRegisterParams): Promise<PlayerType.AppRegisterResponse | undefined> {
+    const response = await api.player.geral.register(credentials);
 
-    const { player, token } = response.data;
+    const { player, token: { payload: token } } = response.data;
 
     localStorage.setItem(monkeynautsApiToken, token);
     
@@ -121,8 +121,8 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     tokenIsValid.changeToTrue();
     setToken(token);
-    setUser({
-      user: {
+    setPlayer({
+      player: {
         ...player,
         id_short: replaceToShortString(player.id)
       }
@@ -152,10 +152,10 @@ export function AuthProvider({children}: AuthProviderProps) {
         token,
         tokenIsValid: tokenIsValid.state,
         loading: loading.state,
-        user,
+        player,
         
-        getUser,
-        setUser,
+        getPlayer,
+        setPlayer,
       }}
     >
       {children}
