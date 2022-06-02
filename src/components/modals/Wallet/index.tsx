@@ -31,13 +31,12 @@ export function Wallet({
   const { connect } = useMetaMask();
 
   async function connectMetaMask() {
-
     try {
       const connection = await connect();
 
-      if(connection) {
+      if(connection && connection[0]) {
         const response = await api.wallet.geral.saveWallet({
-          wallet: connection?.[0]
+          wallet: connection[0]
         });
 
         if(response) {
@@ -55,6 +54,18 @@ export function Wallet({
 
           await getPlayer();
         }
+      } else {
+        toast(`You have not connected your metamask account in our app.`, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       }
     } catch(err: any) {
       const error_message = err?.response?.headers['grpc-message'];
