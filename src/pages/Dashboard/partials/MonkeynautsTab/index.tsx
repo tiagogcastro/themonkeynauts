@@ -36,14 +36,14 @@ export type MonkeynautsTabProps = {
 export function MonkeynautsTab({
   monkeynautIsShow,
 }: MonkeynautsTabProps) {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const { setMonkeynaut } = useDashboardTabs();
   const monkeynautsIsLoading = useBoolean(true);
 
   const [{monkeynauts}, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
 
   async function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
-    let monkeynautOwnerName = monkeynaut.owner.id === user?.user.id ? 'YOU' : monkeynaut.owner.nickname;
+    let monkeynautOwnerName = monkeynaut.owner.id === player?.player.id ? 'YOU' : monkeynaut.owner.nickname;
 
     try {
       const getUniqueShipResponse = await api.ships.geral.getUnique({

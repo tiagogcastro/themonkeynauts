@@ -1,5 +1,5 @@
 import { Monkeynaut } from '../../monkeynauts/types';
-import { User } from '../../user/types';
+import { Player } from '../../player/types';
 
 export type ShipRole = 'fighter' | 'explorer' | 'miner';
 
@@ -23,8 +23,8 @@ export type Ship = {
     description: string;
   };
   
-  owner: User;
-  operator: User;
+  owner: Player;
+  operator: Player;
 
   crew: {
     seats: number;

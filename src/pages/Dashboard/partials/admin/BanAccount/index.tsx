@@ -9,14 +9,14 @@ import * as Yup from 'yup';
 import * as S from './styles';
 
 const banAccountSchema = Yup.object().shape({
-  user_id: Yup.string()
+  player_id: Yup.string()
     .required('This field is required'),
   reason: Yup.string()
     .required('This field is required'),
 });
 
 export function AdminBanAccount() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const formRef = useRef<FormHandles>(null);
 
   async function banAccountSubmit(data: any) {
@@ -42,8 +42,8 @@ export function AdminBanAccount() {
           <S.FormContainer ref={formRef} onSubmit={banAccountSubmit}>
             <h1>Ban Account</h1>
             <Input
-              name='user_id' 
-              labelText='User ID or Wallet' 
+              name='player_id' 
+              labelText='Player ID or Wallet' 
             />
             <UnformTextarea
               name='reason' 

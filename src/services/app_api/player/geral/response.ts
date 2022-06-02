@@ -1,6 +1,6 @@
 import { Wallet } from '../../wallet/types'
 
-export type User = {
+export type Player = {
   id: string;
   email: string;
   nickname: string;
@@ -10,15 +10,19 @@ export type User = {
   wallet: Wallet
 }
 
-export type GetUser = {
-  user: User;
+export type GetPlayer = {
+  player: Player;
 }
 
 export type AppRegisterResponse = {
-  player: User;
-  token: string;
+  player: Player;
+  token: {
+    payload: string
+  };
 }
 
 export type AppLoginResponse = {
-  token: string;
+  token: {
+    payload: string
+  };
 }

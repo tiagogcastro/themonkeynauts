@@ -1,6 +1,3 @@
-export type CreateWalletParams = {
-  body: {
-    name: string;
-    address: string | undefined;
-  }
+export type SaveWalletParams = {
+  wallet: string
 }

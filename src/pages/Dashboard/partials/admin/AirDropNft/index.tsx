@@ -122,7 +122,7 @@ const types = [
 ];
 
 export function AdminAirDropNft() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const formRef = useRef<FormHandles>(null);
 
   const [type, setType] = useState<AirDropNftType | undefined>(undefined);

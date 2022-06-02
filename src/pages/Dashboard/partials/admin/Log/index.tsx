@@ -14,7 +14,7 @@ export type HandleChange = {
 }
 
 export function AdminLog() {
-  const { user } = useAuth();
+  const { player } = useAuth();
   const formRef = useRef<FormHandles>(null);
 
   return (
@@ -28,7 +28,7 @@ export function AdminLog() {
             </label>
             <div className="checkbox_container">
               <InputCheckbox>
-                <span>User id</span>
+                <span>Player id</span>
               </InputCheckbox>
               <InputCheckbox>
                 <span>Wallet</span>
@@ -44,7 +44,7 @@ export function AdminLog() {
               <S.TableCustom>
                 <thead>
                   <tr>
-                    <S.TdCustom>User id</S.TdCustom>
+                    <S.TdCustom>Player id</S.TdCustom>
                     <S.TdCustom>Wallet</S.TdCustom>
                     <S.TdCustom>Action</S.TdCustom>
                     <S.TdCustom>Hash</S.TdCustom>

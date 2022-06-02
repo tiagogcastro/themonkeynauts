@@ -27,7 +27,7 @@ export function Wallet({
   isOpen,
   handleClose
 }: ModalCustomProps) {
-  const { getUser } = useAuth();
+  const { getPlayer } = useAuth();
   const { connect } = useMetaMask();
 
   async function connectMetaMask() {
@@ -36,11 +36,8 @@ export function Wallet({
       const connection = await connect();
 
       if(connection) {
-        const response = await api.wallet.geral.createWallet({
-          body: {
-            address: connection?.[0],
-            name: 'Metamask'
-          }
+        const response = await api.wallet.geral.saveWallet({
+          wallet: connection?.[0]
         });
 
         if(response) {
@@ -56,7 +53,7 @@ export function Wallet({
             }
           });
 
-          await getUser();
+          await getPlayer();
         }
       }
     } catch(err: any) {

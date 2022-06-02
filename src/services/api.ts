@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 import {
-  user,
+  player,
   ships,
   monkeynauts,
   wallet,
 
-  UserType,
+  PlayerType,
   ShipType,
   MonkeynautType,
   WalletType
@@ -15,21 +15,21 @@ import {
 export const monkeynautsApiToken = '@monkeynauts:token@';
 
 export const baseApi = axios.create({
-  baseURL: 'https://api.themonkeynauts.com/api/',
+  baseURL: 'https://the-monkeynauts.herokuapp.com',
   headers: {
     'Content-type': 'application/json',
   }
 });
 
 export const api = {
-  user,
+  player,
   ships,
   monkeynauts,
   wallet,
 };
 
 export {
-  UserType,
+  PlayerType,
   ShipType,
   MonkeynautType,
   WalletType

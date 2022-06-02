@@ -35,7 +35,7 @@ export type ShipsTabProps = {
 export function ShipsTab({
   shipIsShow,
 }: ShipsTabProps) {
-  const { user } = useAuth();
+  const { player } = useAuth();
 
   const loadingShips = useBoolean(true);
   const { setShip } = useDashboardTabs();
@@ -43,7 +43,7 @@ export function ShipsTab({
   const [{ships}, setShips] = useState<ShipType.GetShip>({} as ShipType.GetShip);
 
   function selectShip(ship: ShipType.Ship) {
-    let shipOwnerName = ship.owner.id === user?.user.id ? 'YOU' : ship.owner.nickname;
+    let shipOwnerName = ship.owner.id === player?.player.id ? 'YOU' : ship.owner.nickname;
 
     setShip({
       ...ship,
