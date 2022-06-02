@@ -61,7 +61,7 @@ export function PrivateSale() {
 
     const validatedInput = handleClick({
       max: 3,
-      min: 0.00000001
+      min: 0.3
     })
 
     if(!validatedInput) {
@@ -162,8 +162,8 @@ export function PrivateSale() {
       <Content onSubmit={handleSubmit}>
         <div className="texts_container">
           <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
-          <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.1 BNB and a maximum of 1 BNB, spreading the tokens among more players.</p>
-          <p className="text">In this pre-sale each SPC will be sold at a price of $0.10 and you will receive the equivalent of the deposited BNB in ​​tokens.</p>
+          <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
+          <p className="text">1 BNB is equivalent to 39.000 SPC</p>
           <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
 
         </div>
