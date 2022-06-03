@@ -52,11 +52,19 @@ export function PrivateSale() {
   }
 
   async function verifyWallet() {
-    if(typeof (window as any).ethereum === 'undefined') {
+    const ethereum = (window as any).ethereum;
+
+    if(typeof ethereum === 'undefined') {
       throw new Error("Activate ethereum in your browser");
     }
 
-    const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+    const chainId = await ethereum.request({ method: 'eth_chainId' });
+
+    if (chainId !== ethereumConfig.network.mainNetBSC) {
+      throw new Error('You are in wrong netword. Please connect to BSC Mainnet network.');
+    }
+
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const account = accounts?.[0];
 
     if(!account) {
@@ -76,6 +84,8 @@ export function PrivateSale() {
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const ethereum = (window as any).ethereum;
+
     event.preventDefault();
 
     try {
@@ -115,7 +125,7 @@ export function PrivateSale() {
     
         if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
           const { transaction, error } = await paymentByEthereum({
-            ethereum: (window as any).ethereum,
+            ethereum,
             toAddress: ethereumConfig.privateSaleTransaction.toAddress,
             ether: ethers.utils.parseEther(inputValue)._hex,
             dataContract: ethereumConfig.privateSaleTransaction.dataContract,

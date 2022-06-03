@@ -6,5 +6,8 @@ export const ethereum = {
   privateSaleTransaction: {
     toAddress: '0x6c4543b80c4A2Bb922e31E045a67217F13caf797',
     dataContract: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+  },
+  network: {
+    mainNetBSC: '0x38',
   }
 }
