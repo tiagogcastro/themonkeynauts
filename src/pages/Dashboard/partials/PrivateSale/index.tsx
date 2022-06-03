@@ -26,7 +26,7 @@ export function PrivateSale() {
   const { ethereum, connect } = useMetaMask()
   
   const [inputValue, setInputValue] = useState('');
-  const buttonHasBlocked = useBoolean(false);
+  const isButtonLoading = useBoolean(false);
 
   function handleClick({
     max,
@@ -96,8 +96,13 @@ export function PrivateSale() {
         });
       }
   
-      buttonHasBlocked.changeToTrue();
-  
+      isButtonLoading.changeToTrue();
+      
+      console.log(
+        ethereumConfig.privateSaleTransaction.toAddress,  
+        ethereumConfig.privateSaleTransaction.dataContract
+      )
+
       toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
         autoClose: 7000,
         pauseOnHover: true,
@@ -110,6 +115,7 @@ export function PrivateSale() {
         }
       });
   
+      
       toast(`if it doesn't open a popup, check your metamask`, {
         autoClose: 9000,
         pauseOnHover: true,
@@ -121,6 +127,8 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
+
+      
   
       if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
         const { transaction, error } = await paymentByEthereum({
@@ -131,7 +139,7 @@ export function PrivateSale() {
         });
   
         if(transaction || error) {
-          buttonHasBlocked.changeToFalse();
+          isButtonLoading.changeToFalse();
         }
   
         if(transaction && player) {
@@ -195,6 +203,8 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
+    } finally {
+      isButtonLoading.changeToFalse();
     }
   }
 
@@ -218,7 +228,7 @@ export function PrivateSale() {
           type="submit" 
           text="BUY"
           loading={{
-            state: buttonHasBlocked.state
+            state: isButtonLoading.state
           }}
         />
       </Content>
