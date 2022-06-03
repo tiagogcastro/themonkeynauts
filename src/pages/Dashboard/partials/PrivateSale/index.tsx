@@ -47,7 +47,6 @@ export function PrivateSale() {
 
       return false
     }
-    
 
     return true;
   }
@@ -85,10 +84,24 @@ export function PrivateSale() {
       const validatedInput = handleClick({
         max: 3,
         min: 0.3
-      })
-  
-      if(!validatedInput) {
-        return toast(`Please, enter a value on input`, {
+      });
+
+      isButtonLoading.changeToTrue();
+
+      if(validatedInput) {
+        toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
+          autoClose: 7000,
+          pauseOnHover: true,
+          type: 'info',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+        
+        toast(`if it doesn't open a popup, check your metamask`, {
           autoClose: 9000,
           pauseOnHover: true,
           type: 'info',
@@ -99,81 +112,69 @@ export function PrivateSale() {
             fontFamily: 'Orbitron, sans-serif',
           }
         });
-      }
+    
+        if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
+          const { transaction, error } = await paymentByEthereum({
+            ethereum: (window as any).ethereum,
+            toAddress: ethereumConfig.privateSaleTransaction.toAddress,
+            ether: ethers.utils.parseEther(inputValue)._hex,
+            dataContract: ethereumConfig.privateSaleTransaction.dataContract,
+          });
+    
+          if(transaction || error) {
+            isButtonLoading.changeToFalse();
+          }
+    
+          if(transaction && player) {
+            try {
+              toast(`Wait for the transaction to be confirmed and saved in our database. This can take time`, {
+                autoClose: 9000,
+                pauseOnHover: true,
+                type: 'info',
+                style: {
+                  background: COLORS.global.white_0,
+                  color: COLORS.global.black_0,
+                  fontSize: 14,
+                  fontFamily: 'Orbitron, sans-serif',
+                }
+              });
   
-      isButtonLoading.changeToTrue();
-      
-      toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
-        autoClose: 7000,
-        pauseOnHover: true,
-        type: 'info',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-      
-      toast(`if it doesn't open a popup, check your metamask`, {
-        autoClose: 9000,
-        pauseOnHover: true,
-        type: 'info',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+              await baseApi.post('/sales/create-private-sale', {
+                player_id: player.player.id,
+                wallet: player.player.wallet,
+                bnb_amount: Number(inputValue),
+                tx_hash: transaction,
+              })
+    
+              toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
+                autoClose: 5000,
+                pauseOnHover: true,
+                type: 'success',
+                style: {
+                  background: COLORS.global.white_0,
+                  color: COLORS.global.black_0,
+                  fontSize: 14,
+                  fontFamily: 'Orbitron, sans-serif',
+                }
+              });
   
-      if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
-        const { transaction, error } = await paymentByEthereum({
-          ethereum: (window as any).ethereum,
-          toAddress: ethereumConfig.privateSaleTransaction.toAddress,
-          ether: ethers.utils.parseEther(inputValue)._hex,
-          dataContract: ethereumConfig.privateSaleTransaction.dataContract,
-        });
-  
-        if(transaction || error) {
-          isButtonLoading.changeToFalse();
-        }
-  
-        if(transaction && player) {
-          try {
-            toast(`Wait for the transaction to be confirmed and saved in our database. This can take time`, {
-              autoClose: 9000,
-              pauseOnHover: true,
-              type: 'info',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.black_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
-
-            await baseApi.post('/sales/create-private-sale', {
-              player_id: player.player.id,
-              wallet: player.player.wallet,
-              bnb_amount: Number(inputValue),
-              tx_hash: transaction,
-            })
-  
-            toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'success',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.black_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
-
-            setInputValue('');
-          } catch {
+              setInputValue('');
+            } catch {
+              toast(error.message, {
+                autoClose: 5000,
+                pauseOnHover: true,
+                type: 'error',
+                style: {
+                  background: COLORS.global.white_0,
+                  color: COLORS.global.red_0,
+                  fontSize: 14,
+                  fontFamily: 'Orbitron, sans-serif',
+                }
+              });
+            }
+          }
+    
+          if(error) {
             toast(error.message, {
               autoClose: 5000,
               pauseOnHover: true,
@@ -186,20 +187,6 @@ export function PrivateSale() {
               }
             });
           }
-        }
-  
-        if(error) {
-          toast(error.message, {
-            autoClose: 5000,
-            pauseOnHover: true,
-            type: 'error',
-            style: {
-              background: COLORS.global.white_0,
-              color: COLORS.global.red_0,
-              fontSize: 14,
-              fontFamily: 'Orbitron, sans-serif',
-            }
-          });
         }
       }
     } catch (error: any) {
