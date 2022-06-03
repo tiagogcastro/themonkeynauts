@@ -61,7 +61,7 @@ export function PrivateSale() {
     const chainId = await ethereum.request({ method: 'eth_chainId' });
 
     if (chainId !== ethereumConfig.network.mainNetBSC) {
-      throw new Error('You are in wrong netword. Please connect to BSC Mainnet network.');
+      throw new Error('You are in wrong network. Please connect to BSC Mainnet network.');
     }
 
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
