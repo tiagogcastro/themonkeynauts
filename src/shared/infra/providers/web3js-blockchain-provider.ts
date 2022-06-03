@@ -78,15 +78,24 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       );
     }
 
-    if (transaction.to !== process.env.WALLET_TO) {
+    const transactionTo = transaction.to?.toLowerCase();
+    const walletTo = process.env.WALLET_TO?.toLowerCase();
+
+    if (!transactionTo || !walletTo) {
+      throw new AppError('The transaction could not be confirmed', 409);
+    }
+
+    const transactionFrom = transaction.from.toLowerCase();
+    const walletFrom = from.toLowerCase();
+
+    if (transactionTo !== walletTo) {
       throw new AppError(
         'The transaction destination is not the same as the wallet address',
         400,
       );
     }
 
-    console.log(transaction.from, from);
-    if (transaction.from !== from) {
+    if (transactionFrom !== walletFrom) {
       throw new AppError(
         'The transaction origin is not the same as the user wallet',
         400,
