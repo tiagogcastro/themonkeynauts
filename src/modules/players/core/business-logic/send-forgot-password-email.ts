@@ -47,7 +47,7 @@ class SendForgotPasswordEmailBusinessLogic {
         address: player.email,
       },
       subject: 'Recuperação de senha.',
-      templateData: {
+      template_data: {
         file: forgotPasswordTemplatePath,
         variables: {
           name: player.nickname,

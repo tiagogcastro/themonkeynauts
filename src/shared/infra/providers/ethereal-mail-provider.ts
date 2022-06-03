@@ -33,7 +33,7 @@ export class EtherealMailProvider implements IMailProvider {
     to,
     from,
     subject,
-    templateData,
+    template_data,
   }: SendMailDTO): Promise<void> {
     const { name, address } = mailConfig.config.ethereal.defaults.from;
 
@@ -47,7 +47,7 @@ export class EtherealMailProvider implements IMailProvider {
         address: from?.address || address,
       },
       subject,
-      html: await this.mailTemplateProvider.parse(templateData),
+      html: await this.mailTemplateProvider.parse(template_data),
     });
     console.log(message.messageId);
     console.log(getTestMessageUrl(message));

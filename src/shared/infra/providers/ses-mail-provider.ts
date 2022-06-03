@@ -25,11 +25,11 @@ export class SESMailProvider implements IMailProvider {
     to,
     from,
     subject,
-    templateData,
+    template_data,
   }: SendMailDTO): Promise<void> {
     const { name, address } = mailConfig.config.ses.defaults.from;
 
-    this.transporter.sendMail({
+    await this.transporter.sendMail({
       from: {
         address: from?.address || address,
         name: from?.name || name,
@@ -39,7 +39,7 @@ export class SESMailProvider implements IMailProvider {
         address: to.address,
       },
       subject,
-      html: await this.mailTemplateProvider.parse(templateData),
+      html: await this.mailTemplateProvider.parse(template_data),
     });
   }
 }

@@ -8,7 +8,7 @@ type SendMailDTO = {
   to: MailContact;
   from?: MailContact;
   subject: string;
-  templateData: ParseMailTemplateDTO;
+  template_data: ParseMailTemplateDTO;
 };
 
 interface IMailProvider {

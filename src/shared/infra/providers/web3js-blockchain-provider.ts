@@ -85,6 +85,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       );
     }
 
+    console.log(transaction.from, from);
     if (transaction.from !== from) {
       throw new AppError(
         'The transaction origin is not the same as the user wallet',

@@ -55,6 +55,7 @@
     "multer": "^1.4.4",
     "nodemailer": "^6.7.2",
     "reflect-metadata": "^0.1.13",
+    "ts-mailgun": "^0.5.1",
     "tsyringe": "^4.6.0",
     "web3": "^1.7.1",
     "web3-core": "^1.7.3"
