@@ -69,6 +69,13 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       throw new AppError('The transaction could not be confirmed', 400);
     }
 
+    if (!transaction) {
+      throw new AppError(
+        'Transaction return is null, could not commit transaction',
+        400,
+      );
+    }
+
     const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
 
     if (amountToWei !== transaction.value) {
