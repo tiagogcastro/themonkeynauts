@@ -43,20 +43,22 @@ export function Menu({
       <Content 
         {...menuContentProps}
       >
-        {Array.isArray(children) && children.map((item, index) => (
-          <TabChange 
-            key={index} 
-            selected={index === selectedTab}
-            className="tab_title_btn"
-          >
-            <TabTitle 
-              onClick={() => changeSelected(index)}
+        {Array.isArray(children) && children.map(({props: {render = true, title}}, index) => (
+          render && (
+            <TabChange 
+              key={index} 
               selected={index === selectedTab}
-              className="tab_title"
+              className="tab_title_btn"
             >
-              {item.props.title}
-            </TabTitle>
-          </TabChange>
+              <TabTitle 
+                onClick={() => changeSelected(index)}
+                selected={index === selectedTab}
+                className="tab_title"
+              >
+                {title}
+              </TabTitle>
+            </TabChange>
+          )
         ))}
         <button 
           className="signout"

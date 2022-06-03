@@ -5,6 +5,7 @@ type TabProps = {
 	children?: React.ReactNode;
 	title: string;
 	hasButtonToBack?: UseBooleanTypes;
+	render?: boolean;
 };
 
 export function Tab(props: TabProps) {

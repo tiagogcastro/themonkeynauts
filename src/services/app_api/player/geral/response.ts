@@ -1,10 +1,8 @@
-import { Wallet } from '../../wallet/types'
-
 export type Player = {
   id: string;
   email: string;
   nickname: string;
-  roles: string[];
+  role: string;
   id_short: string | undefined;
 
   wallet: string;
