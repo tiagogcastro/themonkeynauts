@@ -40,6 +40,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
           return RETRY;
         }
 
+        console.log('receipt: ', receipt);
+
         return !RETRY;
       } catch {
         throw new AppError('The transaction could not be confirmed', 400);
@@ -65,6 +67,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     try {
       transaction = await this.web3.eth.getTransaction(tx_hash);
+
+      console.log('transaction: ', transaction);
     } catch {
       throw new AppError('The transaction could not be confirmed', 400);
     }
