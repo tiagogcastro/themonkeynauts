@@ -1,4 +1,4 @@
-import { mailConfig } from '@config/mail';
+import { mailConfig, MailDriver } from '@config/mail';
 import { IBlockchainProvider } from '@shared/domain/providers/blockchain-provider';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
@@ -12,7 +12,9 @@ import { DiskStorageProvider } from '@shared/infra/providers/disk-storage-provid
 import { EtherealMailProvider } from '@shared/infra/providers/ethereal-mail-provider';
 import { HandlebarsMailTemplateProvider } from '@shared/infra/providers/handlebars-mail-template-provider';
 import { JWTokenProvider } from '@shared/infra/providers/jwt-token-provider';
+import { MailgunMailProvider } from '@shared/infra/providers/mailgun-mail-provider';
 import { SESMailProvider } from '@shared/infra/providers/ses-mail-provider';
+import { TitanMailProvider } from '@shared/infra/providers/titan-mail-provider';
 import { Web3jsBlockchainProvider } from '@shared/infra/providers/web3js-blockchain-provider';
 import { container } from 'tsyringe';
 
@@ -30,6 +32,8 @@ container.registerSingleton<IMailTemplateProvider>(
 const MailProvider = {
   ethereal: EtherealMailProvider,
   ses: SESMailProvider,
+  mailgun: MailgunMailProvider,
+  titan: TitanMailProvider,
 }[mailConfig.driver];
 
 container.registerSingleton<IMailProvider>('MailProvider', MailProvider);
