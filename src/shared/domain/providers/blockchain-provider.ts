@@ -12,7 +12,6 @@ type SendTransactionDTO = {
 };
 
 interface IBlockchainProvider {
-  waitTransaction(tx_hash: string): Promise<void>;
   confirmTransaction(data: ConfirmTransactionDTO): Promise<void>;
   sendTransaction(data: SendTransactionDTO): Promise<void>;
 }
