@@ -21,6 +21,18 @@ class SaveWalletBusinessLogic {
       throw new AppError('Player does not exist', 401);
     }
 
+    if (player.wallet) {
+      throw new AppError('Wallet already saved', 400);
+    }
+
+    const checkWalletAlreadyExists = await this.playersRepository.findByWallet(
+      wallet,
+    );
+
+    if (checkWalletAlreadyExists) {
+      throw new AppError('Wallet already exists', 400);
+    }
+
     player.wallet = wallet;
 
     await this.playersRepository.save(player);

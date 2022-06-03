@@ -6,5 +6,6 @@ interface IPrivateSalesRepository {
   listAllPrivateSales(): Promise<IPrivateSale[]>;
   findByTxHash(tx_hash: string): AsyncMaybe<IPrivateSale>;
   listAllPrivateSalesFromWallet(wallet: string): Promise<IPrivateSale[]>;
+  listAllPrivateSalesFromPlayer(player_id: string): Promise<IPrivateSale[]>;
 }
 export { IPrivateSalesRepository };

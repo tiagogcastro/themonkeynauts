@@ -14,8 +14,8 @@ enum PlayerRole {
 
 model Log {
   id        String   @id @db.Uuid()
-  playerId  String   @db.Uuid()
-  player    Player   @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  playerId  String?  @db.Uuid()
+  player    Player?  @relation(fields: [playerId], references: [id], onDelete: SetNull)
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,11 +70,11 @@ model PlayerToken {
 model Monkeynaut {
   id String @id @db.Uuid()
 
-  owner   Player @relation("owner_monkeynauts", fields: [ownerId], references: [id], onDelete: SetNull)
-  ownerId String @db.Uuid()
+  owner   Player? @relation("owner_monkeynauts", fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String? @db.Uuid()
 
-  playerId String @db.Uuid()
-  player   Player @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
+  playerId String? @db.Uuid()
+  player   Player? @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
 
   name       String
   class      String
@@ -126,11 +126,11 @@ model Resource {
 model Ship {
   id String @id @db.Uuid()
 
-  owner   Player @relation("owner_ships", fields: [ownerId], references: [id], onDelete: SetNull)
-  ownerId String @db.Uuid()
+  owner   Player? @relation("owner_ships", fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String? @db.Uuid()
 
-  player   Player @relation("player_ships", fields: [playerId], references: [id], onDelete: SetNull)
-  playerId String @db.Uuid()
+  player   Player? @relation("player_ships", fields: [playerId], references: [id], onDelete: SetNull)
+  playerId String? @db.Uuid()
 
   name             String
   class            String
@@ -155,10 +155,10 @@ model Ship {
 model Crew {
   id String @id @db.Uuid()
 
-  ship   Ship   @relation(fields: [shipId], references: [id], onDelete: SetNull)
+  ship   Ship   @relation(fields: [shipId], references: [id], onDelete: Cascade)
   shipId String @db.Uuid()
 
-  monkeynaut   Monkeynaut @relation(fields: [monkeynautId], references: [id], onDelete: SetNull)
+  monkeynaut   Monkeynaut @relation(fields: [monkeynautId], references: [id], onDelete: Cascade)
   monkeynautId String     @db.Uuid()
 
   createdAt DateTime @default(now())
@@ -170,7 +170,7 @@ model Crew {
 model PlayerAuth {
   id String @id @db.Uuid()
 
-  player   Player @relation("player_auth", fields: [playerId], references: [id], onDelete: SetNull)
+  player   Player @relation("player_auth", fields: [playerId], references: [id], onDelete: Cascade)
   playerId String @db.Uuid()
 
   isLogged     Boolean @default(false)
@@ -188,7 +188,7 @@ model PlayerAuth {
 model PrivateSale {
   id        String   @id @db.Uuid()
   playerId  String   @db.Uuid()
-  player    Player   @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
   wallet    String
   txHash    String   @unique
   bnbAmount Float

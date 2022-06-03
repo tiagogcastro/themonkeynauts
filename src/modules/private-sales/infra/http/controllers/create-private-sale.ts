@@ -16,7 +16,7 @@ class CreatePrivateSaleController {
       data,
     );
 
-    return response.status(200).json(createdPrivateSale);
+    return response.status(201).json(createdPrivateSale);
   }
 }
 

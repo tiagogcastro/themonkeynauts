@@ -17,6 +17,18 @@ const parsePrivateSale = (log: PrismaPrivateSale): IPrivateSale => {
 };
 
 class PrismaPrivateSalesRepository implements IPrivateSalesRepository {
+  async listAllPrivateSalesFromPlayer(
+    player_id: string,
+  ): Promise<IPrivateSale[]> {
+    const privateSales = await prisma.privateSale.findMany({
+      where: {
+        playerId: player_id,
+      },
+    });
+
+    return privateSales.map(parsePrivateSale);
+  }
+
   async listAllPrivateSales(): Promise<IPrivateSale[]> {
     const privateSales = await prisma.privateSale.findMany();
 
