@@ -84,7 +84,7 @@ export function PrivateSale() {
 
       const validatedInput = handleClick({
         max: 3,
-        min: 0.00001
+        min: 0.3
       })
   
       if(!validatedInput) {
