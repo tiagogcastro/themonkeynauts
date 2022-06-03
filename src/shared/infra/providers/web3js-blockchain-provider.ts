@@ -40,13 +40,38 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
           return RETRY;
         }
 
-        console.log('receipt: ', receipt);
-
         return !RETRY;
       } catch {
-        throw new AppError('The transaction could not be confirmed', 400);
+        throw new AppError(
+          'The get transaction receipt could not be confirmed',
+          400,
+        );
       }
     }, 500);
+  }
+
+  async waitGetTransaction(tx_hash: string): Promise<Transaction> {
+    const RETRY = true;
+
+    try {
+      const _transaction = await new Promise<Transaction>(resolve => {
+        retry(async () => {
+          const transaction = await this.web3.eth.getTransaction(tx_hash);
+
+          if (!transaction) {
+            return RETRY;
+          }
+
+          resolve(transaction);
+
+          return !RETRY;
+        }, 500);
+      });
+
+      return _transaction;
+    } catch {
+      throw new AppError('The get transaction could not be confirmed', 400);
+    }
   }
 
   async confirmTransaction({
@@ -63,15 +88,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     await this.waitTransaction(tx_hash);
 
-    let transaction: Transaction;
-
-    try {
-      transaction = await this.web3.eth.getTransaction(tx_hash);
-
-      console.log('transaction: ', transaction);
-    } catch {
-      throw new AppError('The transaction could not be confirmed', 400);
-    }
+    const transaction = await this.waitGetTransaction(tx_hash);
 
     if (!transaction) {
       throw new AppError(

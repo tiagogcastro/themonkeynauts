@@ -5,7 +5,7 @@ let attempts = 0;
 const retry = async (
   callback: () => Promise<boolean>,
   delay?: number,
-  max_attempts = 10000,
+  max_attempts = 2000,
 ) => {
   const _retry = await callback();
 
