@@ -1,20 +1,20 @@
+import { Button } from '@/components';
+import { ethereum as ethereumConfig } from '@/config/ethereum';
+import { useAuth, useBoolean } from '@/hooks';
+import { baseApi } from '@/services/api';
+import { COLORS } from '@/theme';
+import { paymentByEthereum } from '@/utils';
+import { ethers } from 'ethers';
 import { useMetaMask } from 'metamask-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ethers } from 'ethers';
-
-import { ethereum as ethereumConfig } from '@/config/ethereum';
-
-import { Button } from '@/components';
-import { COLORS } from '@/theme';
-import { paymentByEthereum } from '@/utils';
-import { useAuth, useBoolean } from '@/hooks';
-
 import {
   Container,
-  Content,
+  Content
 } from './styles';
-import { baseApi } from '@/services/api';
+
+
+
 
 type HandleClick = {
   max: number;
@@ -23,7 +23,7 @@ type HandleClick = {
 
 export function PrivateSale() {
   const { player } = useAuth();
-  const { ethereum, connect } = useMetaMask()
+  const { ethereum, account } = useMetaMask()
   
   const [inputValue, setInputValue] = useState('');
   const isButtonLoading = useBoolean(false);
@@ -57,14 +57,18 @@ export function PrivateSale() {
   }
 
   async function verifyWallet() {
-    const connection = await connect();
+    if(player && player.player.wallet) {
 
-    if(player?.player.wallet) {
-      const foundWalletDifferent = connection?.every(where => where !== player?.player.wallet);
+      if(!account) {
+        throw new Error('You have not connected your metamask account.');
+      }
 
-      if(foundWalletDifferent) {
+      const walletDifferent = account !== player?.player.wallet;
+
+      if(walletDifferent) {
         throw new Error("Active metamask wallet is not the wallet that is linked in our system.");
       }
+      
       return; 
     }
 
@@ -98,11 +102,6 @@ export function PrivateSale() {
   
       isButtonLoading.changeToTrue();
       
-      console.log(
-        ethereumConfig.privateSaleTransaction.toAddress,  
-        ethereumConfig.privateSaleTransaction.dataContract
-      )
-
       toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
         autoClose: 7000,
         pauseOnHover: true,

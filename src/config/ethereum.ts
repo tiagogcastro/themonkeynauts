@@ -1,10 +1,10 @@
 export const ethereum = {
   sendTransaction: {
-    toAddress: process.env.BUY_TRANSACTION_DESTINATION_WALLET ,
-    dataContract: process.env.BUY_SALE_CRYPTO_CONTRACT,
+    toAddress: '0x6c4543b80c4A2Bb922e31E045a67217F13caf797',
+    dataContract: '0x84b9b910527ad5c03a9ca831909e21e236ea7b06',
   },
   privateSaleTransaction: {
-    toAddress: process.env.PRIVATE_SALE_DESTINATION_WALLET,
-    dataContract: process.env.PRIVATE_SALE_CRYPTO_CONTRACT,
+    toAddress: '0x6c4543b80c4A2Bb922e31E045a67217F13caf797',
+    dataContract: '0x84b9b910527ad5c03a9ca831909e21e236ea7b06',
   }
 }
