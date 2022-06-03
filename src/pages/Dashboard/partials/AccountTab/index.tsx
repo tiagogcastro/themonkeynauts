@@ -1,12 +1,11 @@
 import { FaReact } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { useState } from 'react';
-import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean } from '@/hooks';
-import { paymentByEthereum, replaceToShortString } from '@/utils';
+import { paymentByEthereum } from '@/utils';
 
 import { Wallet } from '@/components/modals/Wallet';
 import { Button } from '@/components';
@@ -43,7 +42,6 @@ export type HandleChange = {
 
 export function AccountTab() {
   const { player, signOut } = useAuth();
-  const { ethereum } = useMetaMask();
   
   const walletModalIsOpen = useBoolean();
   const depositButtonHasBlocked = useBoolean(false);
@@ -108,7 +106,7 @@ export function AccountTab() {
 
     try {
       const { transaction, error } = await paymentByEthereum({
-        ethereum,
+        ethereum: (window as any).ethereum,
         toAddress: ethereumConfig.privateSaleTransaction.toAddress,
         ether: ethers.utils.parseEther(inputValue)._hex,
         dataContract: ethereumConfig.privateSaleTransaction.dataContract,

@@ -1,4 +1,3 @@
-import { useMetaMask } from 'metamask-react';
 import { toast } from 'react-toastify';
 
 import { ethereum as ethereumConfig } from '@/config/ethereum';
@@ -18,13 +17,12 @@ import {
 import notfound from '@/assets/notfound.png';
 
 export function FoundersPackTab() {
-  const { ethereum } = useMetaMask();
     
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const { error, transaction } = await paymentByEthereum({
-      ethereum,
+      ethereum: (window as any).ethereum,
       toAddress: ethereumConfig.sendTransaction.toAddress,
       ether: '1',
       dataContract: ethereumConfig.sendTransaction.dataContract,

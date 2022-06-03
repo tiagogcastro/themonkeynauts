@@ -5,15 +5,12 @@ import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ethers } from 'ethers';
-import { useMetaMask } from 'metamask-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   Container,
   Content
 } from './styles';
-
-
 
 
 type HandleClick = {
@@ -23,7 +20,6 @@ type HandleClick = {
 
 export function PrivateSale() {
   const { player } = useAuth();
-  const { ethereum, account } = useMetaMask()
   
   const [inputValue, setInputValue] = useState('');
   const isButtonLoading = useBoolean(false);
@@ -57,18 +53,23 @@ export function PrivateSale() {
   }
 
   async function verifyWallet() {
+    if(typeof (window as any).ethereum === 'undefined') {
+      throw new Error("Activate ethereum in your browser");
+    }
+
+    const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+    const account = accounts?.[0];
+
+    if(!account) {
+      throw new Error('You have not connected your metamask account.');
+    }
+
     if(player && player.player.wallet) {
-
-      if(!account) {
-        throw new Error('You have not connected your metamask account.');
-      }
-
       const walletDifferent = account !== player?.player.wallet;
 
       if(walletDifferent) {
         throw new Error("Active metamask wallet is not the wallet that is linked in our system.");
       }
-      
       return; 
     }
 
@@ -83,7 +84,7 @@ export function PrivateSale() {
 
       const validatedInput = handleClick({
         max: 3,
-        min: 0.3
+        min: 0.00001
       })
   
       if(!validatedInput) {
@@ -113,7 +114,6 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
-  
       
       toast(`if it doesn't open a popup, check your metamask`, {
         autoClose: 9000,
@@ -126,12 +126,10 @@ export function PrivateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
-
-      
   
       if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
         const { transaction, error } = await paymentByEthereum({
-          ethereum,
+          ethereum: (window as any).ethereum,
           toAddress: ethereumConfig.privateSaleTransaction.toAddress,
           ether: ethers.utils.parseEther(inputValue)._hex,
           dataContract: ethereumConfig.privateSaleTransaction.dataContract,
@@ -143,6 +141,18 @@ export function PrivateSale() {
   
         if(transaction && player) {
           try {
+            toast(`Wait for the transaction to be confirmed and saved in our database. This can take time`, {
+              autoClose: 9000,
+              pauseOnHover: true,
+              type: 'info',
+              style: {
+                background: COLORS.global.white_0,
+                color: COLORS.global.black_0,
+                fontSize: 14,
+                fontFamily: 'Orbitron, sans-serif',
+              }
+            });
+
             await baseApi.post('/sales/create-private-sale', {
               player_id: player.player.id,
               wallet: player.player.wallet,
@@ -161,6 +171,8 @@ export function PrivateSale() {
                 fontFamily: 'Orbitron, sans-serif',
               }
             });
+
+            setInputValue('');
           } catch {
             toast(error.message, {
               autoClose: 5000,

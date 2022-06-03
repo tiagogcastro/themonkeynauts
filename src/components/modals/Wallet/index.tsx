@@ -1,4 +1,3 @@
-import { useMetaMask } from 'metamask-react';
 import { RiAlertFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -28,37 +27,29 @@ export function Wallet({
   handleClose
 }: ModalCustomProps) {
   const { getPlayer } = useAuth();
-  const { connect } = useMetaMask();
 
   async function connectMetaMask() {
     try {
-      const connection = await connect();
+      if(typeof (window as any).ethereum === 'undefined') {
+        throw new Error("Activate ethereum in your browser");
+      }
+  
+      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
+      const account = accounts?.[0];
+  
+      if(!account) {
+        throw new Error('You have not connected your metamask account.');
+      }
+  
+      const response = await api.wallet.geral.saveWallet({
+        wallet: account
+      });
 
-      if(connection && connection[0]) {
-        const response = await api.wallet.geral.saveWallet({
-          wallet: connection[0]
-        });
-
-        if(response) {
-          toast(`Success, you have connected your metamask account in our app.`, {
-            autoClose: 5000,
-            pauseOnHover: true,
-            type: 'success',
-            style: {
-              background: COLORS.global.white_0,
-              color: COLORS.global.black_0,
-              fontSize: 14,
-              fontFamily: 'Orbitron, sans-serif',
-            }
-          });
-
-          await getPlayer();
-        }
-      } else {
-        toast(`You have not connected your metamask account in our app.`, {
+      if(response) {
+        toast(`Success, you have connected your metamask account in our app.`, {
           autoClose: 5000,
           pauseOnHover: true,
-          type: 'error',
+          type: 'success',
           style: {
             background: COLORS.global.white_0,
             color: COLORS.global.black_0,
@@ -66,6 +57,8 @@ export function Wallet({
             fontFamily: 'Orbitron, sans-serif',
           }
         });
+
+        await getPlayer();
       }
     } catch(err: any) {
       const error_message = err?.response?.data.message;
