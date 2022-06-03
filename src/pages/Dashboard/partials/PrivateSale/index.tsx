@@ -5,24 +5,58 @@ import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   Container,
   Content
 } from './styles';
 
-
 type HandleClick = {
   max: number;
   min: number;
+}
+
+type WalletBallance = {
+  player_balance: {
+    bnb_amount_spent: number;
+    bnb_amount_spent_max: number;
+    wallet: string;
+  }
 }
 
 export function PrivateSale() {
   const { player } = useAuth();
   
   const [inputValue, setInputValue] = useState('');
+  const [walletBalance, setWalletBalance] = useState<WalletBallance | null>(null);
   const isButtonLoading = useBoolean(false);
+
+  async function getWalletBalance() {
+    try {
+      const response = await baseApi.get<WalletBallance>('/sales/show-player-bnb-balance');
+
+      const data = response.data;
+
+      setWalletBalance(data)
+    } catch (error: any) {
+      toast(error.message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
+  }
+
+  useEffect(() => {
+    getWalletBalance();
+  }, []);
 
   function handleClick({
     max,
@@ -220,6 +254,8 @@ export function PrivateSale() {
     <Container>
       <Content onSubmit={handleSubmit}>
         <div className="texts_container">
+          <p className="text">Total purchased was: <span>{walletBalance?.player_balance.bnb_amount_spent} BNB</span></p>
+          <p className="text">Maximum you can buy: <span>{walletBalance?.player_balance.bnb_amount_spent_max} BNB</span></p>
           <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
           <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
           <p className="text">1 BNB is equivalent to 39.000 SPC</p>

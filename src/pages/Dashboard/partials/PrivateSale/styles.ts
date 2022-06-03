@@ -32,6 +32,18 @@ export const Content = styled.form`
       text-align: center;
 
       margin-top: 14px;
+
+      span {
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 14px;
+        letter-spacing: 0.035em;
+        text-align: center;
+
+        margin-top: 14px;
+
+        color: ${COLORS.colors.primary_0}
+      }
     }
   }
 
@@ -68,18 +80,15 @@ export const Content = styled.form`
   @media(min-width: 768px) {
     .texts_container {
       margin-top: 64px;
-      .text {
-        font-size: 14px;
-        line-height: 17px;
-      }
-    }
-  }
 
-  @media(min-width: 768px) {
-    .texts_container {
       .text {
         font-size: 18px;
         line-height: 21px;
+
+        span {
+          font-size: 18px;
+          line-height: 21px;
+        }
       }
     }
   }
