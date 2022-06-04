@@ -259,8 +259,7 @@ export function PrivateSale() {
           <p className="text">1 BNB is equivalent to 39.000 SPC</p>
           <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
           <p className="text">
-            You purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnb_amount_spent * 39000} SPCs</span>
-             with your <span>{walletBalance?.player_balance.bnb_amount_spent} BNBs</span> sended.</p>
+            You already purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnb_amount_spent * 39000} SPCs</span> with your <span>{walletBalance?.player_balance.bnb_amount_spent} BNBs</span> sended.</p>
           
         </div>
         <input 

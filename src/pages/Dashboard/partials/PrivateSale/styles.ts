@@ -44,10 +44,6 @@ export const Content = styled.form`
 
         color: ${COLORS.colors.primary_0}
       }
-
-      strong {
-        margin-top: 20px;
-      }
     }
   }
 
