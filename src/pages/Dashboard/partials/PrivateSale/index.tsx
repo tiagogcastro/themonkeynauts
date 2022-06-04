@@ -127,7 +127,7 @@ export function PrivateSale() {
 
       const validatedInput = handleClick({
         max: 3,
-        min: 0.00001
+        min: 0.3
       });
 
       isButtonLoading.changeToTrue();
@@ -260,12 +260,12 @@ export function PrivateSale() {
           <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
           <p className="text">
             You purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnb_amount_spent * 39000} </span>
-            SPCs <span>({walletBalance?.player_balance.bnb_amount_spent_max})</span></p>
+            SPCs with your <span>{walletBalance?.player_balance.bnb_amount_spent} BNBs sended.</span></p>
           
         </div>
         <input 
           type="text"
-          placeholder="Min 0.00001 / max 3"
+          placeholder="Min 0.3 / max 3"
           onChange={(event) => setInputValue(event.target.value)}
           value={inputValue}
         />
