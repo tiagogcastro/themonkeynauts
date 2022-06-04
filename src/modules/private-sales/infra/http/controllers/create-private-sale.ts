@@ -8,13 +8,16 @@ class CreatePrivateSaleController {
   async handle(request: Request, response: Response): Promise<Response> {
     const data: CreatePrivateSaleRequestDTO = request.body;
 
+    const player_id = request.player.id;
+
     const createPrivateSaleBusinessLogic = container.resolve(
       CreatePrivateSaleBusinessLogic,
     );
 
-    const createdPrivateSale = await createPrivateSaleBusinessLogic.execute(
-      data,
-    );
+    const createdPrivateSale = await createPrivateSaleBusinessLogic.execute({
+      ...data,
+      player_id,
+    });
 
     return response.status(201).json(createdPrivateSale);
   }

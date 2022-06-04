@@ -58,8 +58,6 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
         await retry(async () => {
           const transaction = await this.web3.eth.getTransaction(tx_hash);
 
-          console.log(transaction);
-
           if (!transaction) {
             return RETRY;
           }

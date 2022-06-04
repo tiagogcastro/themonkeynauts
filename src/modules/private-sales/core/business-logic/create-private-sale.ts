@@ -1,4 +1,5 @@
 import { balanceConfig } from '@config/balance';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import {
   IPrivateSale,
   PrivateSale,
@@ -16,6 +17,9 @@ type CreatePreSaleResponse = {
 @injectable()
 class CreatePrivateSaleBusinessLogic {
   constructor(
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
+
     @inject('PrivateSalesRepository')
     private privateSalesRepository: IPrivateSalesRepository,
 
@@ -24,20 +28,38 @@ class CreatePrivateSaleBusinessLogic {
   ) {}
 
   async execute({
-    player_id: playerId,
+    player_id,
     tx_hash: txHash,
     bnb_amount: bnbAmount,
     wallet,
   }: CreatePrivateSaleRequestDTO): Promise<CreatePreSaleResponse> {
+    const player = await this.playersRepository.findByWallet(wallet);
+
+    if (!player) {
+      throw new AppError(
+        'Could not create private sale because player does not exist',
+        401,
+      );
+    }
+
+    if (player_id !== player.id) {
+      throw new AppError(
+        `You are trying to create a private sale with another player's wallet`,
+        401,
+      );
+    }
+
     const { privateSale } = new PrivateSale({
-      playerId,
+      playerId: player.id,
       txHash,
       bnbAmount,
       wallet,
     });
 
     const privateSales =
-      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(playerId);
+      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(
+        player.id,
+      );
 
     const bnbAmountLimit = balanceConfig.bnb_amount_max;
 
