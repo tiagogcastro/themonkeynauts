@@ -11,6 +11,8 @@ type ShipPropsOmittedCommons = {
   bonusValue: number;
   bonusDescription: string;
   tankCapacity: number;
+  crewCapacity: number;
+  crew: number;
   fuel: number;
   avatar: Maybe<string>;
   breedCount: number;
@@ -45,6 +47,8 @@ export class Ship implements IShip {
       bonusValue: this._props.bonusValue,
       bonusDescription: this._props.bonusDescription,
       tankCapacity: this._props.tankCapacity,
+      crewCapacity: this._props.crewCapacity,
+      crew: this._props.crew,
       fuel: this._props.fuel,
       avatar: this._props.avatar,
       breedCount: this._props.breedCount,
@@ -95,6 +99,14 @@ export class Ship implements IShip {
 
   get tankCapacity(): number {
     return this._props.tankCapacity;
+  }
+
+  get crewCapacity(): number {
+    return this._props.crewCapacity;
+  }
+
+  get crew(): number {
+    return this._props.crew;
   }
 
   get fuel(): number {

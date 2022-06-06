@@ -14,6 +14,8 @@ import { IPrivateSalesRepository } from '@modules/private-sales/domain/repositor
 import { PrismaPrivateSalesRepository } from '@modules/private-sales/infra/database/prisma/repositories/prisma-private-sale-repositories';
 import { PrismaMonkeynautsRepository } from '@modules/monkeynauts/infra/database/prisma/repositories/prisma-monkeynauts-repositories';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { PrismaShipsRepository } from '@modules/ships/infra/database/prisma/repositories/prisma-ships-repositories';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -48,4 +50,9 @@ container.registerSingleton<IPrivateSalesRepository>(
 container.registerSingleton<IMonkeynautsRepository>(
   'MonkeynautsRepository',
   PrismaMonkeynautsRepository,
+);
+
+container.registerSingleton<IShipsRepository>(
+  'ShipsRepository',
+  PrismaShipsRepository,
 );

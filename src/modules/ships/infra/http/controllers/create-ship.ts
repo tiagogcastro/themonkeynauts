@@ -9,9 +9,9 @@ class CreateShipController {
 
     const createShipBusinessLogic = container.resolve(CreateShipBusinessLogic);
 
-    const ships = await createShipBusinessLogic.execute(data);
+    const ship = await createShipBusinessLogic.execute(data);
 
-    return response.status(200).json(ships);
+    return response.status(200).json(ship);
   }
 }
 

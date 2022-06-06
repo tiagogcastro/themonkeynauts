@@ -10,7 +10,6 @@ const shipsRouter = Router();
 shipsRouter.get(
   '/list',
   ensureAuthenticated,
-  ensureAdministrator,
   celebrate({
     [Segments.QUERY]: {
       player_id: Joi.string().uuid(),
@@ -20,30 +19,24 @@ shipsRouter.get(
 );
 
 shipsRouter.post(
-  '/create',
+  '/create-ship',
   ensureAuthenticated,
   ensureAdministrator,
   celebrate({
-    [Segments.QUERY]: {
+    [Segments.BODY]: {
       player_id: Joi.string().uuid().required(),
-      bonus: Joi.string().required(),
-      bonus_value: Joi.number().required(),
-      breed_count: Joi.number().required(),
-      class: Joi.string()
-        .regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/)
-        .required(),
-      rank: Joi.string()
-        .regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/)
-        .required(),
-      energy: Joi.number().required(),
-      health: Joi.number().required(),
-      max_energy: Joi.number().required(),
-
       name: Joi.string(),
-
-      power: Joi.number(),
-      resistence: Joi.number(),
-      speed: Joi.number(),
+      class: Joi.string().regex(/^(FIGHTER|MINER|EXPLORER)$/),
+      rank: Joi.string().regex(/^(B|A|S)$/),
+      bonus_value: Joi.number(),
+      bonus_description: Joi.string(),
+      tank_capacity: Joi.number(),
+      crew_capacity: Joi.number(),
+      crew: Joi.number(),
+      fuel: Joi.number(),
+      avatar: Joi.string(),
+      breed_count: Joi.number(),
+      on_sale: Joi.boolean(),
     },
   }),
   (request, response) => createShipController.handle(request, response),
