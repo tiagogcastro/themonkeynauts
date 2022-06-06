@@ -18,6 +18,7 @@
       "@typescript-eslint",
       "prettier"
     ],
+   
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
       "no-underscore-dangle": "off",
@@ -46,7 +47,12 @@
         "error"
       ],
       "no-async-promise-executor": "off",
-      "prettier/prettier": "error",
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto" 
+        }
+      ],
       "import/extensions": [
         "error",
         "ignorePackages",
