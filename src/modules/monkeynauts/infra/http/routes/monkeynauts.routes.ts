@@ -22,28 +22,22 @@ monkeynautsRouter.get(
 monkeynautsRouter.post(
   '/create',
   ensureAuthenticated,
-  ensureAdministrator,
   celebrate({
-    [Segments.QUERY]: {
+    [Segments.BODY]: {
       player_id: Joi.string().uuid().required(),
+
       bonus: Joi.string().required(),
       bonus_value: Joi.number().required(),
+
       breed_count: Joi.number().required(),
-      class: Joi.string()
-        .regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/)
-        .required(),
-      rank: Joi.string()
-        .regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/)
-        .required(),
+
+      class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
+      rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
+
       energy: Joi.number().required(),
-      health: Joi.number().required(),
       max_energy: Joi.number().required(),
 
       name: Joi.string(),
-
-      power: Joi.number(),
-      resistence: Joi.number(),
-      speed: Joi.number(),
     },
   }),
   (request, response) => createMonkeynautController.handle(request, response),
