@@ -12,6 +12,8 @@ import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/a
 import { PrismaAppPlayerAuthRepository } from '@modules/players/infra/database/prisma/repositories/prisma-app-player-auth-repository';
 import { IPrivateSalesRepository } from '@modules/private-sales/domain/repositories/private-sales-repositories';
 import { PrismaPrivateSalesRepository } from '@modules/private-sales/infra/database/prisma/repositories/prisma-private-sale-repositories';
+import { PrismaMonkeynautsRepository } from '@modules/monkeynauts/infra/database/prisma/repositories/prisma-monkeynauts-repositories';
+import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -41,4 +43,9 @@ container.registerSingleton<IAppPlayerAuthRepository>(
 container.registerSingleton<IPrivateSalesRepository>(
   'PrivateSalesRepository',
   PrismaPrivateSalesRepository,
+);
+
+container.registerSingleton<IMonkeynautsRepository>(
+  'MonkeynautsRepository',
+  PrismaMonkeynautsRepository,
 );
