@@ -50,9 +50,9 @@ class CreateShipBusinessLogic {
     });
 
     const generatedRank = await rarity<Record<Lowercase<ShipRank>, number>>({
-      a: percentage,
-      b: percentage,
-      s: percentage,
+      a: 50,
+      b: 35,
+      s: 15,
     });
 
     const gereratedSpaceName = await generateSpaceName();
