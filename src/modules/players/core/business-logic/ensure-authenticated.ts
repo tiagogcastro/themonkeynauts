@@ -32,7 +32,7 @@ export class EnsureAuthenticatedBusinessLogic {
     private dateProvider: IDateProvider,
 
     @inject('PlayersRepository')
-    private playersRepository: IPlayersRepository,
+    private playerRepository: IPlayersRepository,
 
     @inject('AppPlayerAuthRepository')
     private appPlayerAuthRepository: IAppPlayerAuthRepository,
@@ -55,31 +55,19 @@ export class EnsureAuthenticatedBusinessLogic {
 
     try {
       decoded = this.tokenProvider.verify<TokenPayload>(token);
-    } catch (error) {
+    } catch (error: any) {
       throw new AppError('Token is not valid', 401);
     }
 
-    const {
-      id: playerAuthId,
-      updatedAt,
-      expireIn,
-      isValidToken,
-      playerId,
-    } = decoded;
+    const { id, playerId, updatedAt, expireIn, isValidToken } = decoded;
 
-    const foundPlayer = await this.playersRepository.findById(playerId);
+    const foundPlayer = await this.playerRepository.findById(playerId);
 
-    if (!foundPlayer) {
-      throw new AppError('User does not exists', 403);
-    }
-
-    if (!foundPlayer.enabled) {
+    if (!foundPlayer?.enabled) {
       throw new AppError('User does not have an activated account', 403);
     }
 
-    const foundPlayerAuth = await this.appPlayerAuthRepository.findById(
-      playerAuthId,
-    );
+    const foundPlayerAuth = await this.appPlayerAuthRepository.findById(id);
 
     if (!foundPlayerAuth) {
       throw new AppError('User does not logged', 403);
