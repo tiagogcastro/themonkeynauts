@@ -1,17 +1,26 @@
+type MonkeynautClasse = 'SOLDIER' | 'ENGINEER' | 'SCIENTIST';
+
+type MonkeynautRank = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
+
 type CreateMonkeynautRequestDTO = {
   bonus: string;
   bonus_value: number;
+
   breed_count: number;
-  class: string;
-  rank: string;
+
+  class: MonkeynautClasse;
+  rank: MonkeynautRank;
+
   energy: number;
-  health: number;
   max_energy: number;
-  name: string;
-  player_id: string;
+
+  health: number;
   power: number;
   resistence: number;
   speed: number;
+
+  name: string;
+  player_id: string;
 };
 
-export { CreateMonkeynautRequestDTO };
+export { CreateMonkeynautRequestDTO, MonkeynautClasse, MonkeynautRank };
