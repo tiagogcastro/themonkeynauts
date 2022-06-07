@@ -12,10 +12,12 @@ type CreateMonkeynautRequestDTO = {
   energy: number;
   max_energy: number;
 
-  health: number;
-  power: number;
-  resistence: number;
-  speed: number;
+  base_attributes?: {
+    base_health?: number;
+    base_power?: number;
+    base_resistence?: number;
+    base_speed?: number;
+  };
 
   name: string;
   player_id: string;
