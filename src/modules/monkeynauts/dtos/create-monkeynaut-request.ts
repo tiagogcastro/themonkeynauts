@@ -1,14 +1,12 @@
-type MonkeynautClasse = 'SOLDIER' | 'ENGINEER' | 'SCIENTIST';
-
-type MonkeynautRank = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
+import { MonkeynautClass, MonkeynautRank } from '../domain/enums';
 
 type CreateMonkeynautRequestDTO = {
-  bonus: string;
+  bonus_description: string;
   bonus_value: number;
 
   breed_count: number;
 
-  class: MonkeynautClasse;
+  class: MonkeynautClass;
   rank: MonkeynautRank;
 
   energy: number;
@@ -23,4 +21,4 @@ type CreateMonkeynautRequestDTO = {
   player_id: string;
 };
 
-export { CreateMonkeynautRequestDTO, MonkeynautClasse, MonkeynautRank };
+export { CreateMonkeynautRequestDTO };
