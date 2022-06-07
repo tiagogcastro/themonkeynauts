@@ -35,14 +35,20 @@ class CreateMonkeynautBusinessLogic {
     power: _power,
     resistence: _resistence,
 
+    name,
+
     player_id,
   }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const baseHealth = getRandomInt(250, 350);
-    const baseSpeed = getRandomInt(20, 50);
-    const basePower = getRandomInt(20, 50);
-    const baseResistence = getRandomInt(20, 50);
+    const baseAttributes = {
+      baseHealth: getRandomInt(250, 350),
+      baseSpeed: getRandomInt(20, 50),
+      basePower: getRandomInt(20, 50),
+      baseResistence: getRandomInt(20, 50),
+    };
 
-    const attributes = {
+    const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
+
+    let attributes = {
       health: baseHealth,
       speed: baseSpeed,
       power: basePower,
@@ -61,6 +67,27 @@ class CreateMonkeynautBusinessLogic {
       captain: 15,
       major: 5,
     });
+
+    const values = {
+      PRIVATE: 0,
+      SERGEANT: 0.15,
+      CAPTAIN: 0.3,
+      MAJOR: 0.45,
+    };
+
+    const percentage = values[rank];
+
+    baseAttributes.baseHealth += Math.floor(baseHealth * percentage);
+    baseAttributes.baseSpeed += Math.floor(baseSpeed * percentage);
+    baseAttributes.basePower += Math.floor(basePower * percentage);
+    baseAttributes.baseResistence += Math.floor(baseResistence * percentage);
+
+    attributes = {
+      health: baseAttributes.baseHealth,
+      speed: baseAttributes.baseSpeed,
+      power: baseAttributes.basePower,
+      resistence: baseAttributes.baseResistence,
+    };
 
     const ranksSchema = {
       SOLDIER: {
@@ -84,9 +111,9 @@ class CreateMonkeynautBusinessLogic {
     };
 
     const classesSchema = {
-      SOLDIER: basePower * 0.1,
-      ENGINEER: baseResistence * 0.2,
-      SCIENTIST: baseSpeed * 0.3,
+      SOLDIER: baseAttributes.basePower * 0.1,
+      ENGINEER: baseAttributes.baseResistence * 0.2,
+      SCIENTIST: baseAttributes.baseSpeed * 0.3,
     };
 
     const finalRank = ranksSchema[_class || classe][_rank || rank];
@@ -95,15 +122,19 @@ class CreateMonkeynautBusinessLogic {
     if (rank !== 'PRIVATE') {
       switch (classe) {
         case 'SOLDIER':
-          attributes.power = Math.floor(basePower + finalRank + finalClasse);
+          attributes.power = Math.floor(
+            baseAttributes.basePower + finalRank + finalClasse,
+          );
           break;
         case 'ENGINEER':
           attributes.resistence = Math.floor(
-            baseResistence + finalRank + finalClasse,
+            baseAttributes.baseResistence + finalRank + finalClasse,
           );
           break;
         case 'SCIENTIST':
-          attributes.speed = Math.floor(baseSpeed + finalRank + finalClasse);
+          attributes.speed = Math.floor(
+            baseAttributes.baseSpeed + finalRank + finalClasse,
+          );
           break;
         default:
           break;
@@ -113,10 +144,7 @@ class CreateMonkeynautBusinessLogic {
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
-      baseHealth,
-      baseSpeed,
-      basePower,
-      baseResistence,
+      ...baseAttributes,
 
       ...attributes,
 
@@ -130,7 +158,7 @@ class CreateMonkeynautBusinessLogic {
       energy,
       maxEnergy: max_energy,
 
-      name: 'xxx-xxx-xxx-xx',
+      name,
 
       ownerId: player_id,
       playerId: player_id,
