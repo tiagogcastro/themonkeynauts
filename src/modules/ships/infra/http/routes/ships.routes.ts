@@ -2,15 +2,16 @@ import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { consumeFuelController } from '../controllers/consume-fuel';
 import { createShipController } from '../controllers/create-ship';
 import { listShipsController } from '../controllers/list-ships';
+import { refuelShipController } from '../controllers/refuel-ship';
 
 const shipsRouter = Router();
 
 shipsRouter.get(
   '/list',
   ensureAuthenticated,
-  ensureAdministrator,
   celebrate({
     [Segments.QUERY]: {
       player_id: Joi.string().uuid(),
@@ -19,31 +20,48 @@ shipsRouter.get(
   (request, response) => listShipsController.handle(request, response),
 );
 
+shipsRouter.put(
+  '/consume-fuel',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      ship_id: Joi.string().uuid(),
+      action: Joi.string().valid('TRAVEL', 'BOUNTY_HUNT'),
+    },
+  }),
+  (request, response) => consumeFuelController.handle(request, response),
+);
+
+shipsRouter.put(
+  '/refuel-ship',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      ship_id: Joi.string().uuid(),
+    },
+  }),
+  (request, response) => refuelShipController.handle(request, response),
+);
+
 shipsRouter.post(
-  '/create',
+  '/create-ship',
   ensureAuthenticated,
   ensureAdministrator,
   celebrate({
-    [Segments.QUERY]: {
+    [Segments.BODY]: {
       player_id: Joi.string().uuid().required(),
-      bonus: Joi.string().required(),
-      bonus_value: Joi.number().required(),
-      breed_count: Joi.number().required(),
-      class: Joi.string()
-        .regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/)
-        .required(),
-      rank: Joi.string()
-        .regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/)
-        .required(),
-      energy: Joi.number().required(),
-      health: Joi.number().required(),
-      max_energy: Joi.number().required(),
-
       name: Joi.string(),
-
-      power: Joi.number(),
-      resistence: Joi.number(),
-      speed: Joi.number(),
+      class: Joi.string().valid('FIGHTER', 'MINER', 'EXPLORER'),
+      rank: Joi.string().valid('B', 'A', 'S'),
+      bonus_value: Joi.number(),
+      bonus_description: Joi.string(),
+      tank_capacity: Joi.number(),
+      crew_capacity: Joi.number(),
+      crew: Joi.number(),
+      fuel: Joi.number(),
+      avatar: Joi.string(),
+      breed_count: Joi.number(),
+      on_sale: Joi.boolean(),
     },
   }),
   (request, response) => createShipController.handle(request, response),

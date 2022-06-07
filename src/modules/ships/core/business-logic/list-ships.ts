@@ -10,13 +10,11 @@ class ListShipsBusinessLogic {
   ) {}
 
   async execute(player_id?: string): Promise<IShip[]> {
-    let ships: IShip[] = [];
-
     if (player_id) {
-      ships = await this.shipsRepository.listAllShipsFromPlayer(player_id);
-    } else {
-      ships = await this.shipsRepository.listAllShips();
+      return this.shipsRepository.listAllShipsFromPlayer(player_id);
     }
+
+    const ships = await this.shipsRepository.listAllShips();
 
     return ships;
   }

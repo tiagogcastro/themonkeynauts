@@ -3,14 +3,16 @@ import { Maybe } from '@shared/types/maybe';
 import crypto from 'node:crypto';
 
 type ShipPropsOmittedCommons = {
-  ownerId: string;
-  playerId: string;
+  ownerId: Maybe<string>;
+  playerId: Maybe<string>;
   name: string;
   class: string;
   rank: string;
   bonusValue: number;
   bonusDescription: string;
   tankCapacity: number;
+  crewCapacity: number;
+  crew: number;
   fuel: number;
   avatar: Maybe<string>;
   breedCount: number;
@@ -45,6 +47,8 @@ export class Ship implements IShip {
       bonusValue: this._props.bonusValue,
       bonusDescription: this._props.bonusDescription,
       tankCapacity: this._props.tankCapacity,
+      crewCapacity: this._props.crewCapacity,
+      crew: this._props.crew,
       fuel: this._props.fuel,
       avatar: this._props.avatar,
       breedCount: this._props.breedCount,
@@ -65,11 +69,11 @@ export class Ship implements IShip {
     return this._id;
   }
 
-  get ownerId(): string {
+  get ownerId(): Maybe<string> {
     return this._props.ownerId;
   }
 
-  get playerId(): string {
+  get playerId(): Maybe<string> {
     return this._props.playerId;
   }
 
@@ -95,6 +99,14 @@ export class Ship implements IShip {
 
   get tankCapacity(): number {
     return this._props.tankCapacity;
+  }
+
+  get crewCapacity(): number {
+    return this._props.crewCapacity;
+  }
+
+  get crew(): number {
+    return this._props.crew;
   }
 
   get fuel(): number {
