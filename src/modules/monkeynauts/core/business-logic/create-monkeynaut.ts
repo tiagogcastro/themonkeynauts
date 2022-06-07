@@ -144,7 +144,10 @@ class CreateMonkeynautBusinessLogic {
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
-      ...baseAttributes,
+      baseHealth,
+      basePower,
+      baseResistence,
+      baseSpeed,
 
       ...attributes,
 
