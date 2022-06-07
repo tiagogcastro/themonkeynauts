@@ -4,7 +4,7 @@ type getPercentageInt = {
 };
 
 function getPercentageInt({ percentage, value }: getPercentageInt) {
-  return Math.floor((percentage / 100) * value + value);
+  return Math.floor((percentage / 100) * value);
 }
 
 export { getPercentageInt };
