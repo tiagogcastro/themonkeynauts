@@ -3,8 +3,8 @@ import { Maybe } from '@shared/types/maybe';
 import crypto from 'node:crypto';
 
 type ShipPropsOmittedCommons = {
-  ownerId: string;
-  playerId: string;
+  ownerId: Maybe<string>;
+  playerId: Maybe<string>;
   name: string;
   class: string;
   rank: string;
@@ -69,11 +69,11 @@ export class Ship implements IShip {
     return this._id;
   }
 
-  get ownerId(): string {
+  get ownerId(): Maybe<string> {
     return this._props.ownerId;
   }
 
-  get playerId(): string {
+  get playerId(): Maybe<string> {
     return this._props.playerId;
   }
 
