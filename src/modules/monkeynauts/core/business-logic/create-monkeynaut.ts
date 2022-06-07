@@ -31,10 +31,7 @@ class CreateMonkeynautBusinessLogic {
     energy,
     max_energy,
 
-    health: _health,
-    speed: _speed,
-    power: _power,
-    resistence: _resistence,
+    base_attributes: request_base_attributes,
 
     name,
 
@@ -61,10 +58,12 @@ class CreateMonkeynautBusinessLogic {
     };
 
     const baseAttributes = {
-      baseHealth: getRandomInt(250, 350),
-      baseSpeed: getRandomInt(20, 50),
-      basePower: getRandomInt(20, 50),
-      baseResistence: getRandomInt(20, 50),
+      baseHealth:
+        request_base_attributes?.base_health || getRandomInt(250, 350),
+      baseSpeed: request_base_attributes?.base_speed || getRandomInt(20, 50),
+      basePower: request_base_attributes?.base_power || getRandomInt(20, 50),
+      baseResistence:
+        request_base_attributes?.base_resistence || getRandomInt(20, 50),
     };
 
     const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
