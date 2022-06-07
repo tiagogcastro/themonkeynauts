@@ -92,20 +92,22 @@ class CreateMonkeynautBusinessLogic {
     const finalRank = ranksSchema[_class || classe][_rank || rank];
     const finalClasse = classesSchema[_class || classe];
 
-    switch (classe) {
-      case 'SOLDIER':
-        attributes.power = Math.floor(basePower + finalRank + finalClasse);
-        break;
-      case 'ENGINEER':
-        attributes.resistence = Math.floor(
-          baseResistence + finalRank + finalClasse,
-        );
-        break;
-      case 'SCIENTIST':
-        attributes.speed = Math.floor(baseSpeed + finalRank + finalClasse);
-        break;
-      default:
-        break;
+    if (rank !== 'PRIVATE') {
+      switch (classe) {
+        case 'SOLDIER':
+          attributes.power = Math.floor(basePower + finalRank + finalClasse);
+          break;
+        case 'ENGINEER':
+          attributes.resistence = Math.floor(
+            baseResistence + finalRank + finalClasse,
+          );
+          break;
+        case 'SCIENTIST':
+          attributes.speed = Math.floor(baseSpeed + finalRank + finalClasse);
+          break;
+        default:
+          break;
+      }
     }
 
     const { monkeynaut } = new Monkeynaut({
