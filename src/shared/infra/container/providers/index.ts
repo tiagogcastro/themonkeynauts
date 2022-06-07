@@ -29,14 +29,14 @@ container.registerSingleton<IMailTemplateProvider>(
   HandlebarsMailTemplateProvider,
 );
 
-const MailProvider = {
-  ethereal: EtherealMailProvider,
-  ses: SESMailProvider,
-  mailgun: MailgunMailProvider,
-  titan: TitanMailProvider,
+const mailProvider: IMailProvider = {
+  ethereal: container.resolve(EtherealMailProvider),
+  ses: container.resolve(SESMailProvider),
+  mailgun: container.resolve(MailgunMailProvider),
+  titan: container.resolve(TitanMailProvider),
 }[mailConfig.driver];
 
-container.registerSingleton<IMailProvider>('MailProvider', MailProvider);
+container.registerInstance<IMailProvider>('MailProvider', mailProvider);
 
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',

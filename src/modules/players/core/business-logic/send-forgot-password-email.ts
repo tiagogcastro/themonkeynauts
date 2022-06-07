@@ -5,12 +5,19 @@ import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { AppError } from '@shared/errors/app-error';
 import crypto from 'node:crypto';
 import path from 'node:path';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 class SendForgotPasswordEmailBusinessLogic {
   constructor(
+    @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
-    private mailProvider: IMailProvider,
+
+    @inject('PlayerTokensRepository')
     private playerTokensRepository: IPlayerTokensRepository,
+
+    @inject('MailProvider')
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute(email: string): Promise<void> {
@@ -38,7 +45,7 @@ class SendForgotPasswordEmailBusinessLogic {
       '..',
       'infra',
       'views',
-      'forgotPasswordEmailTemplate.hbs',
+      'forgot-password-email-template.hbs',
     );
 
     await this.mailProvider.sendMail({
