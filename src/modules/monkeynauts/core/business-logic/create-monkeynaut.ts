@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { faker } from '@faker-js/faker';
 
 import { getPercentageInt, getRandomInt, rarity } from '@shared/helpers';
 
@@ -19,8 +20,8 @@ class CreateMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    bonus,
     bonus_value,
+    bonus_description,
 
     breed_count,
 
@@ -149,6 +150,8 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
+    const randomName = faker.name.findName();
+
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
@@ -159,7 +162,7 @@ class CreateMonkeynautBusinessLogic {
 
       ...attributes,
 
-      bonus,
+      bonusDescription: bonus_description,
       bonusValue: bonus_value,
       breedCount: breed_count,
 
@@ -169,7 +172,7 @@ class CreateMonkeynautBusinessLogic {
       energy,
       maxEnergy: max_energy,
 
-      name,
+      name: name || randomName,
 
       ownerId: player_id,
       playerId: player_id,
