@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import { AppPlayerAuthBusinessLogic } from '@modules/players/core/business-logic/app-auth-player';
 
-import { instanceToInstance } from '@shared/infra/helpers/instance-to-instance';
+import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 
 class AppPlayerAuthController {
   async handle(request: Request, response: Response): Promise<Response> {
