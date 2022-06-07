@@ -4,12 +4,17 @@ import {
 } from '@shared/domain/providers/mail-provider';
 import { IMailTemplateProvider } from '@shared/domain/providers/mail-template-provider';
 import { createTransport, Transporter } from 'nodemailer';
+import { inject, injectable } from 'tsyringe';
 import { mailConfig } from '../../../config/mail';
 
+@injectable()
 export class TitanMailProvider implements IMailProvider {
   private transporter: Transporter;
 
-  constructor(private mailTemplateProvider: IMailTemplateProvider) {
+  constructor(
+    @inject('MailTemplateProvider')
+    private mailTemplateProvider: IMailTemplateProvider,
+  ) {
     const transporter = createTransport({
       host: 'smtp.titan.email',
       port: 587,
