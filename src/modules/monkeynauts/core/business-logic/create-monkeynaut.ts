@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { getRandomInt, rarity } from '@shared/helpers';
+import { getPercentageInt, getRandomInt, rarity } from '@shared/helpers';
 
 import {
   IMonkeynaut,
@@ -39,22 +39,6 @@ class CreateMonkeynautBusinessLogic {
 
     player_id,
   }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const baseAttributes = {
-      baseHealth: getRandomInt(250, 350),
-      baseSpeed: getRandomInt(20, 50),
-      basePower: getRandomInt(20, 50),
-      baseResistence: getRandomInt(20, 50),
-    };
-
-    const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
-
-    let attributes = {
-      health: baseHealth,
-      speed: baseSpeed,
-      power: basePower,
-      resistence: baseResistence,
-    };
-
     const classe = await rarity({
       soldier: 40,
       engineer: 30,
@@ -68,25 +52,49 @@ class CreateMonkeynautBusinessLogic {
       major: 5,
     });
 
-    const values = {
+    const ranksPercentage = {
       PRIVATE: 0,
       SERGEANT: 0.15,
       CAPTAIN: 0.3,
       MAJOR: 0.45,
     };
 
-    const percentage = values[rank];
+    const baseAttributes = {
+      baseHealth: getRandomInt(250, 350),
+      baseSpeed: getRandomInt(20, 50),
+      basePower: getRandomInt(20, 50),
+      baseResistence: getRandomInt(20, 50),
+    };
 
-    baseAttributes.baseHealth += Math.floor(baseHealth * percentage);
-    baseAttributes.baseSpeed += Math.floor(baseSpeed * percentage);
-    baseAttributes.basePower += Math.floor(basePower * percentage);
-    baseAttributes.baseResistence += Math.floor(baseResistence * percentage);
+    const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
 
-    attributes = {
-      health: baseAttributes.baseHealth,
-      speed: baseAttributes.baseSpeed,
-      power: baseAttributes.basePower,
-      resistence: baseAttributes.baseResistence,
+    const percentage = ranksPercentage[rank];
+
+    const attributes = {
+      health:
+        baseHealth +
+        getPercentageInt({
+          percentage,
+          value: baseHealth,
+        }),
+      speed:
+        baseSpeed +
+        getPercentageInt({
+          percentage,
+          value: baseSpeed,
+        }),
+      power:
+        basePower +
+        getPercentageInt({
+          percentage,
+          value: basePower,
+        }),
+      resistence:
+        baseResistence +
+        getPercentageInt({
+          percentage,
+          value: baseResistence,
+        }),
     };
 
     const ranksSchema = {
@@ -111,9 +119,9 @@ class CreateMonkeynautBusinessLogic {
     };
 
     const classesSchema = {
-      SOLDIER: baseAttributes.basePower * 0.1,
-      ENGINEER: baseAttributes.baseResistence * 0.2,
-      SCIENTIST: baseAttributes.baseSpeed * 0.3,
+      SOLDIER: basePower * 0.1,
+      ENGINEER: baseResistence * 0.2,
+      SCIENTIST: baseSpeed * 0.3,
     };
 
     const finalRank = ranksSchema[_class || classe][_rank || rank];
