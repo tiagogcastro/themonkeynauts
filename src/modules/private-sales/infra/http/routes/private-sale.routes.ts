@@ -16,8 +16,8 @@ salesRouter.post(
       wallet: Joi.string().required(),
       bnb_amount: Joi.number()
         .required()
-        .min(balanceConfig.bnb_amount_min)
-        .max(balanceConfig.bnb_amount_max),
+        .min(balanceConfig.bnbAmountMin)
+        .max(balanceConfig.bnbAmountMax),
       tx_hash: Joi.string().required(),
     },
   }),

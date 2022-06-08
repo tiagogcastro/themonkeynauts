@@ -29,12 +29,12 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     throw new Error('Method not implemented.');
   }
 
-  async waitTransaction(tx_hash: string): Promise<void> {
+  async waitTransaction(txHash: string): Promise<void> {
     const RETRY = true;
 
     await retry(async () => {
       try {
-        const receipt = await this.web3.eth.getTransactionReceipt(tx_hash);
+        const receipt = await this.web3.eth.getTransactionReceipt(txHash);
 
         if (!receipt || !receipt.status) {
           return RETRY;
@@ -50,13 +50,13 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }, 500);
   }
 
-  async waitGetTransaction(tx_hash: string): Promise<Transaction> {
+  async waitGetTransaction(txHash: string): Promise<Transaction> {
     const RETRY = true;
 
     try {
       const _transaction = await new Promise<Transaction>(async resolve => {
         await retry(async () => {
-          const transaction = await this.web3.eth.getTransaction(tx_hash);
+          const transaction = await this.web3.eth.getTransaction(txHash);
 
           if (!transaction) {
             return RETRY;
@@ -75,20 +75,20 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   }
 
   async confirmTransaction({
-    tx_hash,
+    txHash,
     amount,
     from,
   }: ConfirmTransactionDTO): Promise<void> {
     const checkIfTheTransactionHasAlreadyBeenCarriedOut =
-      await this.privateSalesRepository.findByTxHash(tx_hash);
+      await this.privateSalesRepository.findByTxHash(txHash);
 
     if (checkIfTheTransactionHasAlreadyBeenCarriedOut) {
       throw new AppError('This transaction has already been carried out', 400);
     }
 
-    await this.waitTransaction(tx_hash);
+    await this.waitTransaction(txHash);
 
-    const transaction = await this.waitGetTransaction(tx_hash);
+    const transaction = await this.waitGetTransaction(txHash);
 
     if (!transaction) {
       throw new AppError(

@@ -1,14 +1,14 @@
 type ConfirmTransactionDTO = {
   from: string;
   amount: number;
-  tx_hash: string;
+  txHash: string;
 };
 
 type SendTransactionDTO = {
   from: string;
   amount: number;
-  player_id: string;
-  tx_hash: string;
+  playerId: string;
+  txHash: string;
 };
 
 interface IBlockchainProvider {
