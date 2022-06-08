@@ -1,28 +1,19 @@
-import crypto from 'node:crypto';
-import { BCryptHashProvider } from '@shared/infra/providers/bcrypt-hash-provider';
+import 'reflect-metadata';
+import '@shared/infra/container';
+import { CreatePlayerBusinessLogic } from '@modules/players/core/business-logic/create-player';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
-import { prisma } from '../client';
+import { container } from 'tsyringe';
 
 const main = async () => {
-  const bcryptHashProvider = new BCryptHashProvider();
+  const createPlayerBusinessLogic = container.resolve(
+    CreatePlayerBusinessLogic,
+  );
 
-  const player = await prisma.player.create({
-    data: {
-      id: crypto.randomUUID(),
-      nickname: process.env.ADMIN_NICKNAME || '*****',
-      email: process.env.ADMIN_EMAIL || '******@*****.****',
-      role: PlayerRole.ADMIN,
-      password: await bcryptHashProvider.generateHash(
-        process.env.ADMIN_PASS || '*****',
-      ),
-    },
-  });
-
-  await prisma.resource.create({
-    data: {
-      id: crypto.randomUUID(),
-      playerId: player.id,
-    },
+  await createPlayerBusinessLogic.execute({
+    nickname: process.env.ADMIN_NICKNAME || '*****',
+    email: process.env.ADMIN_EMAIL || '******@*****.****',
+    role: PlayerRole.ADMIN,
+    password: process.env.ADMIN_PASS || '********',
   });
 };
 
