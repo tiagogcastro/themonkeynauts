@@ -1,5 +1,6 @@
-import { mailConfig, MailDriver } from '@config/mail';
+import { mailConfig } from '@config/mail';
 import { IBlockchainProvider } from '@shared/domain/providers/blockchain-provider';
+import { ICronJobProvider } from '@shared/domain/providers/cronjob-provider';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
@@ -7,6 +8,7 @@ import { IMailTemplateProvider } from '@shared/domain/providers/mail-template-pr
 import { IStorageProvider } from '@shared/domain/providers/storage-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { BCryptHashProvider } from '@shared/infra/providers/bcrypt-hash-provider';
+import { CronJobProvider } from '@shared/infra/providers/cronjob-provider';
 import { DateFnsDateProvider } from '@shared/infra/providers/datefns-date-provider';
 import { DiskStorageProvider } from '@shared/infra/providers/disk-storage-provider';
 import { EtherealMailProvider } from '@shared/infra/providers/ethereal-mail-provider';
@@ -23,6 +25,11 @@ container.registerSingleton<ITokenProvider>('TokenProvider', JWTokenProvider);
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 
 container.registerSingleton<IDateProvider>('DateProvider', DateFnsDateProvider);
+
+container.registerSingleton<ICronJobProvider>(
+  'CronJobProvider',
+  CronJobProvider,
+);
 
 container.registerSingleton<IMailTemplateProvider>(
   'MailTemplateProvider',

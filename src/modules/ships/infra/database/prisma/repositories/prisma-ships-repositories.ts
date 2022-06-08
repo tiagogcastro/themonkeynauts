@@ -1,5 +1,6 @@
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
 import { Ship as PrismaShip } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 import { AsyncMaybe } from '@shared/types/maybe';
@@ -13,6 +14,14 @@ const parseShip = (ship: PrismaShip): IShip => {
 };
 
 class PrismaShipsRepository implements IShipsRepository {
+  async saveMany({ canRefuelAtStation }: ShipsSaveManyDTO): Promise<void> {
+    await prisma.ship.updateMany({
+      data: {
+        canRefuelAtStation,
+      },
+    });
+  }
+
   async findById(ship_id: string): AsyncMaybe<IShip> {
     const ship = await prisma.ship.findUnique({
       where: {

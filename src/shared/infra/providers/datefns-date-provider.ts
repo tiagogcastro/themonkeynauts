@@ -1,17 +1,39 @@
 import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { addHours, isAfter, parseISO } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  addSeconds,
+  isAfter,
+  parseISO,
+  getMinutes,
+} from 'date-fns';
 
 class DateFnsDateProvider implements IDateProvider {
-  isAfter(date: Date, dateToCompare: Date): boolean {
-    if (typeof date === 'string') {
-      date = parseISO(date);
+  getMinutes(date: Date): number {
+    return getMinutes(date);
+  }
+
+  addSeconds(date: Date, amount: number): Date {
+    return addSeconds(date, amount);
+  }
+
+  addDays(date: Date, amount: number): Date {
+    return addDays(date, amount);
+  }
+
+  isAfter(date: number | string | Date, dateToCompare: Date): boolean {
+    let _date = date;
+    let _dateToCompare = dateToCompare;
+
+    if (typeof _date === 'string') {
+      _date = parseISO(_date);
     }
 
-    if (typeof dateToCompare === 'string') {
-      dateToCompare = parseISO(dateToCompare);
+    if (typeof _dateToCompare === 'string') {
+      _dateToCompare = parseISO(_dateToCompare);
     }
 
-    return isAfter(date, dateToCompare);
+    return isAfter(_date, _dateToCompare);
   }
 
   addHours(date: number | Date, amount: number): Date {

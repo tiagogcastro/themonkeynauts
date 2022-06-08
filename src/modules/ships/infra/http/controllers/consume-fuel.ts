@@ -11,9 +11,9 @@ class ConsumeFuelController {
       ConsumeFuelBusinessLogic,
     );
 
-    const ship = await consumeFuelBusinessLogic.execute(data);
+    await consumeFuelBusinessLogic.execute(data);
 
-    return response.status(200).json(ship);
+    return response.status(204).json();
   }
 }
 

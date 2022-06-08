@@ -17,6 +17,7 @@ type ShipPropsOmittedCommons = {
   avatar: Maybe<string>;
   breedCount: number;
   onSale: boolean;
+  canRefuelAtStation: boolean;
 };
 
 type ShipProps = ShipPropsOmittedCommons & Commons;
@@ -53,6 +54,7 @@ export class Ship implements IShip {
       avatar: this._props.avatar,
       breedCount: this._props.breedCount,
       onSale: this._props.onSale,
+      canRefuelAtStation: this._props.canRefuelAtStation,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     };
@@ -123,6 +125,10 @@ export class Ship implements IShip {
 
   get onSale(): boolean {
     return this._props.onSale;
+  }
+
+  get canRefuelAtStation(): boolean {
+    return this._props.canRefuelAtStation;
   }
 
   get updatedAt(): Date {

@@ -1,5 +1,5 @@
 import { UpdatePlayerBusinessLogic } from '@modules/players/core/business-logic/update-player';
-import { instanceToInstance } from '@shared/infra/helpers/instance-to-instance';
+import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
