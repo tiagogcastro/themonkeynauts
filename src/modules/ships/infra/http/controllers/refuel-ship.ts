@@ -1,4 +1,4 @@
-import { RefuelShipRequestDTO } from '@modules/monkeynauts/dtos/refuel-ship-request';
+import { RefuelShipRequestDTO } from '@modules/ships/dtos/refuel-ship-request';
 import { RefuelShipBusinessLogic } from '@modules/ships/core/business-logic/refuel-ship';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
