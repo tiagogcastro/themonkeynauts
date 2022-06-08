@@ -1,8 +1,9 @@
 import { Commons } from '@shared/types/commons';
+import { Maybe } from '@shared/types/maybe';
 import crypto from 'node:crypto';
 
 type LogPropsOmittedCommons = {
-  playerId: string;
+  playerId: Maybe<string>;
   content: string;
 };
 
@@ -44,7 +45,7 @@ export class Log implements ILog {
     return this._id;
   }
 
-  get playerId(): string {
+  get playerId(): Maybe<string> {
     return this._props.playerId;
   }
 

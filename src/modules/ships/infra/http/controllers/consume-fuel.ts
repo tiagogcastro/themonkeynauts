@@ -1,4 +1,4 @@
-import { ConsumeFuelRequestDTO } from '@modules/monkeynauts/dtos/consume-fuel-request';
+import { ConsumeFuelRequestDTO } from '@modules/ships/dtos/consume-fuel-request';
 import { ConsumeFuelBusinessLogic } from '@modules/ships/core/business-logic/consume-fuel';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';

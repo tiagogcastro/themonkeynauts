@@ -12,10 +12,10 @@ const parseLog = (log: PrismaLog): ILog => {
 };
 
 class PrismaLogsRepository implements ILogsRepository {
-  async create({ id: log_id, ...props }: ILog): Promise<void> {
+  async create({ id: logId, ...props }: ILog): Promise<void> {
     await prisma.log.create({
       data: {
-        id: log_id,
+        id: logId,
         ...props,
       },
     });
@@ -27,10 +27,10 @@ class PrismaLogsRepository implements ILogsRepository {
     return logs.map(parseLog);
   }
 
-  async listAllLogsFromPlayer(player_id: string): Promise<ILog[]> {
+  async listAllLogsFromPlayer(playerId: string): Promise<ILog[]> {
     const logs = await prisma.log.findMany({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 

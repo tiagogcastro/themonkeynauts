@@ -12,7 +12,7 @@ salesRouter.post(
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      player_id: Joi.string().uuid().required(),
+      player_id: Joi.string().uuid(),
       wallet: Joi.string().required(),
       bnb_amount: Joi.number()
         .required()

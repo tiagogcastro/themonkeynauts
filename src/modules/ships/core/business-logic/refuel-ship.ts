@@ -11,8 +11,8 @@ class RefuelShipBusinessLogic {
     private shipsRepository: IShipsRepository,
   ) {}
 
-  async execute({ ship_id }: RefuelShipRequestDTO): Promise<IShip> {
-    const ship = await this.shipsRepository.findById(ship_id);
+  async execute({ shipId }: RefuelShipRequestDTO): Promise<IShip> {
+    const ship = await this.shipsRepository.findById(shipId);
 
     if (!ship) {
       throw new AppError(
@@ -22,7 +22,7 @@ class RefuelShipBusinessLogic {
     }
 
     if (!ship.canRefuelAtStation) {
-      throw new AppError('You can not refuel this ship at the station', 400);
+      throw new AppError('You cannot refuel this ship at the station', 400);
     }
 
     const replenished = ship.tankCapacity;

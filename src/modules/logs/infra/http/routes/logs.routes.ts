@@ -12,7 +12,7 @@ logsRouter.get(
   ensureAdministrator,
   celebrate({
     [Segments.QUERY]: {
-      player_id: Joi.string().uuid(),
+      playerId: Joi.string().uuid(),
     },
   }),
   (request, response) => listLogsController.handle(request, response),

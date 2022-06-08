@@ -1,5 +1,5 @@
 type RefuelShipRequestDTO = {
-  ship_id: string;
+  shipId: string;
 };
 
 export { RefuelShipRequestDTO };

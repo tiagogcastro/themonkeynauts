@@ -19,20 +19,21 @@ class CreateShipBusinessLogic {
   ) {}
 
   async execute({
-    player_id,
+    playerId,
     name,
     class: _class,
     rank,
-    bonus_value,
-    bonus_description,
-    tank_capacity,
-    crew_capacity,
+    bonusValue,
+    bonusDescription,
+    tankCapacity,
+    crewCapacity,
+    canRefuelAtStation,
     crew,
     fuel,
-    breed_count,
-    on_sale,
+    breedCount,
+    onSale,
   }: CreateShipRequestDTO): Promise<IShip> {
-    const player = await this.playersRepository.findById(player_id);
+    const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
       throw new AppError(
@@ -43,25 +44,34 @@ class CreateShipBusinessLogic {
 
     const percentage = 100 / 3;
 
-    const generatedClass = await rarity<Record<Lowercase<ShipClass>, number>>({
-      explorer: percentage,
-      miner: percentage,
-      fighter: percentage,
-    });
+    const __class =
+      _class ||
+      (await rarity<Record<Lowercase<ShipClass>, number>>({
+        explorer: percentage,
+        miner: percentage,
+        fighter: percentage,
+      }));
 
-    const generatedRank = await rarity<Record<Lowercase<ShipRank>, number>>({
-      a: 50,
-      b: 35,
-      s: 15,
-    });
+    const __rank =
+      rank ||
+      (await rarity<Record<Lowercase<ShipRank>, number>>({
+        a: 50,
+        b: 35,
+        s: 15,
+      }));
 
-    const gereratedSpaceName = await generateSpaceName();
+    const __name = name || (await generateSpaceName());
 
-    const generatedTankCapacity = {
-      B: 200,
-      A: 300,
-      S: 400,
-    }[generatedRank];
+    const __tankCapacity =
+      tankCapacity ||
+      {
+        B: 200,
+        A: 300,
+        S: 400,
+      }[__rank];
+
+    const __fuel = fuel || __tankCapacity;
+    const __crew = crew || 0;
 
     const crewCapacitySchema: Record<ShipRank, number> = {
       B: 2,
@@ -87,31 +97,36 @@ class CreateShipBusinessLogic {
       },
     };
 
-    const generatedBonusDescription = {
-      FIGHTER: 'Bounty Hunt Damage',
-      MINER: 'Mining Success Rate',
-      EXPLORER: 'Mission Time',
-    }[generatedClass];
+    const __bonusDescription =
+      bonusDescription ||
+      {
+        FIGHTER: 'Bounty Hunt Damage',
+        MINER: 'Mining Success Rate',
+        EXPLORER: 'Mission Time',
+      }[__class];
 
-    const generatedCrewCapacity = crewCapacitySchema[generatedRank];
-    const generatedBonusValue = bonusValueSchema[generatedClass][generatedRank];
+    const __crewCapacity = crewCapacity || crewCapacitySchema[__rank];
+    const __bonusValue = bonusValue || bonusValueSchema[__class][__rank];
+    const __canRefuelAtStation = canRefuelAtStation || false;
+    const __breedCount = breedCount || 0;
+    const __onSale = onSale || false;
 
     const { ship } = new Ship({
-      ownerId: player_id,
-      playerId: player_id,
-      name: name || gereratedSpaceName,
-      class: _class || generatedClass,
-      rank: rank || generatedRank,
-      bonusValue: bonus_value || generatedBonusValue,
-      bonusDescription: bonus_description || generatedBonusDescription,
-      tankCapacity: tank_capacity || generatedTankCapacity,
-      crewCapacity: crew_capacity || generatedCrewCapacity,
-      crew: crew || 0,
-      canRefuelAtStation: false,
-      fuel: fuel || generatedTankCapacity,
+      ownerId: playerId,
+      playerId,
+      name: __name,
+      class: __class,
+      rank: __rank,
+      fuel: __fuel,
+      crew: __crew,
+      bonusValue: __bonusValue,
+      bonusDescription: __bonusDescription,
+      tankCapacity: __tankCapacity,
+      crewCapacity: __crewCapacity,
+      canRefuelAtStation: __canRefuelAtStation,
       avatar: null,
-      breedCount: breed_count || 0,
-      onSale: on_sale || false,
+      breedCount: __breedCount,
+      onSale: __onSale,
     });
 
     await this.shipsRepository.create(ship);
