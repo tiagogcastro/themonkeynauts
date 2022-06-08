@@ -142,9 +142,10 @@ model Ship {
   crewCapacity     Int
   crew             Int
 
-  avatar     String?
-  breedCount Int
-  onSale     Boolean @default(false)
+  avatar             String?
+  breedCount         Int
+  onSale             Boolean @default(false)
+  canRefuelAtStation Boolean @default(false)
 
   crews Crew[]
 
