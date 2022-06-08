@@ -47,7 +47,7 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
     );
 
     if (!foundMonkeynaut) {
-      throw new AppError('Actual operator player does not exist', 404);
+      throw new AppError('Monkeynaut does not exist', 404);
     }
 
     const { monkeynaut } = new Monkeynaut(
