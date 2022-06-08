@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { faker } from '@faker-js/faker';
 
 import { getPercentageInt, getRandomInt, rarity } from '@shared/helpers';
 
@@ -19,8 +20,8 @@ class CreateMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    bonus,
     bonus_value,
+    bonus_description,
 
     breed_count,
 
@@ -30,10 +31,7 @@ class CreateMonkeynautBusinessLogic {
     energy,
     max_energy,
 
-    health: _health,
-    speed: _speed,
-    power: _power,
-    resistence: _resistence,
+    base_attributes: request_base_attributes,
 
     name,
 
@@ -60,10 +58,12 @@ class CreateMonkeynautBusinessLogic {
     };
 
     const baseAttributes = {
-      baseHealth: getRandomInt(250, 350),
-      baseSpeed: getRandomInt(20, 50),
-      basePower: getRandomInt(20, 50),
-      baseResistence: getRandomInt(20, 50),
+      baseHealth:
+        request_base_attributes?.base_health || getRandomInt(250, 350),
+      baseSpeed: request_base_attributes?.base_speed || getRandomInt(20, 50),
+      basePower: request_base_attributes?.base_power || getRandomInt(20, 50),
+      baseResistence:
+        request_base_attributes?.base_resistence || getRandomInt(20, 50),
     };
 
     const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
@@ -149,6 +149,8 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
+    const randomName = faker.name.findName();
+
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
@@ -159,7 +161,7 @@ class CreateMonkeynautBusinessLogic {
 
       ...attributes,
 
-      bonus,
+      bonusDescription: bonus_description,
       bonusValue: bonus_value,
       breedCount: breed_count,
 
@@ -169,7 +171,7 @@ class CreateMonkeynautBusinessLogic {
       energy,
       maxEnergy: max_energy,
 
-      name,
+      name: name || randomName,
 
       ownerId: player_id,
       playerId: player_id,

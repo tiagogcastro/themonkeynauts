@@ -80,7 +80,7 @@ model Monkeynaut {
   class      String
   rank       String
   bonusValue Int
-  bonus      String
+  bonusDescription      String
   maxEnergy  Int
   energy     Int
   avatar     String?
