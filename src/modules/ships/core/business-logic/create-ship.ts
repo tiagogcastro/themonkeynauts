@@ -107,6 +107,7 @@ class CreateShipBusinessLogic {
       tankCapacity: tank_capacity || generatedTankCapacity,
       crewCapacity: crew_capacity || generatedCrewCapacity,
       crew: crew || 0,
+      canRefuelAtStation: false,
       fuel: fuel || generatedTankCapacity,
       avatar: null,
       breedCount: breed_count || 0,

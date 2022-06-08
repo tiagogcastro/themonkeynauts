@@ -1,5 +1,6 @@
 import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { ensureOneHourWait } from '@modules/players/infra/http/middlewares/ensure-one-hour-wait';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { consumeFuelController } from '../controllers/consume-fuel';
@@ -22,6 +23,7 @@ shipsRouter.get(
 
 shipsRouter.put(
   '/consume-fuel',
+  ensureOneHourWait,
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {

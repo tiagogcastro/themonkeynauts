@@ -1,5 +1,7 @@
 import { ConsumeFuelRequestDTO } from '@modules/monkeynauts/dtos/consume-fuel-request';
-import { IShip, Ship } from '@modules/ships/domain/entities/ship';
+import { Ship } from '@modules/ships/domain/entities/ship';
+import { ICronJobProvider } from '@shared/domain/providers/cronjob-provider';
+import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
@@ -9,48 +11,59 @@ class ConsumeFuelBusinessLogic {
   constructor(
     @inject('ShipsRepository')
     private shipsRepository: IShipsRepository,
+
+    @inject('CronJobProvider')
+    private cronJobProvider: ICronJobProvider,
+
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
   ) {}
 
-  async execute({ ship_id, action }: ConsumeFuelRequestDTO): Promise<IShip> {
-    const ship = await this.shipsRepository.findById(ship_id);
+  async execute({ ship_id, action }: ConsumeFuelRequestDTO): Promise<void> {
+    const minutes = this.dateProvider.getMinutes(new Date());
 
-    const consumeFuelSchema = {
-      TRAVEL: 100,
-      BOUNTY_HUNT: 100,
-    };
+    await this.cronJobProvider.run({
+      cronTime: `${minutes} */1 * * *`,
+      onTick: async () => {
+        const ship = await this.shipsRepository.findById(ship_id);
 
-    const consumeFuel = consumeFuelSchema[action];
+        const consumeFuelSchema = {
+          TRAVEL: 100,
+          BOUNTY_HUNT: 100,
+        };
 
-    if (!ship) {
-      throw new AppError(
-        'Could not consume fuel because the ship you entered does not exist',
-        400,
-      );
-    }
+        const consumeFuel = consumeFuelSchema[action];
 
-    if (ship.fuel < consumeFuel) {
-      throw new AppError(
-        'Could not consume fuel because the ship does not have enough fuel',
-        400,
-      );
-    }
+        if (!ship) {
+          throw new AppError(
+            'Could not consume fuel because the ship you entered does not exist',
+            400,
+          );
+        }
 
-    const fuel = ship.fuel - consumeFuel;
+        if (ship.fuel < consumeFuel) {
+          await this.cronJobProvider.stop();
 
-    const { ship: updatedShip } = new Ship(
-      {
-        ...ship,
-        fuel,
+          return;
+        }
+
+        const fuel = ship.fuel - consumeFuel;
+
+        const { ship: updatedShip } = new Ship(
+          {
+            ...ship,
+            canRefuelAtStation: false,
+            fuel,
+          },
+          {
+            id: ship.id,
+            createdAt: ship.createdAt,
+          },
+        );
+
+        await this.shipsRepository.save(updatedShip);
       },
-      {
-        id: ship.id,
-        createdAt: ship.createdAt,
-      },
-    );
-
-    await this.shipsRepository.save(updatedShip);
-
-    return updatedShip;
+    });
   }
 }
 
