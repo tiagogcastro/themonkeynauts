@@ -1,26 +1,26 @@
 import { MonkeynautClass, MonkeynautRank } from '../domain/enums';
 
 type CreateMonkeynautRequestDTO = {
-  bonus_description: string;
-  bonus_value: number;
+  bonusDescription: string;
+  bonusValue: number;
 
-  breed_count: number;
+  breedCount: number;
 
   class: MonkeynautClass;
   rank: MonkeynautRank;
 
   energy: number;
-  max_energy: number;
+  maxEnergy: number;
 
-  base_attributes?: {
-    base_health?: number;
-    base_power?: number;
-    base_resistence?: number;
-    base_speed?: number;
+  baseAttributes?: {
+    baseHealth?: number;
+    basePower?: number;
+    baseResistence?: number;
+    baseSpeed?: number;
   };
 
   name: string;
-  player_id: string;
+  playerId: string;
 };
 
 export { CreateMonkeynautRequestDTO };

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { faker } from '@faker-js/faker';
 
-import { getPercentageInt, getRandomInt, rarity } from '@shared/helpers';
+import { getRandomInt } from '@shared/helpers';
 
 import {
   IMonkeynaut,
@@ -10,6 +10,13 @@ import {
 
 import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-monkeynaut-request';
 
+import {
+  getAttributesByBase,
+  getClassByRarity,
+  getRankByRarity,
+  getRanksSchema,
+  ranksPercentageToBonus,
+} from '@modules/monkeynauts/config/create-monkeynaut';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
@@ -20,103 +27,44 @@ class CreateMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    bonus_value,
-    bonus_description,
+    bonusValue,
+    bonusDescription,
 
-    breed_count,
+    breedCount,
 
     class: _class,
     rank: _rank,
 
     energy,
-    max_energy,
+    maxEnergy,
 
-    base_attributes: request_base_attributes,
+    baseAttributes: request_base_attributes,
 
     name,
 
-    player_id,
+    playerId,
   }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const classe = await rarity({
-      soldier: 40,
-      engineer: 30,
-      scientist: 30,
-    });
-
-    const rank = await rarity({
-      private: 50,
-      sergeant: 30,
-      captain: 15,
-      major: 5,
-    });
-
-    const ranksPercentage = {
-      PRIVATE: 0,
-      SERGEANT: 0.15,
-      CAPTAIN: 0.3,
-      MAJOR: 0.45,
-    };
+    const classRarity = _class || (await getClassByRarity());
+    const rankRarity = _rank || (await getRankByRarity());
 
     const baseAttributes = {
-      baseHealth:
-        request_base_attributes?.base_health || getRandomInt(250, 350),
-      baseSpeed: request_base_attributes?.base_speed || getRandomInt(20, 50),
-      basePower: request_base_attributes?.base_power || getRandomInt(20, 50),
+      baseHealth: request_base_attributes?.baseHealth || getRandomInt(250, 350),
+      baseSpeed: request_base_attributes?.baseSpeed || getRandomInt(20, 50),
+      basePower: request_base_attributes?.basePower || getRandomInt(20, 50),
       baseResistence:
-        request_base_attributes?.base_resistence || getRandomInt(20, 50),
+        request_base_attributes?.baseResistence || getRandomInt(20, 50),
     };
 
-    const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
+    const { basePower, baseResistence, baseSpeed } = baseAttributes;
 
-    const percentage = ranksPercentage[rank];
+    const percentageToBonus = ranksPercentageToBonus[rankRarity];
 
-    const attributes = {
-      health:
-        baseHealth +
-        getPercentageInt({
-          percentage,
-          value: baseHealth,
-        }),
-      speed:
-        baseSpeed +
-        getPercentageInt({
-          percentage,
-          value: baseSpeed,
-        }),
-      power:
-        basePower +
-        getPercentageInt({
-          percentage,
-          value: basePower,
-        }),
-      resistence:
-        baseResistence +
-        getPercentageInt({
-          percentage,
-          value: baseResistence,
-        }),
-    };
+    const attributes = getAttributesByBase({
+      ...baseAttributes,
+      percentage: percentageToBonus,
+    });
 
-    const ranksSchema = {
-      SOLDIER: {
-        PRIVATE: basePower * 0,
-        SERGEANT: basePower * 0.1,
-        CAPTAIN: basePower * 0.2,
-        MAJOR: basePower * 0.3,
-      },
-      ENGINEER: {
-        PRIVATE: baseResistence * 0,
-        SERGEANT: baseResistence * 0.1,
-        CAPTAIN: baseResistence * 0.2,
-        MAJOR: baseResistence * 0.3,
-      },
-      SCIENTIST: {
-        PRIVATE: baseSpeed * 0,
-        SERGEANT: baseSpeed * 0.1,
-        CAPTAIN: baseSpeed * 0.2,
-        MAJOR: baseSpeed * 0.3,
-      },
-    };
+    const ranksSchema = getRanksSchema(baseAttributes);
 
     const classesSchema = {
       SOLDIER: basePower * 0.1,
@@ -124,24 +72,24 @@ class CreateMonkeynautBusinessLogic {
       SCIENTIST: baseSpeed * 0.3,
     };
 
-    const finalRank = ranksSchema[_class || classe][_rank || rank];
-    const finalClasse = classesSchema[_class || classe];
+    const finalRankValue = ranksSchema[classRarity][rankRarity];
+    const finalClassValue = classesSchema[classRarity];
 
-    if (rank !== 'PRIVATE') {
-      switch (classe) {
+    if (rankRarity !== 'PRIVATE') {
+      switch (classRarity) {
         case 'SOLDIER':
           attributes.power = Math.floor(
-            baseAttributes.basePower + finalRank + finalClasse,
+            baseAttributes.basePower + finalRankValue + finalClassValue,
           );
           break;
         case 'ENGINEER':
           attributes.resistence = Math.floor(
-            baseAttributes.baseResistence + finalRank + finalClasse,
+            baseAttributes.baseResistence + finalRankValue + finalClassValue,
           );
           break;
         case 'SCIENTIST':
           attributes.speed = Math.floor(
-            baseAttributes.baseSpeed + finalRank + finalClasse,
+            baseAttributes.baseSpeed + finalRankValue + finalClassValue,
           );
           break;
         default:
@@ -149,32 +97,29 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
-    const randomName = faker.name.findName();
+    const _name = name || faker.name.findName();
 
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
-      baseHealth,
-      basePower,
-      baseResistence,
-      baseSpeed,
+      ...baseAttributes,
 
       ...attributes,
 
-      bonusDescription: bonus_description,
-      bonusValue: bonus_value,
-      breedCount: breed_count,
+      bonusDescription,
+      bonusValue,
+      breedCount,
 
-      class: _class || classe,
-      rank: _rank || rank,
+      class: classRarity,
+      rank: rankRarity,
 
       energy,
-      maxEnergy: max_energy,
+      maxEnergy,
 
-      name: name || randomName,
+      name: _name,
 
-      ownerId: player_id,
-      playerId: player_id,
+      ownerId: playerId,
+      playerId,
     });
 
     await this.monkeynautsRepository.create(monkeynaut);

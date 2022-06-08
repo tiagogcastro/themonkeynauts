@@ -1,46 +1,102 @@
-import { getRandomInt } from '@shared/helpers';
+import { getPercentageInt, rarity } from '@shared/helpers';
 
-const baseAttributes = {
-  baseHealth: getRandomInt(250, 350),
-  baseSpeed: getRandomInt(20, 50),
-  basePower: getRandomInt(20, 50),
-  baseResistence: getRandomInt(20, 50),
+type AttributesBase = {
+  baseHealth: number;
+  baseSpeed: number;
+  basePower: number;
+  baseResistence: number;
 };
 
-const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
+type GetAttributesByBase = AttributesBase & {
+  percentage: number;
+};
 
-const attributes = {
+const ranksPercentageToBonus = {
+  PRIVATE: 0,
+  SERGEANT: 0.15,
+  CAPTAIN: 0.3,
+  MAJOR: 0.45,
+};
+
+// Add rank and base * percentage
+function getRanksByBase(base: number) {
+  return {
+    PRIVATE: base * 0,
+    SERGEANT: base * 0.1,
+    CAPTAIN: base * 0.2,
+    MAJOR: base * 0.3,
+  };
+}
+
+async function getClassByRarity() {
+  return rarity({
+    soldier: 40,
+    engineer: 30,
+    scientist: 30,
+  });
+}
+
+async function getRankByRarity() {
+  return rarity({
+    private: 50,
+    sergeant: 30,
+    captain: 15,
+    major: 5,
+  });
+}
+
+function getAttributesByBase({
   baseHealth,
+  baseSpeed,
+  basePower,
+  baseResistence,
+
+  percentage,
+}: GetAttributesByBase) {
+  return {
+    health:
+      baseHealth +
+      getPercentageInt({
+        percentage,
+        value: baseHealth,
+      }),
+    speed:
+      baseSpeed +
+      getPercentageInt({
+        percentage,
+        value: baseSpeed,
+      }),
+    power:
+      basePower +
+      getPercentageInt({
+        percentage,
+        value: basePower,
+      }),
+    resistence:
+      baseResistence +
+      getPercentageInt({
+        percentage,
+        value: baseResistence,
+      }),
+  };
+}
+
+function getRanksSchema({
   basePower,
   baseResistence,
   baseSpeed,
-};
+}: AttributesBase) {
+  return {
+    SOLDIER: getRanksByBase(basePower),
+    ENGINEER: getRanksByBase(baseResistence),
+    SCIENTIST: getRanksByBase(baseSpeed),
+  };
+}
 
-const ranksSchema = {
-  SOLDIER: {
-    PRIVATE: basePower * 0,
-    SERGEANT: basePower * 0.1,
-    CAPTAIN: basePower * 0.2,
-    MAJOR: basePower * 0.3,
-  },
-  ENGINEER: {
-    PRIVATE: baseResistence * 0,
-    SERGEANT: baseResistence * 0.1,
-    CAPTAIN: baseResistence * 0.2,
-    MAJOR: baseResistence * 0.3,
-  },
-  SCIENTIST: {
-    PRIVATE: baseSpeed * 0,
-    SERGEANT: baseSpeed * 0.1,
-    CAPTAIN: baseSpeed * 0.2,
-    MAJOR: baseSpeed * 0.3,
-  },
+export {
+  getClassByRarity,
+  getRankByRarity,
+  ranksPercentageToBonus,
+  getAttributesByBase,
+  getRanksSchema,
 };
-
-const classesSchema = {
-  SOLDIER: basePower * 0.1,
-  ENGINEER: baseResistence * 0.2,
-  SCIENTIST: baseSpeed * 0.3,
-};
-
-export { baseAttributes, attributes };

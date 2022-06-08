@@ -28,25 +28,25 @@ monkeynautsRouter.post(
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      player_id: Joi.string().uuid(),
+      playerId: Joi.string().uuid(),
 
-      bonus_description: Joi.string(),
-      bonus_value: Joi.number(),
+      bonusDescription: Joi.string(),
+      bonusValue: Joi.number(),
 
-      base_attributes: Joi.object({
-        base_health: Joi.number().min(250).max(350),
-        base_speed: Joi.number().min(20).max(50),
-        base_power: Joi.number().min(20).max(50),
-        base_resistence: Joi.number().min(20).max(50),
+      baseAttributes: Joi.object({
+        baseHealth: Joi.number().min(250).max(350),
+        baseSpeed: Joi.number().min(20).max(50),
+        basePower: Joi.number().min(20).max(50),
+        baseResistence: Joi.number().min(20).max(50),
       }),
 
-      breed_count: Joi.number(),
+      breedCount: Joi.number(),
 
       class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
       rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
 
       energy: Joi.number(),
-      max_energy: Joi.number(),
+      maxEnergy: Joi.number(),
 
       name: Joi.string(),
     },
