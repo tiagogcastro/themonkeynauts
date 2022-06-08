@@ -1,4 +1,4 @@
-import { RefuelShipRequestDTO } from '@modules/monkeynauts/dtos/refuel-ship-request';
+import { RefuelShipRequestDTO } from '@modules/ships/dtos/refuel-ship-request';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
