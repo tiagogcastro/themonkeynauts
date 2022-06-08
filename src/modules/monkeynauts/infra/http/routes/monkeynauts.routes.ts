@@ -7,6 +7,7 @@ import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ens
 import { createMonkeynautController } from '../controllers/create-monkeynaut';
 import { listMonkeynautsController } from '../controllers/list-monkeynauts';
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';
+import { updateMonkeynautController } from '../controllers/update-monkeynaut';
 
 const monkeynautsRouter = Router();
 
@@ -54,6 +55,46 @@ monkeynautsRouter.post(
 );
 
 monkeynautsRouter.put(
+  '/update',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      owner_id: Joi.string().uuid().required(),
+      player_id: Joi.string().uuid(),
+      monkeynaut_id: Joi.string().uuid().required(),
+
+      bonus_description: Joi.string(),
+      bonus_value: Joi.number(),
+
+      breed_count: Joi.number(),
+
+      class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
+      rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
+
+      base_attributes: Joi.object({
+        base_health: Joi.number().min(250).max(350),
+        base_speed: Joi.number().min(20).max(50),
+        base_power: Joi.number().min(20).max(50),
+        base_resistence: Joi.number().min(20).max(50),
+      }),
+
+      attributes: Joi.object({
+        health: Joi.number().min(250).max(350),
+        speed: Joi.number().min(20).max(50),
+        power: Joi.number().min(20).max(50),
+        resistence: Joi.number().min(20).max(50),
+      }),
+
+      name: Joi.string(),
+
+      energy: Joi.number(),
+      max_energy: Joi.number(),
+    },
+  }),
+  (request, response) => updateMonkeynautController.handle(request, response),
+);
+
+monkeynautsRouter.put(
   '/change-player-operator',
   ensureAuthenticated,
   celebrate({
@@ -65,6 +106,20 @@ monkeynautsRouter.put(
   }),
   (request, response) =>
     changePlayerOperatorMonkeynautController.handle(request, response),
+);
+
+monkeynautsRouter.put(
+  '/update-name',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      owner_id: Joi.string().uuid().required(),
+      monkeynaut_id: Joi.string().uuid().required(),
+
+      name: Joi.string(),
+    },
+  }),
+  (request, response) => updateMonkeynautController.handle(request, response),
 );
 
 export { monkeynautsRouter };
