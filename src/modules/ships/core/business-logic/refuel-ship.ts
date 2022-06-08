@@ -21,11 +21,16 @@ class RefuelShipBusinessLogic {
       );
     }
 
+    if (!ship.canRefuelAtStation) {
+      throw new AppError('You can not refuel this ship at the station', 400);
+    }
+
     const replenished = ship.tankCapacity;
 
     const { ship: updatedShip } = new Ship(
       {
         ...ship,
+        canRefuelAtStation: false,
         fuel: replenished,
       },
       {
