@@ -10,6 +10,7 @@ import { UpdateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/update-mon
 
 import { AppError } from '@shared/errors/app-error';
 
+import { updateProps } from '@shared/helpers/update-props';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
@@ -22,58 +23,37 @@ class UpdateMonkeynautBusinessLogic {
     private playerRepository: IPlayersRepository,
   ) {}
 
-  async execute({
-    bonus_value,
-    bonus_description,
+  async execute(data: UpdateMonkeynautRequestDTO): Promise<IMonkeynaut> {
+    const { energy, maxEnergy, monkeynautId, playerId, ownerId } = data;
 
-    breed_count,
-
-    class: _class,
-    rank: _rank,
-
-    energy,
-    max_energy,
-
-    base_attributes: request_base_attributes,
-    attributes: request_attributes,
-
-    avatar,
-
-    name,
-
-    monkeynaut_id,
-
-    player_id,
-    owner_id,
-  }: UpdateMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const foundOwnerPlayer = await this.playerRepository.findById(owner_id);
+    const foundOwnerPlayer = await this.playerRepository.findById(ownerId);
 
     if (!foundOwnerPlayer) {
       throw new AppError('The owner of this monkeynaut does not exist', 404);
     }
 
     const foundMonkeynaut = await this.monkeynautsRepository.findById(
-      monkeynaut_id,
+      monkeynautId,
     );
 
     if (!foundMonkeynaut) {
       throw new AppError('Monkeynaut does not exist', 404);
     }
 
-    if (foundMonkeynaut?.ownerId !== owner_id) {
+    if (foundMonkeynaut?.ownerId !== ownerId) {
       throw new AppError(
-        'owner_id informed is different from owner_id in monkeynaut',
+        'ownerId informed is different from ownerId in monkeynaut',
         403,
       );
     }
 
-    if (player_id) {
+    if (playerId) {
       const foundOperatorPlayer = await this.playerRepository.findById(
-        player_id,
+        playerId,
       );
 
       if (!foundOperatorPlayer) {
-        throw new AppError('player_id operator informed does not exist', 404);
+        throw new AppError('playerId operator informed does not exist', 404);
       }
     }
 
@@ -81,60 +61,26 @@ class UpdateMonkeynautBusinessLogic {
       if (foundMonkeynaut.maxEnergy < energy) {
         throw new AppError(
           `Energy cannot be greater than maximum energy: ${foundMonkeynaut.maxEnergy}`,
-          404,
+          403,
         );
       }
 
-      if (max_energy) {
-        if (max_energy < energy) {
+      if (maxEnergy) {
+        if (maxEnergy < energy) {
           throw new AppError(
-            `New Energy value cannot be greater than maximum energy field: ${max_energy}`,
-            404,
+            `New Energy value cannot be greater than maximum energy field: ${maxEnergy}`,
+            403,
           );
         }
       }
     }
 
-    const monkeynautUpdated = {
-      bonusValue: bonus_value || foundMonkeynaut.bonusValue,
-      bonusDescription: bonus_description || foundMonkeynaut.bonusDescription,
-
-      breedCount: breed_count || foundMonkeynaut.breedCount,
-
-      class: _class || foundMonkeynaut.class,
-      rank: _rank || foundMonkeynaut.rank,
-
-      energy: energy || foundMonkeynaut.energy,
-      maxEnergy: max_energy || foundMonkeynaut.maxEnergy,
-
-      baseHealth:
-        request_base_attributes?.base_health || foundMonkeynaut.baseHealth,
-      basePower:
-        request_base_attributes?.base_power || foundMonkeynaut.basePower,
-      baseResistence:
-        request_base_attributes?.base_resistence ||
-        foundMonkeynaut.baseResistence,
-      baseSpeed:
-        request_base_attributes?.base_speed || foundMonkeynaut.baseSpeed,
-
-      health: request_attributes?.health || foundMonkeynaut.health,
-      power: request_attributes?.power || foundMonkeynaut.power,
-      resistence: request_attributes?.resistence || foundMonkeynaut.resistence,
-      speed: request_attributes?.speed || foundMonkeynaut.speed,
-
-      avatar: avatar || foundMonkeynaut.avatar,
-
-      name: name || foundMonkeynaut.name,
-
-      id: monkeynaut_id || foundMonkeynaut.id,
-
-      playerId: player_id || foundMonkeynaut.playerId,
-      ownerId: owner_id,
-    };
+    const updateData = updateProps(data);
 
     const { monkeynaut } = new Monkeynaut(
       {
-        ...monkeynautUpdated,
+        ...foundMonkeynaut,
+        ...updateData,
       },
       {
         id: foundMonkeynaut.id,
