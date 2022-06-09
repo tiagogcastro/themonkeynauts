@@ -1,10 +1,10 @@
 import { MonkeynautClass, MonkeynautRank } from '../domain/enums';
 
 type UpdateMonkeynautRequestDTO = {
-  bonus_description?: string;
-  bonus_value?: number;
+  bonusDescription?: string;
+  bonusValue?: number;
 
-  breed_count?: number;
+  breedCount?: number;
 
   class?: MonkeynautClass;
   rank?: MonkeynautRank;
@@ -12,13 +12,13 @@ type UpdateMonkeynautRequestDTO = {
   avatar?: string;
 
   energy?: number;
-  max_energy?: number;
+  maxEnergy?: number;
 
-  base_attributes?: {
-    base_health?: number;
-    base_power?: number;
-    base_resistence?: number;
-    base_speed?: number;
+  baseAttributes?: {
+    baseHealth?: number;
+    basePower?: number;
+    baseResistence?: number;
+    baseSpeed?: number;
   };
 
   attributes?: {
@@ -29,10 +29,10 @@ type UpdateMonkeynautRequestDTO = {
   };
 
   name?: string;
-  player_id?: string;
-  owner_id: string;
+  playerId?: string;
+  ownerId: string;
 
-  monkeynaut_id: string;
+  monkeynautId: string;
 };
 
 export { UpdateMonkeynautRequestDTO };
