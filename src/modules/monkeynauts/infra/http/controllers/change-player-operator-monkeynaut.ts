@@ -10,7 +10,7 @@ class ChangePlayerOperatorMonkeynautController {
 
     const data = request.body as ChangePlayerOperatorMonkeynautRequestDTO;
 
-    const { actual_operator_player_id } = data;
+    const { currentOperatorPlayerId } = data;
 
     const changePlayerOperatorMonkeynautBusinessLogic = container.resolve(
       ChangePlayerOperatorMonkeynautBusinessLogic,
@@ -19,7 +19,7 @@ class ChangePlayerOperatorMonkeynautController {
     const monkeynaut =
       await changePlayerOperatorMonkeynautBusinessLogic.execute({
         ...data,
-        actual_operator_player_id: actual_operator_player_id || user_logged_id,
+        currentOperatorPlayerId: currentOperatorPlayerId || user_logged_id,
       });
 
     return response.status(200).json(monkeynaut);

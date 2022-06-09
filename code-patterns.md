@@ -1,6 +1,5 @@
 # Default code sintex to project 
 
-
 variables -> camelCase 
   # example: const playerController = ''
 
@@ -13,10 +12,10 @@ functions -> camelCase
 class -> PascalCase 
   # example: class PlayerController {}
 
-objects -> snake_case 
+objects -> camelCase 
   # example: 
   # {
-  #   property_x: 'value'
+  #   propertyX: 'value'
   # }
   
 parameters -> snake_case 

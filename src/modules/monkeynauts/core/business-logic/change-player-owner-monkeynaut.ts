@@ -5,14 +5,14 @@ import {
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
 
-import { ChangePlayerOperatorMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-operator-monkeynaut-request';
+import { ChangePlayerOwnerMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-owner-monkeynaut-request';
 
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
-class ChangePlayerOperatorMonkeynautBusinessLogic {
+class ChangePlayerOwnerMonkeynautBusinessLogic {
   constructor(
     @inject('MonkeynautsRepository')
     private monkeynautsRepository: IMonkeynautsRepository,
@@ -22,24 +22,27 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    currentOperatorPlayerId,
-    newOperatorPlayerId,
+    currentOwnerPlayerId,
+    newOwerPlayerId,
     monkeynautId,
-  }: ChangePlayerOperatorMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const foundActualOperatorPlayer = await this.playerRepository.findById(
-      currentOperatorPlayerId,
+  }: ChangePlayerOwnerMonkeynautRequestDTO): Promise<IMonkeynaut> {
+    const foundCurrentOperatorPlayer = await this.playerRepository.findById(
+      currentOwnerPlayerId,
     );
 
-    if (!foundActualOperatorPlayer) {
-      throw new AppError('Actual operator player does not exist', 404);
+    if (!foundCurrentOperatorPlayer) {
+      throw new AppError(
+        'Current owner player from monkeynaut does not exist',
+        404,
+      );
     }
 
-    const foundNewOperatorPlayer = await this.playerRepository.findById(
-      newOperatorPlayerId,
+    const foundNewOwnerPlayer = await this.playerRepository.findById(
+      newOwerPlayerId,
     );
 
-    if (!foundNewOperatorPlayer) {
-      throw new AppError('New player operator does not exist', 404);
+    if (!foundNewOwnerPlayer) {
+      throw new AppError('New player owner does not exist', 404);
     }
 
     const foundMonkeynaut = await this.monkeynautsRepository.findById(
@@ -50,9 +53,9 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
       throw new AppError('Monkeynaut does not exist', 404);
     }
 
-    if (currentOperatorPlayerId !== foundMonkeynaut.playerId) {
+    if (currentOwnerPlayerId !== foundMonkeynaut.ownerId) {
       throw new AppError(
-        'Current operator reported is different from operator in monkeynaut',
+        'Current owner reported is different from owner in monkeynaut',
         403,
       );
     }
@@ -60,7 +63,7 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
     const { monkeynaut } = new Monkeynaut(
       {
         ...foundMonkeynaut,
-        playerId: foundNewOperatorPlayer.id,
+        ownerId: foundNewOwnerPlayer.id,
       },
       {
         id: foundMonkeynaut.id,
@@ -75,4 +78,4 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
   }
 }
 
-export { ChangePlayerOperatorMonkeynautBusinessLogic };
+export { ChangePlayerOwnerMonkeynautBusinessLogic };

@@ -49,6 +49,20 @@ class PrismaMonkeynautsRepository implements IMonkeynautsRepository {
     });
   }
 
+  async update(monkeynaut: IMonkeynaut): Promise<void> {
+    const { id: monkeynaut_id, ...props } = monkeynaut;
+
+    await prisma.monkeynaut.update({
+      data: {
+        id: monkeynaut_id,
+        ...props,
+      },
+      where: {
+        id: monkeynaut_id,
+      },
+    });
+  }
+
   async listAllMonkeynauts(): Promise<IMonkeynaut[]> {
     const monkeynauts = await prisma.monkeynaut.findMany();
 

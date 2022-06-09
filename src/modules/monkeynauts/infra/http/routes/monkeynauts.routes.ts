@@ -5,8 +5,13 @@ import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 
 import { createMonkeynautController } from '../controllers/create-monkeynaut';
+
 import { listMonkeynautsController } from '../controllers/list-monkeynauts';
+
+import { updateMonkeynautController } from '../controllers/update-monkeynaut';
+
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';
+import { changePlayerOwnerMonkeynautController } from '../controllers/change-player-owner-monkeynaut';
 
 const monkeynautsRouter = Router();
 
@@ -27,25 +32,26 @@ monkeynautsRouter.post(
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      player_id: Joi.string().uuid(),
+      ownerId: Joi.string().uuid().required(),
+      playerId: Joi.string().uuid(),
 
-      bonus_description: Joi.string(),
-      bonus_value: Joi.number(),
+      bonusDescription: Joi.string(),
+      bonusValue: Joi.number(),
 
-      base_attributes: Joi.object({
-        base_health: Joi.number().min(250).max(350),
-        base_speed: Joi.number().min(20).max(50),
-        base_power: Joi.number().min(20).max(50),
-        base_resistence: Joi.number().min(20).max(50),
+      baseAttributes: Joi.object({
+        baseHealth: Joi.number().min(250).max(350),
+        baseSpeed: Joi.number().min(20).max(50),
+        basePower: Joi.number().min(20).max(50),
+        baseResistence: Joi.number().min(20).max(50),
       }),
 
-      breed_count: Joi.number(),
+      breedCount: Joi.number(),
 
       class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
       rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
 
       energy: Joi.number(),
-      max_energy: Joi.number(),
+      maxEnergy: Joi.number(),
 
       name: Joi.string(),
     },
@@ -54,17 +60,85 @@ monkeynautsRouter.post(
 );
 
 monkeynautsRouter.put(
+  '/update',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      ownerId: Joi.string().uuid().required(),
+      playerId: Joi.string().uuid(),
+      monkeynautId: Joi.string().uuid().required(),
+
+      bonusDescription: Joi.string(),
+      bonusValue: Joi.number(),
+
+      baseAttributes: Joi.object({
+        baseHealth: Joi.number().min(250).max(350),
+        baseSpeed: Joi.number().min(20).max(50),
+        basePower: Joi.number().min(20).max(50),
+        baseResistence: Joi.number().min(20).max(50),
+      }),
+
+      attributes: Joi.object({
+        health: Joi.number().min(250).max(350),
+        speed: Joi.number().min(20).max(50),
+        power: Joi.number().min(20).max(50),
+        resistence: Joi.number().min(20).max(50),
+      }),
+
+      breedCount: Joi.number(),
+
+      class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
+      rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
+
+      energy: Joi.number(),
+      maxEnergy: Joi.number(),
+
+      name: Joi.string(),
+    },
+  }),
+  (request, response) => updateMonkeynautController.handle(request, response),
+);
+
+monkeynautsRouter.put(
   '/change-player-operator',
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      actual_operator_player_id: Joi.string().uuid(),
-      new_operator_player_id: Joi.string().uuid(),
-      monkeynaut_id: Joi.string().uuid().required(),
+      currentOperatorPlayerId: Joi.string().uuid().required(),
+      newOperatorPlayerId: Joi.string().uuid().required(),
+      monkeynautId: Joi.string().uuid().required(),
     },
   }),
   (request, response) =>
     changePlayerOperatorMonkeynautController.handle(request, response),
+);
+
+monkeynautsRouter.put(
+  '/change-player-owner',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      currentOwnerPlayerId: Joi.string().uuid().required(),
+      newOwnerPlayerId: Joi.string().uuid().required(),
+      monkeynautId: Joi.string().uuid().required(),
+    },
+  }),
+  (request, response) =>
+    changePlayerOwnerMonkeynautController.handle(request, response),
+);
+
+monkeynautsRouter.put(
+  '/update-name',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      owner_id: Joi.string().uuid().required(),
+      monkeynaut_id: Joi.string().uuid().required(),
+
+      name: Joi.string(),
+    },
+  }),
+  (request, response) => updateMonkeynautController.handle(request, response),
 );
 
 export { monkeynautsRouter };

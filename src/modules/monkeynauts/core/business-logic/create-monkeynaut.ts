@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { faker } from '@faker-js/faker';
 
-import { getPercentageInt, getRandomInt, rarity } from '@shared/helpers';
+import { getRandomInt } from '@shared/helpers';
 
 import {
   IMonkeynaut,
@@ -10,6 +10,19 @@ import {
 
 import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-monkeynaut-request';
 
+import {
+  getAttributesByBase,
+  getClassByRarity,
+  getClassSchema,
+  getRankByRarity,
+  getRanksSchema,
+  ranksPercentageToBonus,
+} from '@modules/monkeynauts/config/create-monkeynaut';
+
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+
+import { AppError } from '@shared/errors/app-error';
+
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
@@ -17,131 +30,103 @@ class CreateMonkeynautBusinessLogic {
   constructor(
     @inject('MonkeynautsRepository')
     private monkeynautsRepository: IMonkeynautsRepository,
+
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
   ) {}
 
   async execute({
-    bonus_value,
-    bonus_description,
+    bonusValue,
+    bonusDescription,
 
-    breed_count,
+    breedCount,
 
     class: _class,
     rank: _rank,
 
     energy,
-    max_energy,
+    maxEnergy,
 
-    base_attributes: request_base_attributes,
+    baseAttributes: request_base_attributes,
 
     name,
 
-    player_id,
+    playerId,
+    ownerId,
   }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
-    const classe = await rarity({
-      soldier: 40,
-      engineer: 30,
-      scientist: 30,
-    });
+    const foundOwnerMonkeynautPlayer = await this.playersRepository.findById(
+      ownerId,
+    );
 
-    const rank = await rarity({
-      private: 50,
-      sergeant: 30,
-      captain: 15,
-      major: 5,
-    });
+    if (!foundOwnerMonkeynautPlayer) {
+      throw new AppError('ownerId field informed does not exist', 404);
+    }
+    if (playerId) {
+      const foundPlayer = await this.playersRepository.findById(playerId);
 
-    const ranksPercentage = {
-      PRIVATE: 0,
-      SERGEANT: 0.15,
-      CAPTAIN: 0.3,
-      MAJOR: 0.45,
+      if (!foundPlayer) {
+        throw new AppError('playerId field informed does not exist', 404);
+      }
+    }
+
+    const classRarity = _class || (await getClassByRarity());
+    const rankRarity = _rank || (await getRankByRarity());
+
+    const maxEnergyBasedOnRank = {
+      PRIVATE: 2,
+      SERGEANT: 4,
+      CAPTAIN: 6,
+      MAJOR: 8,
     };
+
+    const maxEnergyBase = maxEnergy || maxEnergyBasedOnRank[rankRarity];
+    const initialEnergyValue = energy || maxEnergyBase;
+
+    if (energy) {
+      if (maxEnergyBase < energy) {
+        throw new AppError(
+          `Energy value(${energy}) cannot be greater than maximum energy field: ${maxEnergyBase}`,
+          403,
+        );
+      }
+    }
 
     const baseAttributes = {
-      baseHealth:
-        request_base_attributes?.base_health || getRandomInt(250, 350),
-      baseSpeed: request_base_attributes?.base_speed || getRandomInt(20, 50),
-      basePower: request_base_attributes?.base_power || getRandomInt(20, 50),
+      baseHealth: request_base_attributes?.baseHealth || getRandomInt(250, 350),
+      baseSpeed: request_base_attributes?.baseSpeed || getRandomInt(20, 50),
+      basePower: request_base_attributes?.basePower || getRandomInt(20, 50),
       baseResistence:
-        request_base_attributes?.base_resistence || getRandomInt(20, 50),
+        request_base_attributes?.baseResistence || getRandomInt(20, 50),
     };
 
-    const { baseHealth, basePower, baseResistence, baseSpeed } = baseAttributes;
+    const percentageToBonus = ranksPercentageToBonus[rankRarity];
 
-    const percentage = ranksPercentage[rank];
+    const attributes = getAttributesByBase({
+      ...baseAttributes,
+      percentage: percentageToBonus,
+    });
 
-    const attributes = {
-      health:
-        baseHealth +
-        getPercentageInt({
-          percentage,
-          value: baseHealth,
-        }),
-      speed:
-        baseSpeed +
-        getPercentageInt({
-          percentage,
-          value: baseSpeed,
-        }),
-      power:
-        basePower +
-        getPercentageInt({
-          percentage,
-          value: basePower,
-        }),
-      resistence:
-        baseResistence +
-        getPercentageInt({
-          percentage,
-          value: baseResistence,
-        }),
-    };
+    const ranksSchema = getRanksSchema(baseAttributes);
+    const classSchema = getClassSchema(baseAttributes);
 
-    const ranksSchema = {
-      SOLDIER: {
-        PRIVATE: basePower * 0,
-        SERGEANT: basePower * 0.1,
-        CAPTAIN: basePower * 0.2,
-        MAJOR: basePower * 0.3,
-      },
-      ENGINEER: {
-        PRIVATE: baseResistence * 0,
-        SERGEANT: baseResistence * 0.1,
-        CAPTAIN: baseResistence * 0.2,
-        MAJOR: baseResistence * 0.3,
-      },
-      SCIENTIST: {
-        PRIVATE: baseSpeed * 0,
-        SERGEANT: baseSpeed * 0.1,
-        CAPTAIN: baseSpeed * 0.2,
-        MAJOR: baseSpeed * 0.3,
-      },
-    };
+    const finalRankValue = ranksSchema[classRarity][rankRarity];
+    const finalClassValue = classSchema[classRarity];
 
-    const classesSchema = {
-      SOLDIER: basePower * 0.1,
-      ENGINEER: baseResistence * 0.2,
-      SCIENTIST: baseSpeed * 0.3,
-    };
-
-    const finalRank = ranksSchema[_class || classe][_rank || rank];
-    const finalClasse = classesSchema[_class || classe];
-
-    if (rank !== 'PRIVATE') {
-      switch (classe) {
+    if (rankRarity !== 'PRIVATE') {
+      switch (classRarity) {
         case 'SOLDIER':
           attributes.power = Math.floor(
-            baseAttributes.basePower + finalRank + finalClasse,
+            baseAttributes.basePower + finalRankValue + finalClassValue,
           );
           break;
         case 'ENGINEER':
           attributes.resistence = Math.floor(
-            baseAttributes.baseResistence + finalRank + finalClasse,
+            baseAttributes.baseResistence + finalRankValue + finalClassValue,
           );
           break;
         case 'SCIENTIST':
           attributes.speed = Math.floor(
-            baseAttributes.baseSpeed + finalRank + finalClasse,
+            baseAttributes.baseSpeed + finalRankValue + finalClassValue,
           );
           break;
         default:
@@ -149,32 +134,43 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
-    const randomName = faker.name.findName();
+    const _name = name || faker.name.findName();
+
+    const bonusDescriptionBaseadClass = {
+      SOLDIER: 'Bounty Hunting Rewards',
+      ENGINEER: 'Mining Rewards',
+      SCIENTIST: 'Exploration Rewards',
+    };
+
+    const bonusValueBaseadRank = {
+      PRIVATE: 0,
+      SERGEANT: 25,
+      CAPTAIN: 50,
+      MAJOR: 75,
+    };
 
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
-      baseHealth,
-      basePower,
-      baseResistence,
-      baseSpeed,
+      ...baseAttributes,
 
       ...attributes,
 
-      bonusDescription: bonus_description,
-      bonusValue: bonus_value,
-      breedCount: breed_count,
+      bonusDescription:
+        bonusDescription || bonusDescriptionBaseadClass[classRarity],
+      bonusValue: bonusValue || bonusValueBaseadRank[rankRarity],
+      breedCount: breedCount || 0,
 
-      class: _class || classe,
-      rank: _rank || rank,
+      class: classRarity,
+      rank: rankRarity,
 
-      energy,
-      maxEnergy: max_energy,
+      energy: initialEnergyValue,
+      maxEnergy: maxEnergyBase,
 
-      name: name || randomName,
+      name: _name,
 
-      ownerId: player_id,
-      playerId: player_id,
+      ownerId,
+      playerId: playerId || ownerId,
     });
 
     await this.monkeynautsRepository.create(monkeynaut);
