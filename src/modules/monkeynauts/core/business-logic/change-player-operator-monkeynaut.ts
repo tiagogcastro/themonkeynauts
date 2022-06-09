@@ -22,12 +22,12 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    actual_operator_player_id,
-    new_operator_player_id,
-    monkeynaut_id,
+    currentOperatorPlayerId,
+    newOperatorPlayerId,
+    monkeynautId,
   }: ChangePlayerOperatorMonkeynautRequestDTO): Promise<IMonkeynaut> {
     const foundActualOperatorPlayer = await this.playerRepository.findById(
-      actual_operator_player_id,
+      currentOperatorPlayerId,
     );
 
     if (!foundActualOperatorPlayer) {
@@ -35,7 +35,7 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
     }
 
     const foundNewOperatorPlayer = await this.playerRepository.findById(
-      new_operator_player_id,
+      newOperatorPlayerId,
     );
 
     if (!foundNewOperatorPlayer) {
@@ -43,11 +43,18 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
     }
 
     const foundMonkeynaut = await this.monkeynautsRepository.findById(
-      monkeynaut_id,
+      monkeynautId,
     );
 
     if (!foundMonkeynaut) {
       throw new AppError('Monkeynaut does not exist', 404);
+    }
+
+    if (currentOperatorPlayerId !== foundMonkeynaut.playerId) {
+      throw new AppError(
+        'Current operator reported is different from operator in monkeynaut',
+        403,
+      );
     }
 
     const { monkeynaut } = new Monkeynaut(
