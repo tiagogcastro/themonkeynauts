@@ -13,10 +13,16 @@ import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-mon
 import {
   getAttributesByBase,
   getClassByRarity,
+  getClassSchema,
   getRankByRarity,
   getRanksSchema,
   ranksPercentageToBonus,
 } from '@modules/monkeynauts/config/create-monkeynaut';
+
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+
+import { AppError } from '@shared/errors/app-error';
+
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
@@ -24,6 +30,9 @@ class CreateMonkeynautBusinessLogic {
   constructor(
     @inject('MonkeynautsRepository')
     private monkeynautsRepository: IMonkeynautsRepository,
+
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
   ) {}
 
   async execute({
@@ -43,9 +52,44 @@ class CreateMonkeynautBusinessLogic {
     name,
 
     playerId,
+    ownerId,
   }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
+    const foundOwnerMonkeynautPlayer = await this.playersRepository.findById(
+      ownerId,
+    );
+
+    if (!foundOwnerMonkeynautPlayer) {
+      throw new AppError('ownerId field informed does not exist', 404);
+    }
+    if (playerId) {
+      const foundPlayer = await this.playersRepository.findById(playerId);
+
+      if (!foundPlayer) {
+        throw new AppError('playerId field informed does not exist', 404);
+      }
+    }
+
     const classRarity = _class || (await getClassByRarity());
     const rankRarity = _rank || (await getRankByRarity());
+
+    const maxEnergyBasedOnRank = {
+      PRIVATE: 2,
+      SERGEANT: 4,
+      CAPTAIN: 6,
+      MAJOR: 8,
+    };
+
+    const maxEnergyBase = maxEnergy || maxEnergyBasedOnRank[rankRarity];
+    const initialEnergyValue = energy || maxEnergyBase;
+
+    if (energy) {
+      if (maxEnergyBase < energy) {
+        throw new AppError(
+          `Energy value(${energy}) cannot be greater than maximum energy field: ${maxEnergyBase}`,
+          403,
+        );
+      }
+    }
 
     const baseAttributes = {
       baseHealth: request_base_attributes?.baseHealth || getRandomInt(250, 350),
@@ -55,8 +99,6 @@ class CreateMonkeynautBusinessLogic {
         request_base_attributes?.baseResistence || getRandomInt(20, 50),
     };
 
-    const { basePower, baseResistence, baseSpeed } = baseAttributes;
-
     const percentageToBonus = ranksPercentageToBonus[rankRarity];
 
     const attributes = getAttributesByBase({
@@ -65,15 +107,10 @@ class CreateMonkeynautBusinessLogic {
     });
 
     const ranksSchema = getRanksSchema(baseAttributes);
-
-    const classesSchema = {
-      SOLDIER: basePower * 0.1,
-      ENGINEER: baseResistence * 0.2,
-      SCIENTIST: baseSpeed * 0.3,
-    };
+    const classSchema = getClassSchema(baseAttributes);
 
     const finalRankValue = ranksSchema[classRarity][rankRarity];
-    const finalClassValue = classesSchema[classRarity];
+    const finalClassValue = classSchema[classRarity];
 
     if (rankRarity !== 'PRIVATE') {
       switch (classRarity) {
@@ -99,6 +136,19 @@ class CreateMonkeynautBusinessLogic {
 
     const _name = name || faker.name.findName();
 
+    const bonusDescriptionBaseadClass = {
+      SOLDIER: 'Bounty Hunting Rewards',
+      ENGINEER: 'Mining Rewards',
+      SCIENTIST: 'Exploration Rewards',
+    };
+
+    const bonusValueBaseadRank = {
+      PRIVATE: 0,
+      SERGEANT: 25,
+      CAPTAIN: 50,
+      MAJOR: 75,
+    };
+
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
 
@@ -106,20 +156,21 @@ class CreateMonkeynautBusinessLogic {
 
       ...attributes,
 
-      bonusDescription,
-      bonusValue,
-      breedCount,
+      bonusDescription:
+        bonusDescription || bonusDescriptionBaseadClass[classRarity],
+      bonusValue: bonusValue || bonusValueBaseadRank[rankRarity],
+      breedCount: breedCount || 0,
 
       class: classRarity,
       rank: rankRarity,
 
-      energy,
-      maxEnergy,
+      energy: initialEnergyValue,
+      maxEnergy: maxEnergyBase,
 
       name: _name,
 
-      ownerId: playerId,
-      playerId,
+      ownerId,
+      playerId: playerId || ownerId,
     });
 
     await this.monkeynautsRepository.create(monkeynaut);
