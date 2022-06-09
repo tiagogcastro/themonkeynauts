@@ -16,7 +16,8 @@ model Log {
   id        String   @id @db.Uuid()
   playerId  String?  @db.Uuid()
   player    Player?  @relation(fields: [playerId], references: [id], onDelete: SetNull)
-  content   String
+  action    String
+  txHash    String?  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -76,14 +77,14 @@ model Monkeynaut {
   playerId String? @db.Uuid()
   player   Player? @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
 
-  name       String
-  class      String
-  rank       String
-  bonusValue Int
-  bonusDescription      String
-  maxEnergy  Int
-  energy     Int
-  avatar     String?
+  name             String
+  class            String
+  rank             String
+  bonusValue       Int
+  bonusDescription String
+  maxEnergy        Int
+  energy           Int
+  avatar           String?
 
   basePower      Int
   baseSpeed      Int
@@ -199,4 +200,71 @@ model PrivateSale {
   updatedAt DateTime @updatedAt
 
   @@map("private_sales")
+}
+
+model SaleEvent {
+  id String @id @db.Uuid()
+
+  crypto         String
+  price          Float
+  startDate      DateTime
+  endDate        DateTime
+  quantity       Int
+  totalUnitsSold Int
+  active         Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  monkeynautSale MonkeynautSale?
+  shipSale       ShipSale?
+  packSale       PackSale?
+
+  @@map("sale_events")
+}
+
+model MonkeynautSale {
+  id String @id @db.Uuid()
+
+  private  Float
+  sargeant Float
+  captain  Float
+  major    Float
+
+  saleEventId String? @unique @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
+}
+
+model ShipSale {
+  id String @id @db.Uuid()
+
+  b Float
+  a Float
+  s Float
+
+  saleEventId String? @unique @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
+}
+
+model PackSale {
+  id String @id @db.Uuid()
+
+  basic    Float
+  advanced Float
+  expert   Float
+
+  saleEventId String? @unique @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
 }

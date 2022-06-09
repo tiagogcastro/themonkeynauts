@@ -4,7 +4,8 @@ import crypto from 'node:crypto';
 
 type LogPropsOmittedCommons = {
   playerId: Maybe<string>;
-  content: string;
+  txHash: Maybe<string>;
+  action: string;
 };
 
 type LogProps = LogPropsOmittedCommons & Commons;
@@ -28,7 +29,8 @@ export class Log implements ILog {
     return {
       id: this._id,
       playerId: this._props.playerId,
-      content: this._props.content,
+      action: this._props.action,
+      txHash: this._props.txHash,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     } as ILog;
@@ -49,8 +51,12 @@ export class Log implements ILog {
     return this._props.playerId;
   }
 
-  get content(): string {
-    return this._props.content;
+  get action(): string {
+    return this._props.action;
+  }
+
+  get txHash(): Maybe<string> {
+    return this._props.txHash;
   }
 
   get updatedAt(): Date {
