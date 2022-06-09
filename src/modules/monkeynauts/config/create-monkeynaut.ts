@@ -13,9 +13,9 @@ type GetAttributesByBase = AttributesBase & {
 
 const ranksPercentageToBonus = {
   PRIVATE: 0,
-  SERGEANT: 0.15,
-  CAPTAIN: 0.3,
-  MAJOR: 0.45,
+  SERGEANT: 0.25,
+  CAPTAIN: 0.5,
+  MAJOR: 0.75,
 };
 
 // Add rank and base * percentage
@@ -25,6 +25,30 @@ function getRanksByBase(base: number) {
     SERGEANT: base * 0.1,
     CAPTAIN: base * 0.2,
     MAJOR: base * 0.3,
+  };
+}
+
+function getRanksSchema({
+  basePower,
+  baseResistence,
+  baseSpeed,
+}: AttributesBase) {
+  return {
+    SOLDIER: getRanksByBase(basePower),
+    ENGINEER: getRanksByBase(baseResistence),
+    SCIENTIST: getRanksByBase(baseSpeed),
+  };
+}
+
+function getClassSchema({
+  basePower,
+  baseResistence,
+  baseSpeed,
+}: AttributesBase) {
+  return {
+    SOLDIER: basePower * 0.1,
+    ENGINEER: baseResistence * 0.2,
+    SCIENTIST: baseSpeed * 0.3,
   };
 }
 
@@ -81,22 +105,11 @@ function getAttributesByBase({
   };
 }
 
-function getRanksSchema({
-  basePower,
-  baseResistence,
-  baseSpeed,
-}: AttributesBase) {
-  return {
-    SOLDIER: getRanksByBase(basePower),
-    ENGINEER: getRanksByBase(baseResistence),
-    SCIENTIST: getRanksByBase(baseSpeed),
-  };
-}
-
 export {
   getClassByRarity,
   getRankByRarity,
   ranksPercentageToBonus,
   getAttributesByBase,
   getRanksSchema,
+  getClassSchema,
 };
