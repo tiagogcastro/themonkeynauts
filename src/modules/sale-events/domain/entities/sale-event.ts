@@ -1,8 +1,9 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
+import { SaleEventCrypto } from '../enums/sale-event-crypto';
 
 type SaleEventPropsOmittedCommons = {
-  crypto: string;
+  crypto: SaleEventCrypto;
   price: number;
   startDate: Date;
   endDate: Date;
@@ -54,7 +55,7 @@ export class SaleEvent implements ISaleEvent {
     return this._id;
   }
 
-  get crypto(): string {
+  get crypto(): SaleEventCrypto {
     return this._props.crypto;
   }
 
