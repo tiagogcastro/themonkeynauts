@@ -9,9 +9,9 @@ class ListShipsBusinessLogic {
     private shipsRepository: IShipsRepository,
   ) {}
 
-  async execute(player_id?: string): Promise<IShip[]> {
-    if (player_id) {
-      return this.shipsRepository.listAllShipsFromPlayer(player_id);
+  async execute(playerId?: string): Promise<IShip[]> {
+    if (playerId) {
+      return this.shipsRepository.listAllShipsFromPlayer(playerId);
     }
 
     const ships = await this.shipsRepository.listAllShips();

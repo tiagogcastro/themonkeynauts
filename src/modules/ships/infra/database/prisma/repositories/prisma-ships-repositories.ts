@@ -22,10 +22,10 @@ class PrismaShipsRepository implements IShipsRepository {
     });
   }
 
-  async findById(ship_id: string): AsyncMaybe<IShip> {
+  async findById(shipId: string): AsyncMaybe<IShip> {
     const ship = await prisma.ship.findUnique({
       where: {
-        id: ship_id,
+        id: shipId,
       },
     });
 
@@ -37,7 +37,7 @@ class PrismaShipsRepository implements IShipsRepository {
   }
 
   async save(ship: Ship): Promise<void> {
-    const { id: ship_id, ...props } = ship;
+    const { id: shipId, ...props } = ship;
 
     await prisma.ship.update({
       data: {
@@ -45,25 +45,25 @@ class PrismaShipsRepository implements IShipsRepository {
         updatedAt: new Date(),
       },
       where: {
-        id: ship_id,
+        id: shipId,
       },
     });
   }
 
-  async destroy(ship_id: string): Promise<void> {
+  async destroy(shipId: string): Promise<void> {
     await prisma.ship.delete({
       where: {
-        id: ship_id,
+        id: shipId,
       },
     });
   }
 
   async create(ship: IShip): Promise<void> {
-    const { id: ship_id, ...props } = ship;
+    const { id: shipId, ...props } = ship;
 
     await prisma.ship.create({
       data: {
-        id: ship_id,
+        id: shipId,
         ...props,
       },
     });
@@ -75,10 +75,10 @@ class PrismaShipsRepository implements IShipsRepository {
     return ships.map(parseShip);
   }
 
-  async listAllShipsFromPlayer(player_id: string): Promise<IShip[]> {
+  async listAllShipsFromPlayer(playerId: string): Promise<IShip[]> {
     const ships = await prisma.ship.findMany({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 

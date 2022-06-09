@@ -1,8 +1,6 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
 
-type Player = IPlayer & {
-  password: undefined;
-};
+type Player = Omit<IPlayer, 'password'>;
 
 type Instance<T extends IPlayer> = T extends IPlayer ? Player : never;
 
@@ -13,10 +11,11 @@ export function instanceToInstance<T extends IPlayer>(
   instance: T,
 ): Instance<T> {
   const formattedInstance = {
-    player: {
-      ...(instance as IPlayer),
-      password: undefined,
-    } as Instance<T>,
+    player: (() => {
+      const { password: _, ...props } = instance;
+
+      return props as Player;
+    })(),
   }[instance_type];
 
   return formattedInstance as Instance<T>;

@@ -38,7 +38,7 @@ class ShowPlayerBNBBalanceBusinessLogic {
         player_id,
       );
 
-    const bnbAmountLimit = balanceConfig.bnb_amount_max;
+    const bnbAmountLimit = balanceConfig.bnbAmountMax;
 
     const bnbAmountTotal = privateSales.reduce(
       (accumulator, currentPrivateSale) =>

@@ -1,5 +1,5 @@
 type ConsumeFuelRequestDTO = {
-  ship_id: string;
+  shipId: string;
   action: 'TRAVEL' | 'BOUNTY_HUNT';
 };
 

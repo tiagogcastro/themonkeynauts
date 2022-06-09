@@ -49,19 +49,8 @@ class CreatePrivateSaleBusinessLogic {
       );
     }
 
-    const { privateSale } = new PrivateSale({
-      playerId: player.id,
-      txHash,
-      bnbAmount,
-      wallet,
-    });
-
     const privateSales =
-      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(
-        player.id,
-      );
-
-    const bnbAmountLimit = balanceConfig.bnb_amount_max;
+      await this.privateSalesRepository.listAllPrivateSales();
 
     const bnbAmountTotal = privateSales.reduce(
       (accumulator, currentPrivateSale) =>
@@ -69,7 +58,27 @@ class CreatePrivateSaleBusinessLogic {
       0,
     );
 
-    if (bnbAmountTotal + bnbAmount > bnbAmountLimit) {
+    if (bnbAmountTotal + bnbAmount > balanceConfig.bnbAmountTotalMax) {
+      throw new AppError(
+        `The value entered plus transfers already made exceeds the maximum value of ${balanceConfig.bnbAmountTotalMax} BNB`,
+        401,
+      );
+    }
+
+    const privateSalesFromPlayer =
+      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(
+        player.id,
+      );
+
+    const bnbAmountLimit = balanceConfig.bnbAmountMax;
+
+    const bnbAmountFromPlayerTotal = privateSalesFromPlayer.reduce(
+      (accumulator, currentPrivateSale) =>
+        accumulator + currentPrivateSale.bnbAmount,
+      0,
+    );
+
+    if (bnbAmountFromPlayerTotal + bnbAmount > bnbAmountLimit) {
       throw new AppError(
         `The player has reached the limit of ${bnbAmountLimit} BNB`,
         400,
@@ -79,7 +88,14 @@ class CreatePrivateSaleBusinessLogic {
     await this.blockchainProvider.confirmTransaction({
       amount: bnbAmount,
       from: wallet,
-      tx_hash: txHash,
+      txHash,
+    });
+
+    const { privateSale } = new PrivateSale({
+      playerId: player.id,
+      txHash,
+      bnbAmount,
+      wallet,
     });
 
     await this.privateSalesRepository.create(privateSale);

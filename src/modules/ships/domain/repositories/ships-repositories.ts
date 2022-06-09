@@ -6,9 +6,9 @@ interface IShipsRepository {
   create(ship: IShip): Promise<void>;
   save(ship: IShip): Promise<void>;
   saveMany(data: ShipsSaveManyDTO): Promise<void>;
-  destroy(ship_id: string): Promise<void>;
-  findById(ship_id: string): AsyncMaybe<IShip>;
+  destroy(shipId: string): Promise<void>;
+  findById(shipId: string): AsyncMaybe<IShip>;
   listAllShips(): Promise<IShip[]>;
-  listAllShipsFromPlayer(player_id: string): Promise<IShip[]>;
+  listAllShipsFromPlayer(playerId: string): Promise<IShip[]>;
 }
 export { IShipsRepository };

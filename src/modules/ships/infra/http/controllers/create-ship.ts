@@ -11,7 +11,7 @@ class CreateShipController {
 
     const ship = await createShipBusinessLogic.execute(data);
 
-    return response.status(200).json(ship);
+    return response.status(201).json(ship);
   }
 }
 
