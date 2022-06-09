@@ -10,9 +10,9 @@ type UpdatePlayerRequestDTO = {
   nickname: string;
   role?: PlayerRole;
 
-  old_password?: string;
-  new_password?: string;
-  new_password_confirmation?: string;
+  oldPassword?: string;
+  newPassword?: string;
+  newPasswordConfirmation?: string;
 };
 
 type Response = {
@@ -32,9 +32,9 @@ class UpdatePlayerBusinessLogic {
   async execute({
     player_id,
     nickname,
-    new_password,
-    new_password_confirmation,
-    old_password,
+    newPassword,
+    newPasswordConfirmation,
+    oldPassword,
     role,
   }: UpdatePlayerRequestDTO): Promise<Response> {
     const player = await this.playersRepository.findById(player_id);
@@ -60,17 +60,17 @@ class UpdatePlayerBusinessLogic {
       player.role = role;
     }
 
-    if (old_password) {
-      if (!new_password_confirmation || !new_password) {
+    if (oldPassword) {
+      if (!newPasswordConfirmation || !newPassword) {
         throw new AppError('New password and confirmation is required', 403);
       }
 
-      if (new_password !== new_password_confirmation) {
+      if (newPassword !== newPasswordConfirmation) {
         throw new AppError('New password and confirmation not matched', 403);
       }
 
       const oldPasswordMatched = this.hashProvider.compareHashSync(
-        old_password,
+        oldPassword,
         player.password,
       );
 
@@ -79,7 +79,7 @@ class UpdatePlayerBusinessLogic {
       }
 
       const generateNewPasswordHashed = await this.hashProvider.generateHash(
-        new_password,
+        newPassword,
       );
 
       player.password = generateNewPasswordHashed;

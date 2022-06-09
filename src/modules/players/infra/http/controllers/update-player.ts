@@ -9,9 +9,9 @@ class UpdatePlayerController {
 
     const {
       nickname,
-      new_password,
-      new_password_confirmation,
-      old_password,
+      newPassword,
+      newPasswordConfirmation,
+      oldPassword,
       role,
     } = request.body;
 
@@ -22,9 +22,9 @@ class UpdatePlayerController {
     const { player } = await updatePlayerBusinessLogic.execute({
       player_id,
       nickname,
-      new_password,
-      new_password_confirmation,
-      old_password,
+      newPassword,
+      newPasswordConfirmation,
+      oldPassword,
       role,
     });
 
