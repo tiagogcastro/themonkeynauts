@@ -9,5 +9,6 @@ interface IMonkeynautsRepository {
   listAllMonkeynauts(): Promise<IMonkeynaut[]>;
   listAllMonkeynautsFromPlayer(player_id: string): Promise<IMonkeynaut[]>;
   findById(monkeynaut_id: string): AsyncMaybe<IMonkeynaut>;
+  findMany(): AsyncMaybe<IMonkeynaut[]>;
 }
 export { IMonkeynautsRepository };

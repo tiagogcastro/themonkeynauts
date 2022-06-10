@@ -94,6 +94,10 @@ class PrismaMonkeynautsRepository implements IMonkeynautsRepository {
 
     return parseMonkeynaut(monkeynaut);
   }
+
+  async findMany(): AsyncMaybe<IMonkeynaut[]> {
+    return prisma.monkeynaut.findMany();
+  }
 }
 
 export { PrismaMonkeynautsRepository };
