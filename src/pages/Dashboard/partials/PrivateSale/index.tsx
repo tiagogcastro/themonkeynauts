@@ -33,25 +33,11 @@ export function PrivateSale() {
   const isButtonLoading = useBoolean(false);
 
   async function getWalletBalance() {
-    try {
-      const response = await baseApi.get<WalletBallance>('/sales/show-player-bnb-balance');
+    const response = await baseApi.get<WalletBallance>('/sales/show-player-bnb-balance');
 
-      const data = response.data;
+    const data = response.data;
 
-      setWalletBalance(data)
-    } catch (error: any) {
-      toast(error.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-    }
+    setWalletBalance(data)
   }
 
   useEffect(() => {
