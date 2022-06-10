@@ -19,3 +19,7 @@
 ```
 4. yarn dev:server
 ```
+
+**Run all cmd**
+ubuntu: sh ./scripts/init.sh 
+bash: bash ./scripts/init.sh 
