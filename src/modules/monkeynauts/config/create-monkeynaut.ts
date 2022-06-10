@@ -13,9 +13,9 @@ type GetAttributesByBase = AttributesBase & {
 
 const ranksPercentageToBonus = {
   PRIVATE: 0,
-  SERGEANT: 0.25,
-  CAPTAIN: 0.5,
-  MAJOR: 0.75,
+  SERGEANT: 25,
+  CAPTAIN: 50,
+  MAJOR: 75,
 };
 
 // Add rank and base * percentage
