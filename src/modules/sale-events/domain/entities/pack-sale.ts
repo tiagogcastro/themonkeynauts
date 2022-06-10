@@ -1,10 +1,17 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
+import { SaleEventCrypto } from '../enums/sale-event-crypto';
 
 type PackSalePropsOmittedCommons = {
-  asic: number;
+  basic: number;
   advanced: number;
   expert: number;
+  crypto: SaleEventCrypto;
+  price: number;
+  startDate: Date;
+  endDate: Date;
+  quantity: number;
+  totalUnitsSold: number;
 };
 
 type PackSaleProps = PackSalePropsOmittedCommons & Commons;
@@ -27,12 +34,18 @@ export class PackSale implements IPackSale {
   get packSale(): IPackSale {
     return {
       id: this._id,
-      asic: this._props.asic,
+      basic: this._props.basic,
       advanced: this._props.advanced,
       expert: this._props.expert,
+      crypto: this._props.crypto,
+      price: this._props.price,
+      startDate: this._props.startDate,
+      endDate: this._props.endDate,
+      quantity: this._props.quantity,
+      totalUnitsSold: this._props.totalUnitsSold,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
-    } as IPackSale;
+    };
   }
 
   set assign(props: Partial<PackSaleProps>) {
@@ -46,8 +59,8 @@ export class PackSale implements IPackSale {
     return this._id;
   }
 
-  get asic(): number {
-    return this._props.asic;
+  get basic(): number {
+    return this._props.basic;
   }
 
   get advanced(): number {
@@ -56,6 +69,30 @@ export class PackSale implements IPackSale {
 
   get expert(): number {
     return this._props.expert;
+  }
+
+  get crypto(): SaleEventCrypto {
+    return this._props.crypto;
+  }
+
+  get price(): number {
+    return this._props.price;
+  }
+
+  get startDate(): Date {
+    return this._props.startDate;
+  }
+
+  get endDate(): Date {
+    return this._props.endDate;
+  }
+
+  get quantity(): number {
+    return this._props.quantity;
+  }
+
+  get totalUnitsSold(): number {
+    return this._props.totalUnitsSold;
   }
 
   get updatedAt(): Date {

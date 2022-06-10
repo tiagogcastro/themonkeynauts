@@ -36,6 +36,21 @@ class DateFnsDateProvider implements IDateProvider {
     return isAfter(_date, _dateToCompare);
   }
 
+  isBefore(date: number | string | Date, dateToCompare: Date): boolean {
+    let _date = date;
+    let _dateToCompare = dateToCompare;
+
+    if (typeof _date === 'string') {
+      _date = parseISO(_date);
+    }
+
+    if (typeof _dateToCompare === 'string') {
+      _dateToCompare = parseISO(_dateToCompare);
+    }
+
+    return isAfter(_date, _dateToCompare);
+  }
+
   addHours(date: number | Date, amount: number): Date {
     return addHours(date, amount);
   }

@@ -1,4 +1,4 @@
-import { getRandomInt } from './get-random-int';
+import { getRandomInt } from './get-random';
 import { rarity } from './rarity';
 
 type SpacePlanetNames =

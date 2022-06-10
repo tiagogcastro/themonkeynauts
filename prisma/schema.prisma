@@ -12,6 +12,12 @@ enum PlayerRole {
   DEFAULT
 }
 
+enum SaleEventType {
+  MONKEYNAUT
+  SHIP
+  PACK
+}
+
 model Log {
   id        String   @id @db.Uuid()
   playerId  String?  @db.Uuid()
@@ -205,13 +211,9 @@ model PrivateSale {
 model SaleEvent {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime
-  quantity       Int
-  totalUnitsSold Int
-  active         Boolean  @default(true)
+  active Boolean @default(true)
+
+  type SaleEventType
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -225,6 +227,13 @@ model SaleEvent {
 
 model MonkeynautSale {
   id String @id @db.Uuid()
+
+  crypto         String
+  price          Float
+  startDate      DateTime
+  endDate        DateTime
+  quantity       Int
+  totalUnitsSold Int
 
   private  Float
   sargeant Float
@@ -242,9 +251,16 @@ model MonkeynautSale {
 model ShipSale {
   id String @id @db.Uuid()
 
-  b Float
-  a Float
-  s Float
+  crypto         String
+  price          Float
+  startDate      DateTime
+  endDate        DateTime
+  quantity       Int
+  totalUnitsSold Int
+
+  rank_b Float
+  rank_a Float
+  rank_s Float
 
   saleEventId String? @unique @db.Uuid
 
@@ -256,6 +272,13 @@ model ShipSale {
 
 model PackSale {
   id String @id @db.Uuid()
+
+  crypto         String
+  price          Float
+  startDate      DateTime
+  endDate        DateTime
+  quantity       Int
+  totalUnitsSold Int
 
   basic    Float
   advanced Float

@@ -1,11 +1,18 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
+import { SaleEventCrypto } from '../enums/sale-event-crypto';
 
 type MonkeynautSalePropsOmittedCommons = {
   private: number;
   sargeant: number;
   captain: number;
   major: number;
+  crypto: SaleEventCrypto;
+  price: number;
+  startDate: Date;
+  endDate: Date;
+  quantity: number;
+  totalUnitsSold: number;
 };
 
 type MonkeynautSaleProps = MonkeynautSalePropsOmittedCommons & Commons;
@@ -32,9 +39,15 @@ export class MonkeynautSale implements IMonkeynautSale {
       sargeant: this._props.sargeant,
       captain: this._props.captain,
       major: this._props.major,
+      crypto: this._props.crypto,
+      price: this._props.price,
+      startDate: this._props.startDate,
+      endDate: this._props.endDate,
+      quantity: this._props.quantity,
+      totalUnitsSold: this._props.totalUnitsSold,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
-    } as IMonkeynautSale;
+    };
   }
 
   set assign(props: Partial<MonkeynautSaleProps>) {
@@ -62,6 +75,30 @@ export class MonkeynautSale implements IMonkeynautSale {
 
   get major(): number {
     return this._props.major;
+  }
+
+  get crypto(): SaleEventCrypto {
+    return this._props.crypto;
+  }
+
+  get price(): number {
+    return this._props.price;
+  }
+
+  get startDate(): Date {
+    return this._props.startDate;
+  }
+
+  get endDate(): Date {
+    return this._props.endDate;
+  }
+
+  get quantity(): number {
+    return this._props.quantity;
+  }
+
+  get totalUnitsSold(): number {
+    return this._props.totalUnitsSold;
   }
 
   get updatedAt(): Date {

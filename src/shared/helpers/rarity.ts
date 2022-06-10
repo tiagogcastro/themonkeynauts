@@ -1,6 +1,5 @@
 import { AppError } from '@shared/errors/app-error';
-import { getRandomInt } from './get-random-int';
-import { isFloat } from './is-float';
+import { getRandomNumber } from './get-random';
 
 type Rarity = {
   [key: string]: [number, number];
@@ -15,17 +14,6 @@ type Response<T> = Uppercase<keyof T & string>;
 export async function rarity<T extends RarityData>(
   rarity_data: T,
 ): Promise<Response<T>> {
-  const oldRarityKeys = Object.keys(rarity_data);
-
-  const sorted = getRandomInt(0, oldRarityKeys.length - 1);
-
-  const isEveryFloat = Object.values(rarity_data).every(isFloat);
-  const hasSomeFloat = Object.values(rarity_data).some(isFloat);
-
-  if (!isEveryFloat && hasSomeFloat) {
-    throw new AppError('Rarity data must be a integer', 409);
-  }
-
   const total = Object.values(rarity_data).reduce(
     (percentage, previous_percentage) => percentage + previous_percentage,
     0,
@@ -35,28 +23,9 @@ export async function rarity<T extends RarityData>(
     throw new AppError('Rarity percentages must add up to 100', 409);
   }
 
-  const rarityData = oldRarityKeys.reduce(
-    (previous_rarity_data, rarity_data_key) => {
-      return {
-        ...previous_rarity_data,
-        [rarity_data_key]: Math.floor(rarity_data[rarity_data_key]),
-      };
-    },
-    {} as RarityData,
-  );
+  const rarityPercentages = Object.values(rarity_data) as number[];
 
-  const oldRarityPercentages = Object.values(rarityData) as number[];
-
-  const oldTotal = oldRarityPercentages.reduce(
-    (percentage, previous_percentage) => percentage + previous_percentage,
-    0,
-  );
-
-  rarityData[oldRarityKeys[sorted]] += 100 - oldTotal;
-
-  const rarityPercentages = Object.values(rarityData) as number[];
-
-  const rarityKeys = Object.keys(rarityData);
+  const rarityKeys = Object.keys(rarity_data);
 
   let rarityPercentageEnd = 0;
   let rarityPercentageStart = 1;
@@ -81,7 +50,7 @@ export async function rarity<T extends RarityData>(
     {} as Rarity,
   );
 
-  const generatedInt = getRandomInt(1, 100);
+  const generatedInt = getRandomNumber(0, 100);
 
   const formattedRarityPorcentages = Object.values(formattedRarity);
 

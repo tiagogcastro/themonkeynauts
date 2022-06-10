@@ -1,14 +1,7 @@
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
-import { SaleEventCrypto } from '../enums/sale-event-crypto';
 
 type SaleEventPropsOmittedCommons = {
-  crypto: SaleEventCrypto;
-  price: number;
-  startDate: Date;
-  endDate: Date;
-  quantity: number;
-  totalUnitsSold: number;
   active: boolean;
 };
 
@@ -32,12 +25,6 @@ export class SaleEvent implements ISaleEvent {
   get saleEvent(): ISaleEvent {
     return {
       id: this._id,
-      crypto: this._props.crypto,
-      price: this._props.price,
-      startDate: this._props.startDate,
-      endDate: this._props.endDate,
-      quantity: this._props.quantity,
-      totalUnitsSold: this._props.totalUnitsSold,
       active: this._props.active,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
@@ -53,30 +40,6 @@ export class SaleEvent implements ISaleEvent {
 
   get id(): string {
     return this._id;
-  }
-
-  get crypto(): SaleEventCrypto {
-    return this._props.crypto;
-  }
-
-  get price(): number {
-    return this._props.price;
-  }
-
-  get startDate(): Date {
-    return this._props.startDate;
-  }
-
-  get endDate(): Date {
-    return this._props.endDate;
-  }
-
-  get quantity(): number {
-    return this._props.quantity;
-  }
-
-  get totalUnitsSold(): number {
-    return this._props.totalUnitsSold;
   }
 
   get active(): boolean {
