@@ -105,6 +105,21 @@ function getAttributesByBase({
   };
 }
 
+const bonusRanksValue = {
+  PRIVATE: 0,
+  SERGEANT: 5,
+  CAPTAIN: 10,
+  MAJOR: 15,
+};
+
+function getBonusValueByClassAndRank() {
+  return {
+    SOLDIER: bonusRanksValue,
+    ENGINEER: bonusRanksValue,
+    SCIENTIST: bonusRanksValue,
+  };
+}
+
 export {
   getClassByRarity,
   getRankByRarity,
@@ -112,4 +127,5 @@ export {
   getAttributesByBase,
   getRanksSchema,
   getClassSchema,
+  getBonusValueByClassAndRank,
 };

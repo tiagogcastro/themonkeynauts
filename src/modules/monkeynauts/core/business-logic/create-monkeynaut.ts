@@ -12,6 +12,7 @@ import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-mon
 
 import {
   getAttributesByBase,
+  getBonusValueByClassAndRank,
   getClassByRarity,
   getClassSchema,
   getRankByRarity,
@@ -142,12 +143,8 @@ class CreateMonkeynautBusinessLogic {
       SCIENTIST: 'Exploration Rewards',
     };
 
-    const bonusValueBaseadRank = {
-      PRIVATE: 0,
-      SERGEANT: 25,
-      CAPTAIN: 50,
-      MAJOR: 75,
-    };
+    const bonusValueBaseadRank =
+      getBonusValueByClassAndRank()[classRarity][rankRarity];
 
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
@@ -158,7 +155,7 @@ class CreateMonkeynautBusinessLogic {
 
       bonusDescription:
         bonusDescription || bonusDescriptionBaseadClass[classRarity],
-      bonusValue: bonusValue || bonusValueBaseadRank[rankRarity],
+      bonusValue: bonusValue || bonusValueBaseadRank,
       breedCount: breedCount || 0,
 
       class: classRarity,
