@@ -240,12 +240,14 @@ model MonkeynautSale {
   captain  Float
   major    Float
 
-  saleEventId String? @unique @db.Uuid
+  saleEventId String @unique @db.Uuid
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
+
+  @@map("monkeynaut_sales")
 }
 
 model ShipSale {
@@ -262,12 +264,14 @@ model ShipSale {
   rank_a Float
   rank_s Float
 
-  saleEventId String? @unique @db.Uuid
+  saleEventId String @unique @db.Uuid
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
+
+  @@map("ship_sales")
 }
 
 model PackSale {
@@ -284,10 +288,11 @@ model PackSale {
   advanced Float
   expert   Float
 
-  saleEventId String? @unique @db.Uuid
+  saleEventId String @unique @db.Uuid
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
+  @@map("pack_sales")
 }
