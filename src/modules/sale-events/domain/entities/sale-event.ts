@@ -1,8 +1,10 @@
+import { SaleEventType } from '@prisma/client';
 import { Commons } from '@shared/types/commons';
 import crypto from 'node:crypto';
 
 type SaleEventPropsOmittedCommons = {
   active: boolean;
+  type: SaleEventType;
 };
 
 type SaleEventProps = SaleEventPropsOmittedCommons & Commons;
@@ -28,6 +30,7 @@ export class SaleEvent implements ISaleEvent {
       active: this._props.active,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
+      type: this._props.type,
     } as ISaleEvent;
   }
 
@@ -44,6 +47,10 @@ export class SaleEvent implements ISaleEvent {
 
   get active(): boolean {
     return this._props.active;
+  }
+
+  get type(): SaleEventType {
+    return this._props.type;
   }
 
   get updatedAt(): Date {
