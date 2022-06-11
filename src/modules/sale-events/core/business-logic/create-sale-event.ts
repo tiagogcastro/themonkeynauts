@@ -22,6 +22,7 @@ import {
   SaleEvent,
   ISaleEvent,
 } from '@modules/sale-events/domain/entities/sale-event';
+import { SaleEventType } from '@modules/sale-events/domain/enums/sale-event-type';
 
 type Response = {
   saleEvent: ISaleEvent;
@@ -63,6 +64,31 @@ class CreateSaleEventBusinessLogic {
 
     if (this.dateProvider.isBefore(startDate, currentDate)) {
       throw new AppError('Start date must be after current date');
+    }
+
+    const salesPercentage: Record<SaleEventType, boolean> = {
+      PACK:
+        !!salePack &&
+        Object.values(salePack).reduce(
+          (accumulator, current) => accumulator + current,
+          0,
+        ) === 100,
+      MONKEYNAUT:
+        !!saleMonkeynaut &&
+        Object.values(saleMonkeynaut).reduce(
+          (accumulator, current) => accumulator + current,
+          0,
+        ) === 100,
+      SHIP:
+        !!saleShip &&
+        Object.values(saleShip).reduce(
+          (accumulator, current) => accumulator + current,
+          0,
+        ) === 100,
+    };
+
+    if (salesPercentage[type] === false) {
+      throw new AppError('Sales percentage must be 100%');
     }
 
     const { saleEvent } = new SaleEvent({
