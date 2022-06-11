@@ -16,6 +16,8 @@ import { PrismaMonkeynautsRepository } from '@modules/monkeynauts/infra/database
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { PrismaShipsRepository } from '@modules/ships/infra/database/prisma/repositories/prisma-ships-repositories';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { ISaleEventsRepository } from '@modules/sale-events/domain/repositories/sale-events-repositories';
+import { PrismaSaleEventsRepository } from '@modules/sale-events/infra/database/prisma/repositories/prisma-sale-events-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -55,4 +57,9 @@ container.registerSingleton<IMonkeynautsRepository>(
 container.registerSingleton<IShipsRepository>(
   'ShipsRepository',
   PrismaShipsRepository,
+);
+
+container.registerSingleton<ISaleEventsRepository>(
+  'SaleEventsRepository',
+  PrismaSaleEventsRepository,
 );
