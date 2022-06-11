@@ -12,6 +12,7 @@ type PackSalePropsOmittedCommons = {
   endDate: Date;
   quantity: number;
   totalUnitsSold: number;
+  saleEventId: string;
 };
 
 type PackSaleProps = PackSalePropsOmittedCommons & Commons;
@@ -43,6 +44,7 @@ export class PackSale implements IPackSale {
       endDate: this._props.endDate,
       quantity: this._props.quantity,
       totalUnitsSold: this._props.totalUnitsSold,
+      saleEventId: this._props.saleEventId,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     };
@@ -57,6 +59,10 @@ export class PackSale implements IPackSale {
 
   get id(): string {
     return this._id;
+  }
+
+  get saleEventId(): string {
+    return this._props.saleEventId;
   }
 
   get basic(): number {

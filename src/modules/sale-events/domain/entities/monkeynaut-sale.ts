@@ -13,6 +13,7 @@ type MonkeynautSalePropsOmittedCommons = {
   endDate: Date;
   quantity: number;
   totalUnitsSold: number;
+  saleEventId: string;
 };
 
 type MonkeynautSaleProps = MonkeynautSalePropsOmittedCommons & Commons;
@@ -45,6 +46,7 @@ export class MonkeynautSale implements IMonkeynautSale {
       endDate: this._props.endDate,
       quantity: this._props.quantity,
       totalUnitsSold: this._props.totalUnitsSold,
+      saleEventId: this._props.saleEventId,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     };
@@ -59,6 +61,10 @@ export class MonkeynautSale implements IMonkeynautSale {
 
   get id(): string {
     return this._id;
+  }
+
+  get saleEventId(): string {
+    return this._props.saleEventId;
   }
 
   get private(): number {

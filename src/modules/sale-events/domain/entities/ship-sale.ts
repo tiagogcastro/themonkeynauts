@@ -12,6 +12,7 @@ type ShipSalePropsOmittedCommons = {
   endDate: Date;
   quantity: number;
   totalUnitsSold: number;
+  saleEventId: string;
 };
 
 type ShipSaleProps = ShipSalePropsOmittedCommons & Commons;
@@ -43,6 +44,7 @@ export class ShipSale implements IShipSale {
       endDate: this._props.endDate,
       quantity: this._props.quantity,
       totalUnitsSold: this._props.totalUnitsSold,
+      saleEventId: this._props.saleEventId,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     };
@@ -57,6 +59,10 @@ export class ShipSale implements IShipSale {
 
   get id(): string {
     return this._id;
+  }
+
+  get saleEventId(): string {
+    return this._props.saleEventId;
   }
 
   get rank_b(): number {
