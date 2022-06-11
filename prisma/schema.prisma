@@ -231,7 +231,7 @@ model MonkeynautSale {
   crypto         String
   price          Float
   startDate      DateTime
-  endDate        DateTime
+  endDate        DateTime?
   quantity       Int
   totalUnitsSold Int
 
@@ -254,7 +254,7 @@ model ShipSale {
   crypto         String
   price          Float
   startDate      DateTime
-  endDate        DateTime
+  endDate        DateTime?
   quantity       Int
   totalUnitsSold Int
 
@@ -276,7 +276,7 @@ model PackSale {
   crypto         String
   price          Float
   startDate      DateTime
-  endDate        DateTime
+  endDate        DateTime?
   quantity       Int
   totalUnitsSold Int
 
