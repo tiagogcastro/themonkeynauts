@@ -29,9 +29,9 @@ type CreateSaleEventRequestDTO = {
   quantity: number;
   totalUnitsSold: number;
 
-  sale: Partial<
-    MonkeynautSaleUniqueProps & ShipSaleUniqueProps & PackSaleUniqueProps
-  >;
+  saleMonkeynaut?: MonkeynautSaleUniqueProps;
+  saleShip?: ShipSaleUniqueProps;
+  salePack?: PackSaleUniqueProps;
 };
 
 export { CreateSaleEventRequestDTO };
