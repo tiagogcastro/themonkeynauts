@@ -16,8 +16,12 @@ import { PrismaMonkeynautsRepository } from '@modules/monkeynauts/infra/database
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { PrismaShipsRepository } from '@modules/ships/infra/database/prisma/repositories/prisma-ships-repositories';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { ISaleEventsRepository } from '@modules/sale-events/domain/repositories/sale-events-repositories';
-import { PrismaSaleEventsRepository } from '@modules/sale-events/infra/database/prisma/repositories/prisma-sale-events-repositories';
+import { PrismaMonkeynautSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-monkeynaut-sales-repositories';
+import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
+import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
+import { PrismaShipSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-ship-sales-repositories';
+import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
+import { PrismaPackSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-pack-sales-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -59,7 +63,17 @@ container.registerSingleton<IShipsRepository>(
   PrismaShipsRepository,
 );
 
-container.registerSingleton<ISaleEventsRepository>(
-  'SaleEventsRepository',
-  PrismaSaleEventsRepository,
+container.registerSingleton<IMonkeynautSalesRepository>(
+  'MonkeynautSalesRepository',
+  PrismaMonkeynautSalesRepository,
+);
+
+container.registerSingleton<IShipSalesRepository>(
+  'ShipSalesRepository',
+  PrismaShipSalesRepository,
+);
+
+container.registerSingleton<IPackSalesRepository>(
+  'PackSalesRepository',
+  PrismaPackSalesRepository,
 );

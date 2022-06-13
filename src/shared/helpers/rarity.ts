@@ -1,5 +1,6 @@
 import { AppError } from '@shared/errors/app-error';
-import { getRandomNumber } from './get-random';
+import { getRandomInt } from './get-random-int';
+import { isFloat } from './is-float';
 
 type Rarity = {
   [key: string]: [number, number];
@@ -21,6 +22,12 @@ export async function rarity<T extends RarityData>(
 
   if (total !== 100) {
     throw new AppError('Rarity percentages must add up to 100', 409);
+  }
+
+  const hasFloat = Object.values(rarity_data).some(isFloat);
+
+  if (hasFloat) {
+    throw new AppError('Rarity percentages must be integers', 409);
   }
 
   const rarityPercentages = Object.values(rarity_data) as number[];
@@ -50,7 +57,7 @@ export async function rarity<T extends RarityData>(
     {} as Rarity,
   );
 
-  const generatedInt = getRandomNumber(0, 100);
+  const generatedInt = getRandomInt(0, 100);
 
   const formattedRarityPorcentages = Object.values(formattedRarity);
 

@@ -6,6 +6,7 @@ import {
   isAfter,
   parseISO,
   getMinutes,
+  isBefore,
 } from 'date-fns';
 
 class DateFnsDateProvider implements IDateProvider {
@@ -48,7 +49,7 @@ class DateFnsDateProvider implements IDateProvider {
       _dateToCompare = parseISO(_dateToCompare);
     }
 
-    return isAfter(_date, _dateToCompare);
+    return isBefore(_date, _dateToCompare);
   }
 
   addHours(date: number | Date, amount: number): Date {
