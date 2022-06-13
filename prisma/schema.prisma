@@ -208,23 +208,6 @@ model PrivateSale {
   @@map("private_sales")
 }
 
-model SaleEvent {
-  id String @id @db.Uuid()
-
-  active Boolean @default(true)
-
-  type SaleEventType
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  monkeynautSale MonkeynautSale?
-  shipSale       ShipSale?
-  packSale       PackSale?
-
-  @@map("sale_events")
-}
-
 model MonkeynautSale {
   id String @id @db.Uuid()
 
@@ -233,19 +216,17 @@ model MonkeynautSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
-  totalUnitsSold Int @default(0)
+  totalUnitsSold Int       @default(0)
 
   private  Float
   sargeant Float
   captain  Float
   major    Float
 
-  saleEventId String @unique @db.Uuid
+  active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
 
   @@map("monkeynaut_sales")
 }
@@ -258,18 +239,16 @@ model ShipSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
-  totalUnitsSold Int @default(0)
+  totalUnitsSold Int       @default(0)
 
   rank_b Float
   rank_a Float
   rank_s Float
 
-  saleEventId String @unique @db.Uuid
+  active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
 
   @@map("ship_sales")
 }
@@ -282,17 +261,16 @@ model PackSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
-  totalUnitsSold Int @default(0)
+  totalUnitsSold Int       @default(0)
 
   basic    Float
   advanced Float
   expert   Float
 
-  saleEventId String @unique @db.Uuid
+  active Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  saleEvent SaleEvent? @relation(fields: [saleEventId], references: [id])
   @@map("pack_sales")
 }
