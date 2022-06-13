@@ -1,5 +1,5 @@
-import { inject, injectable } from 'tsyringe';
 import { faker } from '@faker-js/faker';
+import { inject, injectable } from 'tsyringe';
 
 import { getRandomInt } from '@shared/helpers';
 

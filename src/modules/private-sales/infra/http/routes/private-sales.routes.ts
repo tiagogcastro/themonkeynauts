@@ -5,9 +5,9 @@ import { Router } from 'express';
 import { createPrivateSaleController } from '../controllers/create-private-sale';
 import { showPlayerBNBBalanceController } from '../controllers/show-player-bnb-balance';
 
-const salesRouter = Router();
+const privateSalesRouter = Router();
 
-salesRouter.post(
+privateSalesRouter.post(
   '/create-private-sale',
   ensureAuthenticated,
   celebrate({
@@ -24,11 +24,11 @@ salesRouter.post(
   (request, response) => createPrivateSaleController.handle(request, response),
 );
 
-salesRouter.get(
+privateSalesRouter.get(
   '/show-player-bnb-balance',
   ensureAuthenticated,
   (request, response) =>
     showPlayerBNBBalanceController.handle(request, response),
 );
 
-export { salesRouter };
+export { privateSalesRouter };
