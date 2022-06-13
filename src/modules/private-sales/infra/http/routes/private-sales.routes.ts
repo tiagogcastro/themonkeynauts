@@ -12,13 +12,13 @@ privateSalesRouter.post(
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      player_id: Joi.string().uuid(),
+      playerId: Joi.string().uuid(),
       wallet: Joi.string().required(),
-      bnb_amount: Joi.number()
+      bnbAmount: Joi.number()
         .required()
         .min(balanceConfig.bnbAmountMin)
         .max(balanceConfig.bnbAmountMax),
-      tx_hash: Joi.string().required(),
+      txHash: Joi.string().required(),
     },
   }),
   (request, response) => createPrivateSaleController.handle(request, response),

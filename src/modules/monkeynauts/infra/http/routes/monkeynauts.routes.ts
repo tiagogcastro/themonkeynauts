@@ -132,8 +132,8 @@ monkeynautsRouter.put(
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      owner_id: Joi.string().uuid().required(),
-      monkeynaut_id: Joi.string().uuid().required(),
+      ownerId: Joi.string().uuid().required(),
+      monkeynautId: Joi.string().uuid().required(),
 
       name: Joi.string(),
     },

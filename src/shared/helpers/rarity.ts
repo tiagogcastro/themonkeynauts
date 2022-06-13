@@ -1,4 +1,5 @@
 import { AppError } from '@shared/errors/app-error';
+// import BigDecimal from 'js-big-decimal';
 import { getRandomInt } from './get-random-int';
 
 type Rarity = {
@@ -14,6 +15,8 @@ type Response<T> = Uppercase<keyof T & string>;
 export async function rarity<T extends RarityData>(
   rarityData: T,
 ): Promise<Response<T>> {
+  // const big = new BigDecimal(100).subtract(new BigDecimal(99.99));
+
   const _rarityPercentages = Object.values(rarityData);
 
   const oldRarityKeys = Object.keys(rarityData);
@@ -24,7 +27,6 @@ export async function rarity<T extends RarityData>(
     (percentage, previousPercentage) => percentage + previousPercentage,
     0,
   );
-
   if (total !== 100) {
     throw new AppError('Rarity percentages must add up to 100', 409);
   }

@@ -28,9 +28,9 @@ class CreatePrivateSaleBusinessLogic {
   ) {}
 
   async execute({
-    player_id,
-    tx_hash: txHash,
-    bnb_amount: bnbAmount,
+    playerId,
+    txHash,
+    bnbAmount,
     wallet,
   }: CreatePrivateSaleRequestDTO): Promise<CreatePreSaleResponse> {
     const player = await this.playersRepository.findByWallet(wallet);
@@ -42,7 +42,7 @@ class CreatePrivateSaleBusinessLogic {
       );
     }
 
-    if (player_id !== player.id) {
+    if (playerId !== player.id) {
       throw new AppError(
         `You are trying to create a private sale with another player's wallet`,
         401,

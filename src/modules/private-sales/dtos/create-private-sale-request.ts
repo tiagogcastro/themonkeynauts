@@ -1,6 +1,6 @@
 export type CreatePrivateSaleRequestDTO = {
-  bnb_amount: number;
-  player_id: string;
-  tx_hash: string;
+  bnbAmount: number;
+  playerId: string;
+  txHash: string;
   wallet: string;
 };

@@ -6,8 +6,8 @@ import { IPrivateSalesRepository } from '../../domain/repositories/private-sales
 
 type ShowPlayerBNBBalanceResponse = {
   player_balance: {
-    bnb_amount_spent: number;
-    bnb_amount_spent_max: number;
+    bnbAmount_spent: number;
+    bnbAmount_spent_max: number;
     wallet: string;
   };
 };
@@ -48,8 +48,8 @@ class ShowPlayerBNBBalanceBusinessLogic {
 
     return {
       player_balance: {
-        bnb_amount_spent: bnbAmountTotal,
-        bnb_amount_spent_max: bnbAmountLimit,
+        bnbAmount_spent: bnbAmountTotal,
+        bnbAmount_spent_max: bnbAmountLimit,
         wallet: player.wallet,
       },
     };
