@@ -31,7 +31,26 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
   }
 
   async listManyMonkeynauts(): Promise<IMonkeynautSale[]> {
-    const monkeynautsales = await prisma.monkeynautSale.findMany();
+    const monkeynautsales = await prisma.monkeynautSale.findMany({
+      where: {
+        active: true,
+        quantity: {
+          not: {
+            equals: 0,
+          },
+        },
+        OR: [
+          {
+            endDate: null,
+          },
+          {
+            endDate: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+    });
 
     return monkeynautsales.map(parseMonkeynautSale);
   }

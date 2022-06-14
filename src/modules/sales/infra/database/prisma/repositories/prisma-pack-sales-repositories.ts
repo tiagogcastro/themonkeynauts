@@ -26,7 +26,26 @@ class PrismaPackSalesRepository implements IPackSalesRepository {
   }
 
   async listManyPacks(): Promise<IPackSale[]> {
-    const packSales = await prisma.packSale.findMany();
+    const packSales = await prisma.packSale.findMany({
+      where: {
+        active: true,
+        quantity: {
+          not: {
+            equals: 0,
+          },
+        },
+        OR: [
+          {
+            endDate: null,
+          },
+          {
+            endDate: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+    });
 
     return packSales.map(parsePackSale);
   }

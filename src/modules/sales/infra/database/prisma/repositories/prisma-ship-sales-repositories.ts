@@ -26,7 +26,26 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
   }
 
   async listManyShips(): Promise<IShipSale[]> {
-    const shipSales = await prisma.shipSale.findMany();
+    const shipSales = await prisma.shipSale.findMany({
+      where: {
+        active: true,
+        quantity: {
+          not: {
+            equals: 0,
+          },
+        },
+        OR: [
+          {
+            endDate: null,
+          },
+          {
+            endDate: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+    });
 
     return shipSales.map(parseShipSale);
   }
