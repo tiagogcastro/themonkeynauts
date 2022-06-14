@@ -12,7 +12,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://app.themonkeynauts.com',
+    origin: ['https://app.themonkeynauts.com', 'http://localhost:3000'],
   }),
 );
 app.use(express.json());
