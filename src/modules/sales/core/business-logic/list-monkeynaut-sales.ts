@@ -13,7 +13,12 @@ class ListMonkeynautSalesBusinesslogic {
     const monkeynautSales =
       await this.monkeynautSalesRepository.listManyMonkeynauts();
 
-    return monkeynautSales;
+    return monkeynautSales.map(sale => {
+      return {
+        ...sale,
+        type: 'Monkeynaut',
+      };
+    });
   }
 }
 

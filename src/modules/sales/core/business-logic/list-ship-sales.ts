@@ -12,7 +12,12 @@ class ListShipSalesBusinesslogic {
   async execute(): Promise<IShipSale[]> {
     const shipSales = await this.shipSalesRepository.listManyShips();
 
-    return shipSales;
+    return shipSales.map(sale => {
+      return {
+        ...sale,
+        type: 'Ship',
+      };
+    });
   }
 }
 

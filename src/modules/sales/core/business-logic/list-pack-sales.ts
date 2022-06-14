@@ -12,7 +12,12 @@ class ListPackSalesBusinesslogic {
   async execute(): Promise<IPackSale[]> {
     const packSales = await this.packSalesRepository.listManyPacks();
 
-    return packSales;
+    return packSales.map(sale => {
+      return {
+        ...sale,
+        type: 'Pack',
+      };
+    });
   }
 }
 
