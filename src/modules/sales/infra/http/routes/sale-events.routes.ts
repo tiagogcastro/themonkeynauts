@@ -4,6 +4,8 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { createSaleController } from '../controllers/create-sale';
 import { listMonkeynautSalesController } from '../controllers/list-monkeynaut-sales';
+import { listPackSalesController } from '../controllers/list-pack-sales';
+import { listShipSalesController } from '../controllers/list-ship-sales';
 
 const saleEventsRouter = Router();
 
@@ -52,16 +54,18 @@ saleEventsRouter.post(
 );
 
 saleEventsRouter.get(
-  '/list',
+  '/list-monkeynauts',
   ensureAuthenticated,
-  ensureAdministrator,
-  celebrate({
-    [Segments.QUERY]: {
-      playerId: Joi.string().uuid(),
-    },
-  }),
   (request, response) =>
     listMonkeynautSalesController.handle(request, response),
+);
+
+saleEventsRouter.get('/list-packs', ensureAuthenticated, (request, response) =>
+  listPackSalesController.handle(request, response),
+);
+
+saleEventsRouter.get('/list-ships', ensureAuthenticated, (request, response) =>
+  listShipSalesController.handle(request, response),
 );
 
 export { saleEventsRouter };
