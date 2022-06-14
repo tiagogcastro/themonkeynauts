@@ -176,7 +176,7 @@ export function AdminCreateSale() {
           saleShip: {
             rank_b: Number(saleShip?.rank_b),
             rank_a: Number(saleShip?.rank_a),
-            rank_S: Number(saleShip?.rank_s),
+            rank_s: Number(saleShip?.rank_s),
           },
         }
         break;
@@ -238,7 +238,7 @@ export function AdminCreateSale() {
         return formRef.current?.setErrors(errors);
       }
 
-      toast(error.message, {
+      toast(error?.response?.data.message, {
         autoClose: 5000,
         pauseOnHover: true,
         type: 'error',

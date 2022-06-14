@@ -36,6 +36,14 @@ export const Card = styled.form`
   align-items: center;
   justify-content: center;
 
+  background: #062043;
+
+  border: 1px solid ${COLORS.colors.primary_0};
+
+  &:hover {
+    border: 1px solid rgba(38, 151, 255, 0.4);
+  }
+
   &:not(:first-child) {
     margin-top: 24px;
   }
@@ -50,7 +58,7 @@ export const Card = styled.form`
 
     color: ${COLORS.colors.primary_0};
 
-    margin-top: 8px;
+    margin: 8px 0;
   }
 
   @media(min-width: 768px) {
@@ -61,9 +69,6 @@ export const Card = styled.form`
 `;
 
 export const CardContainer = styled.div`
-  border: 1px solid ${COLORS.colors.primary_0};
-  background: #062043;
- 
   position: relative;
   
   .card_title {
@@ -82,25 +87,51 @@ export const CardContainer = styled.div`
   .description {
     display: none;
 
+    color: ${COLORS.fonts.primary};
+  }
+
+  .price {
+    display: block;
+
+    margin: 32px 0 0 8px;
+
+    font-size: 16px;
+    text-align: center;
     color: ${COLORS.colors.primary_0};
   }
 
-  &:hover {
-    border: 1px solid rgba(38, 151, 255, 0.4);
+  .more_info_text {
+    display: block;
 
+    margin-top: 24px;
+    
+    opacity: 0.9;
+    text-align: center;
+  }
+
+  &:hover {
     .card_title {
       opacity: 0.4;
       border-bottom: 1px solid rgba(38, 151, 255, 0.4);
     }
 
     .description {
-      display: initial;
+      display: flex;
+      justify-content: center;
 
       font-size: 1.4rem;
       font-weight: 400;
       line-height: 20px;
       letter-spacing: 0.035em;
-      text-align: left;
+      text-align: center;
+    }
+
+    .price {
+      display: none;
+    }
+
+    .more_info_text {
+      display: none;
     }
 
     img {
