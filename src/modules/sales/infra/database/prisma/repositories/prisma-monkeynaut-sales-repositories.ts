@@ -34,7 +34,7 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
     const monkeynautsales = await prisma.monkeynautSale.findMany({
       where: {
         active: true,
-        quantity: {
+        currentQuantityAvailable: {
           not: {
             equals: 0,
           },

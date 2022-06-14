@@ -29,7 +29,7 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
     const shipSales = await prisma.shipSale.findMany({
       where: {
         active: true,
-        quantity: {
+        currentQuantityAvailable: {
           not: {
             equals: 0,
           },

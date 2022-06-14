@@ -43,6 +43,7 @@ class CreatePackSaleBusinessLogic {
       price,
       quantity,
       startDate,
+      currentQuantityAvailable: quantity,
       totalUnitsSold,
       active: true,
     });

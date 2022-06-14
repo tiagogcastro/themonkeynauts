@@ -216,6 +216,7 @@ model MonkeynautSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
+  currentQuantityAvailable Int @default(0)
   totalUnitsSold Int       @default(0)
 
   private  Float
@@ -239,6 +240,7 @@ model ShipSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
+  currentQuantityAvailable Int @default(0)
   totalUnitsSold Int       @default(0)
 
   rank_b Float
@@ -261,6 +263,7 @@ model PackSale {
   startDate      DateTime
   endDate        DateTime?
   quantity       Int
+  currentQuantityAvailable Int @default(0)
   totalUnitsSold Int       @default(0)
 
   basic    Float

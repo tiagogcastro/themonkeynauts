@@ -44,6 +44,7 @@ class CreateShipSaleBusinessLogic {
       quantity,
       startDate,
       totalUnitsSold,
+      currentQuantityAvailable: quantity,
       active: true,
     });
 

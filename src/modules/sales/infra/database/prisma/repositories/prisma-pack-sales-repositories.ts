@@ -29,7 +29,7 @@ class PrismaPackSalesRepository implements IPackSalesRepository {
     const packSales = await prisma.packSale.findMany({
       where: {
         active: true,
-        quantity: {
+        currentQuantityAvailable: {
           not: {
             equals: 0,
           },
