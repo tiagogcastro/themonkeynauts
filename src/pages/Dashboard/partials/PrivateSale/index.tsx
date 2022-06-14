@@ -169,11 +169,11 @@ export function PrivateSale() {
                 }
               });
   
-              await baseApi.post('/sales/create-private-sale', {
-                player_id: player.player.id,
+              await baseApi.post('/create-sales/create-private-sale', {
+                playerId: player.player.id,
                 wallet: player.player.wallet,
-                bnb_amount: Number(inputValue),
-                tx_hash: transaction,
+                bnbAmount: Number(inputValue),
+                txHash: transaction,
               })
     
               toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
