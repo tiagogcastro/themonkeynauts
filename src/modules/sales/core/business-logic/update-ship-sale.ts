@@ -57,7 +57,7 @@ class UpdateShipSaleBusinessLogic {
 
     const { shipSale } = new ShipSale(
       {
-        crypto: crypto || foundShipSale.crypto,
+        crypto: crypto ?? foundShipSale.crypto,
         price: price ?? foundShipSale.price,
         quantity: quantity ?? foundShipSale.quantity,
 
@@ -67,10 +67,10 @@ class UpdateShipSaleBusinessLogic {
 
         ...percentageValues,
 
-        startDate: startDate || foundShipSale.startDate,
-        endDate: endDate || foundShipSale.endDate,
+        startDate: startDate ?? foundShipSale.startDate,
+        endDate: endDate ?? foundShipSale.endDate,
 
-        active: active || foundShipSale.active,
+        active: active ?? foundShipSale.active,
       },
       {
         updatedAt: new Date(),

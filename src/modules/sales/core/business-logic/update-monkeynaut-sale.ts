@@ -62,7 +62,7 @@ class UpdateMonkeynautSaleBusinessLogic {
 
     const { monkeynautSale } = new MonkeynautSale(
       {
-        crypto: crypto || foundMonkeynautSale.crypto,
+        crypto: crypto ?? foundMonkeynautSale.crypto,
         price: price ?? foundMonkeynautSale.price,
         quantity: quantity ?? foundMonkeynautSale.quantity,
 
@@ -73,10 +73,10 @@ class UpdateMonkeynautSaleBusinessLogic {
 
         ...percentageValues,
 
-        startDate: startDate || foundMonkeynautSale.startDate,
-        endDate: endDate || foundMonkeynautSale.endDate,
+        startDate: startDate ?? foundMonkeynautSale.startDate,
+        endDate: endDate ?? foundMonkeynautSale.endDate,
 
-        active: active || foundMonkeynautSale.active,
+        active: active ?? foundMonkeynautSale.active,
       },
       {
         updatedAt: new Date(),

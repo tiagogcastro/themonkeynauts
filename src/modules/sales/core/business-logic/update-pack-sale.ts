@@ -57,7 +57,7 @@ class UpdatePackSaleBusinessLogic {
 
     const { packSale } = new PackSale(
       {
-        crypto: crypto || foundPackSale.crypto,
+        crypto: crypto ?? foundPackSale.crypto,
         price: price ?? foundPackSale.price,
         quantity: quantity ?? foundPackSale.quantity,
 
@@ -67,10 +67,10 @@ class UpdatePackSaleBusinessLogic {
 
         ...percentageValues,
 
-        startDate: startDate || foundPackSale.startDate,
-        endDate: endDate || foundPackSale.endDate,
+        startDate: startDate ?? foundPackSale.startDate,
+        endDate: endDate ?? foundPackSale.endDate,
 
-        active: active || foundPackSale.active,
+        active: active ?? foundPackSale.active,
       },
       {
         updatedAt: new Date(),
