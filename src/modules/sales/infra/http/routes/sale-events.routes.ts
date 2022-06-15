@@ -45,9 +45,9 @@ saleEventsRouter.post(
       salePack: Joi.alternatives().conditional('type', {
         is: 'PACK',
         then: Joi.object({
-          basic: Joi.number().required(),
-          advanced: Joi.number().required(),
-          expert: Joi.number().required(),
+          type: Joi.string()
+            .valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT')
+            .required(),
         }).required(),
       }),
     },
@@ -107,7 +107,7 @@ saleEventsRouter.put(
         then: Joi.object({
           saleMonkeynautId: Joi.string().uuid().required(),
           private: Joi.number(),
-          sargeant: Joi.number(),
+          sergeant: Joi.number(),
           captain: Joi.number(),
           major: Joi.number(),
         }),
@@ -116,18 +116,18 @@ saleEventsRouter.put(
         is: 'SHIP',
         then: Joi.object({
           saleShipId: Joi.string().uuid().required(),
-          rank_b: Joi.number(),
-          rank_a: Joi.number(),
-          rank_s: Joi.number(),
+          rankB: Joi.number(),
+          rankA: Joi.number(),
+          rankS: Joi.number(),
         }),
       }),
       salePack: Joi.alternatives().conditional('type', {
         is: 'PACK',
         then: Joi.object({
           salePackId: Joi.string().uuid().required(),
-          basic: Joi.number(),
-          advanced: Joi.number(),
-          expert: Joi.number(),
+          type: Joi.string()
+            .valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT')
+            .required(),
         }),
       }),
     },

@@ -8,6 +8,7 @@ import { AppError } from '@shared/errors/app-error';
 import { IMonkeynautSale } from '@modules/sales/domain/entities/monkeynaut-sale';
 import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
 import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
+import { PackType } from '@modules/sales/domain/enums/pack-type';
 
 type Response = {
   sale: IPackSale | IShipSale | IMonkeynautSale;
@@ -50,29 +51,28 @@ class UpdateSaleBusinessLogic {
     const updatedSale = await sale.execute({
       salePack: {
         salePackId: salePack?.salePackId as string,
-        advanced: salePack?.advanced as number,
-        basic: salePack?.basic as number,
-        expert: salePack?.expert as number,
+        type: salePack?.type,
       },
 
       saleShip: {
         saleShipId: saleShip?.saleShipId as string,
-        rank_a: saleShip?.rank_a as number,
-        rank_b: saleShip?.rank_b as number,
-        rank_s: saleShip?.rank_s as number,
+        rankA: saleShip?.rankA,
+        rankB: saleShip?.rankB,
+        rankS: saleShip?.rankS,
       },
 
       saleMonkeynaut: {
         saleMonkeynautId: saleMonkeynaut?.saleMonkeynautId as string,
-        captain: saleMonkeynaut?.captain as number,
-        major: saleMonkeynaut?.major as number,
-        private: saleMonkeynaut?.private as number,
-        sargeant: saleMonkeynaut?.sargeant as number,
+        captain: saleMonkeynaut?.captain,
+        major: saleMonkeynaut?.major,
+        private: saleMonkeynaut?.private,
+        sergeant: saleMonkeynaut?.sergeant,
       },
 
       price: data.price,
       crypto: data.crypto,
       quantity: data.quantity,
+      currentQuantityAvailable: data.currentQuantityAvailable,
       totalUnitsSold: data.totalUnitsSold,
       active: data.active,
       startDate,

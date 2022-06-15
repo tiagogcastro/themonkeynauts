@@ -152,12 +152,6 @@ class BuySaleItemBusinessLogic {
         from: wallet,
       });
 
-      const packType = await rarity({
-        basic: packSale.basic,
-        advanced: packSale.advanced,
-        expert: packSale.expert,
-      });
-
       const packs: Record<PackType, Pack> = {
         BASIC: {
           monkeynauts: [
@@ -213,9 +207,56 @@ class BuySaleItemBusinessLogic {
             },
           ],
         },
+        RANDOM: {
+          monkeynauts: [
+            {
+              rank: await (async () => {
+                const percentage = 100 / 4;
+
+                const monkeynautRank = await rarity({
+                  private: percentage,
+                  sergeant: percentage,
+                  captain: percentage,
+                  major: percentage,
+                });
+
+                return monkeynautRank as MonkeynautRank;
+              })(),
+            },
+            {
+              rank: await (async () => {
+                const percentage = 100 / 4;
+
+                const monkeynautRank = await rarity({
+                  private: percentage,
+                  sergeant: percentage,
+                  captain: percentage,
+                  major: percentage,
+                });
+
+                return monkeynautRank as MonkeynautRank;
+              })(),
+            },
+          ],
+          ships: [
+            {
+              rank: await (async () => {
+                const percentage = 100 / 3;
+
+                const shipRank = await rarity({
+                  b: percentage,
+                  a: percentage,
+                  s: percentage,
+                });
+
+                return shipRank as ShipRank;
+              })(),
+            },
+          ],
+        },
       };
 
-      const pack = packs[packType];
+      const pack = packs[packSale.type];
 
       const monkeynauts = pack.monkeynauts.map(monkeynaut => {
         return this.createMonkeynautBusinessLogic.execute({

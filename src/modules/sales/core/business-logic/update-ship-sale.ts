@@ -35,15 +35,15 @@ class UpdateShipSaleBusinessLogic {
     }
 
     const percentageValues = {
-      rank_a: saleShip?.rank_a ?? foundShipSale.rank_a,
-      rank_b: saleShip?.rank_b ?? foundShipSale.rank_b,
-      rank_s: saleShip?.rank_s ?? foundShipSale.rank_s,
+      rankA: saleShip?.rankA ?? foundShipSale.rankA,
+      rankB: saleShip?.rankB ?? foundShipSale.rankB,
+      rankS: saleShip?.rankS ?? foundShipSale.rankS,
     };
 
     const percentages = [
-      percentageValues.rank_a,
-      percentageValues.rank_b,
-      percentageValues.rank_s,
+      percentageValues.rankA,
+      percentageValues.rankB,
+      percentageValues.rankS,
     ];
 
     const totalPercentage = percentages.reduce(
@@ -63,7 +63,9 @@ class UpdateShipSaleBusinessLogic {
 
         totalUnitsSold: totalUnitsSold ?? foundShipSale.totalUnitsSold,
         currentQuantityAvailable:
-          currentQuantityAvailable ?? foundShipSale.currentQuantityAvailable,
+          quantity ??
+          currentQuantityAvailable ??
+          foundShipSale.currentQuantityAvailable,
 
         ...percentageValues,
 

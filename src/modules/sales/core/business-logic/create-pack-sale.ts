@@ -15,29 +15,14 @@ class CreatePackSaleBusinessLogic {
   async execute({
     crypto,
     price,
-    advanced,
-    basic,
-    expert,
+    type,
     quantity,
     startDate,
     totalUnitsSold,
     endDate,
   }: CreatePackSaleRequestDTO): Promise<IPackSale> {
-    const percentages = [advanced, basic, expert];
-
-    const totalPercentage = percentages.reduce(
-      (previousPercentage, percentage) => previousPercentage + percentage,
-      0,
-    );
-
-    if (totalPercentage !== 100) {
-      throw new AppError('Monkeynaut sale percentage must be 100%');
-    }
-
     const { packSale } = new PackSale({
-      advanced,
-      basic,
-      expert,
+      type,
       endDate,
       crypto,
       price,

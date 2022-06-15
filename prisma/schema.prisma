@@ -7,17 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum PlayerRole {
-  ADMIN
-  DEFAULT
-}
-
-enum SaleEventType {
-  MONKEYNAUT
-  SHIP
-  PACK
-}
-
 model Log {
   id        String   @id @db.Uuid()
   playerId  String?  @db.Uuid()
@@ -31,14 +20,14 @@ model Log {
 }
 
 model Player {
-  id            String     @id @db.Uuid()
-  nickname      String     @unique
-  email         String     @unique
+  id            String  @id @db.Uuid()
+  nickname      String  @unique
+  email         String  @unique
   password      String
-  wallet        String?    @unique
-  role          PlayerRole @default(DEFAULT)
-  hasAsteroid   Boolean    @default(false)
-  canBountyHunt Boolean    @default(true)
+  wallet        String? @unique
+  role          String  @default("DEFAULT")
+  hasAsteroid   Boolean @default(false)
+  canBountyHunt Boolean @default(true)
 
   enabled   Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -266,9 +255,7 @@ model PackSale {
   currentQuantityAvailable Int       @default(0)
   totalUnitsSold           Int       @default(0)
 
-  basic    Float
-  advanced Float
-  expert   Float
+  type String @default("BASIC")
 
   active Boolean @default(true)
 

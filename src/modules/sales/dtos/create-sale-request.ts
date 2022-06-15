@@ -1,6 +1,7 @@
 import { CreateMonkeynautSaleBusinessLogic } from '../core/business-logic/create-monkeynaut-sale';
 import { CreatePackSaleBusinessLogic } from '../core/business-logic/create-pack-sale';
 import { CreateShipSaleBusinessLogic } from '../core/business-logic/create-ship-sale';
+import { PackType } from '../domain/enums/pack-type';
 import { SaleCrypto } from '../domain/enums/sale-crypto';
 import { SaleType } from '../domain/enums/sale-type';
 
@@ -18,9 +19,7 @@ export type ShipSaleUniqueProps = {
 };
 
 export type PackSaleUniqueProps = {
-  basic: number;
-  advanced: number;
-  expert: number;
+  type: PackType;
 };
 
 export type SaleCommons = {

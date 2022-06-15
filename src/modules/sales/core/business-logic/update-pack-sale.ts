@@ -17,7 +17,6 @@ class UpdatePackSaleBusinessLogic {
     crypto,
     price,
     quantity,
-
     salePack,
 
     currentQuantityAvailable,
@@ -34,38 +33,17 @@ class UpdatePackSaleBusinessLogic {
       throw new AppError('Pack Sale does not exist', 404);
     }
 
-    const percentageValues = {
-      basic: salePack?.basic ?? foundPackSale.basic,
-      advanced: salePack?.advanced ?? foundPackSale.advanced,
-      expert: salePack?.expert ?? foundPackSale.expert,
-    };
-
-    const percentages = [
-      percentageValues.basic,
-      percentageValues.advanced,
-      percentageValues.expert,
-    ];
-
-    const totalPercentage = percentages.reduce(
-      (previousPercentage, percentage) => previousPercentage + percentage,
-      0,
-    );
-
-    if (totalPercentage !== 100) {
-      throw new AppError('Pack sale percentage must be 100%');
-    }
-
     const { packSale } = new PackSale(
       {
         crypto: crypto ?? foundPackSale.crypto,
         price: price ?? foundPackSale.price,
         quantity: quantity ?? foundPackSale.quantity,
-
+        type: salePack?.type ?? foundPackSale.type,
         totalUnitsSold: totalUnitsSold ?? foundPackSale.totalUnitsSold,
         currentQuantityAvailable:
-          currentQuantityAvailable ?? foundPackSale.currentQuantityAvailable,
-
-        ...percentageValues,
+          quantity ??
+          currentQuantityAvailable ??
+          foundPackSale.currentQuantityAvailable,
 
         startDate: startDate ?? foundPackSale.startDate,
         endDate: endDate ?? foundPackSale.endDate,

@@ -39,14 +39,14 @@ class UpdateMonkeynautSaleBusinessLogic {
 
     const percentageValues = {
       captain: saleMonkeynaut?.captain ?? foundMonkeynautSale.captain,
-      sargeant: saleMonkeynaut?.sargeant ?? foundMonkeynautSale.sargeant,
+      sergeant: saleMonkeynaut?.sergeant ?? foundMonkeynautSale.sergeant,
       major: saleMonkeynaut?.major ?? foundMonkeynautSale.major,
       private: saleMonkeynaut?.private ?? foundMonkeynautSale.private,
     };
 
     const percentages = [
       percentageValues.private,
-      percentageValues.sargeant,
+      percentageValues.sergeant,
       percentageValues.captain,
       percentageValues.major,
     ];
@@ -68,6 +68,7 @@ class UpdateMonkeynautSaleBusinessLogic {
 
         totalUnitsSold: totalUnitsSold ?? foundMonkeynautSale.totalUnitsSold,
         currentQuantityAvailable:
+          quantity ??
           currentQuantityAvailable ??
           foundMonkeynautSale.currentQuantityAvailable,
 

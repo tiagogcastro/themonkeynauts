@@ -3,4 +3,5 @@ export enum PackType {
   BASIC = 'BASIC',
   ADVANCED = 'ADVANCED',
   EXPERT = 'EXPERT',
+  RANDOM = 'RANDOM',
 }
