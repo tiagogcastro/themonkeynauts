@@ -23,7 +23,7 @@ model Log {
   playerId  String?  @db.Uuid()
   player    Player?  @relation(fields: [playerId], references: [id], onDelete: SetNull)
   action    String
-  txHash    String?
+  txHash    String?  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -211,13 +211,13 @@ model PrivateSale {
 model MonkeynautSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
   private  Float
   sergeant Float @default(0)
@@ -235,13 +235,13 @@ model MonkeynautSale {
 model ShipSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
   rankB Float
   rankA Float
@@ -258,13 +258,13 @@ model ShipSale {
 model PackSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
   basic    Float
   advanced Float
