@@ -6,6 +6,7 @@ import { createSaleController } from '../controllers/create-sale';
 import { listMonkeynautSalesController } from '../controllers/list-monkeynaut-sales';
 import { listPackSalesController } from '../controllers/list-pack-sales';
 import { listShipSalesController } from '../controllers/list-ship-sales';
+import { updateSaleController } from '../controllers/update/update-sales';
 
 const saleEventsRouter = Router();
 
@@ -66,6 +67,57 @@ saleEventsRouter.get('/list-packs', ensureAuthenticated, (request, response) =>
 
 saleEventsRouter.get('/list-ships', ensureAuthenticated, (request, response) =>
   listShipSalesController.handle(request, response),
+);
+
+// update
+saleEventsRouter.put(
+  '/update-sale',
+  ensureAuthenticated,
+  ensureAdministrator,
+  celebrate({
+    [Segments.BODY]: {
+      crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
+      price: Joi.number(),
+      startDate: Joi.date(),
+      endDate: Joi.date().optional(),
+      quantity: Joi.number(),
+      totalUnitsSold: Joi.number(),
+      currentQuantityAvailable: Joi.number(),
+      active: Joi.boolean(),
+
+      type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
+
+      saleMonkeynaut: Joi.alternatives().conditional('type', {
+        is: 'MONKEYNAUT',
+        then: Joi.object({
+          monkeynautSaleId: Joi.string().uuid().required(),
+          private: Joi.number(),
+          sargeant: Joi.number(),
+          captain: Joi.number(),
+          major: Joi.number(),
+        }),
+      }),
+      saleShip: Joi.alternatives().conditional('type', {
+        is: 'SHIP',
+        then: Joi.object({
+          shipSaleId: Joi.string().uuid().required(),
+          rank_b: Joi.number(),
+          rank_a: Joi.number(),
+          rank_s: Joi.number(),
+        }),
+      }),
+      salePack: Joi.alternatives().conditional('type', {
+        is: 'PACK',
+        then: Joi.object({
+          packSaleId: Joi.string().uuid().required(),
+          basic: Joi.number(),
+          advanced: Joi.number(),
+          expert: Joi.number(),
+        }),
+      }),
+    },
+  }),
+  (request, response) => updateSaleController.handle(request, response),
 );
 
 export { saleEventsRouter };

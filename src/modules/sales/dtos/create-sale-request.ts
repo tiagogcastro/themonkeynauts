@@ -30,6 +30,7 @@ export type SaleCommons = {
   endDate?: Date;
   quantity: number;
   totalUnitsSold: number;
+  active?: boolean;
 };
 
 type CreateSaleRequestDTO = SaleCommons & {
