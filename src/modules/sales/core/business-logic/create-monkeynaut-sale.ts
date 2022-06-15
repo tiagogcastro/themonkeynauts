@@ -48,6 +48,7 @@ class CreateMonkeynautSaleBusinessLogic {
       sergeant,
       startDate,
       totalUnitsSold,
+      currentQuantityAvailable: quantity,
       endDate,
       active: true,
     });

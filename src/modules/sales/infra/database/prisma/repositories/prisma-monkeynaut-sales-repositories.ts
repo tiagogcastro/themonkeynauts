@@ -44,9 +44,60 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
   }
 
   async listManyMonkeynauts(): Promise<IMonkeynautSale[]> {
+    const monkeynautsales = await prisma.monkeynautSale.findMany({
+      where: {
+        active: true,
+        currentQuantityAvailable: {
+          not: {
+            equals: 0,
+          },
+        },
+        OR: [
+          {
+            endDate: null,
+          },
+          {
+            endDate: {
+              gte: new Date(),
+            },
+          },
+        ],
+      },
+    });
+
+    return monkeynautsales.map(parseMonkeynautSale);
+  }
+
+  async listManyMonkeynautsWithoutException(): Promise<IMonkeynautSale[]> {
     const monkeynautsales = await prisma.monkeynautSale.findMany();
 
     return monkeynautsales.map(parseMonkeynautSale);
+  }
+
+  async findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale | null> {
+    const monkeynautsale = await prisma.monkeynautSale.findUnique({
+      where: {
+        id: monkeynautId,
+      },
+    });
+
+    if (!monkeynautsale) {
+      return null;
+    }
+
+    return parseMonkeynautSale(monkeynautsale);
+  }
+
+  async update({ id: monkeynautId, ...props }: IMonkeynautSale): Promise<void> {
+    await prisma.monkeynautSale.update({
+      data: {
+        id: monkeynautId,
+        ...props,
+      },
+      where: {
+        id: monkeynautId,
+      },
+    });
   }
 }
 

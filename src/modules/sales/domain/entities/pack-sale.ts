@@ -13,6 +13,7 @@ export type PackSalePropsOmittedCommons = {
   endDate: Maybe<Date>;
   quantity: number;
   totalUnitsSold: number;
+  currentQuantityAvailable: number;
   active: boolean;
 };
 
@@ -45,6 +46,7 @@ export class PackSale implements IPackSale {
       endDate: this._props.endDate,
       quantity: this._props.quantity,
       totalUnitsSold: this._props.totalUnitsSold,
+      currentQuantityAvailable: this._props.currentQuantityAvailable,
       active: this._props.active,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
@@ -92,6 +94,10 @@ export class PackSale implements IPackSale {
 
   get quantity(): number {
     return this._props.quantity;
+  }
+
+  get currentQuantityAvailable(): number {
+    return this._props.currentQuantityAvailable;
   }
 
   get totalUnitsSold(): number {

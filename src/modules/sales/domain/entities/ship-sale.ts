@@ -13,6 +13,7 @@ export type ShipSalePropsOmittedCommons = {
   endDate: Maybe<Date>;
   quantity: number;
   totalUnitsSold: number;
+  currentQuantityAvailable: number;
   active: boolean;
 };
 
@@ -48,6 +49,7 @@ export class ShipSale implements IShipSale {
       active: this._props.active,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
+      currentQuantityAvailable: this._props.currentQuantityAvailable,
     };
   }
 
@@ -100,6 +102,10 @@ export class ShipSale implements IShipSale {
 
   get totalUnitsSold(): number {
     return this._props.totalUnitsSold;
+  }
+
+  get currentQuantityAvailable(): number {
+    return this._props.currentQuantityAvailable;
   }
 
   get updatedAt(): Date {
