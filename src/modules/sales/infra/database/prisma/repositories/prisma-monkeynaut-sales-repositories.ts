@@ -54,6 +54,12 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
 
     return monkeynautsales.map(parseMonkeynautSale);
   }
+
+  async listManyMonkeynautsWithoutException(): Promise<IMonkeynautSale[]> {
+    const monkeynautsales = await prisma.monkeynautSale.findMany();
+
+    return monkeynautsales.map(parseMonkeynautSale);
+  }
 }
 
 export { PrismaMonkeynautSalesRepository };
