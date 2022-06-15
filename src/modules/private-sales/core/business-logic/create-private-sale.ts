@@ -1,4 +1,6 @@
 import { balanceConfig } from '@config/balance';
+import { Log } from '@modules/logs/domain/entities/log';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import {
   IPrivateSale,
@@ -25,6 +27,9 @@ class CreatePrivateSaleBusinessLogic {
 
     @inject('BlockchainProvider')
     private blockchainProvider: IBlockchainProvider,
+
+    @inject('LogsRepository')
+    private logsRepository: ILogsRepository,
   ) {}
 
   async execute({
@@ -45,7 +50,7 @@ class CreatePrivateSaleBusinessLogic {
     if (playerId !== player.id) {
       throw new AppError(
         `You are trying to create a private sale with another player's wallet`,
-        401,
+        400,
       );
     }
 
@@ -88,6 +93,7 @@ class CreatePrivateSaleBusinessLogic {
     await this.blockchainProvider.confirmTransaction({
       amount: bnbAmount,
       from: wallet,
+      playerId,
       txHash,
     });
 
@@ -99,6 +105,14 @@ class CreatePrivateSaleBusinessLogic {
     });
 
     await this.privateSalesRepository.create(privateSale);
+
+    const { log } = new Log({
+      action: `The player bought SPC in the amount of ${bnbAmount} BNB. PRIVATE_SALE_ID:${privateSale.id}`,
+      playerId,
+      txHash,
+    });
+
+    await this.logsRepository.create(log);
 
     return {
       private_sale: privateSale,

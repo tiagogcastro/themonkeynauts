@@ -1,5 +1,6 @@
 type ConfirmTransactionDTO = {
   from: string;
+  playerId: string;
   amount: number;
   txHash: string;
 };

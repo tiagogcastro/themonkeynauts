@@ -24,6 +24,8 @@ import { IPlayersRepository } from '@modules/players/domain/repositories/players
 
 import { AppError } from '@shared/errors/app-error';
 
+import { Log } from '@modules/logs/domain/entities/log';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 @injectable()
@@ -34,6 +36,9 @@ class CreateMonkeynautBusinessLogic {
 
     @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
+
+    @inject('LogsRepository')
+    private logsRepository: ILogsRepository,
   ) {}
 
   async execute({
@@ -171,6 +176,14 @@ class CreateMonkeynautBusinessLogic {
     });
 
     await this.monkeynautsRepository.create(monkeynaut);
+
+    const { log } = new Log({
+      action: `Monkeynaut has created on player account. MONKEYNAUT_ID:${monkeynaut.id}`,
+      playerId,
+      txHash: null,
+    });
+
+    await this.logsRepository.create(log);
 
     return monkeynaut;
   }

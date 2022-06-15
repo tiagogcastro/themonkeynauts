@@ -6,15 +6,15 @@ import { SaleType } from '../domain/enums/sale-type';
 
 export type MonkeynautSaleUniqueProps = {
   private: number;
-  sargeant: number;
+  sergeant: number;
   captain: number;
   major: number;
 };
 
 export type ShipSaleUniqueProps = {
-  rank_b: number;
-  rank_a: number;
-  rank_s: number;
+  rankB: number;
+  rankA: number;
+  rankS: number;
 };
 
 export type PackSaleUniqueProps = {

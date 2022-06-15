@@ -6,6 +6,7 @@ import {
 import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { MonkeynautSale as PrismaMonkeynautSale } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@shared/types/maybe';
 
 const parseMonkeynautSale = (
   monkeynautsale: PrismaMonkeynautSale,
@@ -21,6 +22,18 @@ const parseMonkeynautSale = (
 };
 
 class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
+  async findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale> {
+    const monkeynautsale = await prisma.monkeynautSale.findUnique({
+      where: { id: monkeynautId },
+    });
+
+    if (!monkeynautsale) {
+      return null;
+    }
+
+    return parseMonkeynautSale(monkeynautsale);
+  }
+
   async create({ id: monkeynautId, ...props }: IMonkeynautSale): Promise<void> {
     await prisma.monkeynautSale.create({
       data: {

@@ -23,7 +23,7 @@ model Log {
   playerId  String?  @db.Uuid()
   player    Player?  @relation(fields: [playerId], references: [id], onDelete: SetNull)
   action    String
-  txHash    String?  @unique
+  txHash    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -219,7 +219,7 @@ model MonkeynautSale {
   totalUnitsSold Int       @default(0)
 
   private  Float
-  sargeant Float
+  sergeant Float @default(0)
   captain  Float
   major    Float
 
@@ -241,9 +241,9 @@ model ShipSale {
   quantity       Int
   totalUnitsSold Int       @default(0)
 
-  rank_b Float
-  rank_a Float
-  rank_s Float
+  rankB Float
+  rankA Float
+  rankS Float
 
   active Boolean @default(true)
 

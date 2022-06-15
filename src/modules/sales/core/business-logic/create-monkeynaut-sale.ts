@@ -23,11 +23,11 @@ class CreateMonkeynautSaleBusinessLogic {
     price,
     quantity,
     private: _private,
-    sargeant,
+    sergeant,
     startDate,
     totalUnitsSold,
   }: CreateMonkeynautSaleRequestDTO): Promise<IMonkeynautSale> {
-    const percentages = [captain, sargeant, major, _private];
+    const percentages = [captain, sergeant, major, _private];
 
     const totalPercentage = percentages.reduce(
       (previousPercentage, percentage) => previousPercentage + percentage,
@@ -45,7 +45,7 @@ class CreateMonkeynautSaleBusinessLogic {
       price,
       private: _private,
       quantity,
-      sargeant,
+      sergeant,
       startDate,
       totalUnitsSold,
       endDate,

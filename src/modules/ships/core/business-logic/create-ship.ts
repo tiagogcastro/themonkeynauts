@@ -1,3 +1,5 @@
+import { Log } from '@modules/logs/domain/entities/log';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { ShipClass } from '@modules/ships/domain/enums/ship-class';
@@ -16,9 +18,13 @@ class CreateShipBusinessLogic {
 
     @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
+
+    @inject('LogsRepository')
+    private logsRepository: ILogsRepository,
   ) {}
 
   async execute({
+    ownerId,
     playerId,
     name,
     class: _class,
@@ -112,7 +118,7 @@ class CreateShipBusinessLogic {
     const __onSale = onSale || false;
 
     const { ship } = new Ship({
-      ownerId: playerId,
+      ownerId: ownerId || playerId,
       playerId,
       name: __name,
       class: __class,
@@ -130,6 +136,14 @@ class CreateShipBusinessLogic {
     });
 
     await this.shipsRepository.create(ship);
+
+    const { log } = new Log({
+      action: `Ship has created on player account. SHIP_ID:${ship.id}`,
+      playerId,
+      txHash: null,
+    });
+
+    await this.logsRepository.create(log);
 
     return ship;
   }

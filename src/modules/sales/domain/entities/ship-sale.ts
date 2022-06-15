@@ -4,9 +4,9 @@ import crypto from 'node:crypto';
 import { SaleCrypto } from '../enums/sale-crypto';
 
 export type ShipSalePropsOmittedCommons = {
-  rank_b: number;
-  rank_a: number;
-  rank_s: number;
+  rankB: number;
+  rankA: number;
+  rankS: number;
   crypto: SaleCrypto;
   price: number;
   startDate: Date;
@@ -36,9 +36,9 @@ export class ShipSale implements IShipSale {
   get shipSale(): IShipSale {
     return {
       id: this._id,
-      rank_b: this._props.rank_b,
-      rank_a: this._props.rank_a,
-      rank_s: this._props.rank_s,
+      rankB: this._props.rankB,
+      rankA: this._props.rankA,
+      rankS: this._props.rankS,
       crypto: this._props.crypto,
       price: this._props.price,
       startDate: this._props.startDate,
@@ -62,16 +62,16 @@ export class ShipSale implements IShipSale {
     return this._id;
   }
 
-  get rank_b(): number {
-    return this._props.rank_b;
+  get rankS(): number {
+    return this._props.rankS;
   }
 
-  get rank_a(): number {
-    return this._props.rank_a;
+  get rankA(): number {
+    return this._props.rankA;
   }
 
-  get rank_s(): number {
-    return this._props.rank_s;
+  get rankB(): number {
+    return this._props.rankB;
   }
 
   get crypto(): SaleCrypto {

@@ -5,7 +5,7 @@ import { SaleCrypto } from '../enums/sale-crypto';
 
 export type MonkeynautSalePropsOmittedCommons = {
   private: number;
-  sargeant: number;
+  sergeant: number;
   captain: number;
   major: number;
   crypto: SaleCrypto;
@@ -38,7 +38,7 @@ export class MonkeynautSale implements IMonkeynautSale {
     return {
       id: this._id,
       private: this._props.private,
-      sargeant: this._props.sargeant,
+      sergeant: this._props.sergeant,
       captain: this._props.captain,
       major: this._props.major,
       crypto: this._props.crypto,
@@ -68,8 +68,8 @@ export class MonkeynautSale implements IMonkeynautSale {
     return this._props.private;
   }
 
-  get sargeant(): number {
-    return this._props.sargeant;
+  get sergeant(): number {
+    return this._props.sergeant;
   }
 
   get captain(): number {

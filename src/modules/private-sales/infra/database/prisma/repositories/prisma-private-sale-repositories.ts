@@ -38,7 +38,7 @@ class PrismaPrivateSalesRepository implements IPrivateSalesRepository {
   async findByTxHash(txHash: string): AsyncMaybe<IPrivateSale> {
     const privateSale = await prisma.privateSale.findUnique({
       where: {
-        txHash: txHash,
+        txHash,
       },
     });
 

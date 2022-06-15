@@ -50,14 +50,14 @@ class CreateSaleBusinessLogic {
       basic: salePack?.basic as number,
       expert: salePack?.expert as number,
 
-      rank_a: saleShip?.rank_a as number,
-      rank_b: saleShip?.rank_b as number,
-      rank_s: saleShip?.rank_s as number,
+      rankA: saleShip?.rankA as number,
+      rankB: saleShip?.rankB as number,
+      rankS: saleShip?.rankS as number,
 
       captain: saleMonkeynaut?.captain as number,
       major: saleMonkeynaut?.major as number,
       private: saleMonkeynaut?.private as number,
-      sargeant: saleMonkeynaut?.sargeant as number,
+      sergeant: saleMonkeynaut?.sergeant as number,
 
       price: data.price,
       crypto: data.crypto,
