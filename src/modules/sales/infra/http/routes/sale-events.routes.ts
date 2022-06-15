@@ -90,7 +90,7 @@ saleEventsRouter.put(
       saleMonkeynaut: Joi.alternatives().conditional('type', {
         is: 'MONKEYNAUT',
         then: Joi.object({
-          monkeynautSaleId: Joi.string().uuid().required(),
+          saleMonkeynautId: Joi.string().uuid().required(),
           private: Joi.number(),
           sargeant: Joi.number(),
           captain: Joi.number(),
@@ -100,7 +100,7 @@ saleEventsRouter.put(
       saleShip: Joi.alternatives().conditional('type', {
         is: 'SHIP',
         then: Joi.object({
-          shipSaleId: Joi.string().uuid().required(),
+          saleShipId: Joi.string().uuid().required(),
           rank_b: Joi.number(),
           rank_a: Joi.number(),
           rank_s: Joi.number(),
@@ -109,7 +109,7 @@ saleEventsRouter.put(
       salePack: Joi.alternatives().conditional('type', {
         is: 'PACK',
         then: Joi.object({
-          packSaleId: Joi.string().uuid().required(),
+          salePackId: Joi.string().uuid().required(),
           basic: Joi.number(),
           advanced: Joi.number(),
           expert: Joi.number(),
