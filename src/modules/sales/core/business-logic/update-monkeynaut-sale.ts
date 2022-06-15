@@ -7,7 +7,6 @@ import {
 import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { UpdateMonkeynautSaleRequestDTO } from '@modules/sales/dtos/update-monkeynaut-sale-request';
 import { AppError } from '@shared/errors/app-error';
-import { Maybe } from '@shared/types/maybe';
 
 @injectable()
 class UpdateMonkeynautSaleBusinessLogic {
@@ -23,8 +22,6 @@ class UpdateMonkeynautSaleBusinessLogic {
     quantity,
 
     saleMonkeynaut,
-    saleShip,
-    salePack,
 
     currentQuantityAvailable,
 
@@ -39,8 +36,6 @@ class UpdateMonkeynautSaleBusinessLogic {
     if (!foundMonkeynautSale) {
       throw new AppError('Monkeynaut Sale does not exist', 404);
     }
-
-    console.log(saleMonkeynaut);
 
     const percentageValues = {
       captain: saleMonkeynaut?.captain ?? foundMonkeynautSale.captain,

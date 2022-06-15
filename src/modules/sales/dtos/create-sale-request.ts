@@ -31,6 +31,7 @@ export type SaleCommons = {
   quantity: number;
   totalUnitsSold: number;
   active?: boolean;
+  currentQuantityAvailable?: number;
 };
 
 type CreateSaleRequestDTO = SaleCommons & {

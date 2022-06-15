@@ -6,6 +6,7 @@ import {
 import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
 import { PackSale as PrismaPackSale } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@shared/types/maybe';
 
 const parsePackSale = (packSale: PrismaPackSale): IPackSale => {
   return new PackSale(packSale as PackSalePropsOmittedCommons, {
@@ -54,6 +55,32 @@ class PrismaPackSalesRepository implements IPackSalesRepository {
     const packSales = await prisma.packSale.findMany();
 
     return packSales.map(parsePackSale);
+  }
+
+  async findById(packId: string): AsyncMaybe<IPackSale | null> {
+    const packsale = await prisma.packSale.findUnique({
+      where: {
+        id: packId,
+      },
+    });
+
+    if (!packsale) {
+      return null;
+    }
+
+    return parsePackSale(packsale);
+  }
+
+  async update({ id: packId, ...props }: IPackSale): Promise<void> {
+    await prisma.packSale.update({
+      data: {
+        id: packId,
+        ...props,
+      },
+      where: {
+        id: packId,
+      },
+    });
   }
 }
 
