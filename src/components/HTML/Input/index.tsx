@@ -13,7 +13,7 @@ import {
   Content
 } from './styles';
 
-export type InputProps = React.HTMLAttributes<HTMLInputElement> & {
+export type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   name: string;
   labelText?: string;
   type?: HTMLInputTypeAttribute;
