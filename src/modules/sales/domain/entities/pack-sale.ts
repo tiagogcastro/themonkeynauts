@@ -1,12 +1,11 @@
 import { Commons } from '@shared/types/commons';
 import { Maybe } from '@shared/types/maybe';
 import crypto from 'node:crypto';
+import { PackType } from '../enums/pack-type';
 import { SaleCrypto } from '../enums/sale-crypto';
 
 export type PackSalePropsOmittedCommons = {
-  basic: number;
-  advanced: number;
-  expert: number;
+  type: PackType;
   crypto: SaleCrypto;
   price: number;
   startDate: Date;
@@ -37,9 +36,7 @@ export class PackSale implements IPackSale {
   get packSale(): IPackSale {
     return {
       id: this._id,
-      basic: this._props.basic,
-      advanced: this._props.advanced,
-      expert: this._props.expert,
+      type: this._props.type,
       crypto: this._props.crypto,
       price: this._props.price,
       startDate: this._props.startDate,
@@ -64,16 +61,8 @@ export class PackSale implements IPackSale {
     return this._id;
   }
 
-  get basic(): number {
-    return this._props.basic;
-  }
-
-  get advanced(): number {
-    return this._props.advanced;
-  }
-
-  get expert(): number {
-    return this._props.expert;
+  get type(): PackType {
+    return this._props.type;
   }
 
   get crypto(): SaleCrypto {

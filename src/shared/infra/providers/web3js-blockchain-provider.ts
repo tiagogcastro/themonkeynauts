@@ -1,4 +1,5 @@
-import { IPrivateSalesRepository } from '@modules/private-sales/domain/repositories/private-sales-repositories';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import {
   ConfirmTransactionDTO,
   IBlockchainProvider,
@@ -15,8 +16,11 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
 
   constructor(
-    @inject('PrivateSalesRepository')
-    private privateSalesRepository: IPrivateSalesRepository,
+    @inject('LogsRepository')
+    private logsRepository: ILogsRepository,
+
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
   ) {
     this.web3 = new Web3(
       new Web3.providers.HttpProvider(
@@ -77,13 +81,30 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   async confirmTransaction({
     txHash,
     amount,
+    playerId,
     from,
   }: ConfirmTransactionDTO): Promise<void> {
     const checkIfTheTransactionHasAlreadyBeenCarriedOut =
-      await this.privateSalesRepository.findByTxHash(txHash);
+      await this.logsRepository.findByTxHash(txHash);
 
     if (checkIfTheTransactionHasAlreadyBeenCarriedOut) {
       throw new AppError('This transaction has already been carried out', 400);
+    }
+
+    const player = await this.playersRepository.findByWallet(from);
+
+    if (!player) {
+      throw new AppError(
+        'The wallet you entered is not a valid wallet in our database',
+        400,
+      );
+    }
+
+    if (playerId !== player.id) {
+      throw new AppError(
+        `You are trying to create a private sale with another player's wallet`,
+        400,
+      );
     }
 
     await this.waitTransaction(txHash);

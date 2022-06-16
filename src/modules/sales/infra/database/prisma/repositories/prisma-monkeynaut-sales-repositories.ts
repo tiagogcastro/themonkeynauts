@@ -22,6 +22,18 @@ const parseMonkeynautSale = (
 };
 
 class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
+  async findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale> {
+    const monkeynautsale = await prisma.monkeynautSale.findUnique({
+      where: { id: monkeynautId },
+    });
+
+    if (!monkeynautsale) {
+      return null;
+    }
+
+    return parseMonkeynautSale(monkeynautsale);
+  }
+
   async create({ id: monkeynautId, ...props }: IMonkeynautSale): Promise<void> {
     await prisma.monkeynautSale.create({
       data: {

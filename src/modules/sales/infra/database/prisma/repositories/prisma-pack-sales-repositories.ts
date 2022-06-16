@@ -17,6 +17,18 @@ const parsePackSale = (packSale: PrismaPackSale): IPackSale => {
 };
 
 class PrismaPackSalesRepository implements IPackSalesRepository {
+  async findById(packId: string): AsyncMaybe<IPackSale> {
+    const packSale = await prisma.packSale.findUnique({
+      where: { id: packId },
+    });
+
+    if (!packSale) {
+      return null;
+    }
+
+    return parsePackSale(packSale);
+  }
+
   async create({ id: packId, ...props }: IPackSale): Promise<void> {
     await prisma.packSale.create({
       data: {

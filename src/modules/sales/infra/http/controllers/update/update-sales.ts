@@ -21,7 +21,7 @@ class UpdateSaleController {
 
     const updatedSale = await updateSaleBusinessLogic.execute({
       ...data,
-      sale: container.resolve(Sale),
+      sale: container.resolve(Sale as any),
     });
 
     return response.status(201).json(updatedSale);

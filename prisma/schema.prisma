@@ -7,17 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum PlayerRole {
-  ADMIN
-  DEFAULT
-}
-
-enum SaleEventType {
-  MONKEYNAUT
-  SHIP
-  PACK
-}
-
 model Log {
   id        String   @id @db.Uuid()
   playerId  String?  @db.Uuid()
@@ -31,14 +20,14 @@ model Log {
 }
 
 model Player {
-  id            String     @id @db.Uuid()
-  nickname      String     @unique
-  email         String     @unique
+  id            String  @id @db.Uuid()
+  nickname      String  @unique
+  email         String  @unique
   password      String
-  wallet        String?    @unique
-  role          PlayerRole @default(DEFAULT)
-  hasAsteroid   Boolean    @default(false)
-  canBountyHunt Boolean    @default(true)
+  wallet        String? @unique
+  role          String  @default("DEFAULT")
+  hasAsteroid   Boolean @default(false)
+  canBountyHunt Boolean @default(true)
 
   enabled   Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -211,16 +200,16 @@ model PrivateSale {
 model MonkeynautSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
   private  Float
-  sargeant Float
+  sergeant Float @default(0)
   captain  Float
   major    Float
 
@@ -235,17 +224,17 @@ model MonkeynautSale {
 model ShipSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
-  rank_b Float
-  rank_a Float
-  rank_s Float
+  rankB Float
+  rankA Float
+  rankS Float
 
   active Boolean @default(true)
 
@@ -258,17 +247,15 @@ model ShipSale {
 model PackSale {
   id String @id @db.Uuid()
 
-  crypto         String
-  price          Float
-  startDate      DateTime
-  endDate        DateTime?
-  quantity       Int
-  currentQuantityAvailable Int @default(0)
-  totalUnitsSold Int       @default(0)
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
 
-  basic    Float
-  advanced Float
-  expert   Float
+  type String @default("BASIC")
 
   active Boolean @default(true)
 

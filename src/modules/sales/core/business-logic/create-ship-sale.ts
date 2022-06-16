@@ -15,15 +15,15 @@ class CreateShipSaleBusinessLogic {
   async execute({
     crypto,
     price,
-    rank_a,
-    rank_b,
-    rank_s,
+    rankA,
+    rankS,
+    rankB,
     quantity,
     startDate,
     totalUnitsSold,
     endDate,
   }: CreateShipSaleRequestDTO): Promise<IShipSale> {
-    const percentages = [rank_a, rank_b, rank_s];
+    const percentages = [rankA, rankS, rankB];
 
     const totalPercentage = percentages.reduce(
       (previousPercentage, percentage) => previousPercentage + percentage,
@@ -35,9 +35,9 @@ class CreateShipSaleBusinessLogic {
     }
 
     const { shipSale } = new ShipSale({
-      rank_a,
-      rank_b,
-      rank_s,
+      rankA,
+      rankB,
+      rankS,
       endDate,
       crypto,
       price,
