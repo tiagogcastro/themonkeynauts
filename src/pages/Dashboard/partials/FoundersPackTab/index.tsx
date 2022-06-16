@@ -18,6 +18,8 @@ import notfound from '@/assets/notfound.png';
 import { useEffect, useState } from 'react';
 import { baseApi } from '@/services/api';
 import { getFormattedDate } from '@/utils/getFormattedDate';
+import { useAuth } from '@/hooks';
+import { ethers } from 'ethers';
 
 type CommonSaleProps = {
   id: string;
@@ -59,6 +61,7 @@ type Sales = {
 
 export function FoundersPackTab() {
   const [sales, setSales] = useState<Sales>({} as Sales);
+  const { player } = useAuth();
 
   async function getMonkeynautSale() {
     try {
@@ -123,17 +126,98 @@ export function FoundersPackTab() {
     await getPackSale()
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function verifyWallet() {
+    const ethereum = (window as any).ethereum;
+
+    if(typeof ethereum === 'undefined') {
+      throw new Error("Activate ethereum in your browser");
+    }
+
+    const chainId = await ethereum.request({ method: 'eth_chainId' });
+
+    if (chainId !== ethereumConfig.network.mainNetBSC) {
+      throw new Error('You are in wrong network. Please connect to BSC Mainnet network.');
+    }
+
+    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    const account = accounts?.[0];
+
+    if(!account) {
+      throw new Error('You have not connected your metamask account.');
+    }
+
+    if(player && player.player.wallet) {
+      const walletDifferent = account !== player?.player.wallet;
+
+      if(walletDifferent) {
+        throw new Error("Active metamask wallet is not the wallet that is linked in our system.");
+      }
+      return; 
+    }
+
+    throw new Error("You need to link your metamask first.");
+  }
+
+  async function handleSubmit(event: React.FormEvent, data: MonkeynautSale | ShipSale | PackSale) {
     event.preventDefault();
 
-    const { error, transaction } = await paymentByEthereum({
-      ethereum: (window as any).ethereum,
-      toAddress: ethereumConfig.sendTransaction.toAddress,
-      ether: '1',
-      dataContract: ethereumConfig.sendTransaction.dataContract,
-    });
+    try {
+      await verifyWallet();
 
-    if(error) {
+      const { error, transaction } = await paymentByEthereum({
+        ethereum: (window as any).ethereum,
+        toAddress: ethereumConfig.sendTransaction.toAddress,
+        ether: ethers.utils.parseEther(String(data.price))._hex,
+        dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
+      });
+  
+      if(error) {
+        return toast(error.message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+  
+      const sale = {
+        Monkeynaut: {
+          monkeynautSaleId: data.id,
+        },
+        Ship: {
+          shipSaleId: data.id,
+        },
+        Pack: {
+          packSaleId: data.id,
+        },
+      }
+  
+      const dataPost = {
+        wallet: player?.player.wallet,
+        txHash: transaction,
+        ...sale[data.saleType]
+      }
+      
+      await baseApi.post('/sale-events/buy-sale-item', dataPost);
+
+      toast(`Successfully ${data.saleType} sale`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+
+    } catch (error: any) {
       toast(error.message, {
         autoClose: 5000,
         pauseOnHover: true,
@@ -155,30 +239,30 @@ export function FoundersPackTab() {
   return (
     <Container>
       <Content>
-        {sales?.monkeynauts && sales.monkeynauts.map(monkeynautSale => (
-          <Card onSubmit={handleSubmit} key={monkeynautSale.id}>
+        {sales?.monkeynauts && sales.monkeynauts.map(sale => (
+          <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>
-              <h1 className="card_title">{monkeynautSale.saleType}</h1>
+              <h1 className="card_title">{sale.saleType}</h1>
               <CardContent>
                 <p className="description">
                   Includes: <br />
-                  1 {monkeynautSale.saleType} <br />
+                  1 {sale.saleType} <br />
                   <br />
                   Probability: <br />
-                  Private: {monkeynautSale.private}% <br />
-                  Seargeant: {monkeynautSale.sergeant}% <br />
-                  Captain: {monkeynautSale.captain}% <br />
-                  Major: {monkeynautSale.major}% <br />
+                  Private: {sale.private}% <br />
+                  Seargeant: {sale.sergeant}% <br />
+                  Captain: {sale.captain}% <br />
+                  Major: {sale.major}% <br />
                 <br />
-                  {monkeynautSale.endDate && (
+                  {sale.endDate && (
                     <>
                       Expires In: <br />
-                      {getFormattedDate(monkeynautSale.endDate)} <br />
+                      {getFormattedDate(sale.endDate)} <br />
                     </>
                   )}
                 </p>
                 <img src={notfound} />
-                <span className="price">Price {monkeynautSale.price} ${monkeynautSale.crypto}</span>
+                <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
@@ -187,34 +271,34 @@ export function FoundersPackTab() {
                 />
               </CardContent>
             </CardContainer>
-            <span className="stock">{monkeynautSale.currentQuantityAvailable}/{monkeynautSale.quantity} Available</span>
+            <span className="stock">{sale.currentQuantityAvailable}/{sale.quantity} Available</span>
           </Card>
         ))}
 
-        {sales?.ships && sales.ships.map(shipSale => (
-          <Card onSubmit={handleSubmit} key={shipSale.id}>
+        {sales?.ships && sales.ships.map(sale => (
+          <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>
-              <h1 className="card_title">{shipSale.saleType}</h1>
+              <h1 className="card_title">{sale.saleType}</h1>
               <CardContent>
                 <p className="description">
                   Includes: <br />
-                  1 {shipSale.saleType} <br />
+                  1 {sale.saleType} <br />
                   <br />
                   Probability: <br />
-                  Rank A: {shipSale.rank_a}% <br />
-                  Rank B: {shipSale.rank_b}% <br />
-                  Rank S: {shipSale.rank_s}% <br />
+                  Rank A: {sale.rank_a}% <br />
+                  Rank B: {sale.rank_b}% <br />
+                  Rank S: {sale.rank_s}% <br />
                   <br />
-                  {shipSale.endDate && (
+                  {sale.endDate && (
                     <>
                       Expires In: <br /> 
-                      {getFormattedDate(shipSale.endDate)} <br />
+                      {getFormattedDate(sale.endDate)} <br />
                     </>
                   )}
                 </p>
 
                 <img src={notfound} />
-                <span className="price">Price {shipSale.price} ${shipSale.crypto}</span>
+                <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
@@ -223,19 +307,19 @@ export function FoundersPackTab() {
                 />
               </CardContent>
             </CardContainer>
-            <span className="stock">{shipSale.currentQuantityAvailable}/{shipSale.quantity} Available</span>
+            <span className="stock">{sale.currentQuantityAvailable}/{sale.quantity} Available</span>
           </Card>
         ))}
 
-        {sales?.packs && sales.packs.map(packSale => (
-          <Card onSubmit={handleSubmit} key={packSale.id}>
+        {sales?.packs && sales.packs.map(sale => (
+          <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>
-              <h1 className="card_title">{packSale.saleType} - {packSale.type}</h1>
+              <h1 className="card_title">{sale.saleType} - {sale.type}</h1>
               <CardContent>
                 <p className="description">
                   Includes: 
                   <br /> <br />
-                  {packSale.type === 'BASIC' && (
+                  {sale.type === 'BASIC' && (
                     <>
                       2 Monkeynauts - Rank Sergeant <br /><br />
                       1 Ship - Rank B <br /><br />
@@ -243,7 +327,7 @@ export function FoundersPackTab() {
                       <br/>
                     </>
                   )}
-                  {packSale.type === 'ADVANCED' && (
+                  {sale.type === 'ADVANCED' && (
                     <>
                       3 Monkeynauts - Rank Captain <br /><br />
                       1 Ship - Rank A<br /><br />
@@ -251,7 +335,7 @@ export function FoundersPackTab() {
                       <br/>
                     </>
                   )}
-                  {packSale.type === 'EXPERT' && (
+                  {sale.type === 'EXPERT' && (
                     <>
                       4 Monkeynauts - Rank Major <br /><br />
                       1 Ship - Rank S<br /><br />
@@ -259,7 +343,7 @@ export function FoundersPackTab() {
                       <br/>
                     </>
                   )}
-                  {packSale.type === 'RANDOM' && (
+                  {sale.type === 'RANDOM' && (
                     <>
                       2 Monkeynauts random <br /><br />
                       1 Ship random<br /><br />
@@ -268,16 +352,16 @@ export function FoundersPackTab() {
                     </>
                   )}
                   <br />
-                  {packSale.endDate && (
+                  {sale.endDate && (
                     <>
                       Expires In: <br />
-                      {getFormattedDate(packSale.endDate)} <br />
+                      {getFormattedDate(sale.endDate)} <br />
                     </>
                   )}
                 </p>
 
                 <img src={notfound} />
-                <span className="price">Price {packSale.price} ${packSale.crypto}</span>
+                <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
@@ -286,7 +370,7 @@ export function FoundersPackTab() {
                 />
               </CardContent>
             </CardContainer>
-            <span className="stock">{packSale.currentQuantityAvailable}/{packSale.quantity} Available</span>
+            <span className="stock">{sale.currentQuantityAvailable}/{sale.quantity} Available</span>
           </Card>
         ))}
       </Content>
