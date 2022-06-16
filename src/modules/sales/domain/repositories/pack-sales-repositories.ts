@@ -5,6 +5,8 @@ interface IPackSalesRepository {
   create(packSale: IPackSale): Promise<void>;
   listManyPacks(): Promise<IPackSale[]>;
   listManyPacksWithoutException(): Promise<IPackSale[]>;
+  listManyPacksNotActived(): Promise<IPackSale[]>;
+
   update(shipSale: IPackSale): Promise<void>;
   findById(shipSaleId: string): AsyncMaybe<IPackSale>;
 }

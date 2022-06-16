@@ -6,6 +6,7 @@ interface IMonkeynautSalesRepository {
   update(monkeynautSale: IMonkeynautSale): Promise<void>;
   listManyMonkeynautsWithoutException(): Promise<IMonkeynautSale[]>;
   listManyMonkeynauts(): Promise<IMonkeynautSale[]>;
+  listManyMonkeynautsNotActived(): Promise<IMonkeynautSale[]>;
 
   findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale | null>;
 }

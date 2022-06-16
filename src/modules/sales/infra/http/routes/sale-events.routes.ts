@@ -57,16 +57,35 @@ saleEventsRouter.post(
 saleEventsRouter.get(
   '/list-monkeynauts',
   ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+    },
+  }),
   (request, response) =>
     listMonkeynautSalesController.handle(request, response),
 );
 
-saleEventsRouter.get('/list-packs', ensureAuthenticated, (request, response) =>
-  listPackSalesController.handle(request, response),
+saleEventsRouter.get(
+  '/list-packs',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+    },
+  }),
+  (request, response) => listPackSalesController.handle(request, response),
 );
 
-saleEventsRouter.get('/list-ships', ensureAuthenticated, (request, response) =>
-  listShipSalesController.handle(request, response),
+saleEventsRouter.get(
+  '/list-ships',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+    },
+  }),
+  (request, response) => listShipSalesController.handle(request, response),
 );
 
 // update
