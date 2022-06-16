@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { AiOutlineStop } from 'react-icons/ai';
 import { FormHandles } from '@unform/core';
@@ -12,6 +12,7 @@ import * as S from './styles';
 import { baseApi } from '@/services/api';
 import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
+import { getFormattedDate } from '@/utils/getFormattedDate';
 
 const schema = Yup.object().shape({
   type: Yup.string()
@@ -34,7 +35,7 @@ const schema = Yup.object().shape({
       private: Yup.number()
       .required('This field is required')
       .min(0.01, 'Value min is 0.001'),
-      sargeant: Yup.number()
+      sergeant: Yup.number()
         .required('This field is required')
         .min(0.01, 'Value min is 0.001'),
       captain: Yup.number()
@@ -49,13 +50,13 @@ const schema = Yup.object().shape({
   saleShip: Yup.object().when('type', {
     is: (value: any) => value === 'SHIP',
     then: Yup.object({
-      rank_a: Yup.number()
+      rankA: Yup.number()
       .required('This field is required')
       .min(0.01, 'Value min is 0.001'),
-      rank_b: Yup.number()
+      rankB: Yup.number()
         .required('This field is required')
         .min(0.01, 'Value min is 0.001'),
-      rank_s: Yup.number()
+      rankS: Yup.number()
         .required('This field is required')
         .min(0.01, 'Value min is 0.001'),
     })
@@ -64,37 +65,11 @@ const schema = Yup.object().shape({
   salePack: Yup.object().when('type', {
     is: (value: any) => value === 'PACK',
     then: Yup.object({
-      basic: Yup.number()
+      type: Yup.string()
       .required('This field is required')
-      .min(0.01, 'Value min is 0.001'),
-      advanced: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-      expert: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
     })
   })
 });
-
-type MonkeynautSale = {
-  private: number;
-  sargeant: number;
-  captain: number;
-  major: number;
-}
-
-type ShipSale = {
-  rank_a: number;
-  rank_b: number;
-  rank_s: number;
-}
-
-type PackSale = {
-  basic: number;
-  advanced: number;
-  expert: number;
-}
 
 type CreateSale = {
   price: number;
@@ -138,10 +113,203 @@ const cryptoTypes = [
   },
 ];
 
+const packType = [
+  {
+    value: 'BASIC',
+    label: 'Basic'
+  },
+  {
+    value: 'ADVANCED',
+    label: 'Advanced'
+  },
+  {
+    value: 'EXPERT',
+    label: 'Expert'
+  },
+  {
+    value: 'RANDOM',
+    label: 'Random'
+  },
+]
+
+type SaleType = 'MONKEYNAUT' | 'SHIP' | 'PACK';
+
+type CommonSaleProps = {
+  id: string;
+  crypto: 'BNB' | 'BUSD' | 'SPC';
+  saleType: SaleType;
+  price: number;
+  startDate: string;
+  endDate: string | null;
+  quantity: number;
+  totalUnitsSold: number;
+  currentQuantityAvailable: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type MonkeynautSale = CommonSaleProps & {
+  private: number;
+  sergeant: number;
+  captain: number;
+  major: number;
+};
+
+type ShipSale = CommonSaleProps & {
+  rankA: number;
+  rankB: number;
+  rankS: number;
+};
+
+type PackSale = CommonSaleProps & {
+  type: 'BASIC' | 'ADVANCED' | 'EXPERT' | 'RANDOM';
+};
+
+type Sales = {
+  monkeynauts: MonkeynautSale[];
+  ships: ShipSale[];
+  packs: PackSale[];
+}
+
 export function AdminCreateSale() {
   const formRef = useRef<FormHandles>(null);
 
   const [currentType, setCurrentType] = useState('');
+
+  const [openSales, setOpenSales] = useState<Sales>({} as Sales);
+  const [lastSales, setLastSales] = useState<Sales>({} as Sales);
+
+  async function getOpenMonkeynautSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-monkeynauts', {
+        params: {
+          sales: 'actived'
+        }
+      });
+
+      setOpenSales(prevState => {
+        return {
+          ...prevState,
+          monkeynauts: response.data,
+        }
+      })
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getOpenShipSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-ships', {
+        params: {
+          sales: 'actived'
+        }
+      });
+
+      setOpenSales(prevState => {
+        return {
+          ...prevState,
+          ships: response.data,
+        }
+      });
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getOpenPackSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-packs', {
+        params: {
+          sales: 'actived'
+        }
+      });
+
+      setOpenSales(prevState => {
+        return {
+          ...prevState,
+          packs: response.data,
+        }
+      })
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getLastMonkeynautSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-monkeynauts', {
+        params: {
+          sales: 'notActived'
+        }
+      });
+
+      setLastSales(prevState => {
+        return {
+          ...prevState,
+          monkeynauts: response.data,
+        }
+      })
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getLastShipSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-ships', {
+        params: {
+          sales: 'notActived'
+        }
+      });
+
+      setLastSales(prevState => {
+        return {
+          ...prevState,
+          ships: response.data,
+        }
+      });
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getLastPackSale() {
+    try {
+      const response = await baseApi.get('/sale-events/list-packs', {
+        params: {
+          sales: 'notActived'
+        }
+      });
+
+      setLastSales(prevState => {
+        return {
+          ...prevState,
+          packs: response.data,
+        }
+      })
+    } catch (error: any) {
+      console.log({error: error.message});
+    }
+  }
+
+  async function getOpenSales() {
+    await getOpenMonkeynautSale();
+    await getOpenShipSale()
+    await getOpenPackSale()
+  }
+
+  async function getLastSales() {
+    await getLastMonkeynautSale();
+    await getLastShipSale()
+    await getLastPackSale()
+  }
+
+  useEffect(() => {
+    getOpenSales()
+    getLastSales()
+  }, []);
 
   async function createSale(data: CreateSale) {
     const {
@@ -158,13 +326,14 @@ export function AdminCreateSale() {
     
     let dataCommon = {};
 
+
     switch (data.type) {
       case 'MONKEYNAUT':
         dataCommon = {
           ...dataCommon,
           saleMonkeynaut: {
             private: Number(saleMonkeynaut?.private),
-            sargeant: Number(saleMonkeynaut?.sargeant),
+            sergeant: Number(saleMonkeynaut?.sergeant),
             captain: Number(saleMonkeynaut?.captain),
             major: Number(saleMonkeynaut?.major),
           }
@@ -174,9 +343,9 @@ export function AdminCreateSale() {
         dataCommon = {
           ...dataCommon,
           saleShip: {
-            rank_b: Number(saleShip?.rank_b),
-            rank_a: Number(saleShip?.rank_a),
-            rank_s: Number(saleShip?.rank_s),
+            rankB: Number(saleShip?.rankB),
+            rankA: Number(saleShip?.rankA),
+            rankS: Number(saleShip?.rankS),
           },
         }
         break;
@@ -184,9 +353,7 @@ export function AdminCreateSale() {
         dataCommon = {
           ...dataCommon,
           salePack: {
-            basic: Number(salePack?.basic),
-            advanced: Number(salePack?.advanced),
-            expert: Number(salePack?.expert),
+            type: salePack?.type
           },
         }
         break;
@@ -217,7 +384,15 @@ export function AdminCreateSale() {
         abortEarly: false
       });
 
-      const response = await baseApi.post('/sale-events/create', postData);
+      await baseApi.post('/sale-events/create', postData);
+
+      const executeGetOpenSaleByType = {
+        MONKEYNAUT: getOpenMonkeynautSale,
+        SHIP: getOpenShipSale,
+        PACK: getOpenPackSale,
+      };
+
+      executeGetOpenSaleByType[type]()
 
       toast(`Sale created successfully`, {
         autoClose: 5000,
@@ -249,6 +424,65 @@ export function AdminCreateSale() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
+    }
+  }
+
+  async function stopSale(sale: MonkeynautSale | ShipSale | PackSale) {
+    try {
+      const saleDataUnique = {
+        MONKEYNAUT: {
+          saleMonkeynaut: {
+            saleMonkeynautId: sale.id,
+          }
+        },
+        SHIP: {
+          saleShip: {
+            saleShipId: sale.id,
+          }
+        },
+        PACK: {
+          salePack: {
+            salePackId: sale.id,
+          }
+        },
+      }
+
+      const _type = sale.saleType.toUpperCase() as SaleType;
+
+      await baseApi.put('/sale-events/update-sale', {
+        type: _type,
+        active: false,
+        ...saleDataUnique[_type],
+      });
+      
+      const executeGetOpenSaleByType = {
+        MONKEYNAUT: getOpenMonkeynautSale,
+        SHIP: getOpenShipSale,
+        PACK: getOpenPackSale,
+      };
+
+      const executeGetLastSaleByType = {
+        MONKEYNAUT: getLastMonkeynautSale,
+        SHIP: getLastShipSale,
+        PACK: getLastPackSale,
+      };
+
+      executeGetOpenSaleByType[_type]()
+      executeGetLastSaleByType[_type]()
+
+      toast(`Sale stopped successfully`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    } catch (error: any) {
+      
     }
   }
 
@@ -298,7 +532,7 @@ export function AdminCreateSale() {
                   labelText='Private (%)'
                 />
                 <Input 
-                  name="saleMonkeynaut.sargeant"
+                  name="saleMonkeynaut.sergeant"
                   type="number"
                   labelText='Sargeant (%)'
                 />
@@ -318,17 +552,17 @@ export function AdminCreateSale() {
             {currentType === 'SHIP' && (
               <>
                 <Input 
-                  name="saleShip.rank_a"
+                  name="saleShip.rankA"
                   type="number"
                   labelText='Rank A (%)'
                 />
                 <Input 
-                  name="saleShip.rank_b"
+                  name="saleShip.rankB"
                   type="number"
                   labelText='Rank B (%)'
                 />
                 <Input 
-                  name="saleShip.rank_s"
+                  name="saleShip.rankS"
                   type="number"
                   labelText='Rank S (%)'
                 />
@@ -337,20 +571,10 @@ export function AdminCreateSale() {
 
             {currentType === 'PACK' && (
               <>
-                <Input 
-                  name="salePack.basic"
-                  type="number"
-                  labelText='Basic (%)'
-                />
-                <Input 
-                  name="salePack.advanced"
-                  type="number"
-                  labelText='Advanced (%)'
-                />
-                <Input 
-                  name="salePack.expert"
-                  type="number"
-                  labelText='Expert (%)'
+                <InputSelect 
+                  name='salePack.type'
+                  labelText='Pack type' 
+                  fields={packType}
                 />
               </>
             )}
@@ -370,26 +594,61 @@ export function AdminCreateSale() {
                 <thead>
                   <tr>
                     <S.TdCustom>Type</S.TdCustom>
-                    <S.TdCustom>Offerred</S.TdCustom>
-                    <S.TdCustom>Sold</S.TdCustom>
-                    <S.TdCustom>Earning</S.TdCustom>
+                    <S.TdCustom>Units. Sold</S.TdCustom>
+                    <S.TdCustom>Quantity</S.TdCustom>
                     <S.TdCustom>Stop</S.TdCustom>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom className="stop">
-                      <button
-                        type="button"
-                      >
-                        <AiOutlineStop />
-                      </button>
-                    </S.TdCustom>
-                  </tr>
+                  {openSales?.monkeynauts && openSales.monkeynauts.map((sale) => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.totalUnitsSold}</S.TdCustom>
+                      <S.TdCustom>{sale.quantity}</S.TdCustom>
+                      <S.TdCustom className="stop">
+                        <button
+                          type="button"
+                          title="Disable Sale"
+                          onClick={() => stopSale(sale)}
+                        >
+                          <AiOutlineStop />
+                        </button>
+                      </S.TdCustom>
+                    </tr>
+                  ))}
+                  {openSales?.ships && openSales.ships.map((sale) => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.totalUnitsSold}</S.TdCustom>
+                      <S.TdCustom>{sale.quantity}</S.TdCustom>
+                      <S.TdCustom className="stop">
+                        <button
+                          type="button"
+                          title="Disable Sale"
+                          onClick={() => stopSale(sale)}
+                        >
+                          <AiOutlineStop />
+                        </button>
+                      </S.TdCustom>
+                    </tr>
+                  ))}
+                  {openSales?.packs && openSales.packs.map((sale) => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.totalUnitsSold}</S.TdCustom>
+                      <S.TdCustom>{sale.quantity}</S.TdCustom>
+                      <S.TdCustom className="stop">
+                        <button
+                          type="button"
+                          title="Disable Sale"
+                          onClick={() => stopSale(sale)}
+                        >
+                          <AiOutlineStop />
+                        </button>
+                      </S.TdCustom>
+                    </tr>
+                  ))}
+                  
                 </tbody>
               </S.TableCustom>
             </div>
@@ -403,26 +662,40 @@ export function AdminCreateSale() {
                 <thead>
                   <tr>
                     <S.TdCustom>Type</S.TdCustom>
-                    <S.TdCustom>Start</S.TdCustom>
-                    <S.TdCustom>End</S.TdCustom>
                     <S.TdCustom>Crypto</S.TdCustom>
-                    <S.TdCustom>Chests Offered</S.TdCustom>
-                    <S.TdCustom>Chests Sold</S.TdCustom>
-                    <S.TdCustom>Chests Price</S.TdCustom>
-                    <S.TdCustom>$ Total</S.TdCustom>
+                    <S.TdCustom>Start Date</S.TdCustom>
+                    <S.TdCustom>End Date</S.TdCustom>
+                    <S.TdCustom>Units. Sold</S.TdCustom>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                    <S.TdCustom>text</S.TdCustom>
-                  </tr>
+                  {lastSales.monkeynauts && lastSales.monkeynauts.map(sale => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.crypto}</S.TdCustom>
+                      <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
+                    </tr>
+                  ))}
+                  {lastSales.ships && lastSales.ships.map(sale => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.crypto}</S.TdCustom>
+                      <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
+                    </tr>
+                  ))}
+                  {lastSales.packs && lastSales.packs.map(sale => (
+                    <tr key={sale.id}>
+                      <S.TdCustom>{sale.saleType}</S.TdCustom>
+                      <S.TdCustom>{sale.crypto}</S.TdCustom>
+                      <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
+                    </tr>
+                  ))}
                 </tbody>
               </S.TableCustom>
             </div>
