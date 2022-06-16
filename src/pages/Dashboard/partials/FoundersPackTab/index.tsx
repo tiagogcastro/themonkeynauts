@@ -22,7 +22,7 @@ import { getFormattedDate } from '@/utils/getFormattedDate';
 type CommonSaleProps = {
   id: string;
   crypto: 'BNB' | 'BUSD' | 'SPC';
-  type: 'Monkeynaut' | 'Ship' | 'Pack';
+  saleType: 'Monkeynaut' | 'Ship' | 'Pack';
   price: number;
   startDate: string;
   endDate: string | null;
@@ -36,7 +36,7 @@ type CommonSaleProps = {
 
 type MonkeynautSale = CommonSaleProps & {
   private: number;
-  sargeant: number;
+  sergeant: number;
   captain: number;
   major: number;
 };
@@ -48,9 +48,7 @@ type ShipSale = CommonSaleProps & {
 };
 
 type PackSale = CommonSaleProps & {
-  basic: number;
-  advanced: number;
-  expert: number;
+  type: 'BASIC' | 'ADVANCED' | 'EXPERT' | 'RANDOM';
 };
 
 type Sales = {
@@ -64,7 +62,11 @@ export function FoundersPackTab() {
 
   async function getMonkeynautSale() {
     try {
-      const response = await baseApi.get('/sale-events/list-monkeynauts');
+      const response = await baseApi.get('/sale-events/list-monkeynauts', {
+        params: {
+          sales: 'actived'
+        }
+      });
 
       setSales(prevState => {
         return {
@@ -79,7 +81,11 @@ export function FoundersPackTab() {
 
   async function getShipSale() {
     try {
-      const response = await baseApi.get('/sale-events/list-ships');
+      const response = await baseApi.get('/sale-events/list-ships', {
+        params: {
+          sales: 'actived'
+        }
+      });
 
       setSales(prevState => {
         return {
@@ -94,7 +100,11 @@ export function FoundersPackTab() {
 
   async function getPackSale() {
     try {
-      const response = await baseApi.get('/sale-events/list-packs');
+      const response = await baseApi.get('/sale-events/list-packs', {
+        params: {
+          sales: 'actived'
+        }
+      });
 
       setSales(prevState => {
         return {
@@ -148,15 +158,15 @@ export function FoundersPackTab() {
         {sales?.monkeynauts && sales.monkeynauts.map(monkeynautSale => (
           <Card onSubmit={handleSubmit} key={monkeynautSale.id}>
             <CardContainer>
-              <h1 className="card_title">{monkeynautSale.type}</h1>
+              <h1 className="card_title">{monkeynautSale.saleType}</h1>
               <CardContent>
                 <p className="description">
                   Includes: <br />
-                  1 {monkeynautSale.type} <br />
+                  1 {monkeynautSale.saleType} <br />
                   <br />
                   Probability: <br />
                   Private: {monkeynautSale.private}% <br />
-                  Seargeant: {monkeynautSale.sargeant}% <br />
+                  Seargeant: {monkeynautSale.sergeant}% <br />
                   Captain: {monkeynautSale.captain}% <br />
                   Major: {monkeynautSale.major}% <br />
                 <br />
@@ -184,11 +194,11 @@ export function FoundersPackTab() {
         {sales?.ships && sales.ships.map(shipSale => (
           <Card onSubmit={handleSubmit} key={shipSale.id}>
             <CardContainer>
-              <h1 className="card_title">{shipSale.type}</h1>
+              <h1 className="card_title">{shipSale.saleType}</h1>
               <CardContent>
                 <p className="description">
                   Includes: <br />
-                  1 {shipSale.type} <br />
+                  1 {shipSale.saleType} <br />
                   <br />
                   Probability: <br />
                   Rank A: {shipSale.rank_a}% <br />
@@ -220,16 +230,43 @@ export function FoundersPackTab() {
         {sales?.packs && sales.packs.map(packSale => (
           <Card onSubmit={handleSubmit} key={packSale.id}>
             <CardContainer>
-              <h1 className="card_title">{packSale.type}</h1>
+              <h1 className="card_title">{packSale.saleType} - {packSale.type}</h1>
               <CardContent>
                 <p className="description">
-                  Includes: <br />
-                  1 {packSale.type} <br />
-                  <br />
-                  Probability: <br />
-                  Basic: {packSale.basic}% <br />
-                  Advanced: {packSale.advanced}% <br />
-                  Expert: {packSale.expert}% <br />
+                  Includes: 
+                  <br /> <br />
+                  {packSale.type === 'BASIC' && (
+                    <>
+                      2 Monkeynauts - Rank Sergeant <br /><br />
+                      1 Ship - Rank B <br /><br />
+                      Classes are random 
+                      <br/>
+                    </>
+                  )}
+                  {packSale.type === 'ADVANCED' && (
+                    <>
+                      3 Monkeynauts - Rank Captain <br /><br />
+                      1 Ship - Rank A<br /><br />
+                      Classes are random 
+                      <br/>
+                    </>
+                  )}
+                  {packSale.type === 'EXPERT' && (
+                    <>
+                      4 Monkeynauts - Rank Major <br /><br />
+                      1 Ship - Rank S<br /><br />
+                      Classes are random 
+                      <br/>
+                    </>
+                  )}
+                  {packSale.type === 'RANDOM' && (
+                    <>
+                      2 Monkeynauts random <br /><br />
+                      1 Ship random<br /><br />
+                      Classes are random 
+                      <br/>
+                    </>
+                  )}
                   <br />
                   {packSale.endDate && (
                     <>
