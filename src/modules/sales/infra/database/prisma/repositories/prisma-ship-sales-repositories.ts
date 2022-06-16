@@ -17,18 +17,6 @@ const parseShipSale = (shipSale: PrismaShipSale): IShipSale => {
 };
 
 class PrismaShipSalesRepository implements IShipSalesRepository {
-  async findById(shipId: string): AsyncMaybe<IShipSale> {
-    const shipSale = await prisma.shipSale.findUnique({
-      where: { id: shipId },
-    });
-
-    if (!shipSale) {
-      return null;
-    }
-
-    return parseShipSale(shipSale);
-  }
-
   async create({ id: shipId, ...props }: IShipSale): Promise<void> {
     await prisma.shipSale.create({
       data: {
@@ -41,7 +29,9 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
   async listManyShips(): Promise<IShipSale[]> {
     const shipSales = await prisma.shipSale.findMany({
       where: {
-        active: true,
+        active: {
+          equals: true,
+        },
         currentQuantityAvailable: {
           not: {
             equals: 0,
@@ -78,7 +68,7 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
           },
           {
             endDate: {
-              gte: new Date(),
+              lte: new Date(),
             },
           },
         ],

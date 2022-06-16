@@ -22,18 +22,6 @@ const parseMonkeynautSale = (
 };
 
 class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
-  async findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale> {
-    const monkeynautsale = await prisma.monkeynautSale.findUnique({
-      where: { id: monkeynautId },
-    });
-
-    if (!monkeynautsale) {
-      return null;
-    }
-
-    return parseMonkeynautSale(monkeynautsale);
-  }
-
   async create({ id: monkeynautId, ...props }: IMonkeynautSale): Promise<void> {
     await prisma.monkeynautSale.create({
       data: {
@@ -43,10 +31,13 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
     });
   }
 
+  // active
   async listManyMonkeynauts(): Promise<IMonkeynautSale[]> {
     const monkeynautsales = await prisma.monkeynautSale.findMany({
       where: {
-        active: true,
+        active: {
+          equals: true,
+        },
         currentQuantityAvailable: {
           not: {
             equals: 0,
@@ -77,7 +68,7 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
           },
           {
             endDate: {
-              gte: new Date(),
+              lte: new Date(),
             },
           },
         ],
