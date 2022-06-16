@@ -144,9 +144,7 @@ saleEventsRouter.put(
         is: 'PACK',
         then: Joi.object({
           salePackId: Joi.string().uuid().required(),
-          type: Joi.string()
-            .valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT')
-            .required(),
+          type: Joi.string().valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT'),
         }),
       }),
     },
