@@ -128,7 +128,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }
 
     const transactionTo = transaction.to?.toLowerCase();
-    const walletTo = process.env.WALLET_TO?.toLowerCase();
+    const walletTo = process.env.SALES_WALLET?.toLowerCase();
 
     if (!transactionTo || !walletTo) {
       throw new AppError('The transaction could not be confirmed', 409);
