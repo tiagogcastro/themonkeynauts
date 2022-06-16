@@ -143,12 +143,12 @@ export function PrivateSale() {
           }
         });
     
-        if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.dataContract) {
+        if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.contract.BNB) {
           const { transaction, error } = await paymentByEthereum({
             ethereum,
             toAddress: ethereumConfig.privateSaleTransaction.toAddress,
             ether: ethers.utils.parseEther(inputValue)._hex,
-            dataContract: ethereumConfig.privateSaleTransaction.dataContract,
+            dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
           });
     
           if(transaction || error) {

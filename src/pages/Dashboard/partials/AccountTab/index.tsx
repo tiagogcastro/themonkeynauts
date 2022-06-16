@@ -109,7 +109,7 @@ export function AccountTab() {
         ethereum: (window as any).ethereum,
         toAddress: ethereumConfig.privateSaleTransaction.toAddress,
         ether: ethers.utils.parseEther(inputValue)._hex,
-        dataContract: ethereumConfig.privateSaleTransaction.dataContract,
+        dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
       });
   
       if(error) {
