@@ -38,7 +38,7 @@ class ListMonkeynautSalesBusinesslogic {
     return monkeynautSales.map(sale => {
       return {
         ...sale,
-        type: 'Monkeynaut',
+        saleType: 'Monkeynaut',
       };
     });
   }
