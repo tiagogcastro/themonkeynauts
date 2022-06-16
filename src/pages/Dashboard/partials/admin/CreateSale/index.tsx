@@ -20,7 +20,7 @@ const schema = Yup.object().shape({
   crypto: Yup.string()
     .required('This field is required'),
   price: Yup.number()
-    .min(1, 'Min quantity is 1')
+    .min(0.0001, 'Min quantity is 1')
     .required('This field is required'),
   startDate: Yup.string()
     .required('This field is required'),
@@ -506,7 +506,7 @@ export function AdminCreateSale() {
             />
             <Input 
               name="price"
-              type="number"
+              type="text"
               labelText='Price'
             />
             <Input 
