@@ -35,7 +35,7 @@ class ListShipSalesBusinesslogic {
     return shipSales.map(sale => {
       return {
         ...sale,
-        type: 'Ship',
+        saleType: 'Ship',
       };
     });
   }

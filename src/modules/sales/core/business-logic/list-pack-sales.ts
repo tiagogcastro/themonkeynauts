@@ -36,7 +36,7 @@ class ListPackSalesBusinesslogic {
     return packSales.map(sale => {
       return {
         ...sale,
-        type: 'Pack',
+        saleType: 'Pack',
       };
     });
   }
