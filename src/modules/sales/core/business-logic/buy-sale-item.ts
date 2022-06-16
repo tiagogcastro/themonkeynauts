@@ -70,6 +70,10 @@ class BuySaleItemBusinessLogic {
         throw new AppError('Monkeynaut sale not found');
       }
 
+      if (monkeynautSale.currentQuantityAvailable === 0) {
+        throw new AppError('Monkeynaut sale is empty');
+      }
+
       const monkeynautRank = await rarity({
         private: monkeynautSale.private,
         sergeant: monkeynautSale.sergeant,
@@ -83,6 +87,11 @@ class BuySaleItemBusinessLogic {
         playerId,
         from: wallet,
       });
+
+      monkeynautSale.currentQuantityAvailable -= 1;
+      monkeynautSale.totalUnitsSold += 1;
+
+      await this.monkeynautSalesRepository.update(monkeynautSale);
 
       await this.createMonkeynautBusinessLogic.execute({
         ownerId: playerId,
@@ -108,6 +117,10 @@ class BuySaleItemBusinessLogic {
         throw new AppError('Ship sale not found');
       }
 
+      if (shipSale.currentQuantityAvailable === 0) {
+        throw new AppError('Ship sale is empty');
+      }
+
       const shipRank = await rarity({
         a: shipSale.rankA,
         b: shipSale.rankB,
@@ -127,6 +140,11 @@ class BuySaleItemBusinessLogic {
         rank: shipRank as ShipRank,
       });
 
+      shipSale.currentQuantityAvailable -= 1;
+      shipSale.totalUnitsSold += 1;
+
+      await this.shipSalesRepository.update(shipSale);
+
       const { log } = new Log({
         action: `The player bought a ship. SHIP_SALE_ID:${shipSaleId}`,
         playerId,
@@ -143,6 +161,10 @@ class BuySaleItemBusinessLogic {
 
       if (!packSale) {
         throw new AppError('Pack sale not found');
+      }
+
+      if (packSale.currentQuantityAvailable === 0) {
+        throw new AppError('Pack sale is empty');
       }
 
       await this.blockchainProvider.confirmTransaction({
@@ -275,6 +297,11 @@ class BuySaleItemBusinessLogic {
       });
 
       await Promise.all([...monkeynauts, ...ships]);
+
+      packSale.currentQuantityAvailable -= 1;
+      packSale.totalUnitsSold += 1;
+
+      await this.packSalesRepository.update(packSale);
 
       const { log } = new Log({
         action: `The player bought a pack. PACK_SALE_ID:${packSaleId}`,
