@@ -261,7 +261,7 @@ export function FoundersPackTab() {
                     </>
                   )}
                 </p>
-                <img src={notfound} />
+                <img src={'/founderPack/monkeynauts.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
@@ -297,7 +297,7 @@ export function FoundersPackTab() {
                   )}
                 </p>
 
-                <img src={notfound} />
+                <img src={'/founderPack/ships.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
