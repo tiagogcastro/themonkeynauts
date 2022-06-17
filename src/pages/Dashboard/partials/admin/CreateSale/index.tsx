@@ -311,7 +311,7 @@ export function AdminCreateSale() {
     getLastSales()
   }, []);
 
-  async function createSale(data: CreateSale) {
+  async function createSale(data: CreateSale, rest: any) {
     const {
       price,
       quantity,
@@ -392,7 +392,9 @@ export function AdminCreateSale() {
         PACK: getOpenPackSale,
       };
 
-      executeGetOpenSaleByType[type]()
+      executeGetOpenSaleByType[type]();
+
+      rest.reset();
 
       toast(`Sale created successfully`, {
         autoClose: 5000,
@@ -496,7 +498,7 @@ export function AdminCreateSale() {
             <InputSelect 
               name='type' 
               labelText='Type'
-              onChange={(e: any) => setCurrentType(e.value)}
+              onChange={(e: any) => e && setCurrentType(e.value)}
               fields={types}
             />
             <InputSelect 
@@ -674,7 +676,7 @@ export function AdminCreateSale() {
                       <S.TdCustom>{sale.saleType}</S.TdCustom>
                       <S.TdCustom>{sale.crypto}</S.TdCustom>
                       <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
-                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Undefined'}</S.TdCustom>
                       <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
                     </tr>
                   ))}
@@ -683,7 +685,7 @@ export function AdminCreateSale() {
                       <S.TdCustom>{sale.saleType}</S.TdCustom>
                       <S.TdCustom>{sale.crypto}</S.TdCustom>
                       <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
-                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Undefined'}</S.TdCustom>
                       <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
                     </tr>
                   ))}
@@ -692,7 +694,7 @@ export function AdminCreateSale() {
                       <S.TdCustom>{sale.saleType}</S.TdCustom>
                       <S.TdCustom>{sale.crypto}</S.TdCustom>
                       <S.TdCustom>{getFormattedDate(sale.startDate)}</S.TdCustom>
-                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Not end Date'}</S.TdCustom>
+                      <S.TdCustom>{sale.endDate ? getFormattedDate(sale.endDate) : 'Undefined'}</S.TdCustom>
                       <S.TdCustom>{sale.currentQuantityAvailable}/{sale.quantity}</S.TdCustom>
                     </tr>
                   ))}

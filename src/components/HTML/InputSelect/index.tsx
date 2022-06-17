@@ -40,7 +40,7 @@ export function InputSelect({
         ref.select.setValue(value || undefined);
       },
       clearValue: (ref: any) => {
-        ref.select.clearValue();
+        ref.clearValue();
       }
     })
   }, [fieldName, registerField]);
