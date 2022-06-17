@@ -14,7 +14,6 @@ import {
   CardContent,
 } from './styles';
 
-import notfound from '@/assets/notfound.png';
 import { useEffect, useState } from 'react';
 import { baseApi } from '@/services/api';
 import { getFormattedDate } from '@/utils/getFormattedDate';
@@ -360,7 +359,7 @@ export function FoundersPackTab() {
                   )}
                 </p>
 
-                <img src={notfound} />
+                <img src={'/founderPack/pack.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
                 <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
