@@ -20,16 +20,17 @@ export const Content = styled.div`
   padding: 0 1.4rem;
   margin: 0 1.4rem;
 
-  height: 100%;
+  height: 563px;
 
   display: flex;
-  align-items: center;
+  align-items: center;  
   justify-content: center;
 
   background: url(${panel_character_attribute_1}) no-repeat center center;
 
   @media(min-width: 960px) {
     background: url(${panel_character_attribute_2}) no-repeat center center;
+    height: 831px;
   }
 
   @media(min-width: 1300px) {

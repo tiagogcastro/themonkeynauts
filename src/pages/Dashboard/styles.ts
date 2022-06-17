@@ -23,7 +23,7 @@ export const Content = styled.div`
   max-width: 32rem;
   width: 100%;
 
-  height: 100%;
+  height: auto;
 
   margin: 0 auto 24px;
 
@@ -32,13 +32,14 @@ export const Content = styled.div`
   background: url(${dashboard_bg_1}) no-repeat top;
 
   @media(min-width: 768px) {
-    max-width: 76.8rem;
+    max-width: 768px;
     background: url(${dashboard_bg_2}) no-repeat top;
   }
 
   @media(min-width: 1024px) {
-    max-width: 102.4rem;
-    max-height: 90rem;
+    max-width: 1024px;
+
+    height: 900px;
 
     padding-top: 32px;
     
@@ -46,7 +47,7 @@ export const Content = styled.div`
   }
 
   @media(min-width: 1400px) {
-    max-width: 140rem;
+    max-width: 1400px;
     background: url(${dashboard_bg_4}) no-repeat top;
   }
 `;
