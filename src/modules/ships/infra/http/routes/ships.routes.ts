@@ -52,7 +52,8 @@ shipsRouter.post(
   ensureAdministrator,
   celebrate({
     [Segments.BODY]: {
-      playerId: Joi.string().uuid().required(),
+      ownerId: Joi.string().uuid().required(),
+      playerId: Joi.string().uuid(),
       name: Joi.string(),
       class: Joi.string().valid('FIGHTER', 'MINER', 'EXPLORER'),
       rank: Joi.string().valid('B', 'A', 'S'),

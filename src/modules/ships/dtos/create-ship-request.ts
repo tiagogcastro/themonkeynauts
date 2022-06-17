@@ -3,8 +3,8 @@ import { ShipClass } from '../domain/enums/ship-class';
 import { ShipRank } from '../domain/enums/ship-rank';
 
 type CreateShipRequestDTO = {
-  ownerId?: Maybe<string>;
-  playerId: string;
+  ownerId: string;
+  playerId?: Maybe<string>;
   name?: Maybe<string>;
   class?: Maybe<ShipClass>;
   rank?: Maybe<ShipRank>;
