@@ -44,9 +44,9 @@ type MonkeynautSale = CommonSaleProps & {
 };
 
 type ShipSale = CommonSaleProps & {
-  rank_a: number;
-  rank_b: number;
-  rank_s: number;
+  rankA: number;
+  rankB: number;
+  rankS: number;
 };
 
 type PackSale = CommonSaleProps & {
@@ -285,9 +285,9 @@ export function FoundersPackTab() {
                   1 {sale.saleType} <br />
                   <br />
                   Probability: <br />
-                  Rank A: {sale.rank_a}% <br />
-                  Rank B: {sale.rank_b}% <br />
-                  Rank S: {sale.rank_s}% <br />
+                  Rank A: {sale.rankA}% <br />
+                  Rank B: {sale.rankB}% <br />
+                  Rank S: {sale.rankS}% <br />
                   <br />
                   {sale.endDate && (
                     <>
