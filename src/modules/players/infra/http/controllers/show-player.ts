@@ -10,7 +10,7 @@ class ShowPlayerController {
 
     const showPlayerBusinessLogic = container.resolve(ShowPlayerBusinessLogic);
 
-    const { player } = await showPlayerBusinessLogic.execute({
+    const { player, resource } = await showPlayerBusinessLogic.execute({
       ...(nickname
         ? {
             nickname: nickname as string,
@@ -22,6 +22,7 @@ class ShowPlayerController {
 
     return response.status(200).json({
       player: instanceToInstance('player', player),
+      resource,
     });
   }
 }
