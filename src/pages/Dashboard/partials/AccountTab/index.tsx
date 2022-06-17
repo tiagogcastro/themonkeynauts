@@ -208,27 +208,27 @@ export function AccountTab() {
             <Resources>
               <Resource>
                 <img src={iron_ore} />
-                <strong>0</strong>
+                <strong>{player?.resource.iron}</strong>
               </Resource>
               <Resource>
                 <img src={gold_ore} />
-                <strong>0</strong>
+                <strong>{player?.resource.gold}</strong>
               </Resource>
               <Resource>
                 <img src={bronze_ore} />
-                <strong>0</strong>
+                <strong>{player?.resource.copper}</strong>
               </Resource>
               <Resource>
                 <img src={scrap} />
-                <strong>0</strong>
+                <strong>{player?.resource.scrap}</strong>
               </Resource>
               <Resource>
                 <FaReact />
-                <strong>0</strong>
+                <strong>{player?.resource.science}</strong>
               </Resource>
               <Resource>
                 <img src={spc} />
-                <strong>0</strong>
+                <strong>{player?.resource.spc}</strong>
               </Resource>
             </Resources>
           </ResourcesDetail>

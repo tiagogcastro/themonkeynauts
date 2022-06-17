@@ -54,13 +54,14 @@ export function AuthProvider({children}: AuthProviderProps) {
     try {
       const response = await api.player.geral.getPlayer();
       
-      let { player } = response.data;
+      let { player, resource } = response.data;
       
       setPlayer({
         player: {
           ...player,
           id_short: player.id.replace(/^(\w{3}).*(\w{3})$/, '$1...$2')
-        }
+        },
+        resource
       });
 
       loading.changeToFalse();

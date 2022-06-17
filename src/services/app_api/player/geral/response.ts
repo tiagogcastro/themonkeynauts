@@ -8,8 +8,20 @@ export type Player = {
   wallet: string;
 }
 
+export type Resource = {
+  id: string;
+  playerId: string;
+  spc: number;
+  gold: number;
+  iron: number;
+  copper: number;
+  scrap: number;
+  science: number;
+}
+
 export type GetPlayer = {
   player: Player;
+  resource: Resource;
 }
 
 export type AppRegisterResponse = {
