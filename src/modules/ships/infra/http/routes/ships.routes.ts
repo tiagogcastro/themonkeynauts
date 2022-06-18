@@ -6,6 +6,7 @@ import { Router } from 'express';
 import { consumeFuelController } from '../controllers/consume-fuel';
 import { createShipController } from '../controllers/create-ship';
 import { listShipsController } from '../controllers/list-ships';
+import { listUniqueShipController } from '../controllers/list-unique-ship';
 import { refuelShipController } from '../controllers/refuel-ship';
 import { updateShipController } from '../controllers/update-ship';
 
@@ -20,6 +21,18 @@ shipsRouter.get(
     },
   }),
   (request, response) => listShipsController.handle(request, response),
+);
+
+shipsRouter.get(
+  '/list-unique',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      playerId: Joi.string().uuid().required(),
+      shipId: Joi.string().uuid().required(),
+    },
+  }),
+  (request, response) => listUniqueShipController.handle(request, response),
 );
 
 shipsRouter.put(

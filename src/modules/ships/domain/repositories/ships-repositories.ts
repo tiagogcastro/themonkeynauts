@@ -10,5 +10,7 @@ interface IShipsRepository {
   findById(shipId: string): AsyncMaybe<IShip>;
   listAllShips(): Promise<IShip[]>;
   listAllShipsFromPlayer(playerId: string): Promise<IShip[]>;
+
+  findByIdAndPlayerId(shipId: string, playerId: string): AsyncMaybe<IShip>;
 }
 export { IShipsRepository };
