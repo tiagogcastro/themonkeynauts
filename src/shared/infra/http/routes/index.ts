@@ -1,3 +1,4 @@
+import { crewsRouter } from '@modules/crews/infra/http/routes/crews.routes';
 import { logsRouter } from '@modules/logs/infra/http/routes/logs.routes';
 import { monkeynautsRouter } from '@modules/monkeynauts/infra/http/routes/monkeynauts.routes';
 import { authRouter } from '@modules/players/infra/http/routes/auth.routes';
@@ -16,5 +17,6 @@ router.use('/private-sales', privateSalesRouter);
 router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
 router.use('/monkeynauts', monkeynautsRouter);
+router.use('/crews', crewsRouter);
 
 export { router };

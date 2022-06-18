@@ -22,6 +22,8 @@ import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sa
 import { PrismaShipSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-ship-sales-repositories';
 import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
 import { PrismaPackSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-pack-sales-repositories';
+import { ICrewsRepository } from '@modules/crews/domain/repositories/crews-repositories';
+import { PrismaCrewsRepository } from '@modules/crews/infra/database/prisma/repositories/prisma-crews-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -71,6 +73,11 @@ container.registerSingleton<IMonkeynautSalesRepository>(
 container.registerSingleton<IShipSalesRepository>(
   'ShipSalesRepository',
   PrismaShipSalesRepository,
+);
+
+container.registerSingleton<ICrewsRepository>(
+  'CrewsRepository',
+  PrismaCrewsRepository,
 );
 
 container.registerSingleton<IPackSalesRepository>(
