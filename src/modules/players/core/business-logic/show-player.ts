@@ -8,7 +8,7 @@ import { inject, injectable } from 'tsyringe';
 
 type ShowPlayerRequestDTO = {
   nickname?: string;
-  player_id?: string;
+  playerId: string;
 };
 
 type Response = {
@@ -28,16 +28,18 @@ class ShowPlayerBusinessLogic {
 
   async execute({
     nickname,
-    player_id: playerId,
+    playerId,
   }: ShowPlayerRequestDTO): Promise<Response> {
-    if (playerId) {
-      const player = await this.playersRepository.findById(playerId);
+    if (nickname) {
+      const player = await this.playersRepository.findByNickname(
+        nickname as string,
+      );
 
       if (!player) {
         throw new AppError('Could not show player', 401);
       }
 
-      const resource = await this.resourcesRepository.findByPlayerId(playerId);
+      const resource = await this.resourcesRepository.findByPlayerId(player.id);
 
       return {
         player,
@@ -45,15 +47,13 @@ class ShowPlayerBusinessLogic {
       };
     }
 
-    const player = await this.playersRepository.findByNickname(
-      nickname as string,
-    );
+    const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
       throw new AppError('Could not show player', 401);
     }
 
-    const resource = await this.resourcesRepository.findByPlayerId(player.id);
+    const resource = await this.resourcesRepository.findByPlayerId(playerId);
 
     return {
       player,

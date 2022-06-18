@@ -34,6 +34,7 @@ playersRouter.get(
   celebrate({
     [Segments.QUERY]: {
       nickname: Joi.string().min(2).max(100),
+      playerId: Joi.string().uuid(),
     },
   }),
   (request, response) => showPlayerController.handle(request, response),
