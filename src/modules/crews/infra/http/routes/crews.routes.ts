@@ -1,7 +1,6 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 
-import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 
 import { createCrewController } from '../controllers/create-crew';
@@ -11,7 +10,7 @@ import { listCrewsController } from '../controllers/list-crews';
 const crewsRouter = Router();
 
 crewsRouter.get(
-  '/list',
+  '/list-unique',
   ensureAuthenticated,
   celebrate({
     [Segments.QUERY]: {

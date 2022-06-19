@@ -78,12 +78,18 @@ class PrismaCrewsRepository implements ICrewsRepository {
     return prisma.crew.findMany();
   }
 
-  async findManyByMonkeynautId(monkeynautId: string): Promise<ICrew[]> {
-    return prisma.crew.findMany({
+  async findUniqueByMonkeynautId(monkeynautId: string): Promise<ICrew | null> {
+    const crew = await prisma.crew.findFirst({
       where: {
         monkeynautId,
       },
     });
+
+    if (!crew) {
+      return null;
+    }
+
+    return parseCrew(crew);
   }
 }
 

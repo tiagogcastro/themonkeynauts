@@ -62,6 +62,13 @@ class CreateCrewBusinessLogic {
       throw new AppError('Monkeynaut does not exist', 404);
     }
 
+    const foundCrewByMonkeynautId =
+      await this.crewsRepository.findUniqueByMonkeynautId(monkeynautId);
+
+    if (foundCrewByMonkeynautId) {
+      throw new AppError('Monkeynaut is already in a crew', 403);
+    }
+
     const { crew } = new Crew({
       monkeynautId,
       shipId,
