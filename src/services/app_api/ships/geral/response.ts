@@ -1,40 +1,38 @@
 import { Monkeynaut } from '../../monkeynauts/types';
-import { Player } from '../../player/types';
 
 export type ShipRole = 'fighter' | 'explorer' | 'miner';
 
 export type Ship = {
   id: string;
   name: string;
+
   class: ShipRole;
   rank: string;
 
   avatar?: string;
   ownerName?: string;
   id_short?: string;
-  
-  attributes: {
-    maxDurability: number;
-    currentDurability: number;
-  };
 
-  bonus: {
-    value: number;
-    description: string;
-  };
+  bonusDescription: string;
+  bonusValue: number;
   
-  owner: Player;
-  operator: Player;
+  fuel: string;
+  breedCount: string;
+  onSale: string;
+  canRefuelAtStation: string;
 
-  crew: {
-    seats: number;
-    monkeynauts: Monkeynaut[];
-  };
+  crewCapacity: number;
+  tankCapacity: number;
+
+  ownerId: string;
+  playerId: string;
+
+  crew: number;
+
+  crews?: Monkeynaut[];
 }
 
-export type GetShip = {
-  ships: Ship[];
-}
+export type GetShip = Ship[];
 
 export type GetUniqueShip = {
   ship: Ship | null;

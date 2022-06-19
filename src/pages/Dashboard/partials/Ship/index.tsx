@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
@@ -26,6 +26,9 @@ import {
 import engineer from '@/assets/images/engineer.png';
 import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
+import { baseApi } from '@/services/api';
+import { toast } from 'react-toastify';
+import { COLORS } from '@/theme';
 
 export type ShipProps = {
   shipIsShow: UseBooleanTypes;
@@ -34,27 +37,60 @@ export type ShipProps = {
 export function Ship({
   shipIsShow,
 }: ShipProps) {
-  const { ship } = useDashboardTabs();
+  const { ship, setShip } = useDashboardTabs();
+
+  async function getCrew() {
+    try {
+      const getCrewsResponse = await baseApi.get('/crews/list-by-ship', {
+        params: {
+          shipId: ship.id,
+        }
+      });
+
+      console.log(getCrewsResponse);
+
+      setShip({
+        ...ship,
+        crews: getCrewsResponse.data,
+      });
+
+    } catch(error: any) {
+      const error_message = error?.response?.data.message;
+
+      toast(error_message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
+  }
+
+  useEffect(() => {
+    getCrew();
+  }, []);
 
   const shipModified = useMemo(() => {
     return {
       ...ship,
-      crew: {
-        ...ship.crew,
-        monkeynauts: ship.crew.monkeynauts.map(crew => {
-          return {
-            ...crew,
-            rank: capitalize(crew.rank),
-            class: capitalize(crew.class),
-            avatar: verifyRole(crew.class, {
-              engineer,
-              scientist,
-              soldier
-            })
-          }
-        })
-      }
-    }
+      crews: ship?.crews && ship.crews.map(crew => {
+        return {
+          ...crew,
+          rank: capitalize(crew.rank),
+          class: capitalize(crew.class),
+          avatar: verifyRole(crew.class, {
+            engineer,
+            scientist,
+            soldier
+          })
+        };
+      }),
+    };
   }, [ship]);
 
   return (
@@ -83,7 +119,7 @@ export function Ship({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>{shipModified.crew.monkeynauts.length}/{shipModified.crew.seats}</strong>
+                    <strong>{shipModified.crews?.length}/{shipModified.crewCapacity}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
@@ -93,7 +129,7 @@ export function Ship({
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Durability</span>
-                    <strong>{ship.attributes.currentDurability}/{ship.attributes.maxDurability}</strong>
+                    <strong>{ship.fuel}/{ship.tankCapacity}</strong>
                   </UniqueInfo>
                 </div>
               </div>
@@ -101,25 +137,25 @@ export function Ship({
               <PveBonusInfo>
                 <InfoTitle_1>PVE BONUS</InfoTitle_1>
                 <p className="pve_detail">
-                  {ship.class.toLowerCase() !== 'explorer' && '+ '}{ship.bonus?.value}% <br />
-                  {ship.bonus?.description}
+                  {ship.class.toLowerCase() !== 'explorer' && '+ '}{ship.bonusValue}% <br />
+                  {ship.bonusDescription}
                 </p>
               </PveBonusInfo>
             </ShipInformation>
           </PrincipalDetails>
           <CrewContainer>
-            <InfoTitle_1 className={`crew_title ${shipModified.crew.monkeynauts.length === 0 && 'none_crew_list'}`}>Crew</InfoTitle_1>
+            <InfoTitle_1 className={`crew_title ${shipModified.crews?.length === 0 && 'none_crew_list'}`}>Crew</InfoTitle_1>
 
             <CrewContent>
-              {shipModified.crew.monkeynauts.length > 0 ? shipModified.crew.monkeynauts.map(crew => (
+              {shipModified.crews && shipModified.crews?.length > 0 ? shipModified.crews?.map(crew => (
                 <CrewSelected key={crew.id}>
                   <div className="crew_content">
-                    <img src={crew.avatar} alt={`${crew.firstName} ${crew.lastName}`} />
+                    <img src={crew.avatar} alt={`Image from monkeynaut name: ${crew.name}`} />
                     <div className="crew_infos">
-                      <span>{crew.firstName} {crew.lastName}</span>
+                      <span className="crew_name">{crew.name}</span>
                       <span>{crew.class}</span>
                       <span>{crew.rank}</span>
-                      <span>Energy: {crew.attributes.currentEnergy}/{crew.attributes.maxEnergy}</span>
+                      <span>Energy: {crew.energy}/{crew.maxEnergy}</span>
                     </div>
                   </div>
                 </CrewSelected>

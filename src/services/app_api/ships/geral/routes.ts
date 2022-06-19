@@ -8,16 +8,16 @@ import {
 } from './params';
 
 import {
-  GetShip,
   GetUniqueShip,
+  Ship,
 } from './response';
 
 export const geral = {
   // create: (data: CreateShipsParams): Promise<AxiosResponse<CreateShipsResponse>> => {
   //   return baseApi.post('/ships', data);
   // },
-  getShips: (): Promise<AxiosResponse<GetShip>> => {
-    return baseApi.get('/ships');
+  getShips: (): Promise<AxiosResponse<Ship[]>> => {
+    return baseApi.get('/ships/list');
   },
   addMonkeynautToShip: (data: AddMonkeyToShipParams): Promise<AxiosResponse<{}>> => {
     return baseApi.post(`/ships/${data.params.ship_id}/monkeynauts`, data.body);

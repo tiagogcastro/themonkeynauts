@@ -343,6 +343,10 @@ export const CrewSelected = styled.div`
         &:last-child {
           padding-bottom: 12px;
         }
+
+        &.crew_name {
+          color: ${COLORS.colors.primary_0};
+        }
       }
     }
   }

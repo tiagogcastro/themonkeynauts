@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { api, ShipType } from '@/services/api';
+import { api, baseApi, ShipType } from '@/services/api';
 
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
@@ -40,10 +40,20 @@ export function ShipsTab({
   const loadingShips = useBoolean(true);
   const { setShip } = useDashboardTabs();
 
-  const [{ships}, setShips] = useState<ShipType.GetShip>({} as ShipType.GetShip);
+  const [ships, setShips] = useState<ShipType.Ship[]>([]);
 
-  function selectShip(ship: ShipType.Ship) {
-    let shipOwnerName = ship.owner.id === player?.player.id ? 'YOU' : ship.owner.nickname;
+  async function selectShip(ship: ShipType.Ship) {
+    let shipOwnerName = 'YOU';
+
+    if(ship.ownerId !== player?.player.id) {
+      const response = await baseApi.get('/players/show', {
+        params: {
+          playerId: ship.ownerId
+        }
+      });
+
+      shipOwnerName = response.data.nickname;
+    }
 
     setShip({
       ...ship,
@@ -54,19 +64,19 @@ export function ShipsTab({
     shipIsShow?.changeToTrue();
   }
 
-  useEffect(() => {
-    async function getShips() {
-      try {
-        const response = await api.ships.geral.getShips();
+  async function getShips() {
+    try {
+      const response = await api.ships.geral.getShips();
 
-        setShips(response.data);
+      setShips(response.data);
 
-        loadingShips.changeToFalse();
-      } catch(err) {
-        loadingShips.changeToFalse();
-      }
+      loadingShips.changeToFalse();
+    } catch(err) {
+      loadingShips.changeToFalse();
     }
+  }
 
+  useEffect(() => {
     getShips();
 
     return () => loadingShips.changeToFalse();
@@ -101,7 +111,7 @@ export function ShipsTab({
                     <TheadTrCustom>
                       <TheadTdCustom>Ship</TheadTdCustom>
                       <TheadTdCustom>Name</TheadTdCustom>
-                      <TheadTdCustom>Role</TheadTdCustom>
+                      <TheadTdCustom>Class</TheadTdCustom>
                       <TheadTdCustom>Rank</TheadTdCustom>
                       <TheadTdCustom>Crew</TheadTdCustom>
                       <TheadTdCustom>Durability</TheadTdCustom>
@@ -129,7 +139,7 @@ export function ShipsTab({
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">
                           <div className="info">
-                            <span>Role</span>
+                            <span>Class</span>
                             <strong>{capitalize(ship.class)}</strong>
                           </div>
                         </TbodyTdCustom>
@@ -142,13 +152,13 @@ export function ShipsTab({
                         <TbodyTdCustom className="crew">
                           <div className="info">
                             <span>Crew</span>
-                            <strong>{ship.crew.monkeynauts.length || 0}/{ship.crew.seats}</strong>
+                            <strong>{ship.crew}/{ship.crewCapacity}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="fuel">
                           <div className="info">
                             <span>Durability</span>
-                            <strong>{ship.attributes.currentDurability}/{ship.attributes.maxDurability}</strong>
+                            <strong>{ship.fuel}/{ship.tankCapacity}</strong>
                           </div>
                         </TbodyTdCustom>
                       </TbodyTrCustom>
