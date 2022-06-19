@@ -91,6 +91,16 @@ class PrismaCrewsRepository implements ICrewsRepository {
 
     return parseCrew(crew);
   }
+
+  async findManyByShipId(shipId: string): Promise<ICrew[]> {
+    const crews = await prisma.crew.findMany({
+      where: {
+        shipId,
+      },
+    });
+
+    return crews.map(parseCrew);
+  }
 }
 
 export { PrismaCrewsRepository };

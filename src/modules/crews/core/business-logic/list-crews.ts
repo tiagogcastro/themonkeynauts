@@ -1,12 +1,15 @@
 import { ICrew } from '@modules/crews/domain/entities/crew';
+import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { AppError } from '@shared/errors/app-error';
-import { app } from '@shared/infra/http/app';
+import { AsyncMaybe, Maybe } from '@shared/types/maybe';
 import { inject, injectable } from 'tsyringe';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
 type ListCrewsRequest = {
   monkeynautId: string;
+  shipId: string;
 };
 
 @injectable()
@@ -17,22 +20,52 @@ class ListCrewsBusinessLogic {
 
     @inject('MonkeynautsRepository')
     private monkeynautsRepository: IMonkeynautsRepository,
+
+    @inject('ShipsRepository')
+    private shipsRepository: IShipsRepository,
   ) {}
 
-  async execute({ monkeynautId }: ListCrewsRequest): Promise<ICrew> {
-    const foundMonkeynaut = await this.monkeynautsRepository.findById(
-      monkeynautId,
-    );
+  async execute({
+    monkeynautId,
+    shipId,
+  }: ListCrewsRequest): Promise<ICrew | Maybe<IMonkeynaut>[]> {
+    if (monkeynautId) {
+      const foundMonkeynaut = await this.monkeynautsRepository.findById(
+        monkeynautId,
+      );
 
-    if (!foundMonkeynaut) {
-      throw new AppError('Monkeynaut does not exist', 404);
+      if (!foundMonkeynaut) {
+        throw new AppError('Monkeynaut does not exist', 404);
+      }
+
+      const crew = await this.crewsRepository.findUniqueByMonkeynautId(
+        monkeynautId,
+      );
+
+      if (!crew) {
+        throw new AppError('Monkeynaut does not exist on a crew', 404);
+      }
+
+      return crew;
     }
 
-    const crew = await this.crewsRepository.findUniqueByMonkeynautId(
-      monkeynautId,
-    );
+    if (shipId) {
+      const foundShip = await this.shipsRepository.findById(shipId);
 
-    return crew;
+      if (!foundShip) {
+        throw new AppError('Ship does not exist', 404);
+      }
+
+      const crews = await this.crewsRepository.findManyByShipId(shipId);
+
+      const monkeynauts = await this.monkeynautsRepository.findManyByCrews(
+        crews,
+      );
+
+      return monkeynauts;
+    }
+
+    throw new AppError('shipId or monkeynautId parameter not informed', 403);
   }
 }
 

@@ -4,12 +4,13 @@ import { container } from 'tsyringe';
 
 class ListCrewsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { monkeynautId } = request.query;
+    const { monkeynautId, shipId } = request.query;
 
     const listCrewsBusinessLogic = container.resolve(ListCrewsBusinessLogic);
 
     const crews = await listCrewsBusinessLogic.execute({
       monkeynautId: monkeynautId as string,
+      shipId: shipId as string,
     });
 
     return response.status(200).json(crews);

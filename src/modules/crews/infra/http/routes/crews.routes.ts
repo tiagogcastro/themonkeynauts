@@ -10,11 +10,22 @@ import { listCrewsController } from '../controllers/list-crews';
 const crewsRouter = Router();
 
 crewsRouter.get(
-  '/list-unique',
+  '/list-by-monkeynaut',
   ensureAuthenticated,
   celebrate({
     [Segments.QUERY]: {
       monkeynautId: Joi.string().uuid().required(),
+    },
+  }),
+  (request, response) => listCrewsController.handle(request, response),
+);
+
+crewsRouter.get(
+  '/list-by-ship',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      shipId: Joi.string().uuid().required(),
     },
   }),
   (request, response) => listCrewsController.handle(request, response),

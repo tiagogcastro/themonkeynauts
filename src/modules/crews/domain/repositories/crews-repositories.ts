@@ -11,5 +11,7 @@ interface ICrewsRepository {
   findById(crewId: string): AsyncMaybe<ICrew>;
   findMany(): Promise<ICrew[]>;
   findUniqueByMonkeynautId(monkeynautId: string): Promise<ICrew | null>;
+
+  findManyByShipId(shipId: string): Promise<ICrew[]>;
 }
 export { ICrewsRepository };
