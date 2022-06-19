@@ -11,7 +11,7 @@ import {
   // EquipamentsTab,
   AccountTab,
   PrivateSale,
-  FoundersPackTab
+  StoreTab
 } from './partials';
 import { Admin } from './partials/admin';
 
@@ -28,7 +28,7 @@ export function Dashboard() {
   const monekeynautIsShow = useBoolean(false);
   // const equipamentIsShow = useBoolean(false);
   const accountIsShow = useBoolean(false);
-  const foundersPackIsShow = useBoolean(false);
+  const storeIsShow = useBoolean(false);
   const privateSaleIsShow = useBoolean(false);
 
   return (
@@ -46,8 +46,8 @@ export function Dashboard() {
               <Tab title="Account" hasButtonToBack={accountIsShow}>
                 <AccountTab />
               </Tab>
-              <Tab title="Founder's Packs" hasButtonToBack={foundersPackIsShow}>
-                <FoundersPackTab />
+              <Tab title="Store" hasButtonToBack={storeIsShow}>
+                <StoreTab />
               </Tab>
               <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
                 <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />

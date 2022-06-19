@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
 import { Monkeynaut } from '../Monkeynaut';
-import { api, MonkeynautType } from '@/services/api';
+import { api, baseApi, MonkeynautType } from '@/services/api';
 import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
-
-import { COLORS } from '@/theme';
 
 import { Title_1 } from '@/styles/global';
 import { 
@@ -40,43 +37,28 @@ export function MonkeynautsTab({
   const { setMonkeynaut } = useDashboardTabs();
   const monkeynautsIsLoading = useBoolean(true);
 
-  const [{monkeynauts}, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>({} as MonkeynautType.GetMonkeynauts);
+  const [monkeynauts, setMonkeynauts] = useState<MonkeynautType.GetMonkeynauts>([]);
 
   async function selectMonkeynaut(monkeynaut: MonkeynautType.Monkeynaut) {
-    let monkeynautOwnerName = monkeynaut.owner.id === player?.player.id ? 'YOU' : monkeynaut.owner.nickname;
+    let monkeynautOwnerName = 'YOU';
 
-    try {
-      const getUniqueShipResponse = await api.ships.geral.getUnique({
-        path: {
-          ship_id: monkeynaut.shipId,
+    if(monkeynaut.ownerId !== player?.player.id) {
+      const response = await baseApi.get('/players/show', {
+        params: {
+          playerId: monkeynaut.ownerId
         }
       });
 
-      setMonkeynaut({
-        ...monkeynaut,
-        id_short: replaceToShortString(monkeynaut.id),
-        ownerName: monkeynautOwnerName,
-        crew_in_ship: getUniqueShipResponse.data.ship,
-      });
-      
+      monkeynautOwnerName = response.data.nickname;
     }
-    catch(err: any) {
-      const error_message = err?.response?.headers['grpc-message'];
 
-      toast(error_message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-    } finally {
-      monkeynautIsShow?.changeToTrue();
-    }
+    setMonkeynaut({
+      ...monkeynaut,
+      id_short: replaceToShortString(monkeynaut.id),
+      ownerName: monkeynautOwnerName,
+    });
+
+    monkeynautIsShow?.changeToTrue();
   }
 
   useEffect(() => {
@@ -100,6 +82,7 @@ export function MonkeynautsTab({
   const monkeynautsModified = useMemo(() => {
     if(monkeynauts) {
       return monkeynauts.map(monkeynaut => {
+        console.log(monkeynaut);
         return {
           ...monkeynaut,
           avatar: verifyRole(monkeynaut.class, {
@@ -126,7 +109,7 @@ export function MonkeynautsTab({
                     <TheadTrCustom>
                       <TheadTdCustom>Monkeynaut</TheadTdCustom>
                       <TheadTdCustom>Name</TheadTdCustom>
-                      <TheadTdCustom>Role</TheadTdCustom>
+                      <TheadTdCustom>Class</TheadTdCustom>
                       <TheadTdCustom>Rank</TheadTdCustom>
                       <TheadTdCustom>Energy</TheadTdCustom>
                       <TheadTdCustom>Breed COunt</TheadTdCustom>
@@ -143,7 +126,7 @@ export function MonkeynautsTab({
                         </TbodyTdCustom>
                         <TbodyTdCustom className="name">
                           <div className="info">
-                            <Title_1>{monkeynaut.firstName} {monkeynaut.lastName}</Title_1>
+                            <Title_1>{monkeynaut.name}</Title_1>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="id">
@@ -167,7 +150,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="energy">
                           <div className="info">
                             <span>Energy</span>
-                            <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
+                            <strong>{monkeynaut.energy}/{monkeynaut.maxEnergy}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="breed">

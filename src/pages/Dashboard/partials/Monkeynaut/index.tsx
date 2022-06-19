@@ -4,37 +4,17 @@ import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
-import { capitalize } from '@/utils';
+import { capitalize, replaceToShortString } from '@/utils';
 
 import {
   Title_1
 } from '@/styles/global';
 
-import {
-  Container,
-  Content,
-  Details,
-  PrincipalDetails,
-  MonkeynautInformation,
-  
-  OthersDetails,
-
-  UniqueInfo,
-  CrewInShipContainer,
-  CrewInShip,
-
-  AttributesContainer,
-  Attributes,
-  Attribute,
-
-  PveBonusInfo,
-
-  InfoTitle_1,
-
-  EquipamentsContainer,
-  EquipamentsContent,
-  EquipamentToSelect,
-} from './styles';
+import * as S from './styles';
+import { useEffect } from 'react';
+import { baseApi } from '@/services/api';
+import { toast } from 'react-toastify';
+import { COLORS } from '@/theme';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -43,124 +23,165 @@ export type MonkeynautProps = {
 export function Monkeynaut({
   monkeynautIsShow,
 }: MonkeynautProps) { 
-  const { monkeynaut } = useDashboardTabs();
+  const { monkeynaut, setMonkeynaut } = useDashboardTabs();
+
+  async function getCrew() {
+    try {
+      const getUniqueCrewResponse = await baseApi.get('/crews/list-unique', {
+        params: {
+          monkeynautId: monkeynaut.id,
+        }
+      });
+
+      const getUniqueShipResponse = await baseApi.get('/ships/list-unique', {
+        params: {
+          shipId: getUniqueCrewResponse.data.shipId,
+        }
+      });
+
+      setMonkeynaut({
+        ...monkeynaut,
+        crew: getUniqueShipResponse.data,
+      });
+
+    } catch(error: any) {
+      const error_message = error?.response?.data.message;
+
+      toast(error_message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+    }
+  }
+
+  useEffect(() => {
+    getCrew();
+  }, []);
+
   return (
-    <Container>
-      <Content>
-        <Title_1 className="monkeynaut_name">{monkeynaut.firstName} {monkeynaut.lastName}</Title_1>
-        <Details>
-          <PrincipalDetails>
-            <img className="monkeynaut_image" src={monkeynaut.avatar} alt={`${monkeynaut.firstName} ${monkeynaut.lastName}`} />
-            <MonkeynautInformation>
-              <InfoTitle_1 className="details_title">Details</InfoTitle_1>
-              <UniqueInfo>
+    <S.Container>
+      <S.Content>
+        <Title_1 className="monkeynaut_name">{monkeynaut.name}</Title_1>
+        <S.Details>
+          <S.PrincipalDetails>
+            <img className="monkeynaut_image" src={monkeynaut?.avatar} alt={`Monkeynaut name: ${monkeynaut.name}`} />
+            <S.MonkeynautInformation>
+              <S.InfoTitle_1 className="details_title">Details</S.InfoTitle_1>
+              <S.UniqueInfo>
                 <span>Monkeynaut ID</span>
                 <strong title={monkeynaut.id} className="monkeynaut_id">{monkeynaut.id_short}</strong>
-              </UniqueInfo>
+              </S.UniqueInfo>
 
-              <UniqueInfo>
+              <S.UniqueInfo>
                 <span>Owner</span>
                 <strong>{capitalize(String(monkeynaut.ownerName))}</strong>
-              </UniqueInfo>
+              </S.UniqueInfo>
               <div className="mist_info">
                 <div className="info_left">
-                  <UniqueInfo>
-                    <span>Role</span>
+                  <S.UniqueInfo>
+                    <span>Class</span>
                     <strong>{capitalize(monkeynaut.class)}</strong>
-                  </UniqueInfo>
-                  <UniqueInfo>
+                  </S.UniqueInfo>
+                  <S.UniqueInfo>
                     <span>Energy</span>
-                    <strong>{monkeynaut.attributes.currentEnergy}/{monkeynaut.attributes.maxEnergy}</strong>
-                  </UniqueInfo>
+                    <strong>{monkeynaut.energy}/{monkeynaut.maxEnergy}</strong>
+                  </S.UniqueInfo>
                 </div>
                 <div className="info_right">
-                  <UniqueInfo>
+                  <S.UniqueInfo>
                     <span>Rank</span>
                     <strong>{capitalize(monkeynaut.rank)}</strong>
-                  </UniqueInfo>
+                  </S.UniqueInfo>
 
-                  <UniqueInfo>
+                  <S.UniqueInfo>
                     <span>Breed Count</span>
                     <strong>{monkeynaut.breedCount}</strong>
-                  </UniqueInfo>
+                  </S.UniqueInfo>
                 </div>
               </div>
-              <UniqueInfo className={`${!monkeynaut.crew_in_ship && 'none_crew'}`}>
+              <S.UniqueInfo className={`${!monkeynaut.crew && 'none_crew'}`}>
                 <span>Crew in Ship</span>
-                <CrewInShipContainer>
-                  {monkeynaut.crew_in_ship ? (
-                    <CrewInShip>
+                <S.CrewInShipContainer>
+                  {monkeynaut.crew?.ship ? (
+                    <S.CrewInShip>
                       <div>
-                        <strong>{monkeynaut.crew_in_ship.name}</strong>
-                        <p>{capitalize(monkeynaut.crew_in_ship.class)}</p>
+                        <strong>{monkeynaut.crew.ship?.name}</strong>
+                        <p>{capitalize(monkeynaut.crew.ship.class)}</p>
                       </div>
-                    </CrewInShip>
+                    </S.CrewInShip>
                   ) : (
                     <p>None</p>
                   )}
-                </CrewInShipContainer>
-              </UniqueInfo>
-            </MonkeynautInformation>
-          </PrincipalDetails>
-          <OthersDetails>
-            <AttributesContainer>
-              <InfoTitle_1>Attributes</InfoTitle_1>
-              <Attributes>
-                <Attribute>
+                </S.CrewInShipContainer>
+              </S.UniqueInfo>
+            </S.MonkeynautInformation>
+          </S.PrincipalDetails>
+          <S.OthersDetails>
+            <S.AttributesContainer>
+              <S.InfoTitle_1>Attributes</S.InfoTitle_1>
+              <S.Attributes>
+                <S.Attribute>
                   <GiBroadsword />
-                  <strong>{monkeynaut.attributes.skill}</strong>
-                </Attribute>
-                <Attribute>
+                  <strong>{monkeynaut.power}</strong>
+                </S.Attribute>
+                <S.Attribute>
                   <BiRun />
-                  <strong>{monkeynaut.attributes.speed}</strong>
-                </Attribute>
-                <Attribute>
+                  <strong>{monkeynaut.speed}</strong>
+                </S.Attribute>
+                <S.Attribute>
                   <BiShieldQuarter />
-                  <strong>{monkeynaut.attributes.resistance}</strong>
-                </Attribute>
-                <Attribute>
+                  <strong>{monkeynaut.resistence}</strong>
+                </S.Attribute>
+                <S.Attribute>
                   <AiFillHeart />
-                  <strong>{monkeynaut.attributes.life}</strong>
-                </Attribute>
-              </Attributes>
-            </AttributesContainer>
-            <PveBonusInfo>
-              <InfoTitle_1>PVE BONUS</InfoTitle_1>
+                  <strong>{monkeynaut.health}</strong>
+                </S.Attribute>
+              </S.Attributes>
+            </S.AttributesContainer>
+            <S.PveBonusInfo>
+              <S.InfoTitle_1>PVE BONUS</S.InfoTitle_1>
               <p className="pve_detail">
-                + {monkeynaut.bonus?.value}% <br />
-                {monkeynaut.bonus?.description}
+                + {monkeynaut.bonusValue}% <br />
+                {monkeynaut.bonusDescription}
               </p>
-            </PveBonusInfo>
-            <EquipamentsContainer>
-              <InfoTitle_1 className="equipament_title">Equipments</InfoTitle_1>
+            </S.PveBonusInfo>
+            <S.EquipamentsContainer>
+              <S.InfoTitle_1 className="equipament_title">Equipments</S.InfoTitle_1>
 
-              <EquipamentsContent>
-                <EquipamentToSelect>
+              <S.EquipamentsContent>
+                <S.EquipamentToSelect>
                   <div className="equipament_content">
                     <BiPlus />
                   </div>
-                </EquipamentToSelect>
-                <EquipamentToSelect>
+                </S.EquipamentToSelect>
+                <S.EquipamentToSelect>
                   <div className="equipament_content">
                     <BiPlus />
                   </div>
-                </EquipamentToSelect>
-                <EquipamentToSelect>
+                </S.EquipamentToSelect>
+                <S.EquipamentToSelect>
                   <div className="equipament_content">
                     <BiPlus />
                   </div>
-                </EquipamentToSelect>
-              </EquipamentsContent>
-            </EquipamentsContainer>
-          </OthersDetails>
-        </Details>
+                </S.EquipamentToSelect>
+              </S.EquipamentsContent>
+            </S.EquipamentsContainer>
+          </S.OthersDetails>
+        </S.Details>
         <button 
           onClick={monkeynautIsShow.changeToFalse}
           className="back_page"
         >
           Back
         </button>
-      </Content>
-    </Container>
+      </S.Content>
+    </S.Container>
   );
 }

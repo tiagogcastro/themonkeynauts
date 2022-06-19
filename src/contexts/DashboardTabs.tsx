@@ -1,6 +1,5 @@
-import { useAuth } from '@/hooks';
 import { MonkeynautType, ShipType } from '@/services/app_api';
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useState } from 'react';
 
 export type DashboardTabsContextData = {
   ship: ShipType.Ship;

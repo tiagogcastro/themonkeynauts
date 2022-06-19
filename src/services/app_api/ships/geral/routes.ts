@@ -26,6 +26,8 @@ export const geral = {
     return baseApi.delete(`/ships/${data.params.ship_id}/monkeynauts/${data.params.monkeynaut_id}`);
   },
   getUnique: (data: GetUniqueShipParams): Promise<AxiosResponse<GetUniqueShip>> => {
-    return baseApi.get(`/ships/${data.path.ship_id}`);
+    return baseApi.get(`/ships/list-unique`, {
+      ...data,
+    });
   }
 }

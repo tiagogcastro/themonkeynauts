@@ -10,6 +10,6 @@ export const geral = {
   //   return baseApi.post('/ships', data);
   // },
   getMonkeynauts: (): Promise<AxiosResponse<GetMonkeynauts>> => {
-    return baseApi.get('/monkeynauts');
+    return baseApi.get('/monkeynauts/list');
   },
 }

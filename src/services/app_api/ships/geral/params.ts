@@ -15,7 +15,8 @@ export type DeleteMonkeynautFromShipParams = {
 }
 
 export type GetUniqueShipParams = {
-  path: {
-    ship_id: string;
+  params: {
+    shipId: string;
+    playerId: string;
   }
 }

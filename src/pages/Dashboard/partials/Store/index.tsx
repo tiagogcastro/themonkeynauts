@@ -58,7 +58,7 @@ type Sales = {
   packs: PackSale[];
 }
 
-export function FoundersPackTab() {
+export function StoreTab() {
   const [sales, setSales] = useState<Sales>({} as Sales);
   const { player } = useAuth();
 

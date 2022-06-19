@@ -1,43 +1,49 @@
-import { Ship } from '../../ships/types';
 import { Player } from '../../player/types';
+import { Ship } from '../../ships/types';
 
 export type MonkeynautRole = 'soldier' | 'engineer' | 'scientist';
 
+// type Crew = {
+//   id: string;
+//   shipId: string;
+//   monkeynautId: string;
+// }
+
 export type Monkeynaut = {
   id: string;
-  number: string;
-  firstName: string;
-  lastName: string;
+  ownerId: string;
+  playerId: string;
+  name: string;
   class: MonkeynautRole;
   rank: string;
 
-  avatar?: string;
-  ownerName?: string;
-  id_short?: string;
-  crew_in_ship?: Ship | null;
+  bonusValue: number;
+  bonusDescription?: string;
 
-  attributes: {
-    skill: number;
-    speed: number;
-    resistance: number;
-    life: number;
-    maxEnergy: number;
-    currentEnergy: number;
-  };
+  maxEnergy: number;
+  energy: number;
+
+  basePower: number;
+  baseSpeed: number;
+  baseResistence: number;
+  baseHealth: number;
   
-  bonus: {
-    value: number;
-    description: string;
-  };
-
+  power: number;
+  speed: number;
+  resistence: number;
+  health: number;
+  
   shipId: string;
   
   breedCount: number;
 
-  owner: Player;
-  operator: Player;
+  avatar?: string;
+  ownerName?: string;
+  id_short?: string;
+  crew: {
+    ship: Ship | null;
+    player: Player;
+  };
 };
 
-export type GetMonkeynauts = {
-  monkeynauts: Monkeynaut[];
-}
+export type GetMonkeynauts = Monkeynaut[];
