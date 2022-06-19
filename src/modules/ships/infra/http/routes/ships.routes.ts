@@ -28,7 +28,7 @@ shipsRouter.get(
   ensureAuthenticated,
   celebrate({
     [Segments.QUERY]: {
-      playerId: Joi.string().uuid().required(),
+      playerId: Joi.string().uuid(),
       shipId: Joi.string().uuid().required(),
     },
   }),

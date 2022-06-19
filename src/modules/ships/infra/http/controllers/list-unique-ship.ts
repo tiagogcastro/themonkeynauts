@@ -10,13 +10,14 @@ type RequestQuery = {
 class ListUniqueShipController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { playerId, shipId } = request.query as unknown as RequestQuery;
+    const playerLoggedId = request.player.id;
 
     const listUniqueShipBusinessLogic = container.resolve(
       ListUniqueShipBusinessLogic,
     );
 
     const { ship, player } = await listUniqueShipBusinessLogic.execute({
-      playerId,
+      playerId: playerId || playerLoggedId,
       shipId,
     });
 
