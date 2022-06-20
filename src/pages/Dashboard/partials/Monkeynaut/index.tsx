@@ -4,7 +4,7 @@ import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
 
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
-import { capitalize, replaceToShortString } from '@/utils';
+import { capitalize } from '@/utils';
 
 import {
   Title_1
@@ -13,8 +13,6 @@ import {
 import * as S from './styles';
 import { useEffect } from 'react';
 import { baseApi } from '@/services/api';
-import { toast } from 'react-toastify';
-import { COLORS } from '@/theme';
 
 export type MonkeynautProps = {
   monkeynautIsShow: UseBooleanTypes;
@@ -26,39 +24,16 @@ export function Monkeynaut({
   const { monkeynaut, setMonkeynaut } = useDashboardTabs();
 
   async function getCrew() {
-    try {
-      const getUniqueCrewResponse = await baseApi.get('/crews/list-unique', {
-        params: {
-          monkeynautId: monkeynaut.id,
-        }
-      });
+    const getUniqueShipCrewResponse = await baseApi.get('/crews/list-by-monkeynaut', {
+      params: {
+        monkeynautId: monkeynaut.id,
+      }
+    });
 
-      const getUniqueShipResponse = await baseApi.get('/ships/list-unique', {
-        params: {
-          shipId: getUniqueCrewResponse.data.shipId,
-        }
-      });
-
-      setMonkeynaut({
-        ...monkeynaut,
-        crew: getUniqueShipResponse.data,
-      });
-
-    } catch(error: any) {
-      const error_message = error?.response?.data.message;
-
-      toast(error_message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-    }
+    setMonkeynaut({
+      ...monkeynaut,
+      crew: getUniqueShipCrewResponse.data,
+    });
   }
 
   useEffect(() => {
@@ -109,11 +84,11 @@ export function Monkeynaut({
               <S.UniqueInfo className={`${!monkeynaut.crew && 'none_crew'}`}>
                 <span>Crew in Ship</span>
                 <S.CrewInShipContainer>
-                  {monkeynaut.crew?.ship ? (
+                  {monkeynaut?.crew ? (
                     <S.CrewInShip>
                       <div>
-                        <strong>{monkeynaut.crew.ship?.name}</strong>
-                        <p>{capitalize(monkeynaut.crew.ship.class)}</p>
+                        <strong>{monkeynaut.crew.name}</strong>
+                        <p>{capitalize(monkeynaut.crew.class)}</p>
                       </div>
                     </S.CrewInShip>
                   ) : (

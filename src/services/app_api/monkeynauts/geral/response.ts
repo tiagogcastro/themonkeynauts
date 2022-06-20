@@ -40,10 +40,8 @@ export type Monkeynaut = {
   avatar?: string;
   ownerName?: string;
   id_short?: string;
-  crew: {
-    ship: Ship | null;
-    player: Player;
-  };
+
+  crew?: Ship | null;
 };
 
 export type GetMonkeynauts = Monkeynaut[];
