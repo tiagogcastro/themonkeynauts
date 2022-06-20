@@ -8,6 +8,7 @@ import { saveWalletController } from '../controllers/save-wallet';
 import { sendForgotPasswordEmailController } from '../controllers/send-forgot-password-email';
 import { showPlayerController } from '../controllers/show-player';
 import { updatePlayerController } from '../controllers/update-player';
+import { updatePlayerResourceController } from '../controllers/update-player-resource';
 import { ensureAuthenticated } from '../middlewares/ensure-authenticated';
 
 const playersRouter = Router();
@@ -76,6 +77,28 @@ playersRouter.put(
     },
   }),
   (request, response) => resetPasswordController.handle(request, response),
+);
+
+// resource
+playersRouter.put(
+  '/update-resource',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      nickname: Joi.string(),
+      playerId: Joi.string(),
+      resources: Joi.object({
+        spc: Joi.number(),
+        gold: Joi.number(),
+        iron: Joi.number(),
+        copper: Joi.number(),
+        scrap: Joi.number(),
+        science: Joi.number(),
+      }),
+    },
+  }),
+  (request, response) =>
+    updatePlayerResourceController.handle(request, response),
 );
 
 export { playersRouter };
