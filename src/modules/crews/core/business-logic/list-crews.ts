@@ -1,9 +1,9 @@
-import { ICrew } from '@modules/crews/domain/entities/crew';
 import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IShip } from '@modules/ships/domain/entities/ship';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { AppError } from '@shared/errors/app-error';
-import { AsyncMaybe, Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/types/maybe';
 import { inject, injectable } from 'tsyringe';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
@@ -28,7 +28,7 @@ class ListCrewsBusinessLogic {
   async execute({
     monkeynautId,
     shipId,
-  }: ListCrewsRequest): Promise<ICrew | Maybe<IMonkeynaut>[]> {
+  }: ListCrewsRequest): Promise<IShip | Maybe<IMonkeynaut>[]> {
     if (monkeynautId) {
       const foundMonkeynaut = await this.monkeynautsRepository.findById(
         monkeynautId,
@@ -46,7 +46,13 @@ class ListCrewsBusinessLogic {
         throw new AppError('Monkeynaut does not exist on a crew', 404);
       }
 
-      return crew;
+      const foundShip = await this.shipsRepository.findById(crew.shipId);
+
+      if (!foundShip) {
+        throw new AppError('Ship does not exist', 404);
+      }
+
+      return foundShip;
     }
 
     if (shipId) {
