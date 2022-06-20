@@ -110,7 +110,7 @@ export function Login() {
                 <Link to="/register">Sign up</Link>
               </span>
               <span className="forgot_password">
-                <Link to="/forgot">Forgot Password</Link>
+                <Link to="/forgot-password">Forgot Password</Link>
               </span>
 
               <span className="app_name">The Monkeynauts</span>
