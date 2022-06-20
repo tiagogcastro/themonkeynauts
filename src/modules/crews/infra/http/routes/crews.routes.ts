@@ -6,6 +6,7 @@ import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ens
 import { createCrewController } from '../controllers/create-crew';
 
 import { listCrewsController } from '../controllers/list-crews';
+import { removeMonkeynautFromCrewController } from '../controllers/remove-monkeynaut-from-crew';
 
 const crewsRouter = Router();
 
@@ -42,6 +43,19 @@ crewsRouter.post(
     },
   }),
   (request, response) => createCrewController.handle(request, response),
+);
+
+crewsRouter.delete(
+  '/remove-monkeynaut',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.QUERY]: {
+      playerId: Joi.string().uuid(),
+      monkeynautId: Joi.string().uuid().required(),
+    },
+  }),
+  (request, response) =>
+    removeMonkeynautFromCrewController.handle(request, response),
 );
 
 export { crewsRouter };
