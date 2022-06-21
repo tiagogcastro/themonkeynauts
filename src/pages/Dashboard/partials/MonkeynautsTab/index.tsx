@@ -70,8 +70,6 @@ export function MonkeynautsTab({
           }
         });
 
-        console.log(response.data);
-
         setMonkeynauts(response.data);
       } catch(err) {
         
@@ -88,7 +86,6 @@ export function MonkeynautsTab({
   const monkeynautsModified = useMemo(() => {
     if(monkeynauts) {
       return monkeynauts.map(monkeynaut => {
-        console.log(monkeynaut);
         return {
           ...monkeynaut,
           avatar: verifyRole(monkeynaut.class, {

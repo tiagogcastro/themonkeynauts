@@ -47,8 +47,6 @@ export function Ship({
         }
       });
 
-      console.log(getCrewsResponse);
-
       setShip({
         ...ship,
         crews: getCrewsResponse.data,
