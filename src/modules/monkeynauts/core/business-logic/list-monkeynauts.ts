@@ -9,14 +9,12 @@ class ListMonkeynautsBusinessLogic {
     private monkeynautsRepository: IMonkeynautsRepository,
   ) {}
 
-  async execute(player_id?: string): Promise<IMonkeynaut[]> {
+  async execute(playerId?: string): Promise<IMonkeynaut[]> {
     let monkeynauts: IMonkeynaut[] = [];
 
-    if (player_id) {
+    if (playerId) {
       monkeynauts =
-        await this.monkeynautsRepository.listAllMonkeynautsFromPlayer(
-          player_id,
-        );
+        await this.monkeynautsRepository.listAllMonkeynautsFromPlayer(playerId);
     } else {
       monkeynauts = await this.monkeynautsRepository.listAllMonkeynauts();
     }

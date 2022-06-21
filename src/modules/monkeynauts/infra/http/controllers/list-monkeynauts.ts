@@ -4,14 +4,14 @@ import { container } from 'tsyringe';
 
 class ListMonkeynautsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { player_id } = request.query;
+    const { playerId } = request.query;
 
     const listMonkeynautsBusinessLogic = container.resolve(
       ListMonkeynautsBusinessLogic,
     );
 
     const monkeynauts = await listMonkeynautsBusinessLogic.execute(
-      player_id as string,
+      playerId as string,
     );
 
     return response.status(200).json(monkeynauts);

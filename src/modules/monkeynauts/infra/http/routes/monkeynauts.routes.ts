@@ -21,7 +21,7 @@ monkeynautsRouter.get(
   ensureAdministrator,
   celebrate({
     [Segments.QUERY]: {
-      player_id: Joi.string().uuid(),
+      playerId: Joi.string().uuid(),
     },
   }),
   (request, response) => listMonkeynautsController.handle(request, response),
