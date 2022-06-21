@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 
 import { container } from 'tsyringe';
-import { UpdatePlayerResourceBusinessLogic } from '@modules/players/core/business-logic/update-player-resource';
+import { RemovePlayerResourceAmountBusinessLogic } from '@modules/players/core/business-logic/remove-player-resource-amount';
 import { IResource } from '@modules/players/domain/entities/resource';
 
 type RequestQuery = {
@@ -15,19 +15,19 @@ type RequestBody = {
   resources: IResource;
 };
 
-class UpdatePlayerResourceController {
+class RemovePlayerResourceAmountController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { resources } = request.body as RequestBody;
 
     const { playerId, nickname } = request.query as unknown as RequestQuery;
     const playerLoggedId = request.player.id;
 
-    const updatePlayerResourceBusinessLogic = container.resolve(
-      UpdatePlayerResourceBusinessLogic,
+    const removePlayerResourceAmountBusinessLogic = container.resolve(
+      RemovePlayerResourceAmountBusinessLogic,
     );
 
     const { player, resource } =
-      await updatePlayerResourceBusinessLogic.execute({
+      await removePlayerResourceAmountBusinessLogic.execute({
         nickname,
         playerId: playerId || playerLoggedId,
         resources,
@@ -40,6 +40,7 @@ class UpdatePlayerResourceController {
   }
 }
 
-const updatePlayerResourceController = new UpdatePlayerResourceController();
+const removePlayerResourceAmountController =
+  new RemovePlayerResourceAmountController();
 
-export { updatePlayerResourceController };
+export { removePlayerResourceAmountController };

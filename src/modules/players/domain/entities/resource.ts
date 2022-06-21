@@ -1,14 +1,17 @@
 import crypto from 'node:crypto';
 import { Commons } from '@shared/types/commons';
 
-type ResourcePropsOmittedCommons = {
-  playerId?: string;
+export type ResourceItems = {
   spc: number;
   gold: number;
   iron: number;
   copper: number;
   scrap: number;
   science: number;
+};
+
+type ResourcePropsOmittedCommons = ResourceItems & {
+  playerId?: string;
 };
 
 type ResourceProps = ResourcePropsOmittedCommons & Commons;

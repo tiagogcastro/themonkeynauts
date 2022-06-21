@@ -8,7 +8,7 @@ import { saveWalletController } from '../controllers/save-wallet';
 import { sendForgotPasswordEmailController } from '../controllers/send-forgot-password-email';
 import { showPlayerController } from '../controllers/show-player';
 import { updatePlayerController } from '../controllers/update-player';
-import { updatePlayerResourceController } from '../controllers/update-player-resource';
+import { removePlayerResourceAmountController } from '../controllers/remove-player-resource-amount';
 import { ensureAuthenticated } from '../middlewares/ensure-authenticated';
 
 const playersRouter = Router();
@@ -98,7 +98,7 @@ playersRouter.put(
     },
   }),
   (request, response) =>
-    updatePlayerResourceController.handle(request, response),
+    removePlayerResourceAmountController.handle(request, response),
 );
 
 export { playersRouter };

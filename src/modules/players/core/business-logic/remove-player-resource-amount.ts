@@ -1,16 +1,20 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
-import { IResource, Resource } from '@modules/players/domain/entities/resource';
+import {
+  IResource,
+  ResourceItems,
+  Resource,
+} from '@modules/players/domain/entities/resource';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { AppError } from '@shared/errors/app-error';
 import { Maybe } from '@shared/types/maybe';
 import { inject, injectable } from 'tsyringe';
 
-type UpdatePlayerResourceRequestDTO = {
+type RemovePlayerResourceAmountRequestDTO = {
   nickname?: string;
   playerId: string;
 
-  resources: Partial<IResource>;
+  resources: Partial<ResourceItems>;
 };
 
 type Response = {
@@ -19,7 +23,7 @@ type Response = {
 };
 
 @injectable()
-class UpdatePlayerResourceBusinessLogic {
+class RemovePlayerResourceAmountBusinessLogic {
   constructor(
     @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
@@ -32,17 +36,55 @@ class UpdatePlayerResourceBusinessLogic {
     nickname,
     playerId,
     resources,
-  }: UpdatePlayerResourceRequestDTO): Promise<Response> {
-    function getResrouce(resource: IResource) {
+  }: RemovePlayerResourceAmountRequestDTO): Promise<Response> {
+    function getResource(resource: IResource) {
+      const playerResources = {
+        copper: resource.copper,
+        gold: resource.gold,
+        iron: resource.iron,
+        science: resource.science,
+        scrap: resource.scrap,
+        spc: resource.spc,
+      };
+
+      const resourcesReducer = Object.entries(resources).reduce(
+        (previous, data) => {
+          const [key, requestResourceValue] = data;
+
+          const playerResourceValue =
+            playerResources[key as keyof ResourceItems];
+
+          if (requestResourceValue <= 0) {
+            throw new AppError(
+              `Cannot remove ${requestResourceValue} from ${key} resource`,
+            );
+          }
+
+          if (
+            requestResourceValue &&
+            playerResourceValue < requestResourceValue
+          ) {
+            throw new AppError(
+              `You have ${playerResourceValue} ${key}. Cannot remove ${requestResourceValue} ${key}`,
+            );
+          }
+
+          const values = {
+            [key]: playerResourceValue - requestResourceValue,
+          };
+
+          return {
+            ...previous,
+            ...values,
+          };
+        },
+        {} as ResourceItems,
+      );
+
       const { resource: resourcesUpdated } = new Resource(
         {
           ...resource,
-          copper: resources?.copper ?? resource.copper,
-          gold: resources?.gold ?? resource.gold,
-          iron: resources?.iron ?? resource.iron,
-          science: resources?.science ?? resource.science,
-          scrap: resources?.scrap ?? resource.scrap,
-          spc: resources?.spc ?? resource.spc,
+          ...resourcesReducer,
         },
         {
           createdAt: resource?.createdAt,
@@ -69,7 +111,9 @@ class UpdatePlayerResourceBusinessLogic {
         throw new AppError('Player resource not found', 404);
       }
 
-      const resourcesUpdated = getResrouce(resource);
+      const resourcesUpdated = getResource(resource);
+
+      await this.resourcesRepository.save(resourcesUpdated);
 
       return {
         player,
@@ -89,7 +133,9 @@ class UpdatePlayerResourceBusinessLogic {
       throw new AppError('Player resource not found', 404);
     }
 
-    const resourcesUpdated = getResrouce(resource);
+    const resourcesUpdated = getResource(resource);
+
+    await this.resourcesRepository.save(resourcesUpdated);
 
     return {
       player,
@@ -98,4 +144,4 @@ class UpdatePlayerResourceBusinessLogic {
   }
 }
 
-export { UpdatePlayerResourceBusinessLogic };
+export { RemovePlayerResourceAmountBusinessLogic };
