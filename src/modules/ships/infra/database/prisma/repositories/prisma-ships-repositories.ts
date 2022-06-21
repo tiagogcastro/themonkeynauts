@@ -36,6 +36,24 @@ class PrismaShipsRepository implements IShipsRepository {
     return parseShip(ship);
   }
 
+  async findByIdAndPlayerId(
+    shipId: string,
+    playerId: string,
+  ): AsyncMaybe<IShip> {
+    const ship = await prisma.ship.findFirst({
+      where: {
+        id: shipId,
+        playerId,
+      },
+    });
+
+    if (!ship) {
+      return null;
+    }
+
+    return parseShip(ship);
+  }
+
   async save(ship: Ship): Promise<void> {
     const { id: shipId, ...props } = ship;
 

@@ -1,3 +1,4 @@
+import { ICrew } from '@modules/crews/domain/entities/crew';
 import { AsyncMaybe } from '@shared/types/maybe';
 import { IMonkeynaut } from '../entities/monkeynaut';
 
@@ -9,6 +10,8 @@ interface IMonkeynautsRepository {
   listAllMonkeynauts(): Promise<IMonkeynaut[]>;
   listAllMonkeynautsFromPlayer(player_id: string): Promise<IMonkeynaut[]>;
   findById(monkeynaut_id: string): AsyncMaybe<IMonkeynaut>;
-  findMany(): AsyncMaybe<IMonkeynaut[]>;
+
+  findMany(): Promise<IMonkeynaut[]>;
+  findManyByCrews(crews: ICrew[]): Promise<IMonkeynaut[]>;
 }
 export { IMonkeynautsRepository };

@@ -1,3 +1,4 @@
+import { ICrew } from '@modules/crews/domain/entities/crew';
 import {
   IMonkeynaut,
   Monkeynaut,
@@ -95,8 +96,16 @@ class PrismaMonkeynautsRepository implements IMonkeynautsRepository {
     return parseMonkeynaut(monkeynaut);
   }
 
-  async findMany(): AsyncMaybe<IMonkeynaut[]> {
+  async findMany(): Promise<IMonkeynaut[]> {
     return prisma.monkeynaut.findMany();
+  }
+
+  async findManyByCrews(crews: ICrew[]): Promise<IMonkeynaut[]> {
+    return prisma.monkeynaut.findMany({
+      where: {
+        OR: crews.map(crew => ({ id: crew.monkeynautId })),
+      },
+    });
   }
 }
 

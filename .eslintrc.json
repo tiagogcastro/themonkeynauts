@@ -30,6 +30,8 @@
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/ban-types": "off",
+      "no-restricted-syntax": ["off"],
+      "guard-for-in": "error",
       "@typescript-eslint/naming-convention": [
         "error",
         {

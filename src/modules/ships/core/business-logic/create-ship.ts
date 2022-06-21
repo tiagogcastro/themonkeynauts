@@ -39,7 +39,7 @@ class CreateShipBusinessLogic {
     breedCount,
     onSale,
   }: CreateShipRequestDTO): Promise<IShip> {
-    const player = await this.playersRepository.findById(playerId);
+    const player = await this.playersRepository.findById(ownerId);
 
     if (!player) {
       throw new AppError(
@@ -77,7 +77,7 @@ class CreateShipBusinessLogic {
       }[__rank];
 
     const __fuel = fuel || __tankCapacity;
-    const __crew = crew || 0;
+    const __crew = crew ?? 0;
 
     const crewCapacitySchema: Record<ShipRank, number> = {
       B: 2,
@@ -104,22 +104,22 @@ class CreateShipBusinessLogic {
     };
 
     const __bonusDescription =
-      bonusDescription ||
+      bonusDescription ??
       {
         FIGHTER: 'Bounty Hunt Damage',
         MINER: 'Mining Success Rate',
         EXPLORER: 'Mission Time',
       }[__class];
 
-    const __crewCapacity = crewCapacity || crewCapacitySchema[__rank];
-    const __bonusValue = bonusValue || bonusValueSchema[__class][__rank];
-    const __canRefuelAtStation = canRefuelAtStation || false;
-    const __breedCount = breedCount || 0;
-    const __onSale = onSale || false;
+    const __crewCapacity = crewCapacity ?? crewCapacitySchema[__rank];
+    const __bonusValue = bonusValue ?? bonusValueSchema[__class][__rank];
+    const __canRefuelAtStation = canRefuelAtStation ?? false;
+    const __breedCount = breedCount ?? 0;
+    const __onSale = onSale ?? false;
 
     const { ship } = new Ship({
-      ownerId: ownerId || playerId,
-      playerId,
+      ownerId,
+      playerId: playerId ?? ownerId,
       name: __name,
       class: __class,
       rank: __rank,

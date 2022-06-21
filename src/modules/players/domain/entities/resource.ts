@@ -1,8 +1,7 @@
 import crypto from 'node:crypto';
 import { Commons } from '@shared/types/commons';
 
-type ResourcePropsOmittedCommons = {
-  playerId: string;
+export type ResourceItems = {
   spc: number;
   gold: number;
   iron: number;
@@ -11,11 +10,16 @@ type ResourcePropsOmittedCommons = {
   science: number;
 };
 
+type ResourcePropsOmittedCommons = ResourceItems & {
+  playerId?: string;
+};
+
 type ResourceProps = ResourcePropsOmittedCommons & Commons;
 
 type ResourceCommons = Partial<
   {
     id: string;
+    playerId: string;
   } & Commons
 >;
 
@@ -54,8 +58,8 @@ export class Resource implements IResource {
     return this._id;
   }
 
-  get playerId(): string {
-    return this._props.playerId;
+  get playerId(): string | undefined {
+    return this._props?.playerId;
   }
 
   get spc(): number {

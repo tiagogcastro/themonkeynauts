@@ -2,6 +2,10 @@ import { IShip } from '@modules/ships/domain/entities/ship';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 
+type ListRequest = {
+  playerId?: string;
+};
+
 @injectable()
 class ListShipsBusinessLogic {
   constructor(
@@ -9,7 +13,7 @@ class ListShipsBusinessLogic {
     private shipsRepository: IShipsRepository,
   ) {}
 
-  async execute(playerId?: string): Promise<IShip[]> {
+  async execute({ playerId }: ListRequest): Promise<IShip[]> {
     if (playerId) {
       return this.shipsRepository.listAllShipsFromPlayer(playerId);
     }
