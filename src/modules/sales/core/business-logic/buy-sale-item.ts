@@ -233,13 +233,11 @@ class BuySaleItemBusinessLogic {
           monkeynauts: [
             {
               rank: await (async () => {
-                const percentage = 100 / 4;
-
                 const monkeynautRank = await rarity({
-                  private: percentage,
-                  sergeant: percentage,
-                  captain: percentage,
-                  major: percentage,
+                  private: 50,
+                  sergeant: 30,
+                  captain: 18,
+                  major: 2,
                 });
 
                 return monkeynautRank as MonkeynautRank;
@@ -247,13 +245,11 @@ class BuySaleItemBusinessLogic {
             },
             {
               rank: await (async () => {
-                const percentage = 100 / 4;
-
                 const monkeynautRank = await rarity({
-                  private: percentage,
-                  sergeant: percentage,
-                  captain: percentage,
-                  major: percentage,
+                  private: 50,
+                  sergeant: 30,
+                  captain: 18,
+                  major: 2,
                 });
 
                 return monkeynautRank as MonkeynautRank;
@@ -263,12 +259,10 @@ class BuySaleItemBusinessLogic {
           ships: [
             {
               rank: await (async () => {
-                const percentage = 100 / 3;
-
                 const shipRank = await rarity({
-                  b: percentage,
-                  a: percentage,
-                  s: percentage,
+                  b: 55,
+                  a: 33,
+                  s: 12,
                 });
 
                 return shipRank as ShipRank;
