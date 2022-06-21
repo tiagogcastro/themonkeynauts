@@ -170,7 +170,7 @@ export function StoreTab() {
         dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
       });
   
-      if(error) {
+      if(error.message) {
         return toast(error.message, {
           autoClose: 5000,
           pauseOnHover: true,
@@ -183,39 +183,42 @@ export function StoreTab() {
           }
         });
       }
-  
-      const sale = {
-        Monkeynaut: {
-          monkeynautSaleId: data.id,
-        },
-        Ship: {
-          shipSaleId: data.id,
-        },
-        Pack: {
-          packSaleId: data.id,
-        },
-      }
-  
-      const dataPost = {
-        wallet: player?.player.wallet,
-        txHash: transaction,
-        ...sale[data.saleType]
-      }
-      
-      await baseApi.post('/sale-events/buy-sale-item', dataPost);
 
-      toast(`Successfully ${data.saleType} sale`, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'success',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
+      if(transaction) {
+        const sale = {
+          Monkeynaut: {
+            monkeynautSaleId: data.id,
+          },
+          Ship: {
+            shipSaleId: data.id,
+          },
+          Pack: {
+            packSaleId: data.id,
+          },
         }
-      });
+    
+        const dataPost = {
+          wallet: player?.player.wallet,
+          txHash: transaction,
+          ...sale[data.saleType]
+        }
 
+        console.log({dataPost});
+        
+        await baseApi.post('/sale-events/buy-sale-item', dataPost);
+
+        toast(`Successfully ${data.saleType} sale`, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'success',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
     } catch (error: any) {
       toast(error.message, {
         autoClose: 5000,
