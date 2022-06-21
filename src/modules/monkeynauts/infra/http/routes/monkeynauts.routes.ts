@@ -18,7 +18,6 @@ const monkeynautsRouter = Router();
 monkeynautsRouter.get(
   '/list',
   ensureAuthenticated,
-  ensureAdministrator,
   celebrate({
     [Segments.QUERY]: {
       player_id: Joi.string().uuid(),
