@@ -16,8 +16,8 @@ export const geral = {
   // create: (data: CreateShipsParams): Promise<AxiosResponse<CreateShipsResponse>> => {
   //   return baseApi.post('/ships', data);
   // },
-  getShips: (): Promise<AxiosResponse<Ship[]>> => {
-    return baseApi.get('/ships/list');
+  getShips: (data?: any): Promise<AxiosResponse<Ship[]>> => {
+    return baseApi.get('/ships/list', ...data);
   },
   addMonkeynautToShip: (data: AddMonkeyToShipParams): Promise<AxiosResponse<{}>> => {
     return baseApi.post(`/ships/${data.params.ship_id}/monkeynauts`, data.body);

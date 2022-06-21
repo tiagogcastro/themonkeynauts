@@ -66,7 +66,11 @@ export function ShipsTab({
 
   async function getShips() {
     try {
-      const response = await api.ships.geral.getShips();
+      const response = await baseApi.get('/ships/list', {
+        params: {
+          playerId: player?.player.id
+        }
+      });
 
       setShips(response.data);
 

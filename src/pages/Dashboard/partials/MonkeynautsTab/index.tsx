@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
 import { Monkeynaut } from '../Monkeynaut';
-import { api, baseApi, MonkeynautType } from '@/services/api';
+import { baseApi, MonkeynautType } from '@/services/api';
 import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 
 import { Loading } from '@/components';
@@ -64,7 +64,13 @@ export function MonkeynautsTab({
   useEffect(() => {
     async function getMonkeynauts() {
       try {
-        const response = await api.monkeynauts.geral.getMonkeynauts();
+        const response = await baseApi.get('/monkeynauts/list', {
+          params: {
+            playerId: player?.player.id
+          }
+        });
+
+        console.log(response.data);
 
         setMonkeynauts(response.data);
       } catch(err) {
