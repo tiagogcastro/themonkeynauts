@@ -9,5 +9,5 @@ export function getFormattedDate(date: Date | string) {
   const month = addZeroBeforeDate(formatToDate.getMonth());
   const fullYear = formatToDate.getFullYear();
 
-  return `${day}:${month}:${fullYear}`;
+  return `${day}/${month}/${fullYear}`;
 }
