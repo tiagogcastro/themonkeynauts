@@ -20,7 +20,7 @@ const schema = Yup.object().shape({
   crypto: Yup.string()
     .required('This field is required'),
   price: Yup.number()
-    .min(0.0001, 'Min quantity is 1')
+    .min(0.000001, 'Min quantity is 0.000001')
     .required('This field is required'),
   startDate: Yup.string()
     .required('This field is required'),
