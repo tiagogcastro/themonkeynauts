@@ -252,11 +252,6 @@ export function StoreTab() {
   return (
     <Container>
       <Content>
-        {!sales?.monkeynauts.length  && !sales?.ships.length && !sales?.packs.length && (
-          <p style={{
-            fontSize: '1.8rem'
-          }}>We currently have no products in our store.</p>
-        )}
         {sales?.monkeynauts && sales.monkeynauts.map(sale => (
           <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>
