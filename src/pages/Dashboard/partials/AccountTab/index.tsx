@@ -195,7 +195,9 @@ export function AccountTab() {
                       onClick={walletModalIsOpen.changeToTrue}  
                       />
                   ) : (
-                    <strong>{player.player.wallet}</strong>
+                    <strong
+                      className="wallet"
+                    >{player.player.wallet}</strong>
                   )}
                 </UniqueInfo>
               </div>

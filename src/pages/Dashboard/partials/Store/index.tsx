@@ -185,6 +185,18 @@ export function StoreTab() {
       }
 
       if(transaction) {
+        toast(`Wait for the transaction to be confirmed in our database`, {
+          autoClose: 9000,
+          pauseOnHover: true,
+          type: 'info',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+
         const sale = {
           Monkeynaut: {
             monkeynautSaleId: data.id,
@@ -203,8 +215,6 @@ export function StoreTab() {
           ...sale[data.saleType]
         }
 
-        console.log({dataPost});
-        
         await baseApi.post('/sale-events/buy-sale-item', dataPost);
 
         toast(`Successfully ${data.saleType} sale`, {
@@ -219,6 +229,7 @@ export function StoreTab() {
           }
         });
       }
+
     } catch (error: any) {
       toast(error.message, {
         autoClose: 5000,
@@ -241,6 +252,11 @@ export function StoreTab() {
   return (
     <Container>
       <Content>
+        {!sales?.monkeynauts.length  && !sales?.ships.length && !sales?.packs.length && (
+          <p style={{
+            fontSize: '1.8rem'
+          }}>We currently have no products in our store.</p>
+        )}
         {sales?.monkeynauts && sales.monkeynauts.map(sale => (
           <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>

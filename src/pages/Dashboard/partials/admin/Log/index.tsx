@@ -93,7 +93,7 @@ export function AdminLog() {
                           overflow: 'hidden'
                         }}
                       >{log.action}</S.TdCustom>
-                      <S.TdCustom title={log.txHash}>{replaceToShortString(log.txHash)}</S.TdCustom>
+                      <S.TdCustom title={log.txHash}>{log.txHash ? replaceToShortString(log.txHash) : 'Undefined'}</S.TdCustom>
                       <S.TdCustom>{getFormattedDate(log.createdAt)}</S.TdCustom>
                     </tr>
                   ))}

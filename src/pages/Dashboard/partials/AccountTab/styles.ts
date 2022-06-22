@@ -179,6 +179,12 @@ export const UniqueInfo = styled.div`
     letter-spacing: 0.035em;
     color: ${COLORS.fonts.primary};
     margin-top: 0.4rem;
+
+    &.wallet {
+      max-width: 320px;
+       word-break: break-word;
+       line-height: 1.6rem;
+    }
   }
 
   .info_id {
@@ -192,6 +198,13 @@ export const UniqueInfo = styled.div`
   @media(min-width: 768px) {
     .info_id {
       max-width: 200px;
+    }
+
+    strong {
+      &.wallet {
+        max-width: auto;
+        word-break: initial;
+      }
     }
   }
 
