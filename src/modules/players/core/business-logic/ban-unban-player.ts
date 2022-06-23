@@ -5,11 +5,12 @@ import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { UserNotFoundError } from '@shared/errors/user-not-fount-error';
 import path from 'node:path';
 import { inject, injectable } from 'tsyringe';
+import { Maybe } from '@shared/core/logic/maybe';
 
 type BanUnbanPlayerResponse = Either<UserNotFoundError, IPlayer>;
 
 export type BanUnbanPlayerRequestDTO = {
-  playerId: string;
+  playerIdOrWallet: string;
   reason: string;
 };
 
@@ -24,10 +25,20 @@ class BanUnbanPlayerBusinessLogic {
   ) {}
 
   async execute({
-    playerId,
+    playerIdOrWallet,
     reason,
   }: BanUnbanPlayerRequestDTO): Promise<BanUnbanPlayerResponse> {
-    const player = await this.playersRepository.findById(playerId);
+    let player: Maybe<IPlayer>;
+
+    if (
+      playerIdOrWallet.match(
+        /^[0-9A-F]{8}-[0-9A-F]{4}-[1-5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
+      )
+    ) {
+      player = await this.playersRepository.findById(playerIdOrWallet);
+    } else {
+      player = await this.playersRepository.findByWallet(playerIdOrWallet);
+    }
 
     if (!player) {
       return left(new UserNotFoundError());

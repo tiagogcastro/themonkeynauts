@@ -18,7 +18,7 @@ class BanUnbanPlayerController
   implements IController<BanUnbanPlayerRequestDTO>
 {
   async handle({
-    playerId,
+    playerIdOrWallet,
     reason,
   }: BanUnbanPlayerRequestDTO): Promise<HttpResponse> {
     try {
@@ -27,7 +27,7 @@ class BanUnbanPlayerController
       );
 
       const result = await banUnbanPlayerBusinessLogic.execute({
-        playerId,
+        playerIdOrWallet,
         reason,
       });
 

@@ -139,7 +139,7 @@ playersRouter.patch(
   celebrate(
     {
       [Segments.BODY]: {
-        playerId: Joi.string().uuid().required(),
+        playerIdOrWallet: Joi.string().required(),
         reason: Joi.string().required(),
       },
     },
