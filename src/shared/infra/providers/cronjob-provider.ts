@@ -1,6 +1,6 @@
 import { ICronJobProvider } from '@shared/domain/providers/cronjob-provider';
 import { CronJobStartDTO } from '@shared/dtos/cronjob-start-dto';
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import { CronJob } from 'cron';
 
 class CronJobProvider implements ICronJobProvider {

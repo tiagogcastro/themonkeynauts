@@ -1,5 +1,5 @@
 import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IShip } from '../entities/ship';
 
 interface IShipsRepository {
