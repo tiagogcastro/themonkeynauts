@@ -5,15 +5,15 @@ let attempts = 0;
 const retry = async (
   callback: () => Promise<boolean>,
   delay?: number,
-  max_attempts = 2000,
+  maxAttempts = 2000,
 ) => {
   const _retry = await callback();
 
-  if (max_attempts !== 0) {
+  if (maxAttempts !== 0) {
     attempts += 1;
   }
 
-  if (attempts === max_attempts && max_attempts !== 0) {
+  if (attempts === maxAttempts && maxAttempts !== 0) {
     return;
   }
 

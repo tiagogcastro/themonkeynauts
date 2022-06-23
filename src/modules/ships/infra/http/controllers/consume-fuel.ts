@@ -6,12 +6,16 @@ import { container } from 'tsyringe';
 class ConsumeFuelController {
   async handle(request: Request, response: Response): Promise<Response> {
     const data = request.body as ConsumeFuelRequestDTO;
+    const playerIp = request.ip;
 
     const consumeFuelBusinessLogic = container.resolve(
       ConsumeFuelBusinessLogic,
     );
 
-    await consumeFuelBusinessLogic.execute(data);
+    await consumeFuelBusinessLogic.execute({
+      ...data,
+      playerIp,
+    });
 
     return response.status(204).json();
   }
