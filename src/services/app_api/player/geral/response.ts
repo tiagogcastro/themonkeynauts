@@ -5,6 +5,13 @@ export type Player = {
   role: string;
   id_short: string | undefined;
 
+  isBanned: boolean;
+  isEnabled: boolean;
+  activeShipId: string;
+
+  hasAsteroid: string;
+  canBountyHunt: boolean;
+
   wallet: string;
 }
 
