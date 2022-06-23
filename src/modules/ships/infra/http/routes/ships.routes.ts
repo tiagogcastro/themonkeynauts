@@ -3,6 +3,7 @@ import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ens
 
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { changeActivePlayerShipController } from '../controllers/change-active-player-ship';
 import { consumeFuelController } from '../controllers/consume-fuel';
 import { createShipController } from '../controllers/create-ship';
 import { listShipsController } from '../controllers/list-ships';
@@ -139,6 +140,19 @@ shipsRouter.put(
     },
   ),
   (request, response) => updateShipController.handle(request, response),
+);
+
+shipsRouter.put(
+  '/change-active-player',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      playerId: Joi.string().uuid(),
+      shipId: Joi.string().uuid().required(),
+    },
+  }),
+  (request, response) =>
+    changeActivePlayerShipController.handle(request, response),
 );
 
 export { shipsRouter };
