@@ -71,7 +71,8 @@ class CreatePlayerBusinessLogic {
       password: hashedPassword,
       canBountyHunt: true,
       hasAsteroid: false,
-      enabled: true,
+      isEnabled: true,
+      isBanned: false,
     });
 
     await this.playersRepository.create(player);
