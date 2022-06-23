@@ -3,7 +3,7 @@ import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories
 import { IShip } from '@modules/ships/domain/entities/ship';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { AppError } from '@shared/errors/app-error';
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
