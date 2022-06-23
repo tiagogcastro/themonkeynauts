@@ -83,7 +83,7 @@ export function AdminLog() {
                 </thead>
                 <tbody>
                   {logs && logs.map(log => (
-                    <tr>
+                    <tr key={log.id}>
                       <S.TdCustom title={log.playerId}>{replaceToShortString(log.playerId)}</S.TdCustom>
                       <S.TdCustom 
                         title={log.action}
