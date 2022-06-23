@@ -5,7 +5,7 @@ import {
 import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
 import { PlayerToken as PrismaPlayerToken } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parsePlayerToken = (player_token: PrismaPlayerToken): IPlayerToken => {
   return new PlayerToken(player_token, {
@@ -16,10 +16,10 @@ const parsePlayerToken = (player_token: PrismaPlayerToken): IPlayerToken => {
 };
 
 export class PrismaPlayerTokensRepository implements IPlayerTokensRepository {
-  async findByPlayerId(player_id: string): AsyncMaybe<IPlayerToken> {
+  async findByPlayerId(playerId: string): AsyncMaybe<IPlayerToken> {
     const playerToken = await prisma.playerToken.findFirst({
       where: {
-        playerId: player_id,
+        playerId: playerId,
       },
     });
 

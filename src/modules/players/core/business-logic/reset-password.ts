@@ -32,6 +32,7 @@ class ResetPasswordBusinessLogic {
     if (!player) throw new AppError('Player does not exists', 409);
 
     const amount = 2;
+
     const limitDate = this.dateProvider.addHours(
       playerTokens.createdAt,
       amount,

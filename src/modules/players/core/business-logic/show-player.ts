@@ -3,7 +3,7 @@ import { IResource } from '@modules/players/domain/entities/resource';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { AppError } from '@shared/errors/app-error';
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
 
 type ShowPlayerRequestDTO = {

@@ -6,7 +6,7 @@ import {
 import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
 import { PackSale as PrismaPackSale } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parsePackSale = (packSale: PrismaPackSale): IPackSale => {
   return new PackSale(packSale as PackSalePropsOmittedCommons, {

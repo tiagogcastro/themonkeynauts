@@ -5,7 +5,7 @@ import {
   PrivateSale,
 } from '@modules/private-sales/domain/entities/private-sale';
 import { IPrivateSalesRepository } from '@modules/private-sales/domain/repositories/private-sales-repositories';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { PrivateSale as PrismaPrivateSale } from '@prisma/client';
 
 const parsePrivateSale = (log: PrismaPrivateSale): IPrivateSale => {
@@ -18,11 +18,11 @@ const parsePrivateSale = (log: PrismaPrivateSale): IPrivateSale => {
 
 class PrismaPrivateSalesRepository implements IPrivateSalesRepository {
   async listAllPrivateSalesFromPlayer(
-    player_id: string,
+    playerId: string,
   ): Promise<IPrivateSale[]> {
     const privateSales = await prisma.privateSale.findMany({
       where: {
-        playerId: player_id,
+        playerId: playerId,
       },
     });
 

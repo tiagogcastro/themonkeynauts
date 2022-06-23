@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IPackSale } from '../entities/pack-sale';
 
 interface IPackSalesRepository {
@@ -9,7 +9,6 @@ interface IPackSalesRepository {
   listManyPacksNotActived(): Promise<IPackSale[]>;
 
   update(shipSale: IPackSale): Promise<void>;
-  findById(shipSaleId: string): AsyncMaybe<IPackSale>;
 }
 
 export { IPackSalesRepository };

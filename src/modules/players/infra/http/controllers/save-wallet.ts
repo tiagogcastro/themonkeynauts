@@ -6,13 +6,13 @@ class SaveWalletController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { wallet } = request.body;
 
-    const player_id = request.player.id;
+    const playerId = request.player.id;
 
     const saveWalletBusinessLogic = container.resolve(SaveWalletBusinessLogic);
 
     const player = await saveWalletBusinessLogic.execute({
       wallet: wallet as string,
-      player_id,
+      playerId,
     });
 
     return response.status(200).json(player);

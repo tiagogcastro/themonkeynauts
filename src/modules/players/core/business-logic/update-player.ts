@@ -6,7 +6,7 @@ import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
 type UpdatePlayerRequestDTO = {
-  player_id: string;
+  playerId: string;
   nickname: string;
   role?: PlayerRole;
 
@@ -30,24 +30,24 @@ class UpdatePlayerBusinessLogic {
   ) {}
 
   async execute({
-    player_id,
+    playerId,
     nickname,
     newPassword,
     newPasswordConfirmation,
     oldPassword,
     role,
   }: UpdatePlayerRequestDTO): Promise<Response> {
-    const player = await this.playersRepository.findById(player_id);
+    const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
       throw new AppError('Nickname does not exists', 403);
     }
 
     if (nickname !== player.nickname) {
-      const checkUsernameAlreadyExists =
+      const checkNicknameAlreadyExists =
         await this.playersRepository.findByNickname(nickname);
 
-      if (checkUsernameAlreadyExists) {
+      if (checkNicknameAlreadyExists) {
         throw new AppError('Nickname exists another account', 403);
       }
 

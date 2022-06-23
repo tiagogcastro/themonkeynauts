@@ -11,7 +11,7 @@ export type ResourceItems = {
 };
 
 type ResourcePropsOmittedCommons = ResourceItems & {
-  playerId?: string;
+  playerId: string;
 };
 
 type ResourceProps = ResourcePropsOmittedCommons & Commons;
@@ -19,7 +19,6 @@ type ResourceProps = ResourcePropsOmittedCommons & Commons;
 type ResourceCommons = Partial<
   {
     id: string;
-    playerId: string;
   } & Commons
 >;
 
@@ -58,7 +57,7 @@ export class Resource implements IResource {
     return this._id;
   }
 
-  get playerId(): string | undefined {
+  get playerId(): string {
     return this._props?.playerId;
   }
 

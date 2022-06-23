@@ -2,7 +2,7 @@ import { IResource, Resource } from '@modules/players/domain/entities/resource';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { Resource as PrismaResource } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 export const parseResource = (player: PrismaResource): IResource => {
   return new Resource(player, {
@@ -13,10 +13,10 @@ export const parseResource = (player: PrismaResource): IResource => {
 };
 
 class PrismaResourcesRepository implements IResourcesRepository {
-  async findByPlayerId(player_id: string): AsyncMaybe<IResource> {
+  async findByPlayerId(playerId: string): AsyncMaybe<IResource> {
     const player = await prisma.resource.findUnique({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 

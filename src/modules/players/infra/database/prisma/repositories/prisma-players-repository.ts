@@ -2,7 +2,7 @@ import { IPlayer, Player } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Player as PrismaPlayer } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parsePlayer = (player: PrismaPlayer): IPlayer => {
   return new Player(player as Player, {
@@ -54,11 +54,11 @@ class PrismaPlayersRepository implements IPlayersRepository {
     return parsePlayer(player);
   }
 
-  async findById(player_id: string): AsyncMaybe<IPlayer> {
+  async findById(playerId: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
-        id: player_id,
-        enabled: true,
+        id: playerId,
+        isEnabled: true,
       },
     });
 
@@ -70,22 +70,22 @@ class PrismaPlayersRepository implements IPlayersRepository {
   }
 
   async create(player: IPlayer): Promise<void> {
-    const { id: player_id, ...props } = player;
+    const { id: playerId, ...props } = player;
 
     await prisma.player.create({
       data: {
-        id: player_id,
+        id: playerId,
         ...props,
       },
     });
   }
 
   async save(player: IPlayer): Promise<void> {
-    const { id: player_id, ...props } = player;
+    const { id: playerId, ...props } = player;
 
     await prisma.player.update({
       where: {
-        id: player_id,
+        id: playerId,
       },
       data: {
         ...props,

@@ -8,11 +8,11 @@ export default async function ensureAdministrator(
   _: Response,
   next: NextFunction,
 ): Promise<void> {
-  const player_id = request.player.id;
+  const playerId = request.player.id;
 
   const player = await prisma.player.findUnique({
     where: {
-      id: player_id,
+      id: playerId,
     },
   });
 

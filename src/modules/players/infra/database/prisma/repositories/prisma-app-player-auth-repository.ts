@@ -5,7 +5,7 @@ import {
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { PlayerAuth as PrismaPlayerAuth } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parsePlayerAuth = (player_auth: PrismaPlayerAuth): IPlayerAuth => {
   return new PlayerAuth(player_auth, {
@@ -77,10 +77,10 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findFirstByPlayerId(player_id: string): AsyncMaybe<IPlayerAuth> {
+  async findFirstByPlayerId(playerId: string): AsyncMaybe<IPlayerAuth> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 
@@ -92,12 +92,12 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
   }
 
   async findByPlayerIdAndPayload(
-    player_id: string,
+    playerId: string,
     payload: string,
   ): AsyncMaybe<IPlayerAuth> {
     const playerAuth = await prisma.playerAuth.findFirst({
       where: {
-        playerId: player_id,
+        playerId,
         payload,
       },
     });
@@ -109,10 +109,10 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
     return parsePlayerAuth(playerAuth);
   }
 
-  async findManyByPlayerId(player_id: string): Promise<IPlayerAuth[]> {
+  async findManyByPlayerId(playerId: string): Promise<IPlayerAuth[]> {
     const playerAuth = await prisma.playerAuth.findMany({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 

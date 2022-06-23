@@ -1,5 +1,5 @@
 import { Commons } from '@shared/types/commons';
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import crypto from 'node:crypto';
 import { PackType } from '../enums/pack-type';
 import { SaleCrypto } from '../enums/sale-crypto';

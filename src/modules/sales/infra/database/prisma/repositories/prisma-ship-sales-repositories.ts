@@ -6,7 +6,7 @@ import {
 import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
 import { ShipSale as PrismaShipSale } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parseShipSale = (shipSale: PrismaShipSale): IShipSale => {
   return new ShipSale(shipSale as ShipSalePropsOmittedCommons, {

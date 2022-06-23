@@ -3,7 +3,7 @@ import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repos
 import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
 import { Ship as PrismaShip } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parseShip = (ship: PrismaShip): IShip => {
   return new Ship(ship, {

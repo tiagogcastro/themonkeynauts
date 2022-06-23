@@ -5,7 +5,7 @@ import { inject, injectable } from 'tsyringe';
 
 type SaveWalletRequestDTO = {
   wallet: string;
-  player_id: string;
+  playerId: string;
 };
 @injectable()
 class SaveWalletBusinessLogic {
@@ -14,8 +14,8 @@ class SaveWalletBusinessLogic {
     private playersRepository: IPlayersRepository,
   ) {}
 
-  async execute({ player_id, wallet }: SaveWalletRequestDTO): Promise<IPlayer> {
-    const player = await this.playersRepository.findById(player_id);
+  async execute({ playerId, wallet }: SaveWalletRequestDTO): Promise<IPlayer> {
+    const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
       throw new AppError('Player does not exist', 401);

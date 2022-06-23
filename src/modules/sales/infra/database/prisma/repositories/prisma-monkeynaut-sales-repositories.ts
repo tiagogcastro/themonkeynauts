@@ -6,7 +6,7 @@ import {
 import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { MonkeynautSale as PrismaMonkeynautSale } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parseMonkeynautSale = (
   monkeynautsale: PrismaMonkeynautSale,

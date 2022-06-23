@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { Commons } from '@shared/types/commons';
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import { PlayerRole } from '../enums/player-role';
 
 type PlayerPropsOmittedCommons = {
@@ -11,7 +11,8 @@ type PlayerPropsOmittedCommons = {
   role: PlayerRole;
   hasAsteroid: boolean;
   canBountyHunt: boolean;
-  enabled: boolean;
+  isEnabled: boolean;
+  isBanned: boolean;
 };
 
 type PlayerProps = PlayerPropsOmittedCommons & Commons;
@@ -41,7 +42,8 @@ export class Player implements IPlayer {
       role: this._props.role,
       hasAsteroid: this._props.hasAsteroid,
       canBountyHunt: this._props.canBountyHunt,
-      enabled: this._props.enabled,
+      isEnabled: this._props.isEnabled,
+      isBanned: this._props.isBanned,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
     };
@@ -86,8 +88,12 @@ export class Player implements IPlayer {
     return this._props.canBountyHunt;
   }
 
-  get enabled(): boolean {
-    return this._props.enabled;
+  get isEnabled(): boolean {
+    return this._props.isEnabled;
+  }
+
+  get isBanned(): boolean {
+    return this._props.isBanned;
   }
 
   get updatedAt(): Date {

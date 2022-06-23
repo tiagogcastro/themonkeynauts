@@ -22,8 +22,8 @@ class ShowPlayerBNBBalanceBusinessLogic {
     private playersRepository: IPlayersRepository,
   ) {}
 
-  async execute(player_id: string): Promise<ShowPlayerBNBBalanceResponse> {
-    const player = await this.playersRepository.findById(player_id);
+  async execute(playerId: string): Promise<ShowPlayerBNBBalanceResponse> {
+    const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
       throw new AppError('Player does not exist', 401);
@@ -34,9 +34,7 @@ class ShowPlayerBNBBalanceBusinessLogic {
     }
 
     const privateSales =
-      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(
-        player_id,
-      );
+      await this.privateSalesRepository.listAllPrivateSalesFromPlayer(playerId);
 
     const bnbAmountLimit = balanceConfig.bnbAmountMax;
 

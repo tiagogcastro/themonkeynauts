@@ -4,13 +4,13 @@ import { container } from 'tsyringe';
 
 class ShowPlayerBNBBalanceController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const player_id = request.player.id;
+    const playerId = request.player.id;
 
     const showPlayerBNBBalanceBusinessLogic = container.resolve(
       ShowPlayerBNBBalanceBusinessLogic,
     );
 
-    const balance = await showPlayerBNBBalanceBusinessLogic.execute(player_id);
+    const balance = await showPlayerBNBBalanceBusinessLogic.execute(playerId);
 
     return response.status(200).json(balance);
   }

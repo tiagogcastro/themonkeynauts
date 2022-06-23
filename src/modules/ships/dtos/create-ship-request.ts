@@ -1,4 +1,4 @@
-import { Maybe } from '@shared/types/maybe';
+import { Maybe } from '@shared/core/logic/maybe';
 import { ShipClass } from '../domain/enums/ship-class';
 import { ShipRank } from '../domain/enums/ship-rank';
 

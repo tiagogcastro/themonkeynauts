@@ -5,7 +5,7 @@ import { container } from 'tsyringe';
 
 class UpdatePlayerController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const player_id = request.player.id;
+    const playerId = request.player.id;
 
     const {
       nickname,
@@ -20,7 +20,7 @@ class UpdatePlayerController {
     );
 
     const { player } = await updatePlayerBusinessLogic.execute({
-      player_id,
+      playerId,
       nickname,
       newPassword,
       newPasswordConfirmation,

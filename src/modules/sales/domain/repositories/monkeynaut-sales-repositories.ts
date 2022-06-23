@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IMonkeynautSale } from '../entities/monkeynaut-sale';
 
 interface IMonkeynautSalesRepository {
@@ -8,8 +8,6 @@ interface IMonkeynautSalesRepository {
   listManyMonkeynautsWithoutException(): Promise<IMonkeynautSale[]>;
   listManyMonkeynauts(): Promise<IMonkeynautSale[]>;
   listManyMonkeynautsNotActived(): Promise<IMonkeynautSale[]>;
-
-  findById(monkeynautId: string): AsyncMaybe<IMonkeynautSale | null>;
 }
 
 export { IMonkeynautSalesRepository };
