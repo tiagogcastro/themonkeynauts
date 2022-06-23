@@ -1,3 +1,4 @@
+import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, left, right } from '@shared/core/logic/either';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
@@ -5,7 +6,7 @@ import { UserNotFoundError } from '@shared/errors/user-not-fount-error';
 import path from 'node:path';
 import { inject, injectable } from 'tsyringe';
 
-type BanUnbanPlayerResponse = Either<UserNotFoundError, null>;
+type BanUnbanPlayerResponse = Either<UserNotFoundError, IPlayer>;
 
 export type BanUnbanPlayerRequestDTO = {
   playerId: string;
@@ -53,7 +54,7 @@ class BanUnbanPlayerBusinessLogic {
       },
     });
 
-    return right(null);
+    return right(player);
   }
 }
 
