@@ -1,4 +1,4 @@
-type NewError = {
+export type NewError = {
   messages: string[];
   name: string;
   statusCode: number;

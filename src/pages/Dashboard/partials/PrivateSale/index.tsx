@@ -4,6 +4,7 @@ import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
+import { NewError } from '@/utils/apiError';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -109,8 +110,6 @@ export function PrivateSale() {
     event.preventDefault();
 
     try {
-      await verifyWallet();
-
       const validatedInput = handleClick({
         max: 3,
         min: 0.3
@@ -119,6 +118,8 @@ export function PrivateSale() {
       isButtonLoading.changeToTrue();
 
       if(validatedInput) {
+        await verifyWallet();
+
         toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
           autoClose: 7000,
           pauseOnHover: true,
@@ -189,17 +190,21 @@ export function PrivateSale() {
               });
   
               setInputValue('');
-            } catch {
-              toast(error.message, {
-                autoClose: 5000,
-                pauseOnHover: true,
-                type: 'error',
-                style: {
-                  background: COLORS.global.white_0,
-                  color: COLORS.global.red_0,
-                  fontSize: 14,
-                  fontFamily: 'Orbitron, sans-serif',
-                }
+            } catch(error: any) {
+              const apiError = error.response.data.error as NewError;
+
+              apiError.messages.forEach(message => {
+                toast(message, {
+                  autoClose: 5000,
+                  pauseOnHover: true,
+                  type: 'error',
+                  style: {
+                    background: COLORS.global.white_0,
+                    color: COLORS.global.red_0,
+                    fontSize: 14,
+                    fontFamily: 'Orbitron, sans-serif',
+                  }
+                });
               });
             }
           }

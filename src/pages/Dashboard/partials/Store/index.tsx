@@ -19,6 +19,7 @@ import { baseApi } from '@/services/api';
 import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useAuth } from '@/hooks';
 import { ethers } from 'ethers';
+import { NewError } from '@/utils/apiError';
 
 type CommonSaleProps = {
   id: string;
@@ -184,49 +185,67 @@ export function StoreTab() {
         });
       }
 
-      if(transaction) {
-        toast(`Wait for the transaction to be confirmed in our database`, {
-          autoClose: 9000,
-          pauseOnHover: true,
-          type: 'info',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
+      try {
+        if(transaction) {
+          toast(`Wait for the transaction to be confirmed in our database`, {
+            autoClose: 9000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          const sale = {
+            Monkeynaut: {
+              monkeynautSaleId: data.id,
+            },
+            Ship: {
+              shipSaleId: data.id,
+            },
+            Pack: {
+              packSaleId: data.id,
+            },
           }
-        });
-
-        const sale = {
-          Monkeynaut: {
-            monkeynautSaleId: data.id,
-          },
-          Ship: {
-            shipSaleId: data.id,
-          },
-          Pack: {
-            packSaleId: data.id,
-          },
-        }
-    
-        const dataPost = {
-          wallet: player?.player.wallet,
-          txHash: transaction,
-          ...sale[data.saleType]
-        }
-
-        await baseApi.post('/sale-events/buy-sale-item', dataPost);
-
-        toast(`Successfully ${data.saleType} sale`, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
+      
+          const dataPost = {
+            wallet: player?.player.wallet,
+            txHash: transaction,
+            ...sale[data.saleType]
           }
+
+          await baseApi.post('/sale-events/buy-sale-item', dataPost);
+
+          toast(`Successfully ${data.saleType} sale`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        }
+      } catch (error: any) {
+        const apiError = error.response.data.error as NewError;
+
+        apiError.messages.forEach(message => {
+          toast(message, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'error',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.red_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
         });
       }
 
