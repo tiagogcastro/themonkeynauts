@@ -17,7 +17,10 @@ import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 class BanUnbanPlayerController
   implements IController<BanUnbanPlayerRequestDTO>
 {
-  async handle({ playerId }: BanUnbanPlayerRequestDTO): Promise<HttpResponse> {
+  async handle({
+    playerId,
+    reason,
+  }: BanUnbanPlayerRequestDTO): Promise<HttpResponse> {
     try {
       const banUnbanPlayerBusinessLogic = container.resolve(
         BanUnbanPlayerBusinessLogic,
@@ -25,6 +28,7 @@ class BanUnbanPlayerController
 
       const result = await banUnbanPlayerBusinessLogic.execute({
         playerId,
+        reason,
       });
 
       if (result.isLeft()) {

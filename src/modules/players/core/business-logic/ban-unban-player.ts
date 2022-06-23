@@ -10,6 +10,7 @@ type BanUnbanPlayerResponse = Either<UserNotFoundError, IPlayer>;
 
 export type BanUnbanPlayerRequestDTO = {
   playerId: string;
+  reason: string;
 };
 
 @injectable()
@@ -24,6 +25,7 @@ class BanUnbanPlayerBusinessLogic {
 
   async execute({
     playerId,
+    reason,
   }: BanUnbanPlayerRequestDTO): Promise<BanUnbanPlayerResponse> {
     const player = await this.playersRepository.findById(playerId);
 
@@ -46,7 +48,9 @@ class BanUnbanPlayerBusinessLogic {
           'views',
           'ban-unban-player-template.hbs',
         ),
-        variables: {},
+        variables: {
+          reason,
+        },
       },
       to: {
         address: player.email,

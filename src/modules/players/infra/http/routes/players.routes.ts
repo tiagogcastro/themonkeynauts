@@ -140,6 +140,7 @@ playersRouter.patch(
     {
       [Segments.BODY]: {
         playerId: Joi.string().uuid().required(),
+        reason: Joi.string().required(),
       },
     },
     {
