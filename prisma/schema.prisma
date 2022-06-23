@@ -36,20 +36,24 @@ model Player {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  playerTokens PlayerToken[]
+  activeShipId String? @unique @db.Uuid()
 
-  ownerMonkeynauts  Monkeynaut[] @relation("owner_monkeynauts")
-  playerMonkeynauts Monkeynaut[] @relation("player_monkeynauts")
+  // relationships
+
+  activeShip Ship? @relation(fields: [activeShipId], references: [id])
 
   resource Resource?
 
-  ownerShips  Ship[] @relation("owner_ships")
-  playerShips Ship[] @relation("player_ships")
-
-  logs Log[]
-
-  playerAuth    PlayerAuth[]  @relation("player_auth")
+  playerTokens  PlayerToken[]
+  logs          Log[]
   private_sales PrivateSale[]
+
+  ownerMonkeynauts  Monkeynaut[] @relation("owner_monkeynauts")
+  playerMonkeynauts Monkeynaut[] @relation("player_monkeynauts")
+  ownerShips        Ship[]       @relation("owner_ships")
+  playerShips       Ship[]       @relation("player_ships")
+  playerAuth        PlayerAuth[] @relation("player_auth")
+
 
   @@map("players")
 }
@@ -130,6 +134,8 @@ model Ship {
 
   player   Player? @relation("player_ships", fields: [playerId], references: [id], onDelete: SetNull)
   playerId String? @db.Uuid()
+
+  activePlayerShip Player?
 
   name             String
   class            String

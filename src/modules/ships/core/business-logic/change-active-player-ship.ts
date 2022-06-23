@@ -42,7 +42,9 @@ class ChangeActivePlayerShipBusinessLogic {
     }
 
     if (ship.playerId !== playerId) {
-      throw new AppError('Cannot active ship');
+      throw new AppError(
+        'Unable to activate the ship because the ship belongs to another player',
+      );
     }
 
     player.activeShipId = shipId;
