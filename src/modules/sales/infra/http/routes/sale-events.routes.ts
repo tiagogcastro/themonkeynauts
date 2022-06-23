@@ -15,68 +15,83 @@ saleEventsRouter.post(
   '/create',
   ensureAuthenticated,
   ensureAdministrator,
-  celebrate({
-    [Segments.BODY]: {
-      crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
-      type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
-      price: Joi.number().required(),
-      startDate: Joi.date().required(),
-      endDate: Joi.date().optional(),
-      quantity: Joi.number().required(),
-      totalUnitsSold: Joi.number(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
+        type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
+        price: Joi.number().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.date().optional(),
+        quantity: Joi.number().required(),
+        totalUnitsSold: Joi.number(),
 
-      saleMonkeynaut: Joi.alternatives().conditional('type', {
-        is: 'MONKEYNAUT',
-        then: Joi.object({
-          private: Joi.number().required(),
-          sergeant: Joi.number().required(),
-          captain: Joi.number().required(),
-          major: Joi.number().required(),
-        }).required(),
-      }),
-      saleShip: Joi.alternatives().conditional('type', {
-        is: 'SHIP',
-        then: Joi.object({
-          rankB: Joi.number().required(),
-          rankA: Joi.number().required(),
-          rankS: Joi.number().required(),
-        }).required(),
-      }),
-      salePack: Joi.alternatives().conditional('type', {
-        is: 'PACK',
-        then: Joi.object({
-          type: Joi.string()
-            .valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT')
-            .required(),
-        }).required(),
-      }),
+        saleMonkeynaut: Joi.alternatives().conditional('type', {
+          is: 'MONKEYNAUT',
+          then: Joi.object({
+            private: Joi.number().required(),
+            sergeant: Joi.number().required(),
+            captain: Joi.number().required(),
+            major: Joi.number().required(),
+          }).required(),
+        }),
+        saleShip: Joi.alternatives().conditional('type', {
+          is: 'SHIP',
+          then: Joi.object({
+            rankB: Joi.number().required(),
+            rankA: Joi.number().required(),
+            rankS: Joi.number().required(),
+          }).required(),
+        }),
+        salePack: Joi.alternatives().conditional('type', {
+          is: 'PACK',
+          then: Joi.object({
+            type: Joi.string()
+              .valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT')
+              .required(),
+          }).required(),
+        }),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => createSaleController.handle(request, response),
 );
 
 saleEventsRouter.post(
   '/buy-sale-item',
   ensureAuthenticated,
-  celebrate({
-    [Segments.BODY]: {
-      packSaleId: Joi.string().uuid(),
-      monkeynautSaleId: Joi.string().uuid(),
-      shipSaleId: Joi.string().uuid(),
-      wallet: Joi.string().required(),
-      txHash: Joi.string().required(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        packSaleId: Joi.string().uuid(),
+        monkeynautSaleId: Joi.string().uuid(),
+        shipSaleId: Joi.string().uuid(),
+        wallet: Joi.string().required(),
+        txHash: Joi.string().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => buySaleItemController.handle(request, response),
 );
 saleEventsRouter.get(
   '/list-monkeynauts',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) =>
     listMonkeynautSalesController.handle(request, response),
 );
@@ -84,22 +99,32 @@ saleEventsRouter.get(
 saleEventsRouter.get(
   '/list-packs',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => listPackSalesController.handle(request, response),
 );
 
 saleEventsRouter.get(
   '/list-ships',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        sales: Joi.string().valid('actived', 'withoutException', 'notActived'),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => listShipSalesController.handle(request, response),
 );
 
@@ -108,47 +133,52 @@ saleEventsRouter.put(
   '/update-sale',
   ensureAuthenticated,
   ensureAdministrator,
-  celebrate({
-    [Segments.BODY]: {
-      crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
-      price: Joi.number(),
-      startDate: Joi.date(),
-      endDate: Joi.date().optional(),
-      quantity: Joi.number(),
-      totalUnitsSold: Joi.number(),
-      currentQuantityAvailable: Joi.number(),
-      active: Joi.boolean(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
+        price: Joi.number(),
+        startDate: Joi.date(),
+        endDate: Joi.date().optional(),
+        quantity: Joi.number(),
+        totalUnitsSold: Joi.number(),
+        currentQuantityAvailable: Joi.number(),
+        active: Joi.boolean(),
 
-      type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
+        type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
 
-      saleMonkeynaut: Joi.alternatives().conditional('type', {
-        is: 'MONKEYNAUT',
-        then: Joi.object({
-          saleMonkeynautId: Joi.string().uuid().required(),
-          private: Joi.number(),
-          sergeant: Joi.number(),
-          captain: Joi.number(),
-          major: Joi.number(),
+        saleMonkeynaut: Joi.alternatives().conditional('type', {
+          is: 'MONKEYNAUT',
+          then: Joi.object({
+            saleMonkeynautId: Joi.string().uuid().required(),
+            private: Joi.number(),
+            sergeant: Joi.number(),
+            captain: Joi.number(),
+            major: Joi.number(),
+          }),
         }),
-      }),
-      saleShip: Joi.alternatives().conditional('type', {
-        is: 'SHIP',
-        then: Joi.object({
-          saleShipId: Joi.string().uuid().required(),
-          rankB: Joi.number(),
-          rankA: Joi.number(),
-          rankS: Joi.number(),
+        saleShip: Joi.alternatives().conditional('type', {
+          is: 'SHIP',
+          then: Joi.object({
+            saleShipId: Joi.string().uuid().required(),
+            rankB: Joi.number(),
+            rankA: Joi.number(),
+            rankS: Joi.number(),
+          }),
         }),
-      }),
-      salePack: Joi.alternatives().conditional('type', {
-        is: 'PACK',
-        then: Joi.object({
-          salePackId: Joi.string().uuid().required(),
-          type: Joi.string().valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT'),
+        salePack: Joi.alternatives().conditional('type', {
+          is: 'PACK',
+          then: Joi.object({
+            salePackId: Joi.string().uuid().required(),
+            type: Joi.string().valid('BASIC', 'RANDOM', 'ADVANCED', 'EXPERT'),
+          }),
         }),
-      }),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => updateSaleController.handle(request, response),
 );
 

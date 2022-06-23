@@ -10,17 +10,22 @@ const privateSalesRouter = Router();
 privateSalesRouter.post(
   '/create-private-sale',
   ensureAuthenticated,
-  celebrate({
-    [Segments.BODY]: {
-      playerId: Joi.string().uuid(),
-      wallet: Joi.string().required(),
-      bnbAmount: Joi.number()
-        .required()
-        .min(balanceConfig.bnbAmountMin)
-        .max(balanceConfig.bnbAmountMax),
-      txHash: Joi.string().required(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        playerId: Joi.string().uuid(),
+        wallet: Joi.string().required(),
+        bnbAmount: Joi.number()
+          .required()
+          .min(balanceConfig.bnbAmountMin)
+          .max(balanceConfig.bnbAmountMax),
+        txHash: Joi.string().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => createPrivateSaleController.handle(request, response),
 );
 

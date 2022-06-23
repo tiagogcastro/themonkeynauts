@@ -13,47 +13,67 @@ const crewsRouter = Router();
 crewsRouter.get(
   '/list-by-monkeynaut',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      monkeynautId: Joi.string().uuid().required(),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        monkeynautId: Joi.string().uuid().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => listCrewsController.handle(request, response),
 );
 
 crewsRouter.get(
   '/list-by-ship',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      shipId: Joi.string().uuid().required(),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        shipId: Joi.string().uuid().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => listCrewsController.handle(request, response),
 );
 
 crewsRouter.post(
   '/create',
   ensureAuthenticated,
-  celebrate({
-    [Segments.BODY]: {
-      playerId: Joi.string().uuid(),
-      shipId: Joi.string().uuid().required(),
-      monkeynautId: Joi.string().uuid().required(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        playerId: Joi.string().uuid(),
+        shipId: Joi.string().uuid().required(),
+        monkeynautId: Joi.string().uuid().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => createCrewController.handle(request, response),
 );
 
 crewsRouter.delete(
   '/remove-monkeynaut',
   ensureAuthenticated,
-  celebrate({
-    [Segments.QUERY]: {
-      playerId: Joi.string().uuid(),
-      monkeynautId: Joi.string().uuid().required(),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        playerId: Joi.string().uuid(),
+        monkeynautId: Joi.string().uuid().required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) =>
     removeMonkeynautFromCrewController.handle(request, response),
 );

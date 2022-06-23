@@ -10,11 +10,16 @@ logsRouter.get(
   '/list',
   ensureAuthenticated,
   ensureAdministrator,
-  celebrate({
-    [Segments.QUERY]: {
-      playerId: Joi.string().uuid(),
+  celebrate(
+    {
+      [Segments.QUERY]: {
+        playerId: Joi.string().uuid(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => listLogsController.handle(request, response),
 );
 

@@ -7,12 +7,17 @@ const authRouter = Router();
 
 authRouter.post(
   '/app',
-  celebrate({
-    [Segments.BODY]: {
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
+  celebrate(
+    {
+      [Segments.BODY]: {
+        email: Joi.string().email().required(),
+        password: Joi.string().min(8).max(255).required(),
+      },
     },
-  }),
+    {
+      abortEarly: false,
+    },
+  ),
   (request, response) => appPlayerAuthController.handle(request, response),
 );
 
