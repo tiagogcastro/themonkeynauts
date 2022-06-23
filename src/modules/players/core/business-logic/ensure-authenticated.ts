@@ -63,8 +63,18 @@ export class EnsureAuthenticatedBusinessLogic {
 
     const foundPlayer = await this.playerRepository.findById(playerId);
 
-    if (!foundPlayer?.enabled) {
-      throw new AppError('User does not have an activated account', 403);
+    if (!foundPlayer) {
+      throw new AppError('User does not exist', 403);
+    }
+
+    if (foundPlayer.role !== 'ADMIN') {
+      if (!foundPlayer.isEnabled) {
+        throw new AppError('User does not have an activated account', 403);
+      }
+
+      if (foundPlayer.isBanned) {
+        throw new AppError('The user has been banned', 403);
+      }
     }
 
     const foundPlayerAuth = await this.appPlayerAuthRepository.findById(id);
