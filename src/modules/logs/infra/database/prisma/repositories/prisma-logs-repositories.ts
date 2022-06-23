@@ -2,7 +2,7 @@ import { ILog, Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { Log as PrismaLog } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parseLog = (log: PrismaLog): ILog => {
   return new Log(log, {

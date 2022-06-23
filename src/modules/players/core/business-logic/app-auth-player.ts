@@ -46,6 +46,16 @@ export class AppPlayerAuthBusinessLogic {
       throw new AppError('Player does not exist', 403);
     }
 
+    if (player.role !== 'ADMIN') {
+      if (!player.isEnabled) {
+        throw new AppError('The user is disabled', 403);
+      }
+
+      if (player.isBanned) {
+        throw new AppError('The user has been banned', 403);
+      }
+    }
+
     const passwordVerified = await this.hashProvider.compareHash(
       password,
       player.password,
@@ -91,10 +101,6 @@ export class AppPlayerAuthBusinessLogic {
     await this.appPlayerAuth.create(domainPlayerAuth.playerAuth);
 
     const token = domainPlayerAuth.playerAuth;
-
-    if (!token) {
-      throw new AppError('Unable to create a token');
-    }
 
     return {
       player,

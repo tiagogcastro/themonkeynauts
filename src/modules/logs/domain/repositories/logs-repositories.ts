@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { ILog } from '../entities/log';
 
 interface ILogsRepository {

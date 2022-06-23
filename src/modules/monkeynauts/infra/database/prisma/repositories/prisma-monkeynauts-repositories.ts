@@ -6,7 +6,7 @@ import {
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { Monkeynaut as PrismaMonkeynaut } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 
 const parseMonkeynaut = (monkeynaut: PrismaMonkeynaut): IMonkeynaut => {
   return new Monkeynaut(monkeynaut, {
@@ -70,12 +70,10 @@ class PrismaMonkeynautsRepository implements IMonkeynautsRepository {
     return monkeynauts.map(parseMonkeynaut);
   }
 
-  async listAllMonkeynautsFromPlayer(
-    player_id: string,
-  ): Promise<IMonkeynaut[]> {
+  async listAllMonkeynautsFromPlayer(playerId: string): Promise<IMonkeynaut[]> {
     const monkeynauts = await prisma.monkeynaut.findMany({
       where: {
-        playerId: player_id,
+        playerId,
       },
     });
 

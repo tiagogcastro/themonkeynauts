@@ -1,5 +1,5 @@
 import { ICrew } from '@modules/crews/domain/entities/crew';
-import { AsyncMaybe } from '@shared/types/maybe';
+import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IMonkeynaut } from '../entities/monkeynaut';
 
 interface IMonkeynautsRepository {
@@ -8,7 +8,7 @@ interface IMonkeynautsRepository {
   update(monkeynaut: IMonkeynaut): Promise<void>;
   destroy(monkeynaut_id: string): Promise<void>;
   listAllMonkeynauts(): Promise<IMonkeynaut[]>;
-  listAllMonkeynautsFromPlayer(player_id: string): Promise<IMonkeynaut[]>;
+  listAllMonkeynautsFromPlayer(playerId: string): Promise<IMonkeynaut[]>;
   findById(monkeynaut_id: string): AsyncMaybe<IMonkeynaut>;
 
   findMany(): Promise<IMonkeynaut[]>;

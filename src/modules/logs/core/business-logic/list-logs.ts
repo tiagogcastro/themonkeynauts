@@ -9,11 +9,11 @@ class ListLogsBusinessLogic {
     private logsRepository: ILogsRepository,
   ) {}
 
-  async execute(player_id?: string): Promise<ILog[]> {
+  async execute(playerId?: string): Promise<ILog[]> {
     let logs: ILog[] = [];
 
-    if (player_id) {
-      logs = await this.logsRepository.listAllLogsFromPlayer(player_id);
+    if (playerId) {
+      logs = await this.logsRepository.listAllLogsFromPlayer(playerId);
     } else {
       logs = await this.logsRepository.listAllLogs();
     }
