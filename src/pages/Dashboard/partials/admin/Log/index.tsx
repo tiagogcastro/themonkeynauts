@@ -2,6 +2,7 @@ import { InputCheckbox } from '@/components/HTML/InputCheckbox';
 import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
 import { replaceToShortString } from '@/utils';
+import { ApiError } from '@/utils/apiError';
 import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -30,16 +31,20 @@ export function AdminLog() {
 
       setLogs(response.data);
     } catch (error: any) {
-      toast(error?.response?.data.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       });
     }
   }

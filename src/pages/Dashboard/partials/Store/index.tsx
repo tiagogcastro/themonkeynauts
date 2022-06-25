@@ -19,7 +19,7 @@ import { baseApi } from '@/services/api';
 import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useAuth } from '@/hooks';
 import { ethers } from 'ethers';
-import { NewError } from '@/utils/apiError';
+import { ApiError } from '@/utils/apiError';
 
 type CommonSaleProps = {
   id: string;
@@ -78,7 +78,7 @@ export function StoreTab() {
         }
       })
     } catch (error: any) {
-      console.log({error: error.message});
+      // console.log({error: error.message});
     }
   }
 
@@ -97,7 +97,7 @@ export function StoreTab() {
         }
       });
     } catch (error: any) {
-      console.log({error: error.message});
+      // console.log({error: error.message});
     }
   }
 
@@ -116,7 +116,6 @@ export function StoreTab() {
         }
       })
     } catch (error: any) {
-      console.log({error: error.message});
     }
   }
 
@@ -232,7 +231,7 @@ export function StoreTab() {
           });
         }
       } catch (error: any) {
-        const apiError = error.response.data.error as NewError;
+        const apiError = ApiError(error);
 
         apiError.messages.forEach(message => {
           toast(message, {
@@ -271,6 +270,15 @@ export function StoreTab() {
   return (
     <Container>
       <Content>
+        {sales?.monkeynauts?.length === 0 && sales?.ships?.length === 0 && sales?.packs?.length === 0 && (
+          <div className="texts_container">
+            <p className="text" 
+              style={{
+                fontSize: '1.8rem'
+              }}
+            >There are currently no products in the store</p>
+          </div>
+        )}
         {sales?.monkeynauts && sales.monkeynauts.map(sale => (
           <Card onSubmit={(event) => handleSubmit(event, sale)} key={sale.id}>
             <CardContainer>

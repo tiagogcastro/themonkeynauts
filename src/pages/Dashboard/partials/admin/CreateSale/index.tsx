@@ -13,6 +13,7 @@ import { baseApi } from '@/services/api';
 import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
 import { getFormattedDate } from '@/utils/getFormattedDate';
+import { ApiError } from '@/utils/apiError';
 
 const schema = Yup.object().shape({
   type: Yup.string()
@@ -233,7 +234,6 @@ export function AdminCreateSale() {
         }
       })
     } catch (error: any) {
-      console.log({error: error.message});
     }
   }
 
@@ -271,7 +271,6 @@ export function AdminCreateSale() {
         }
       });
     } catch (error: any) {
-      console.log({error: error.message});
     }
   }
 
@@ -361,12 +360,13 @@ export function AdminCreateSale() {
         break;
     }
 
-    const currentDate = new Date();
+    const currentHour = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
 
-    const hourDate = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+    const _startDate = new Date(`${startDate} ${currentHour}`);
+    const _endDate = new Date(`${startDate} ${currentHour}`);
 
     const dataFormatted = {
-      startDate: `${startDate} ${hourDate}`,
+      startDate: _startDate,
       type,
       crypto,
       price: Number(price),
@@ -376,7 +376,7 @@ export function AdminCreateSale() {
 
     const postData = endDate ? {
       ...dataFormatted,
-      endDate: `${endDate} ${hourDate}`,
+      endDate: _endDate,
     } : dataFormatted;
 
     try {
@@ -392,7 +392,14 @@ export function AdminCreateSale() {
         PACK: getOpenPackSale,
       };
 
+      const executeLastOpenSaleByType = {
+        MONKEYNAUT: getLastMonkeynautSale,
+        SHIP: getLastShipSale,
+        PACK: getLastPackSale,
+      };
+
       executeGetOpenSaleByType[type]();
+      executeLastOpenSaleByType[type]();
 
       rest.reset();
 
@@ -415,16 +422,20 @@ export function AdminCreateSale() {
         return formRef.current?.setErrors(errors);
       }
 
-      toast(error?.response?.data.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       });
     }
   }
@@ -484,7 +495,21 @@ export function AdminCreateSale() {
         }
       });
     } catch (error: any) {
-      
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      });
     }
   }
 

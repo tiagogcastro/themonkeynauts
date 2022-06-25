@@ -1,21 +1,25 @@
-export type NewError = {
+export type ApiError = {
   messages: string[];
   name: string;
   statusCode: number;
 }
 
-type ApiError = {
-  error: NewError;
-}
+export function ApiError(error: any): ApiError {
+  let  err: ApiError;
 
-export function newApiError(error: any): ApiError | null {
-  const err = error.response.data.error;
+  if(error.response.data.message) {
+    const message = error.response.data.message;
 
-  if(err) {
-    return {
-      error: err as NewError
-    }
+    err = {
+      messages: [message],
+      name: 'name',
+      statusCode: 400
+    };
+  } else {
+    const _error = error.response.data.error;
+
+    err = _error;
   }
 
-  return null;
+  return err;
 }

@@ -4,7 +4,7 @@ import { baseApi } from '@/services/api';
 import { Player } from '@/services/app_api/player/types';
 import { COLORS } from '@/theme';
 import { getValidationErrors } from '@/utils';
-import { newApiError } from '@/utils/apiError';
+import { ApiError } from '@/utils/apiError';
 import { FormHandles } from '@unform/core';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ export function AdminBanAccount() {
         abortEarly: false
       });
 
-      const response = await baseApi.patch<GetPlayer>('/players/ban-unban-player', data);
+      const response = await baseApi.patch<GetPlayer>('/admin/players/ban-unban-player', data);
 
       const player = response.data.data;
 
@@ -60,36 +60,20 @@ export function AdminBanAccount() {
         return formRef.current?.setErrors(errors);
       }
 
-      const apiErrorResponse = newApiError(error);
+      const apiErrorResponse = ApiError(error);
 
-      if(apiErrorResponse) {
-        apiErrorResponse.error.messages.map(message => {
-          return toast(message, {
-            autoClose: 5000,
-            pauseOnHover: true,
-            type: 'error',
-            style: {
-              background: COLORS.global.white_0,
-              color: COLORS.global.red_0,
-              fontSize: 14,
-              fontFamily: 'Orbitron, sans-serif',
-            }
-          });
-        })
-      }
-
-      const defaultErrorMessage = error.response.data.message;
-
-      return toast(defaultErrorMessage, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       });
     }
   }

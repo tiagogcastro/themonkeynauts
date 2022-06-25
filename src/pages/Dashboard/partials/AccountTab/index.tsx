@@ -35,6 +35,7 @@ import {
 
   Spc,
 } from './styles';
+import { ApiError } from '@/utils/apiError';
 
 export type HandleChange = {
   event: React.ChangeEvent<HTMLInputElement>;
@@ -139,17 +140,21 @@ export function AccountTab() {
           }
         });
       }
-    } catch(err: any) {
-      toast(err.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+    } catch(error: any) {
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       });
     } finally {
       depositButtonHasBlocked.changeToFalse();

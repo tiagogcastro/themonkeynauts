@@ -53,19 +53,6 @@ export function Ship({
       });
 
     } catch(error: any) {
-      const error_message = error?.response?.data.message;
-
-      toast(error_message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
     }
   }
 

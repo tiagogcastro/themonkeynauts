@@ -5,7 +5,7 @@ import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
-import { NewError } from '@/utils/apiError';
+import { ApiError } from '@/utils/apiError';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -46,7 +46,7 @@ export function PrivateSale() {
     getWalletBalance();
   }, []);
 
-  function handleClick({
+  function handleChangeInput({
     max,
     min,
   }: HandleClick) {
@@ -111,7 +111,7 @@ export function PrivateSale() {
     event.preventDefault();
 
     try {
-      const validatedInput = handleClick({
+      const validatedInput = handleChangeInput({
         max: 3,
         min: 0.3
       });
@@ -192,10 +192,10 @@ export function PrivateSale() {
   
               setInputValue('');
             } catch(error: any) {
-              const apiError = error.response.data.error as NewError;
+              const apiErrorResponse = ApiError(error);
 
-              apiError.messages.forEach(message => {
-                toast(message, {
+              apiErrorResponse.messages.map(message => {
+                return toast(message, {
                   autoClose: 5000,
                   pauseOnHover: true,
                   type: 'error',
@@ -206,7 +206,7 @@ export function PrivateSale() {
                     fontFamily: 'Orbitron, sans-serif',
                   }
                 });
-              });
+              })
             }
           }
     
@@ -226,16 +226,20 @@ export function PrivateSale() {
         }
       }
     } catch (error: any) {
-      toast(error.message, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'error',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.red_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
       });
     } finally {
       isButtonLoading.changeToFalse();

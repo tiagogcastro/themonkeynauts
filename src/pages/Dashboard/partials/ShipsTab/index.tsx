@@ -73,9 +73,8 @@ export function ShipsTab({
       });
 
       setShips(response.data);
-
-      loadingShips.changeToFalse();
     } catch(err) {
+    } finally {
       loadingShips.changeToFalse();
     }
   }

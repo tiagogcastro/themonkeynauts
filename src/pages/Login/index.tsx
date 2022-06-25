@@ -24,6 +24,7 @@ import {
 } from './styles';
 import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
+import { ApiError } from '@/utils/apiError';
 
 const schema = Yup.object().shape({
   email: Yup.string().required('This field is required').email('Enter a valid email address'),
@@ -47,30 +48,30 @@ export function Login() {
       });
 
       await signIn(data);
-    } catch(err: any) {
+    } catch(error: any) {
       loadingSignIn.changeToFalse();
 
-      if(err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+      if(error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
         
         return formRef.current?.setErrors(errors);
       }
 
-      if(axios.isAxiosError(err)) {
-        const error_message = err?.response?.data.message;
+      const apiErrorResponse = ApiError(error);
 
-        toast(error_message, {
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
           autoClose: 5000,
           pauseOnHover: true,
           type: 'error',
           style: {
             background: COLORS.global.white_0,
-            color: COLORS.global.black_0 ,
+            color: COLORS.global.red_0,
             fontSize: 14,
             fontFamily: 'Orbitron, sans-serif',
           }
         });
-      }
+      });
     }
   }
 

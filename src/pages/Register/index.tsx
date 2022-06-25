@@ -24,6 +24,7 @@ import {
   MainContent,
   FormContainer
 } from './styles';
+import { ApiError } from '@/utils/apiError';
 
 export function Register() {
   const { register } = useAuth();
@@ -48,30 +49,30 @@ export function Register() {
       });
       
       await register(data);
-    } catch(err: any) {
+    } catch(error: any) {
       loadingRegister.changeToFalse();
 
-      if(err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+      if(error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
         
         return formRef.current?.setErrors(errors);
       }
 
-      if(axios.isAxiosError(err)) {
-        const error_message = err?.response?.data.message;
+      const apiErrorResponse = ApiError(error);
 
-        toast(error_message, {
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
           autoClose: 5000,
           pauseOnHover: true,
           type: 'error',
           style: {
             background: COLORS.global.white_0,
-            color: COLORS.global.black_0 ,
+            color: COLORS.global.red_0,
             fontSize: 14,
             fontFamily: 'Orbitron, sans-serif',
           }
         });
-      }
+      });
     }
   }
 
