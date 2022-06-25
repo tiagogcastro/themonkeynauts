@@ -1,9 +1,9 @@
 import { Button } from '@/components';
+import { PrivateSaleSuccess } from '@/components/modals/PrivateSaleSuccess';
 import { ethereum as ethereumConfig } from '@/config/ethereum';
 import { privateSale } from '@/config/privateSale';
 import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
-import { Player } from '@/services/app_api/player/types';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ApiError } from '@/utils/apiError';
@@ -36,6 +36,8 @@ export function PrivateSale() {
   const [walletBalance, setWalletBalance] = useState<WalletBallance | null>(null);
   const isButtonLoading = useBoolean(false);
 
+  const privateSaleSucessModal = useBoolean();
+
   async function getWalletBalance() {
     const response = await baseApi.get<WalletBallance>('/sales/show-player-bnb-balance');
 
@@ -52,7 +54,7 @@ export function PrivateSale() {
     max,
     min,
   }: HandleClick) {
-    let value: string | number = inputValue.replace(/[^0-9.]/g, '');
+    let value: string | number = inputValue.replace(/[^0-9\.]/g, '');
 
     setInputValue(String(value));
 
@@ -143,9 +145,7 @@ export function PrivateSale() {
                 }
               });
   
-              await baseApi.post('/create-sales/create-private-sale', {
-                playerId: player.player.id,
-                wallet: player.player.wallet,
+              await baseApi.post('/private-sales/create-private-sale', {
                 bnbAmount: Number(inputValue),
                 txHash: transaction,
               })
@@ -163,7 +163,10 @@ export function PrivateSale() {
               });
   
               setInputValue('');
+
+              privateSaleSucessModal.changeToTrue();
             } catch(error: any) {
+              console.log(error);
               const apiErrorResponse = ApiError(error);
 
               apiErrorResponse.messages.map(message => {
@@ -198,20 +201,17 @@ export function PrivateSale() {
         }
       }
     } catch (error: any) {
-      const apiErrorResponse = ApiError(error);
-
-      apiErrorResponse.messages.map(message => {
-        return toast(message, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'error',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.red_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
+      // wallet error
+      return toast(error.message, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'error',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.red_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
       });
     } finally {
       isButtonLoading.changeToFalse();
@@ -221,7 +221,7 @@ export function PrivateSale() {
   return (
     <Container>
       <Content onSubmit={handleSubmit}>
-        {new Date() > new Date(privateSale.openOnDate) ? (
+        {new Date() < new Date(privateSale.openOnDate) ? (
           <>
             <div className="texts_container">
               <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
@@ -254,6 +254,10 @@ export function PrivateSale() {
           </div>
         )}
       </Content>
+      <PrivateSaleSuccess
+        isOpen={privateSaleSucessModal.state} 
+        handleClose={privateSaleSucessModal.changeToFalse} 
+      />
     </Container>
   );
 }
