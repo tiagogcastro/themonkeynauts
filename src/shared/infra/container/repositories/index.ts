@@ -24,6 +24,10 @@ import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sa
 import { PrismaPackSalesRepository } from '@modules/sales/infra/database/prisma/repositories/prisma-pack-sales-repositories';
 import { ICrewsRepository } from '@modules/crews/domain/repositories/crews-repositories';
 import { PrismaCrewsRepository } from '@modules/crews/infra/database/prisma/repositories/prisma-crews-repositories';
+import { IBountyHuntRankingRepository } from '@modules/players/domain/repositories/bounty-hunt-ranking-repository';
+import { PrismaBountyHuntRankingRepository } from '@modules/players/infra/database/prisma/repositories/prisma-bounty-hunt-ranking-repository';
+import { IInitBountyHuntTokenRepository } from '@modules/players/domain/repositories/init-bounty-hunt-token-repository';
+import { PrismaInitBountyHuntTokenRepository } from '@modules/players/infra/database/prisma/repositories/prisma-init-bounty-hunt-token-repository';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -83,4 +87,13 @@ container.registerSingleton<ICrewsRepository>(
 container.registerSingleton<IPackSalesRepository>(
   'PackSalesRepository',
   PrismaPackSalesRepository,
+);
+container.registerSingleton<IBountyHuntRankingRepository>(
+  'BountyHuntRankingRepository',
+  PrismaBountyHuntRankingRepository,
+);
+
+container.registerSingleton<IInitBountyHuntTokenRepository>(
+  'InitBountyHuntTokenRepository',
+  PrismaInitBountyHuntTokenRepository,
 );

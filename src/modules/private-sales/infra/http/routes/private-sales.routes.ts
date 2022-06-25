@@ -1,5 +1,9 @@
 import { balanceConfig } from '@config/balance';
+import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
+import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { createPrivateSaleController } from '../controllers/create-private-sale';
@@ -13,20 +17,38 @@ privateSalesRouter.post(
   celebrate(
     {
       [Segments.BODY]: {
-        playerId: Joi.string().uuid(),
-        wallet: Joi.string().required(),
-        bnbAmount: Joi.number()
-          .required()
-          .min(balanceConfig.bnbAmountMin)
-          .max(balanceConfig.bnbAmountMax),
-        txHash: Joi.string().required(),
+        bnbAmount: Joi.number().required().max(balanceConfig.bnbAmountMax),
+        txHash: Joi.string().required().min(66).max(66),
       },
     },
     {
       abortEarly: false,
     },
   ),
-  (request, response) => createPrivateSaleController.handle(request, response),
+  adaptMiddleware(ensureWalletMiddleware),
+  adaptRoute(createPrivateSaleController),
+);
+
+privateSalesRouter.post(
+  '/admins/create-private-sale',
+  ensureAuthenticated,
+  ensureAdministrator,
+  celebrate(
+    {
+      [Segments.BODY]: {
+        wallet: Joi.string().required(),
+        bnbAmount: Joi.number()
+          .required()
+          .min(balanceConfig.bnbAmountMin)
+          .max(balanceConfig.bnbAmountMax),
+        txHash: Joi.string().required().min(66).max(66),
+      },
+    },
+    {
+      abortEarly: false,
+    },
+  ),
+  adaptRoute(createPrivateSaleController),
 );
 
 privateSalesRouter.get(

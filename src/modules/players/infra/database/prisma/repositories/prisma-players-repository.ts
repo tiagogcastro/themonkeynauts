@@ -12,6 +12,19 @@ const parsePlayer = (player: PrismaPlayer): IPlayer => {
   }).player;
 };
 class PrismaPlayersRepository implements IPlayersRepository {
+  async hasWallet(playerId: string): Promise<boolean> {
+    const hasWallet = !!(await prisma.player.findFirst({
+      where: {
+        id: playerId,
+        NOT: {
+          wallet: null,
+        },
+      },
+    }));
+
+    return hasWallet;
+  }
+
   async findByWallet(wallet: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {

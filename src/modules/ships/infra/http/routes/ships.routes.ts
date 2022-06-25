@@ -142,12 +142,11 @@ shipsRouter.put(
   (request, response) => updateShipController.handle(request, response),
 );
 
-shipsRouter.put(
-  '/change-active-player',
+shipsRouter.patch(
+  '/change-active-ship',
   ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
-      playerId: Joi.string().uuid(),
       shipId: Joi.string().uuid().required(),
     },
   }),

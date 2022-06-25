@@ -49,6 +49,8 @@ class ChangeActivePlayerShipBusinessLogic {
 
     player.activeShipId = shipId;
 
+    await this.playersRepository.save(player);
+
     return {
       player,
       shipActive: ship,

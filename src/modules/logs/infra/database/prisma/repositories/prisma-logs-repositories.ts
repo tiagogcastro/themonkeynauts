@@ -40,12 +40,14 @@ class PrismaLogsRepository implements ILogsRepository {
       }
     }
 
-    await prisma.log.create({
-      data: {
-        id: logId,
-        ...props,
-      },
-    });
+    if (process.env.NODE_ENV === 'production') {
+      await prisma.log.create({
+        data: {
+          id: logId,
+          ...props,
+        },
+      });
+    }
   }
 
   async listAllLogs(): Promise<ILog[]> {

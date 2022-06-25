@@ -42,7 +42,12 @@ class CreateSaleBusinessLogic {
       }
     }
 
-    if (this.dateProvider.isBefore(startDate, currentDate)) {
+    if (
+      this.dateProvider.isBefore(
+        this.dateProvider.addMinutes(startDate, 5),
+        currentDate,
+      )
+    ) {
       throw new AppError('Start date must be after current date');
     }
 

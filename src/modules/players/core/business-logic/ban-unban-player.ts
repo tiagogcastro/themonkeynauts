@@ -2,12 +2,12 @@ import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, left, right } from '@shared/core/logic/either';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
-import { UserNotFoundError } from '@shared/errors/user-not-fount-error';
 import path from 'node:path';
 import { inject, injectable } from 'tsyringe';
 import { Maybe } from '@shared/core/logic/maybe';
+import { PlayerNotFoundError } from './errors/player-not-fount-error';
 
-type BanUnbanPlayerResponse = Either<UserNotFoundError, IPlayer>;
+type BanUnbanPlayerResponse = Either<PlayerNotFoundError, IPlayer>;
 
 export type BanUnbanPlayerRequestDTO = {
   playerIdOrWallet: string;
@@ -41,7 +41,7 @@ class BanUnbanPlayerBusinessLogic {
     }
 
     if (!player) {
-      return left(new UserNotFoundError());
+      return left(new PlayerNotFoundError());
     }
 
     player.isBanned = !player.isBanned;

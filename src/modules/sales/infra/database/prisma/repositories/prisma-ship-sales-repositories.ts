@@ -37,6 +37,9 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
             equals: 0,
           },
         },
+        startDate: {
+          lte: new Date(),
+        },
         OR: [
           {
             endDate: null,
