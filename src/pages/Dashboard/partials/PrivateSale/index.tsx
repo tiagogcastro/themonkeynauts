@@ -1,5 +1,6 @@
 import { Button } from '@/components';
 import { ethereum as ethereumConfig } from '@/config/ethereum';
+import { privateSale } from '@/config/privateSale';
 import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
@@ -244,30 +245,38 @@ export function PrivateSale() {
   return (
     <Container>
       <Content onSubmit={handleSubmit}>
-        <div className="texts_container">
-          <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
-          <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
-          <p className="text">1 BNB is equivalent to 13.000 SPC</p>
-          <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
-          {walletBalance?.player_balance.bnb_amount_spent && (
-            <p className="text">
-            You already purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnb_amount_spent * 13000} SPCs</span> with your <span>{walletBalance?.player_balance.bnb_amount_spent} BNBs</span> sended.</p>
-          )}
-          
-        </div>
-        <input 
-          type="text"
-          placeholder="Min 0.3 / max 3"
-          onChange={(event) => setInputValue(event.target.value)}
-          value={inputValue}
-        />
-        <Button 
-          type="submit" 
-          text="BUY"
-          loading={{
-            state: isButtonLoading.state
-          }}
-        />
+        {new Date() > new Date(privateSale.openOnDate) ? (
+          <>
+            <div className="texts_container">
+              <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
+              <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
+              <p className="text">1 BNB is equivalent to 13.000 SPC</p>
+              <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
+              {walletBalance?.player_balance.bnb_amount_spent && (
+                <p className="text">
+                You already purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnb_amount_spent * 13000} SPCs</span> with your <span>{walletBalance?.player_balance.bnb_amount_spent} BNBs</span> sended.</p>
+              )}
+              
+            </div>
+            <input 
+              type="text"
+              placeholder="Min 0.3 / max 3"
+              onChange={(event) => setInputValue(event.target.value)}
+              value={inputValue}
+            />
+            <Button 
+              type="submit" 
+              text="BUY"
+              loading={{
+                state: isButtonLoading.state
+              }}
+            />
+          </>
+        ) : (
+          <div className="texts_container">
+            <p className="text">Private sale will be live on {privateSale.openOnDate}</p>
+          </div>
+        )}
       </Content>
     </Container>
   );
