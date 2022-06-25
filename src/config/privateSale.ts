@@ -3,5 +3,5 @@
 // WARNING: Don't use different from the example, as it will give an error.
 
 export const privateSale = {
-  openOnDate: '26 Jun 2022',
+  openOnDate: '27 Jun 2022',
 };
