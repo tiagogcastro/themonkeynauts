@@ -23,7 +23,7 @@ export const Content = styled.div`
   max-width: 32rem;
   width: 100%;
 
-  height: inherit;
+  height: ${window.innerHeight}px;
 
   margin: 0 auto 24px;
 

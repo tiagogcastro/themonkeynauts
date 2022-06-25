@@ -9,11 +9,15 @@ import panel_character_attribute_2 from '@/assets/images/panel_character_attribu
 import panel_character_attribute_3 from '@/assets/images/panel_character_attribute_3.png';
 
 export const Container = styled.div`
+  height: 100vh;
+  min-height: 100vh;
+
+  overflow: auto;
+  
   background: url(${background_1}) no-repeat center;
   background-size: cover;
-  padding: 2.4rem 0;
-
-  height: 100vh;
+  
+  padding-top: 2.4rem;
 `;
 
 export const Content = styled.div`
