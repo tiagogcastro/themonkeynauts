@@ -223,7 +223,7 @@ export function PrivateSale() {
       <Content onSubmit={handleSubmit}>
         {new Date() < new Date(privateSale.openOnDate) ? (
           <>
-            <div className="texts_container">
+            <div className="texts_container_private">
               <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
               <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
               <p className="text">1 BNB is equivalent to 13.000 SPC</p>
@@ -249,7 +249,7 @@ export function PrivateSale() {
             />
           </>
         ) : (
-          <div className="texts_container">
+          <div className="texts_container_private">
             <p className="text">Private sale will be live on {privateSale.openOnDate}</p>
           </div>
         )}

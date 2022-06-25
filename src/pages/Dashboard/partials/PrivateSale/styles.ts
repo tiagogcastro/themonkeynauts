@@ -23,7 +23,7 @@ export const Content = styled.form`
   justify-content: center;
   flex-direction: column;
 
-  .texts_container {
+  .texts_container_private {
     .text {
       font-size: 11px;
       font-weight: 400;
@@ -78,7 +78,7 @@ export const Content = styled.form`
   }
 
   @media(min-width: 768px) {
-    .texts_container {
+    .texts_container_private {
       margin-top: 64px;
 
       .text {
