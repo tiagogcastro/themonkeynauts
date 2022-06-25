@@ -20,6 +20,7 @@ import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useAuth } from '@/hooks';
 import { ethers } from 'ethers';
 import { ApiError } from '@/utils/apiError';
+import { verifyWallet } from '@/utils/wallet';
 
 type CommonSaleProps = {
   id: string;
@@ -125,43 +126,37 @@ export function StoreTab() {
     await getPackSale()
   }
 
-  async function verifyWallet() {
-    const ethereum = (window as any).ethereum;
-
-    if(typeof ethereum === 'undefined') {
-      throw new Error("Activate ethereum in your browser");
-    }
-
-    const chainId = await ethereum.request({ method: 'eth_chainId' });
-
-    if (chainId !== ethereumConfig.network.mainNetBSC) {
-      throw new Error('You are in wrong network. Please connect to BSC Mainnet network.');
-    }
-
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const account = accounts?.[0];
-
-    if(!account) {
-      throw new Error('You have not connected your metamask account.');
-    }
-
-    if(player && player.player.wallet) {
-      const walletDifferent = account !== player?.player.wallet;
-
-      if(walletDifferent) {
-        throw new Error("Active metamask wallet is not the wallet that is linked in our system.");
-      }
-      return; 
-    }
-
-    throw new Error("You need to link your metamask first.");
-  }
-
   async function handleSubmit(event: React.FormEvent, data: MonkeynautSale | ShipSale | PackSale) {
     event.preventDefault();
 
     try {
-      await verifyWallet();
+      if(player) {
+        await verifyWallet(player.player);
+      }
+      
+      toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
+        autoClose: 7000,
+        pauseOnHover: true,
+        type: 'info',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+      
+      toast(`if it doesn't open a popup, check your metamask`, {
+        autoClose: 9000,
+        pauseOnHover: true,
+        type: 'info',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
 
       const { error, transaction } = await paymentByEthereum({
         ethereum: (window as any).ethereum,
@@ -169,7 +164,7 @@ export function StoreTab() {
         ether: ethers.utils.parseEther(String(data.price))._hex,
         dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
       });
-  
+
       if(error.message) {
         return toast(error.message, {
           autoClose: 5000,
@@ -183,7 +178,7 @@ export function StoreTab() {
           }
         });
       }
-
+      
       try {
         if(transaction) {
           toast(`Wait for the transaction to be confirmed in our database`, {

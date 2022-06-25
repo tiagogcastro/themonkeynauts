@@ -36,6 +36,8 @@ import {
   Spc,
 } from './styles';
 import { ApiError } from '@/utils/apiError';
+import { baseApi } from '@/services/api';
+import { verifyWallet } from '@/utils/wallet';
 
 export type HandleChange = {
   event: React.ChangeEvent<HTMLInputElement>;
@@ -106,6 +108,10 @@ export function AccountTab() {
     });
 
     try {
+      if(player) {
+        await verifyWallet(player.player);
+      }
+
       const { transaction, error } = await paymentByEthereum({
         ethereum: (window as any).ethereum,
         toAddress: ethereumConfig.privateSaleTransaction.toAddress,
@@ -128,17 +134,39 @@ export function AccountTab() {
       }
 
       if(transaction) {
-        toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
+        try {
+          await baseApi.post('/players/withdraw-tokens', {
+            amount: inputValue
+          });
+
+          toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        } catch (error: any) {
+          const apiErrorResponse = ApiError(error);
+
+          apiErrorResponse.messages.map(message => {
+            return toast(message, {
+              autoClose: 5000,
+              pauseOnHover: true,
+              type: 'error',
+              style: {
+                background: COLORS.global.white_0,
+                color: COLORS.global.red_0,
+                fontSize: 14,
+                fontFamily: 'Orbitron, sans-serif',
+              }
+            });
+          });
+        }
       }
     } catch(error: any) {
       const apiErrorResponse = ApiError(error);

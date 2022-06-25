@@ -1,6 +1,5 @@
 import { RiAlertFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 import {
   Modal,
@@ -17,6 +16,8 @@ import {
   Container
 } from './styles';
 import { useAuth } from '@/hooks';
+import { connectWallet } from '@/utils/wallet';
+import { ApiError } from '@/utils/apiError';
 
 export type ModalCustomProps = ModalProps & {
   handleClose: () => void;
@@ -30,68 +31,43 @@ export function Wallet({
 
   async function connectMetaMask() {
     try {
-      if(typeof (window as any).ethereum === 'undefined') {
-        throw new Error("Activate ethereum in your browser");
-      }
+      const account = await connectWallet();
   
-      const accounts = await (window as any).ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts?.[0];
-  
-      if(!account) {
-        throw new Error('You have not connected your metamask account.');
-      }
-  
-      const response = await api.wallet.geral.saveWallet({
+      await api.wallet.geral.saveWallet({
         wallet: account
       });
 
-      if(response) {
-        toast(`Success, you have connected your metamask account in our app.`, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'success',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
+      toast(`Success, you have connected your metamask account in our app.`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
 
-        await getPlayer();
-      }
-    } catch(err: any) {
-      const error_message = err?.response?.data.message;
+      await getPlayer();
 
-      if(axios.isAxiosError(error_message)) {
-        return toast(error_message, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'error',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.red_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-      }
-
-      if(err) {
-        return toast(err.message, {
-          autoClose: 5000,
-          pauseOnHover: true,
-          type: 'error',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.red_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-      }
-    } finally {
       handleClose();
+    } catch(error: any) {
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      });
     }
   }
 

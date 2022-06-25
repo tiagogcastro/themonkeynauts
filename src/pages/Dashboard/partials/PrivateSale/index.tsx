@@ -3,9 +3,11 @@ import { ethereum as ethereumConfig } from '@/config/ethereum';
 import { privateSale } from '@/config/privateSale';
 import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
+import { Player } from '@/services/app_api/player/types';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ApiError } from '@/utils/apiError';
+import { verifyWallet } from '@/utils/wallet';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -73,38 +75,6 @@ export function PrivateSale() {
     return true;
   }
 
-  async function verifyWallet() {
-    const ethereum = (window as any).ethereum;
-
-    if(typeof ethereum === 'undefined') {
-      throw new Error("Activate ethereum in your browser");
-    }
-
-    const chainId = await ethereum.request({ method: 'eth_chainId' });
-
-    if (chainId !== ethereumConfig.network.mainNetBSC) {
-      throw new Error('You are in wrong network. Please connect to BSC Mainnet network.');
-    }
-
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const account = accounts?.[0];
-
-    if(!account) {
-      throw new Error('You have not connected your metamask account.');
-    }
-
-    if(player && player.player.wallet) {
-      const walletDifferent = account !== player?.player.wallet;
-
-      if(walletDifferent) {
-        throw new Error("Active metamask wallet is not the wallet that is linked in our system.");
-      }
-      return; 
-    }
-
-    throw new Error("You need to link your metamask first.");
-  }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     const ethereum = (window as any).ethereum;
 
@@ -119,7 +89,9 @@ export function PrivateSale() {
       isButtonLoading.changeToTrue();
 
       if(validatedInput) {
-        await verifyWallet();
+        if(player) {
+          await verifyWallet(player.player);
+        }
 
         toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
           autoClose: 7000,
