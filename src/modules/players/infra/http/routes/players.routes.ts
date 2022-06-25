@@ -144,7 +144,7 @@ playersRouter.post(
   '/withdraw-tokens',
   celebrate({
     [Segments.BODY]: {
-      amount: Joi.number().not(0).required(),
+      amount: Joi.number().not(0).integer().required(),
     },
   }),
   ensureAuthenticated,
@@ -182,7 +182,7 @@ playersRouter.post(
   celebrate({
     [Segments.BODY]: {
       bossKill: Joi.boolean().required(),
-      points: Joi.number().required(),
+      points: Joi.number().not(0).required(),
     },
   }),
   ensureAuthenticated,

@@ -31,7 +31,7 @@ adminPlayersRouter.post(
   '/withdraw-tokens',
   celebrate({
     [Segments.BODY]: {
-      amount: Joi.number().not(0).required(),
+      amount: Joi.number().not(0).integer().required(),
       playerId: Joi.string().required().uuid(),
     },
   }),

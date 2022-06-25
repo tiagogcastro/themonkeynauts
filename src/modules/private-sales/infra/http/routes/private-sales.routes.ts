@@ -17,7 +17,10 @@ privateSalesRouter.post(
   celebrate(
     {
       [Segments.BODY]: {
-        bnbAmount: Joi.number().required().max(balanceConfig.bnbAmountMax),
+        bnbAmount: Joi.number()
+          .required()
+          .min(balanceConfig.bnbAmountMin)
+          .max(balanceConfig.bnbAmountMax),
         txHash: Joi.string().required().min(66).max(66),
       },
     },
