@@ -1,8 +1,11 @@
 import { crewsRouter } from '@modules/crews/infra/http/routes/crews.routes';
 import { logsRouter } from '@modules/logs/infra/http/routes/logs.routes';
 import { monkeynautsRouter } from '@modules/monkeynauts/infra/http/routes/monkeynauts.routes';
+import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
+import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { authRouter } from '@modules/players/infra/http/routes/auth.routes';
 import { playersRouter } from '@modules/players/infra/http/routes/players.routes';
+import { adminPlayersRouter } from '@modules/players/infra/http/routes/admin-players.routes';
 import { privateSalesRouter } from '@modules/private-sales/infra/http/routes/private-sales.routes';
 import { saleEventsRouter } from '@modules/sales/infra/http/routes/sale-events.routes';
 import { shipsRouter } from '@modules/ships/infra/http/routes/ships.routes';
@@ -16,6 +19,9 @@ router.use('/auth', authRouter);
 router.use('/private-sales', privateSalesRouter);
 router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
+router.use('/admins', ensureAuthenticated, ensureAdministrator, [
+  adminPlayersRouter,
+]);
 router.use('/monkeynauts', monkeynautsRouter);
 router.use('/crews', crewsRouter);
 

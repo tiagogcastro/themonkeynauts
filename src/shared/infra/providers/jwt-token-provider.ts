@@ -10,10 +10,10 @@ export class JWTokenProvider implements ITokenProvider {
     return verify(token, secret) as T;
   }
 
-  generate(player_auth: IPlayerAuth): string {
+  generate(playerAuth: IPlayerAuth): string {
     const { secret, expiresIn } = authConfig;
 
-    const { payload: _, ...rest } = player_auth;
+    const { payload: _, ...rest } = playerAuth;
 
     const token = sign(
       {
