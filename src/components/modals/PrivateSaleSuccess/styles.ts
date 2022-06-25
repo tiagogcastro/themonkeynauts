@@ -43,9 +43,10 @@ export const Container = styled.div`
     }
 
     a {
-      background: #002A54;
+      background: #005BB7;
 
-      padding: 1.6rem;
+      padding: 16px;
+      margin-top: 16px;
       width: 220px;
       
       display: flex;
@@ -72,7 +73,7 @@ export const Container = styled.div`
 
     padding-top: 32px;
 
-    width: 100%;
+    width: 250px;
   }
   
   .cubic {

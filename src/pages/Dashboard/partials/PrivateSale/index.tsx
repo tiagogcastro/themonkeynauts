@@ -221,7 +221,7 @@ export function PrivateSale() {
   return (
     <Container>
       <Content onSubmit={handleSubmit}>
-        {new Date() < new Date(privateSale.openOnDate) ? (
+        {new Date() > new Date(privateSale.openOnDate) ? (
           <>
             <div className="texts_container_private">
               <p className="text">Welcome to the pre-sale of SPC, The Monkeynauts token.</p>
