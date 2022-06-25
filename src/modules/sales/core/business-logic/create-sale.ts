@@ -27,6 +27,7 @@ class CreateSaleBusinessLogic {
     saleMonkeynaut,
     endDate,
     sale,
+    adminId,
     startDate,
     ...data
   }: CreateSaleRequestDTO): Promise<Response> {
@@ -57,6 +58,7 @@ class CreateSaleBusinessLogic {
       rankA: saleShip?.rankA as number,
       rankB: saleShip?.rankB as number,
       rankS: saleShip?.rankS as number,
+      adminId,
 
       captain: saleMonkeynaut?.captain as number,
       major: saleMonkeynaut?.major as number,
