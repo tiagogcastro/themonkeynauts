@@ -26,4 +26,9 @@ export const Container = styled.button<ButtonContainerProps>`
     cursor: no-drop;
     opacity: 0.6;
   `};
+
+  &:disabled {
+    cursor: no-drop;
+    opacity: 0.6;
+  }
 `;
