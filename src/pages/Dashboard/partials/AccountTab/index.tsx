@@ -52,7 +52,7 @@ export function AccountTab() {
 
   const [inputValue, setInputValue] = useState('');
 
-  function handleChangeWithdrawDeposit({
+  function handleChangeInput({
     event,
   }: HandleChange) {
     let value: string | number = event.target.value.replace(/[^0-9.]/g, '');
@@ -60,14 +60,8 @@ export function AccountTab() {
     setInputValue(String(value));
   }
 
-  function handleSubmitWithdraw(event: React.FormEvent<HTMLButtonElement>) {
-    event.preventDefault();
-  }
-
-  async function handleSubmitDeposit(event: React.FormEvent<HTMLButtonElement>) {
-    event.preventDefault();
-
-    if(!inputValue) {
+  function verifyIfHasInputValue(value: any) {
+    if(!value) {
       return toast('You need to enter the number to continue the deposit.', {
         autoClose: 7000,
         pauseOnHover: true,
@@ -80,11 +74,11 @@ export function AccountTab() {
         }
       });
     }
+  }
 
-    depositButtonHasBlocked.changeToTrue();
-    
+  function commonToast() {
     toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
-      autoClose: 7000,
+      autoClose: 5000,
       pauseOnHover: true,
       type: 'info',
       style: {
@@ -96,7 +90,7 @@ export function AccountTab() {
     });
 
     toast(`if it doesn't open a popup, check your metamask`, {
-      autoClose: 9000,
+      autoClose: 6000,
       pauseOnHover: true,
       type: 'info',
       style: {
@@ -106,6 +100,62 @@ export function AccountTab() {
         fontFamily: 'Orbitron, sans-serif',
       }
     });
+  }
+
+  async function handleSubmitWithdraw(event: React.FormEvent<HTMLButtonElement>) {
+    event.preventDefault();
+
+    verifyIfHasInputValue(inputValue);
+    commonToast();
+
+    withdrawButtonHasBlocked.changeToTrue();
+
+    try {
+      await baseApi.post('/players/withdraw-tokens', {
+        amount: inputValue
+      });
+      
+      toast(`${player?.player.nickname}, your ${inputValue} withdraw was a success`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
+      
+      setInputValue('');
+    } catch (error: any) {
+      const apiErrorResponse = ApiError(error);
+
+      apiErrorResponse.messages.map(message => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      });
+    } finally {
+      withdrawButtonHasBlocked.changeToFalse();
+    }
+  }
+
+  async function handleSubmitDeposit(event: React.FormEvent<HTMLButtonElement>) {
+    event.preventDefault();
+
+    verifyIfHasInputValue(inputValue);
+    commonToast();
+
+    depositButtonHasBlocked.changeToTrue();
 
     try {
       if(player) {
@@ -120,7 +170,7 @@ export function AccountTab() {
       });
   
       if(error) {
-        toast(error.message, {
+        return toast(error.message, {
           autoClose: 5000,
           pauseOnHover: true,
           type: 'error',
@@ -135,10 +185,22 @@ export function AccountTab() {
 
       if(transaction) {
         try {
-          await baseApi.post('/players/withdraw-tokens', {
-            amount: inputValue
+          toast(`Wait for us to confirm the deposit in our database`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
           });
 
+          await baseApi.post('/players/deposit-tokens', {
+            txHash: transaction
+          });
+          
           toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
             autoClose: 5000,
             pauseOnHover: true,
@@ -150,6 +212,8 @@ export function AccountTab() {
               fontFamily: 'Orbitron, sans-serif',
             }
           });
+          
+          setInputValue('');
         } catch (error: any) {
           const apiErrorResponse = ApiError(error);
 
@@ -270,7 +334,7 @@ export function AccountTab() {
           <Spc>
             <InfoTitle_1 className="spc_title">WITHDRAW/DEPOSIT SPC</InfoTitle_1>
             <input 
-              onChange={(event) => handleChangeWithdrawDeposit({
+              onChange={(event) => handleChangeInput({
                 event
               })}
               value={inputValue}
@@ -280,6 +344,7 @@ export function AccountTab() {
             <Button 
               type="submit" 
               text="Withdraw"
+              disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
               loading={{
                 state: withdrawButtonHasBlocked.state
               }}
@@ -288,6 +353,7 @@ export function AccountTab() {
             <Button 
               type="submit" 
               text="Deposit"
+              disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
               loading={{
                 state: depositButtonHasBlocked.state
               }}
