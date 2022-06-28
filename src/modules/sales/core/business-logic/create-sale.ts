@@ -27,6 +27,7 @@ class CreateSaleBusinessLogic {
     saleMonkeynaut,
     endDate,
     sale,
+    adminId,
     startDate,
     ...data
   }: CreateSaleRequestDTO): Promise<Response> {
@@ -42,7 +43,12 @@ class CreateSaleBusinessLogic {
       }
     }
 
-    if (this.dateProvider.isBefore(startDate, currentDate)) {
+    if (
+      this.dateProvider.isBefore(
+        this.dateProvider.addMinutes(startDate, 5),
+        currentDate,
+      )
+    ) {
       throw new AppError('Start date must be after current date');
     }
 
@@ -52,6 +58,7 @@ class CreateSaleBusinessLogic {
       rankA: saleShip?.rankA as number,
       rankB: saleShip?.rankB as number,
       rankS: saleShip?.rankS as number,
+      adminId,
 
       captain: saleMonkeynaut?.captain as number,
       major: saleMonkeynaut?.major as number,

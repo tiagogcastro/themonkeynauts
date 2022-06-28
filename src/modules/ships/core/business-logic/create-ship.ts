@@ -127,7 +127,7 @@ class CreateShipBusinessLogic {
 
     const { log } = new Log({
       action: `Ship has created on player account. SHIP_ID:${ship.id}`,
-      playerId,
+      playerId: ownerId,
       txHash: null,
     });
 

@@ -20,25 +20,21 @@ model Log {
 }
 
 model Player {
-  id            String  @id @db.Uuid()
-  nickname      String  @unique
-  email         String  @unique
-  password      String
-  wallet        String? @unique
-  role          String  @default("DEFAULT")
-  hasAsteroid   Boolean @default(false)
-  canBountyHunt Boolean @default(true)
-
+  id          String  @id @db.Uuid()
+  nickname    String  @unique
+  email       String  @unique
+  password    String
+  wallet      String? @unique
+  role        String  @default("DEFAULT")
+  hasAsteroid Boolean @default(false)
 
   isBanned  Boolean @default(false)
   isEnabled Boolean @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
   activeShipId String? @unique @db.Uuid()
 
-  // relationships
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   activeShip Ship? @relation(fields: [activeShipId], references: [id])
 
@@ -54,6 +50,8 @@ model Player {
   playerShips       Ship[]       @relation("player_ships")
   playerAuth        PlayerAuth[] @relation("player_auth")
 
+  bountyHuntRanking   BountyHuntRanking?
+  initBountyHuntToken InitBountyHuntToken?
 
   @@map("players")
 }
@@ -272,4 +270,32 @@ model PackSale {
   updatedAt DateTime @updatedAt
 
   @@map("pack_sales")
+}
+
+model BountyHuntRanking {
+  id String @id @db.Uuid()
+
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  maxPoints Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bounty_hunt_ranking")
+}
+
+model InitBountyHuntToken {
+  id String @id @db.Uuid()
+
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  token String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("init_bounty_hunt_tokens")
 }

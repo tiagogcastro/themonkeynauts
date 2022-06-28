@@ -12,16 +12,24 @@ import {
 import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 import { container } from 'tsyringe';
 
+type DisableEnablePlayerControllerRequestDTO = DisableEnablePlayerRequestDTO & {
+  player: {
+    id: string;
+  };
+};
 class DisableEnablePlayerController implements IController {
   async handle({
     playerId,
-  }: DisableEnablePlayerRequestDTO): Promise<HttpResponse> {
+    player,
+  }: DisableEnablePlayerControllerRequestDTO): Promise<HttpResponse> {
     try {
       const disableEnablePlayerBusinessLogic = container.resolve(
         DisableEnablePlayerBusinessLogic,
       );
 
-      const result = await disableEnablePlayerBusinessLogic.execute(playerId);
+      const result = await disableEnablePlayerBusinessLogic.execute(
+        playerId || player.id,
+      );
 
       if (result.isLeft()) {
         return clientError(result.value);

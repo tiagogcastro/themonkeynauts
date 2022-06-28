@@ -9,11 +9,22 @@ import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sa
 import { BuySaleItemRequestDTO } from '@modules/sales/dtos/buy-sale-item-request';
 import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
-import { IBlockchainProvider } from '@shared/domain/providers/blockchain-provider';
+import {
+  ConfirmTransactionErrors,
+  IBlockchainProvider,
+} from '@shared/domain/providers/blockchain-provider';
 import { AppError } from '@shared/errors/app-error';
 import { rarity } from '@shared/helpers';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { Log } from '@modules/logs/domain/entities/log';
+import { Either, left, right } from '@shared/core/logic/either';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
+import { IDateProvider } from '@shared/domain/providers/date-provider';
+import { SaleIsEmptyError } from './errors/sale-is-empty-error';
+import { SaleNotFoundError } from './errors/sale-not-found-error';
+import { InvalidSaleStartDateError } from './errors/invalid-sale-start-date-error';
+import { InvalidSaleEndDateError } from './errors/invalid-sale-end-date-error';
 
 type PackMonkeynaut = {
   rank: MonkeynautRank;
@@ -28,9 +39,17 @@ type Pack = {
   ships: PackShip[];
 };
 
+type BuySaleItemResponse = Either<
+  ConfirmTransactionErrors | PlayerNotFoundError,
+  null
+>;
+
 @injectable()
 class BuySaleItemBusinessLogic {
   constructor(
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
+
     @inject('MonkeynautSalesRepository')
     private monkeynautSalesRepository: IMonkeynautSalesRepository,
 
@@ -51,6 +70,9 @@ class BuySaleItemBusinessLogic {
 
     @inject('LogsRepository')
     private logsRepository: ILogsRepository,
+
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
   ) {}
 
   async execute({
@@ -58,20 +80,37 @@ class BuySaleItemBusinessLogic {
     monkeynautSaleId,
     packSaleId,
     shipSaleId,
-    wallet,
     txHash,
-  }: BuySaleItemRequestDTO): Promise<void> {
+  }: BuySaleItemRequestDTO): Promise<BuySaleItemResponse> {
+    const player = await this.playersRepository.findById(playerId);
+    const currentDate = new Date();
+
+    if (!player) {
+      return left(new PlayerNotFoundError());
+    }
+
     if (monkeynautSaleId) {
       const monkeynautSale = await this.monkeynautSalesRepository.findById(
         monkeynautSaleId,
       );
 
       if (!monkeynautSale) {
-        throw new AppError('Monkeynaut sale not found');
+        return left(new SaleIsEmptyError('Monkeynaut'));
+      }
+
+      if (this.dateProvider.isBefore(currentDate, monkeynautSale.startDate)) {
+        return left(new InvalidSaleStartDateError('monkeynaut'));
+      }
+
+      if (
+        monkeynautSale.endDate &&
+        this.dateProvider.isAfter(currentDate, monkeynautSale.endDate)
+      ) {
+        return left(new InvalidSaleEndDateError('monkeynaut'));
       }
 
       if (monkeynautSale.currentQuantityAvailable === 0) {
-        throw new AppError('Monkeynaut sale is empty');
+        return left(new SaleIsEmptyError('Monkeynaut'));
       }
 
       const monkeynautRank = await rarity({
@@ -81,12 +120,19 @@ class BuySaleItemBusinessLogic {
         major: monkeynautSale.major,
       });
 
-      await this.blockchainProvider.confirmTransaction({
-        amount: monkeynautSale.price,
-        txHash,
-        playerId,
-        from: wallet,
-      });
+      const confirmTransactionResult =
+        await this.blockchainProvider.confirmTransaction({
+          amount: monkeynautSale.price,
+          txHash,
+          playerId: player.id,
+          from: player.wallet as string,
+        });
+
+      if (confirmTransactionResult.isLeft()) {
+        const error = confirmTransactionResult.value;
+
+        return left(error);
+      }
 
       monkeynautSale.currentQuantityAvailable -= 1;
       monkeynautSale.totalUnitsSold += 1;
@@ -94,31 +140,42 @@ class BuySaleItemBusinessLogic {
       await this.monkeynautSalesRepository.update(monkeynautSale);
 
       await this.createMonkeynautBusinessLogic.execute({
-        ownerId: playerId,
-        playerId,
+        ownerId: player.id,
+        playerId: player.id,
         rank: monkeynautRank as MonkeynautRank,
       });
 
       const { log } = new Log({
         action: `The player bought a monkeynaut. MONKEYNAUT_SALE_ID:${monkeynautSaleId}`,
-        playerId,
+        playerId: player.id,
         txHash,
       });
 
       await this.logsRepository.create(log);
 
-      return;
+      return right(null);
     }
 
     if (shipSaleId) {
       const shipSale = await this.shipSalesRepository.findById(shipSaleId);
 
       if (!shipSale) {
-        throw new AppError('Ship sale not found');
+        return left(new SaleNotFoundError('Ship'));
       }
 
       if (shipSale.currentQuantityAvailable === 0) {
-        throw new AppError('Ship sale is empty');
+        return left(new SaleIsEmptyError('Ship'));
+      }
+
+      if (this.dateProvider.isBefore(currentDate, shipSale.startDate)) {
+        return left(new InvalidSaleStartDateError('ship'));
+      }
+
+      if (
+        shipSale.endDate &&
+        this.dateProvider.isAfter(currentDate, shipSale.endDate)
+      ) {
+        return left(new InvalidSaleEndDateError('ship'));
       }
 
       const shipRank = await rarity({
@@ -127,16 +184,23 @@ class BuySaleItemBusinessLogic {
         s: shipSale.rankS,
       });
 
-      await this.blockchainProvider.confirmTransaction({
-        amount: shipSale.price,
-        txHash,
-        playerId,
-        from: wallet,
-      });
+      const confirmTransactionResult =
+        await this.blockchainProvider.confirmTransaction({
+          amount: shipSale.price,
+          txHash,
+          playerId: player.id,
+          from: player.wallet as string,
+        });
+
+      if (confirmTransactionResult.isLeft()) {
+        const error = confirmTransactionResult.value;
+
+        return left(error);
+      }
 
       await this.createShipBusinessLogic.execute({
-        ownerId: playerId,
-        playerId,
+        ownerId: player.id,
+        playerId: player.id,
         rank: shipRank as ShipRank,
       });
 
@@ -147,32 +211,50 @@ class BuySaleItemBusinessLogic {
 
       const { log } = new Log({
         action: `The player bought a ship. SHIP_SALE_ID:${shipSaleId}`,
-        playerId,
+        playerId: player.id,
         txHash,
       });
 
       await this.logsRepository.create(log);
 
-      return;
+      return right(null);
     }
 
     if (packSaleId) {
       const packSale = await this.packSalesRepository.findById(packSaleId);
 
       if (!packSale) {
-        throw new AppError('Pack sale not found');
+        return left(new SaleNotFoundError('Pack'));
       }
 
       if (packSale.currentQuantityAvailable === 0) {
-        throw new AppError('Pack sale is empty');
+        return left(new SaleIsEmptyError('Pack'));
       }
 
-      await this.blockchainProvider.confirmTransaction({
-        amount: packSale.price,
-        txHash,
-        playerId,
-        from: wallet,
-      });
+      if (this.dateProvider.isBefore(currentDate, packSale.startDate)) {
+        return left(new InvalidSaleStartDateError('pack'));
+      }
+
+      if (
+        packSale.endDate &&
+        this.dateProvider.isAfter(currentDate, packSale.endDate)
+      ) {
+        return left(new InvalidSaleEndDateError('pack'));
+      }
+
+      const confirmTransactionResult =
+        await this.blockchainProvider.confirmTransaction({
+          amount: packSale.price,
+          txHash,
+          playerId: player.id,
+          from: player.wallet as string,
+        });
+
+      if (confirmTransactionResult.isLeft()) {
+        const error = confirmTransactionResult.value;
+
+        return left(error);
+      }
 
       const packs: Record<PackType, Pack> = {
         BASIC: {
@@ -276,16 +358,16 @@ class BuySaleItemBusinessLogic {
 
       const monkeynauts = pack.monkeynauts.map(monkeynaut => {
         return this.createMonkeynautBusinessLogic.execute({
-          ownerId: playerId,
-          playerId,
+          ownerId: player.id,
+          playerId: player.id,
           rank: monkeynaut.rank,
         });
       });
 
       const ships = pack.ships.map(ship => {
         return this.createShipBusinessLogic.execute({
-          ownerId: playerId,
-          playerId,
+          ownerId: player.id,
+          playerId: player.id,
           rank: ship.rank,
         });
       });
@@ -299,12 +381,14 @@ class BuySaleItemBusinessLogic {
 
       const { log } = new Log({
         action: `The player bought a pack. PACK_SALE_ID:${packSaleId}`,
-        playerId,
+        playerId: player.id,
         txHash,
       });
 
       await this.logsRepository.create(log);
     }
+
+    return right(null);
   }
 }
 

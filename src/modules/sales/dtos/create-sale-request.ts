@@ -35,6 +35,7 @@ export type SaleCommons = {
 
 type CreateSaleRequestDTO = SaleCommons & {
   type: SaleType;
+  adminId: string;
   sale:
     | CreateMonkeynautSaleBusinessLogic
     | CreateShipSaleBusinessLogic

@@ -7,36 +7,36 @@ import { PlayerAuth as PrismaPlayerAuth } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 import { AsyncMaybe } from '@shared/core/logic/maybe';
 
-const parsePlayerAuth = (player_auth: PrismaPlayerAuth): IPlayerAuth => {
-  return new PlayerAuth(player_auth, {
-    id: player_auth.id,
-    createdAt: player_auth.createdAt,
-    updatedAt: player_auth.updatedAt,
+const parsePlayerAuth = (playerAuth: PrismaPlayerAuth): IPlayerAuth => {
+  return new PlayerAuth(playerAuth, {
+    id: playerAuth.id,
+    createdAt: playerAuth.createdAt,
+    updatedAt: playerAuth.updatedAt,
   }).playerAuth;
 };
 
 export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
-  async create(player_auth: IPlayerAuth): Promise<void> {
-    const { id: player_auth_id, ...props } = player_auth;
+  async create(playerAuth: IPlayerAuth): Promise<void> {
+    const { id: playerAuthId, ...props } = playerAuth;
 
     await prisma.playerAuth.create({
       data: {
-        id: player_auth_id,
+        id: playerAuthId,
         ...props,
       },
     });
   }
 
-  async destroy(player_auth_id: string): Promise<void> {
+  async destroy(playerAuthId: string): Promise<void> {
     await prisma.playerAuth.delete({
       where: {
-        id: player_auth_id,
+        id: playerAuthId,
       },
     });
   }
 
-  async update(player_auth: IPlayerAuth): Promise<void> {
-    const { id: player_auth_id, ...props } = player_auth;
+  async update(playerAuth: IPlayerAuth): Promise<void> {
+    const { id: playerAuthId, ...props } = playerAuth;
 
     await prisma.playerAuth.update({
       data: {
@@ -44,7 +44,7 @@ export class PrismaAppPlayerAuthRepository implements IAppPlayerAuthRepository {
         updatedAt: new Date(),
       },
       where: {
-        id: player_auth_id,
+        id: playerAuthId,
       },
     });
   }

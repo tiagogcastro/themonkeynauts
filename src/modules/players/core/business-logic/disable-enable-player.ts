@@ -1,10 +1,10 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, left, right } from '@shared/core/logic/either';
-import { UserNotFoundError } from '@shared/errors/user-not-fount-error';
 import { inject, injectable } from 'tsyringe';
+import { PlayerNotFoundError } from './errors/player-not-fount-error';
 
-type DisableEnablePlayerResponse = Either<UserNotFoundError, IPlayer>;
+type DisableEnablePlayerResponse = Either<PlayerNotFoundError, IPlayer>;
 
 export type DisableEnablePlayerRequestDTO = {
   playerId: string;
@@ -21,7 +21,7 @@ class DisableEnablePlayerBusinessLogic {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
-      return left(new UserNotFoundError());
+      return left(new PlayerNotFoundError());
     }
 
     player.isEnabled = !player.isEnabled;

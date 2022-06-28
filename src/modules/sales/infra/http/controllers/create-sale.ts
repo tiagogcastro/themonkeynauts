@@ -9,6 +9,7 @@ import { container } from 'tsyringe';
 class CreateSaleController {
   async handle(request: Request, response: Response): Promise<Response> {
     const data = request.body as CreateSaleRequestDTO;
+    const adminId = request.player.id;
 
     const createSaleBusinessLogic = container.resolve(CreateSaleBusinessLogic);
 
@@ -20,6 +21,7 @@ class CreateSaleController {
 
     const createdSale = await createSaleBusinessLogic.execute({
       ...data,
+      adminId,
       sale: container.resolve(Sale as any),
     });
 

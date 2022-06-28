@@ -1,5 +1,7 @@
 import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
+import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
@@ -71,15 +73,15 @@ saleEventsRouter.post(
         packSaleId: Joi.string().uuid(),
         monkeynautSaleId: Joi.string().uuid(),
         shipSaleId: Joi.string().uuid(),
-        wallet: Joi.string().required(),
-        txHash: Joi.string().required(),
+        txHash: Joi.string().required().min(66).max(66),
       },
     },
     {
       abortEarly: false,
     },
   ),
-  (request, response) => buySaleItemController.handle(request, response),
+  adaptMiddleware(ensureWalletMiddleware),
+  adaptRoute(buySaleItemController),
 );
 saleEventsRouter.get(
   '/list-monkeynauts',

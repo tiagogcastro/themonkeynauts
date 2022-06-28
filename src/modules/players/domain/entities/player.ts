@@ -10,7 +10,6 @@ type PlayerPropsOmittedCommons = {
   wallet: Maybe<string>;
   role: PlayerRole;
   hasAsteroid: boolean;
-  canBountyHunt: boolean;
   activeShipId: Maybe<string>;
   isEnabled: boolean;
   isBanned: boolean;
@@ -43,7 +42,6 @@ export class Player implements IPlayer {
       role: this._props.role,
       hasAsteroid: this._props.hasAsteroid,
       activeShipId: this._props.activeShipId,
-      canBountyHunt: this._props.canBountyHunt,
       isEnabled: this._props.isEnabled,
       isBanned: this._props.isBanned,
       createdAt: this._props.createdAt,
@@ -88,10 +86,6 @@ export class Player implements IPlayer {
 
   get hasAsteroid(): boolean {
     return this._props.hasAsteroid;
-  }
-
-  get canBountyHunt(): boolean {
-    return this._props.canBountyHunt;
   }
 
   get isEnabled(): boolean {

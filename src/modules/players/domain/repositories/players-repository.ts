@@ -4,6 +4,7 @@ import { AsyncMaybe } from '@shared/core/logic/maybe';
 interface IPlayersRepository {
   findByEmail(email: string): AsyncMaybe<IPlayer>;
   findByWallet(wallet: string): AsyncMaybe<IPlayer>;
+  hasWallet(playerId: string): Promise<boolean>;
   findById(id: string): AsyncMaybe<IPlayer>;
   findByNickname(nickname: string): AsyncMaybe<IPlayer>;
   create(player: IPlayer): Promise<void>;

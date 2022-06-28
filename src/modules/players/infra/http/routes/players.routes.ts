@@ -1,18 +1,26 @@
-import { passwordRegExp } from '@config/regexp';
-import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
-import { banUnbanPlayerController } from '../controllers/ban-unban-player';
+
+import { passwordRegExp } from '@config/regexp';
+
+import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+
 import { createPlayerController } from '../controllers/create-player';
+import { depositTokensController } from '../controllers/deposit-tokens';
 import { disableEnablePlayerController } from '../controllers/disable-enable-player';
+import { finishBountyHuntRunController } from '../controllers/finish-bounty-hunt-run';
+import { initBountyHuntRunController } from '../controllers/init-bounty-hunt-run';
 import { removePlayerResourceAmountController } from '../controllers/remove-player-resource-amount';
 import { resetPasswordController } from '../controllers/reset-password';
 import { saveWalletController } from '../controllers/save-wallet';
 import { sendForgotPasswordEmailController } from '../controllers/send-forgot-password-email';
 import { showPlayerController } from '../controllers/show-player';
 import { updatePlayerController } from '../controllers/update-player';
-import ensureAdministrator from '../middlewares/ensure-administrator';
+import { withdrawTokensController } from '../controllers/withdraw-tokens';
+
 import { ensureAuthenticated } from '../middlewares/ensure-authenticated';
+import { ensureWalletMiddleware } from '../middlewares/ensure-wallet';
 
 const playersRouter = Router();
 
@@ -39,7 +47,6 @@ playersRouter.put('/update', ensureAuthenticated, (request, response) =>
 
 playersRouter.get(
   '/show',
-  ensureAuthenticated,
   celebrate(
     {
       [Segments.QUERY]: {
@@ -51,12 +58,12 @@ playersRouter.get(
       abortEarly: false,
     },
   ),
+  ensureAuthenticated,
   (request, response) => showPlayerController.handle(request, response),
 );
 
 playersRouter.patch(
   '/save-wallet',
-  ensureAuthenticated,
   celebrate(
     {
       [Segments.BODY]: {
@@ -67,6 +74,7 @@ playersRouter.patch(
       abortEarly: false,
     },
   ),
+  ensureAuthenticated,
   (request, response) => saveWalletController.handle(request, response),
 );
 
@@ -108,7 +116,6 @@ playersRouter.put(
 // resource
 playersRouter.put(
   '/update-resource',
-  ensureAuthenticated,
   celebrate(
     {
       [Segments.BODY]: {
@@ -128,32 +135,58 @@ playersRouter.put(
       abortEarly: false,
     },
   ),
+  ensureAuthenticated,
   (request, response) =>
     removePlayerResourceAmountController.handle(request, response),
 );
 
-playersRouter.patch(
-  '/ban-unban-player',
+playersRouter.post(
+  '/withdraw-tokens',
+  celebrate({
+    [Segments.BODY]: {
+      amount: Joi.number().not(0).integer().required(),
+    },
+  }),
   ensureAuthenticated,
-  ensureAdministrator,
-  celebrate(
-    {
-      [Segments.BODY]: {
-        playerIdOrWallet: Joi.string().required(),
-        reason: Joi.string().required(),
-      },
+  adaptMiddleware(ensureWalletMiddleware),
+  adaptRoute(withdrawTokensController),
+);
+
+playersRouter.post(
+  '/deposit-tokens',
+  celebrate({
+    [Segments.BODY]: {
+      txHash: Joi.string().required().min(66).max(66),
     },
-    {
-      abortEarly: false,
-    },
-  ),
-  adaptRoute(banUnbanPlayerController),
+  }),
+  ensureAuthenticated,
+  adaptMiddleware(ensureWalletMiddleware),
+  adaptRoute(depositTokensController),
 );
 
 playersRouter.patch(
   '/disable-enable-player',
   ensureAuthenticated,
   adaptRoute(disableEnablePlayerController),
+);
+
+// Bounty hunt
+playersRouter.post(
+  '/init-bounty-hunt-run',
+  ensureAuthenticated,
+  adaptRoute(initBountyHuntRunController),
+);
+
+playersRouter.post(
+  '/finish-bounty-hunt-run',
+  celebrate({
+    [Segments.BODY]: {
+      bossKill: Joi.boolean().required(),
+      points: Joi.number().not(0).required(),
+    },
+  }),
+  ensureAuthenticated,
+  adaptRoute(finishBountyHuntRunController),
 );
 
 export { playersRouter };

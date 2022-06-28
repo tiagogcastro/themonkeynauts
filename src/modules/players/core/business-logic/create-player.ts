@@ -69,9 +69,9 @@ class CreatePlayerBusinessLogic {
       role,
       wallet: null,
       password: hashedPassword,
-      canBountyHunt: true,
       hasAsteroid: false,
       isEnabled: true,
+      activeShipId: null,
       isBanned: false,
       activeShipId: null,
     });

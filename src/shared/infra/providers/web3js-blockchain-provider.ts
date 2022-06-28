@@ -1,16 +1,38 @@
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionDTO,
+  ConfirmTransactionResponse,
   IBlockchainProvider,
   SendTransactionDTO,
+  SendTransactionResponse,
 } from '@shared/domain/providers/blockchain-provider';
-import { AppError } from '@shared/errors/app-error';
 import { retry } from '@shared/helpers/retry';
 import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
-import { Transaction } from 'web3-core';
+import { SignedTransaction, Transaction, TransactionReceipt } from 'web3-core';
+import Tx from '@ethereumjs/tx';
+import Common from '@ethereumjs/common';
+import { AnotherPlayerWalletError } from './errors/another-player-wallet-error';
+import { AnotherTransactionRecipientError } from './errors/another-transaction-recipient-error';
+import { AnotherTransactionSenderError } from './errors/another-transaction-sender-error';
+import { GenerateTxSignatureError } from './errors/generate-tx-signature-error';
+import { InvalidAmountError } from './errors/invalid-amount-error';
+import { InvalidTransactionToError } from './errors/invalid-transaction-to-error';
+import { InvalidWalletError } from './errors/invalid-wallet-error';
+import { MakeTxError } from './errors/make-tx-error';
+import { TransactionCarriedOutError } from './errors/transaction-carried-out-error';
+import { WaitTransactionError } from './errors/wait-transaction-error';
+import { WaitTxReceiptError } from './errors/wait-tx-receipt-error';
+import { InvalidTransactionFromError } from './errors/invalid-transaction-from-error';
+import { InvalidPrivateKeyError } from './errors/invalid-private-key-error';
 
+type WaitTransactionReceiptResponse = Either<
+  WaitTxReceiptError,
+  TransactionReceipt
+>;
+type WaitTransactionResponse = Either<WaitTransactionError, Transaction>;
 @injectable()
 export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
@@ -29,52 +51,111 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     );
   }
 
-  async sendTransaction(_: SendTransactionDTO): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
+  async sendTransaction({
+    from,
+    to,
+    contract,
+    amount,
+    privateKey,
+  }: SendTransactionDTO): Promise<SendTransactionResponse> {
+    const walletFrom = (from || process.env.SALES_WALLET)?.toLowerCase();
+    const walletTo = (to || process.env.SALES_WALLET)?.toLowerCase();
 
-  async waitTransaction(txHash: string): Promise<void> {
-    const RETRY = true;
+    let signedTransaction: SignedTransaction;
 
-    await retry(async () => {
-      try {
-        const receipt = await this.web3.eth.getTransactionReceipt(txHash);
+    if (privateKey && process.env.WALLET_PRIVATE_KEY) {
+      return left(new InvalidPrivateKeyError());
+    }
 
-        if (!receipt || !receipt.status) {
-          return RETRY;
-        }
+    try {
+      signedTransaction = await this.web3.eth.accounts.signTransaction(
+        {
+          to: walletTo,
+          from: walletFrom,
+          data: contract,
+          value: this.web3.utils.toWei(String(amount), 'ether'),
+          gas: '210000',
+        },
+        privateKey || (process.env.WALLET_PRIVATE_KEY as string),
+      );
 
-        return !RETRY;
-      } catch {
-        throw new AppError(
-          'The get transaction receipt could not be confirmed',
-          400,
-        );
+      if (!signedTransaction.rawTransaction) {
+        return left(new GenerateTxSignatureError());
       }
-    }, 500);
+    } catch (error) {
+      console.log(error);
+      return left(new GenerateTxSignatureError());
+    }
+
+    try {
+      const transactionReceipt = await this.web3.eth.sendSignedTransaction(
+        signedTransaction.rawTransaction,
+      );
+
+      return right({
+        transactionHash: transactionReceipt.transactionHash,
+      });
+    } catch (error) {
+      console.log(error);
+      return left(new MakeTxError());
+    }
   }
 
-  async waitGetTransaction(txHash: string): Promise<Transaction> {
+  async waitTransactionReceipt(
+    txHash: string,
+  ): Promise<WaitTransactionReceiptResponse> {
     const RETRY = true;
 
     try {
-      const _transaction = await new Promise<Transaction>(async resolve => {
-        await retry(async () => {
-          const transaction = await this.web3.eth.getTransaction(txHash);
+      const transactionReceipt = await new Promise<TransactionReceipt>(
+        async resolve => {
+          await retry(async () => {
+            const obtainedTransactionReceipt =
+              await this.web3.eth.getTransactionReceipt(txHash);
 
-          if (!transaction) {
+            if (
+              !obtainedTransactionReceipt ||
+              !obtainedTransactionReceipt.status
+            ) {
+              return RETRY;
+            }
+
+            resolve(obtainedTransactionReceipt);
+
+            return !RETRY;
+          }, 500);
+        },
+      );
+
+      return right(transactionReceipt);
+    } catch {
+      return left(new WaitTxReceiptError());
+    }
+  }
+
+  async waitTransaction(txHash: string): Promise<WaitTransactionResponse> {
+    const RETRY = true;
+
+    try {
+      const transaction = await new Promise<Transaction>(async resolve => {
+        await retry(async () => {
+          const obtainedTransaction = await this.web3.eth.getTransaction(
+            txHash,
+          );
+
+          if (!obtainedTransaction) {
             return RETRY;
           }
 
-          resolve(transaction);
+          resolve(obtainedTransaction);
 
           return !RETRY;
         }, 500);
       });
 
-      return _transaction;
+      return right(transaction);
     } catch {
-      throw new AppError('The get transaction could not be confirmed', 400);
+      return left(new WaitTransactionError());
     }
   }
 
@@ -82,73 +163,90 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     txHash,
     amount,
     playerId,
+    to,
     from,
-  }: ConfirmTransactionDTO): Promise<void> {
+  }: ConfirmTransactionDTO): Promise<ConfirmTransactionResponse> {
     const checkIfTheTransactionHasAlreadyBeenCarriedOut =
       await this.logsRepository.findByTxHash(txHash);
 
     if (checkIfTheTransactionHasAlreadyBeenCarriedOut) {
-      throw new AppError('This transaction has already been carried out', 400);
+      return left(new TransactionCarriedOutError());
     }
 
-    const player = await this.playersRepository.findByWallet(from);
+    const walletFrom = (from || process.env.SALES_WALLET)?.toLowerCase();
+    const walletTo = (to || process.env.SALES_WALLET)?.toLowerCase();
+
+    if (!walletFrom) {
+      return left(new InvalidTransactionFromError());
+    }
+
+    if (!walletTo) {
+      return left(new InvalidTransactionToError());
+    }
+
+    const player = await this.playersRepository.findByWallet(
+      from || walletFrom,
+    );
 
     if (!player) {
-      throw new AppError(
-        'The wallet you entered is not a valid wallet in our database',
-        400,
-      );
+      return left(new InvalidWalletError());
     }
 
     if (playerId !== player.id) {
-      throw new AppError(
-        `You are trying to create a private sale with another player's wallet`,
-        400,
-      );
+      return left(new AnotherPlayerWalletError());
     }
 
-    await this.waitTransaction(txHash);
+    const waitTransactionReceiptResult = await this.waitTransactionReceipt(
+      txHash,
+    );
 
-    const transaction = await this.waitGetTransaction(txHash);
+    if (waitTransactionReceiptResult.isLeft()) {
+      const error = waitTransactionReceiptResult.value;
 
-    if (!transaction) {
-      throw new AppError(
-        'Transaction return is null, could not commit transaction',
-        400,
-      );
+      return left(error);
     }
 
-    const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
+    const transactionReceipt = waitTransactionReceiptResult.value;
 
-    if (amountToWei !== transaction.value) {
-      throw new AppError(
-        'The transaction value is not the same as the one sent',
-        400,
-      );
+    const waitTransactionResult = await this.waitTransaction(txHash);
+
+    if (waitTransactionResult.isLeft()) {
+      const error = waitTransactionResult.value;
+
+      return left(error);
+    }
+
+    const transaction = waitTransactionResult.value;
+
+    console.log(transaction);
+    console.log(transactionReceipt);
+
+    if (amount) {
+      const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
+
+      if (amountToWei !== transaction.value) {
+        return left(new InvalidAmountError());
+      }
     }
 
     const transactionTo = transaction.to?.toLowerCase();
-    const walletTo = process.env.SALES_WALLET?.toLowerCase();
 
-    if (!transactionTo || !walletTo) {
-      throw new AppError('The transaction could not be confirmed', 409);
+    if (!transactionTo) {
+      return left(new InvalidTransactionToError());
     }
 
     const transactionFrom = transaction.from.toLowerCase();
-    const walletFrom = from.toLowerCase();
 
     if (transactionTo !== walletTo) {
-      throw new AppError(
-        'The transaction destination is not the same as the wallet address',
-        400,
-      );
+      return left(new AnotherTransactionRecipientError());
     }
 
     if (transactionFrom !== walletFrom) {
-      throw new AppError(
-        'The transaction origin is not the same as the user wallet',
-        400,
-      );
+      return left(new AnotherTransactionSenderError());
     }
+
+    return right({
+      amount: Number(this.web3.utils.fromWei(transaction.value, 'ether')),
+    });
   }
 }

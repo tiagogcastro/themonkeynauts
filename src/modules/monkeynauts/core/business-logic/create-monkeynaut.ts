@@ -179,7 +179,7 @@ class CreateMonkeynautBusinessLogic {
 
     const { log } = new Log({
       action: `Monkeynaut has created on player account. MONKEYNAUT_ID:${monkeynaut.id}`,
-      playerId,
+      playerId: ownerId,
       txHash: null,
     });
 

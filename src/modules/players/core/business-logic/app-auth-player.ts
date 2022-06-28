@@ -86,14 +86,14 @@ export class AppPlayerAuthBusinessLogic {
     const playersAuth = await this.appPlayerAuth.findManyByPlayerId(player.id);
 
     await Promise.all(
-      playersAuth.map(async player_auth => {
+      playersAuth.map(async playerAuth => {
         const isTokenExpired = this.dateProvider.isAfter(
           today,
-          player_auth.expireIn,
+          playerAuth.expireIn,
         );
 
         if (isTokenExpired) {
-          await this.appPlayerAuth.destroy(player_auth.id);
+          await this.appPlayerAuth.destroy(playerAuth.id);
         }
       }),
     );

@@ -2,7 +2,7 @@ import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IPlayerAuth } from '../entities/player-auth';
 
 export interface IAppPlayerAuthRepository {
-  create(player_auth: IPlayerAuth): Promise<void>;
+  create(playerAuth: IPlayerAuth): Promise<void>;
 
   findUniqueByPayload(payload: string): AsyncMaybe<IPlayerAuth>;
   findFirstByPlayerId(playerId: string): AsyncMaybe<IPlayerAuth>;
@@ -15,7 +15,7 @@ export interface IAppPlayerAuthRepository {
 
   verifyIsValidToken(payload: string): Promise<boolean>;
 
-  update(player_auth: IPlayerAuth): Promise<void>;
+  update(playerAuth: IPlayerAuth): Promise<void>;
 
-  destroy(player_auth_id: string): Promise<void>;
+  destroy(playerAuthId: string): Promise<void>;
 }

@@ -7,9 +7,14 @@ import {
   parseISO,
   getMinutes,
   isBefore,
+  addMinutes,
 } from 'date-fns';
 
 class DateFnsDateProvider implements IDateProvider {
+  addMinutes(date: Date, amount: number): Date {
+    return addMinutes(date, amount);
+  }
+
   getMinutes(date: Date): number {
     return getMinutes(date);
   }
