@@ -19,7 +19,7 @@ export class PrismaPlayerTokensRepository implements IPlayerTokensRepository {
   async findByPlayerId(playerId: string): AsyncMaybe<IPlayerToken> {
     const playerToken = await prisma.playerToken.findFirst({
       where: {
-        playerId: playerId,
+        playerId,
       },
     });
 
