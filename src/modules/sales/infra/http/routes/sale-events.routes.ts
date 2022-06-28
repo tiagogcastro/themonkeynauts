@@ -1,8 +1,10 @@
 import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { buySaleItemController } from '../controllers/buy-sale-item';
+import { createAirDropNftPlayerController } from '../controllers/create-air-drop-nft';
 import { createSaleController } from '../controllers/create-sale';
 import { listMonkeynautSalesController } from '../controllers/list-monkeynaut-sales';
 import { listPackSalesController } from '../controllers/list-pack-sales';
@@ -182,4 +184,45 @@ saleEventsRouter.put(
   (request, response) => updateSaleController.handle(request, response),
 );
 
+saleEventsRouter.post(
+  '/create-air-drop-nft',
+  ensureAuthenticated,
+  ensureAdministrator,
+  celebrate(
+    {
+      [Segments.BODY]: {
+        email: Joi.string().email().required(),
+        type: Joi.string().valid('MONKEYNAUT', 'SHIP', 'PACK').required(),
+        monkeynaut: Joi.alternatives().conditional('type', {
+          is: 'MONKEYNAUT',
+          then: Joi.object({
+            rank: Joi.string().valid(
+              'PRIVATE',
+              'SERGEANT',
+              'CAPTAIN',
+              'MAJOR',
+              'RANDOM',
+            ),
+            class: Joi.string().valid('RANDOM'),
+          }),
+        }),
+        ship: Joi.alternatives().conditional('type', {
+          is: 'SHIP',
+          then: Joi.object({
+            rank: Joi.string().valid('A', 'B', 'S', 'RANDOM'),
+            class: Joi.string().valid('RANDOM'),
+          }),
+        }),
+        pack: Joi.alternatives().conditional('type', {
+          is: 'PACK',
+          then: Joi.optional(),
+        }),
+      },
+    },
+    {
+      abortEarly: false,
+    },
+  ),
+  adaptRoute(createAirDropNftPlayerController),
+);
 export { saleEventsRouter };
