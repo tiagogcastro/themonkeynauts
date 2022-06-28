@@ -32,6 +32,9 @@
       "@typescript-eslint/ban-types": "off",
       "no-restricted-syntax": ["off"],
       "guard-for-in": "error",
+      "no-case-declarations": "off",
+      "no-plusplus": "off",
+      "consistent-return": "off",
       "@typescript-eslint/naming-convention": [
         "error",
         {
