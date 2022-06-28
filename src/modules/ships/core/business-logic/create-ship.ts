@@ -1,6 +1,10 @@
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import {
+  getShipClassByRarity,
+  getShipRankByRarity,
+} from '@modules/ships/config/create-ship';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { ShipClass } from '@modules/ships/domain/enums/ship-class';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
@@ -48,24 +52,8 @@ class CreateShipBusinessLogic {
       );
     }
 
-    const percentage = 100 / 3;
-
-    const __class =
-      _class ||
-      (await rarity<Record<Lowercase<ShipClass>, number>>({
-        explorer: percentage,
-        miner: percentage,
-        fighter: percentage,
-      }));
-
-    const __rank =
-      rank ||
-      (await rarity<Record<Lowercase<ShipRank>, number>>({
-        a: 50,
-        b: 35,
-        s: 15,
-      }));
-
+    const __class = _class || (await getShipClassByRarity());
+    const __rank = rank || (await getShipRankByRarity());
     const __name = name || (await generateSpaceName());
 
     const __tankCapacity =
