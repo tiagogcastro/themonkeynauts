@@ -51,6 +51,29 @@ export class EnsureAuthenticatedBusinessLogic {
 
     const [, token] = authorization.split(' ');
 
+    const foundToken = await this.appPlayerAuthRepository.findUniqueByPayload(
+      token,
+    );
+
+    if (!foundToken) {
+      throw new AppError('Token is not valid', 401);
+    }
+
+    const today = new Date();
+
+    const isTokenExpired = this.dateProvider.isAfter(
+      today,
+      foundToken.expireIn,
+    );
+
+    if (isTokenExpired) {
+      throw new AppError('Token expired', 403);
+    }
+
+    if (!foundToken.isValidToken) {
+      throw new AppError('Token invalid', 403);
+    }
+
     let decoded: TokenPayload;
 
     try {
