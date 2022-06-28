@@ -6,4 +6,6 @@ enum MonkeynautRank {
   MAJOR = 'MAJOR',
 }
 
-export { MonkeynautRank };
+type TypeMonkeynautRank = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
+
+export { MonkeynautRank, TypeMonkeynautRank };

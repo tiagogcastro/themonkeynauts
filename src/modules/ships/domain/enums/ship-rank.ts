@@ -5,4 +5,6 @@ enum ShipRank {
   S = 'S',
 }
 
-export { ShipRank };
+type TypeShipRank = 'A' | 'B' | 'S';
+
+export { ShipRank, TypeShipRank };

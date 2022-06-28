@@ -5,4 +5,6 @@ enum ShipClass {
   EXPLORER = 'EXPLORER',
 }
 
-export { ShipClass };
+type TypeShipClass = 'FIGHTER' | 'MINER' | 'EXPLORER';
+
+export { ShipClass, TypeShipClass };
