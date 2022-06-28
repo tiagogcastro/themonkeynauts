@@ -73,6 +73,7 @@ class CreatePlayerBusinessLogic {
       hasAsteroid: false,
       isEnabled: true,
       isBanned: false,
+      activeShipId: null,
     });
 
     await this.playersRepository.create(player);
