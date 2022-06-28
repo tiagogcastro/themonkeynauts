@@ -11,7 +11,7 @@ authRouter.post(
     {
       [Segments.BODY]: {
         email: Joi.string().email().required(),
-        password: Joi.string().min(8).max(255).required(),
+        password: Joi.string().required(),
       },
     },
     {
