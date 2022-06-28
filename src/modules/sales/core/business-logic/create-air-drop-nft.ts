@@ -31,11 +31,11 @@ import {
 import { CreateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
 import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
 
-import { UserNotFoundError } from '@shared/errors/user-not-fount-error';
-import { AirDropNftTypeNotAllowed } from '../errors/air-drop-nft-type-not-allowed';
+import { AirDropNftTypeNotAllowed } from './errors/air-drop-nft-type-not-allowed';
+import { PlayerNotFoundError } from './errors/player-not-fount-error';
 
 type CreateAirDropNftResponse = Either<
-  UserNotFoundError,
+  PlayerNotFoundError,
   {
     monkeynauts: IMonkeynaut[] | null;
     ships: IShip[] | null;
@@ -93,12 +93,12 @@ export class CreateAirDropNftBusinessLogic {
     const player = await this.playersRepository.findByEmail(email);
 
     if (!player) {
-      return left(new UserNotFoundError());
+      return left(new PlayerNotFoundError());
     }
 
     async function generateLogAfterCreate(message: string) {
       if (!player) {
-        return left(new UserNotFoundError());
+        return left(new PlayerNotFoundError());
       }
 
       const { log } = new Log({
