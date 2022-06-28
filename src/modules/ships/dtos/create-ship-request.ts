@@ -1,13 +1,13 @@
 import { Maybe } from '@shared/core/logic/maybe';
-import { ShipClass } from '../domain/enums/ship-class';
-import { ShipRank } from '../domain/enums/ship-rank';
+import { ShipClass, TypeShipClass } from '../domain/enums/ship-class';
+import { ShipRank, TypeShipRank } from '../domain/enums/ship-rank';
 
 type CreateShipRequestDTO = {
   ownerId: string;
   playerId?: Maybe<string>;
   name?: Maybe<string>;
-  class?: Maybe<ShipClass>;
-  rank?: Maybe<ShipRank>;
+  class?: Maybe<TypeShipClass>;
+  rank?: Maybe<TypeShipRank>;
   bonusValue?: Maybe<number>;
   bonusDescription?: Maybe<string>;
   tankCapacity?: Maybe<number>;
