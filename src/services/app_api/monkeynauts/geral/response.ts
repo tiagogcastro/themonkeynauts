@@ -14,8 +14,8 @@ export type Monkeynaut = {
   ownerId: string;
   playerId: string;
   name: string;
-  class: MonkeynautRole;
   rank: string;
+  role: string;
 
   bonusValue: number;
   bonusDescription?: string;

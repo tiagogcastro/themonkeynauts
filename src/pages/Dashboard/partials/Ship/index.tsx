@@ -1,8 +1,6 @@
-import { useEffect, useMemo } from 'react';
-
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
-import { capitalize, verifyRole } from '@/utils';
+import { capitalize } from '@/utils';
 
 import {
   Title_1
@@ -23,13 +21,6 @@ import {
   CrewSelected,
 } from './styles';
 
-import engineer from '@/assets/images/engineer.png';
-import scientist from '@/assets/images/scientist.png';
-import soldier from '@/assets/images/soldier.png';
-import { baseApi } from '@/services/api';
-import { toast } from 'react-toastify';
-import { COLORS } from '@/theme';
-
 export type ShipProps = {
   shipIsShow: UseBooleanTypes;
 }
@@ -37,46 +28,7 @@ export type ShipProps = {
 export function Ship({
   shipIsShow,
 }: ShipProps) {
-  const { ship, setShip } = useDashboardTabs();
-
-  async function getCrew() {
-    try {
-      const getCrewsResponse = await baseApi.get('/crews/list-by-ship', {
-        params: {
-          shipId: ship.id,
-        }
-      });
-
-      setShip({
-        ...ship,
-        crews: getCrewsResponse.data,
-      });
-
-    } catch(error: any) {
-    }
-  }
-
-  useEffect(() => {
-    getCrew();
-  }, []);
-
-  const shipModified = useMemo(() => {
-    return {
-      ...ship,
-      crews: ship?.crews && ship.crews.map(crew => {
-        return {
-          ...crew,
-          rank: capitalize(crew.rank),
-          class: capitalize(crew.class),
-          avatar: verifyRole(crew.class, {
-            engineer,
-            scientist,
-            soldier
-          })
-        };
-      }),
-    };
-  }, [ship]);
+  const { ship } = useDashboardTabs();
 
   return (
     <Container>
@@ -100,11 +52,11 @@ export function Ship({
                 <div className="info_left">
                   <UniqueInfo>
                     <span>Role</span>
-                    <strong>{capitalize(ship.class)}</strong>
+                    <strong>{capitalize(ship.role)}</strong>
                   </UniqueInfo>
                   <UniqueInfo>
                     <span>Crew</span>
-                    <strong>{shipModified.crews?.length}/{shipModified.crewCapacity}</strong>
+                    <strong>{ship.crew?.length}/{ship.crewCapacity}</strong>
                   </UniqueInfo>
                 </div>
                 <div className="info_right">
@@ -122,23 +74,23 @@ export function Ship({
               <PveBonusInfo>
                 <InfoTitle_1>PVE BONUS</InfoTitle_1>
                 <p className="pve_detail">
-                  {ship.class.toLowerCase() !== 'explorer' && '+ '}{ship.bonusValue}% <br />
+                  {ship.role.toLowerCase() !== 'explorer' && '+ '}{ship.bonusValue}% <br />
                   {ship.bonusDescription}
                 </p>
               </PveBonusInfo>
             </ShipInformation>
           </PrincipalDetails>
           <CrewContainer>
-            <InfoTitle_1 className={`crew_title ${shipModified.crews?.length === 0 && 'none_crew_list'}`}>Crew</InfoTitle_1>
+            <InfoTitle_1 className={`crew_title ${ship.crew?.length === 0 && 'none_crew_list'}`}>Crew</InfoTitle_1>
 
             <CrewContent>
-              {shipModified.crews && shipModified.crews?.length > 0 ? shipModified.crews?.map(crew => (
+              {ship.crew && ship.crew?.length > 0 ? ship.crew?.map(crew => (
                 <CrewSelected key={crew.id}>
                   <div className="crew_content">
                     <img src={crew.avatar} alt={`Image from monkeynaut name: ${crew.name}`} />
                     <div className="crew_infos">
                       <span className="crew_name">{crew.name}</span>
-                      <span>{crew.class}</span>
+                      <span>{crew.role}</span>
                       <span>{crew.rank}</span>
                       <span>Energy: {crew.energy}/{crew.maxEnergy}</span>
                     </div>

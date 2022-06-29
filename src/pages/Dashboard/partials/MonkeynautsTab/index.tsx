@@ -88,7 +88,7 @@ export function MonkeynautsTab({
       return monkeynauts.map(monkeynaut => {
         return {
           ...monkeynaut,
-          avatar: verifyRole(monkeynaut.class, {
+          avatar: verifyRole(monkeynaut.role, {
             engineer,
             soldier,
             scientist
@@ -112,7 +112,7 @@ export function MonkeynautsTab({
                     <TheadTrCustom>
                       <TheadTdCustom>Monkeynaut</TheadTdCustom>
                       <TheadTdCustom>Name</TheadTdCustom>
-                      <TheadTdCustom>Class</TheadTdCustom>
+                      <TheadTdCustom>Role</TheadTdCustom>
                       <TheadTdCustom>Rank</TheadTdCustom>
                       <TheadTdCustom>Energy</TheadTdCustom>
                       <TheadTdCustom>Breed COunt</TheadTdCustom>
@@ -141,7 +141,7 @@ export function MonkeynautsTab({
                         <TbodyTdCustom className="role">
                           <div className="info">
                             <span>Role</span>
-                            <strong>{capitalize(monkeynaut.class)}</strong>
+                            <strong>{capitalize(monkeynaut.role)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="rank">

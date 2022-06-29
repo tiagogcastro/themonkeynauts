@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { api, baseApi, ShipType } from '@/services/api';
+import { baseApi, ShipType } from '@/services/api';
 
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
 
@@ -11,6 +11,10 @@ import { capitalize, replaceToShortString, verifyRole } from '@/utils';
 import fighter from '@/assets/images/fighter.png';
 import explorer from '@/assets/images/explorer.png';
 import miner from '@/assets/images/miner.png';
+
+import engineer from '@/assets/images/engineer.png';
+import scientist from '@/assets/images/scientist.png';
+import soldier from '@/assets/images/soldier.png';
 
 import { Ship } from '../Ship';
 
@@ -65,18 +69,14 @@ export function ShipsTab({
   }
 
   async function getShips() {
-    try {
-      const response = await baseApi.get('/ships/list', {
-        params: {
-          playerId: player?.player.id
-        }
-      });
+    const response = await baseApi.get('/ships/list', {
+      params: {
+        playerId: player?.player.id
+      }
+    });
 
-      setShips(response.data);
-    } catch(err) {
-    } finally {
-      loadingShips.changeToFalse();
-    }
+    setShips(response.data);
+    loadingShips.changeToFalse();
   }
 
   useEffect(() => {
@@ -90,10 +90,22 @@ export function ShipsTab({
       return ships.map(ship => {
         return {
           ...ship,
-          avatar: verifyRole(ship.class, {
+          avatar: verifyRole(ship.role, {
             explorer,
             fighter,
             miner
+          }),
+          crew: ship?.crew && ship.crew.map(crew => {
+            return {
+              ...crew,
+              rank: capitalize(crew.rank),
+              role: capitalize(crew.role),
+              avatar: verifyRole(crew.role, {
+                engineer,
+                scientist,
+                soldier
+              })
+            };
           }),
         }
       });
@@ -142,8 +154,8 @@ export function ShipsTab({
                         </TbodyTdCustom>
                         <TbodyTdCustom className="role">
                           <div className="info">
-                            <span>Class</span>
-                            <strong>{capitalize(ship.class)}</strong>
+                            <span>Role</span>
+                            <strong>{capitalize(ship.role)}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="rank">
@@ -155,7 +167,7 @@ export function ShipsTab({
                         <TbodyTdCustom className="crew">
                           <div className="info">
                             <span>Crew</span>
-                            <strong>{ship.crew}/{ship.crewCapacity}</strong>
+                            <strong>{ship.crew.length}/{ship.crewCapacity}</strong>
                           </div>
                         </TbodyTdCustom>
                         <TbodyTdCustom className="fuel">

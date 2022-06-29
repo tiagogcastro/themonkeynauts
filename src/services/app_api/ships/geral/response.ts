@@ -6,7 +6,7 @@ export type Ship = {
   id: string;
   name: string;
 
-  class: ShipRole;
+  role: ShipRole;
   rank: string;
 
   avatar?: string;
@@ -27,9 +27,7 @@ export type Ship = {
   ownerId: string;
   playerId: string;
 
-  crew: number;
-
-  crews?: Monkeynaut[];
+  crew: Monkeynaut[];
 }
 
 export type GetShip = Ship[];

@@ -61,8 +61,8 @@ export function Monkeynaut({
               <div className="mist_info">
                 <div className="info_left">
                   <S.UniqueInfo>
-                    <span>Class</span>
-                    <strong>{capitalize(monkeynaut.class)}</strong>
+                    <span>Role</span>
+                    <strong>{capitalize(monkeynaut.role)}</strong>
                   </S.UniqueInfo>
                   <S.UniqueInfo>
                     <span>Energy</span>
@@ -88,7 +88,7 @@ export function Monkeynaut({
                     <S.CrewInShip>
                       <div>
                         <strong>{monkeynaut.crew.name}</strong>
-                        <p>{capitalize(monkeynaut.crew.class)}</p>
+                        <p>{capitalize(monkeynaut.crew.role)}</p>
                       </div>
                     </S.CrewInShip>
                   ) : (
