@@ -54,7 +54,7 @@ class CreateCrewBusinessLogic {
       throw new AppError('Ship does not exist', 404);
     }
 
-    if (foundShip.crews.length === foundShip.crewCapacity) {
+    if (foundShip.crew.length === foundShip.crewCapacity) {
       throw new AppError(
         `You cannot exceed the maximum crew capacity(${foundShip.crewCapacity})`,
         403,
