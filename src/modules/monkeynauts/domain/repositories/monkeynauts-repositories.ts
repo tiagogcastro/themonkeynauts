@@ -6,10 +6,10 @@ interface IMonkeynautsRepository {
   create(monkeynaut: IMonkeynaut): Promise<void>;
   save(monkeynaut: IMonkeynaut): Promise<void>;
   update(monkeynaut: IMonkeynaut): Promise<void>;
-  destroy(monkeynaut_id: string): Promise<void>;
+  destroy(monkeynautId: string): Promise<void>;
   listAllMonkeynauts(): Promise<IMonkeynaut[]>;
   listAllMonkeynautsFromPlayer(playerId: string): Promise<IMonkeynaut[]>;
-  findById(monkeynaut_id: string): AsyncMaybe<IMonkeynaut>;
+  findById(monkeynautId: string): AsyncMaybe<IMonkeynaut>;
 
   findMany(): Promise<IMonkeynaut[]>;
   findManyByCrews(crews: ICrew[]): Promise<IMonkeynaut[]>;

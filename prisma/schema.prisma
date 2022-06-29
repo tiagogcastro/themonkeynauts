@@ -100,7 +100,7 @@ model Monkeynaut {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  crews Crew[]
+  crew Crew[]
 
   @@map("monkeynauts")
 }
@@ -147,7 +147,7 @@ model Ship {
   onSale             Boolean @default(false)
   canRefuelAtStation Boolean @default(false)
 
-  crews Crew[]
+  crew Crew[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

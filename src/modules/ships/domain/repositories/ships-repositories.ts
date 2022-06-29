@@ -8,15 +8,15 @@ interface IShipsRepository {
   save(ship: IShip): Promise<void>;
   saveMany(data: ShipsSaveManyDTO): Promise<void>;
   destroy(shipId: string): Promise<void>;
-  findById(shipId: string): AsyncMaybe<IShip & { crews: ICrew[] }>;
-  listAllShips(): Promise<(IShip & { crews: ICrew[] })[]>;
+  findById(shipId: string): AsyncMaybe<IShip & { crew: ICrew[] }>;
+  listAllShips(): Promise<(IShip & { crew: ICrew[] })[]>;
   listAllShipsFromPlayer(
     playerId: string,
-  ): Promise<(IShip & { crews: ICrew[] })[]>;
+  ): Promise<(IShip & { crew: ICrew[] })[]>;
 
   findByIdAndPlayerId(
     shipId: string,
     playerId: string,
-  ): AsyncMaybe<IShip & { crews: ICrew[] }>;
+  ): AsyncMaybe<IShip & { crew: ICrew[] }>;
 }
 export { IShipsRepository };
