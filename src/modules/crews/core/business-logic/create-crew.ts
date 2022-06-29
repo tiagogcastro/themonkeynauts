@@ -54,7 +54,7 @@ class CreateCrewBusinessLogic {
       throw new AppError('Ship does not exist', 404);
     }
 
-    if (foundShip.crew >= foundShip.crewCapacity) {
+    if (foundShip.crews.length === foundShip.crewCapacity) {
       throw new AppError(
         `You cannot exceed the maximum crew capacity(${foundShip.crewCapacity})`,
         403,
@@ -83,12 +83,10 @@ class CreateCrewBusinessLogic {
 
     await this.crewsRepository.create(crew);
 
-    foundShip.crew += 1;
-
     await this.shipsRespository.save(foundShip);
 
     const { log } = new Log({
-      action: `Crew has created on player account. crewId: ${crew.id}`,
+      action: `Crew has created on player account. CREW_ID: ${crew.id}`,
       playerId,
       txHash: null,
     });

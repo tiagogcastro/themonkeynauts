@@ -12,7 +12,6 @@ type CreateShipRequestDTO = {
   bonusDescription?: Maybe<string>;
   tankCapacity?: Maybe<number>;
   crewCapacity?: Maybe<number>;
-  crew?: Maybe<number>;
   fuel?: Maybe<number>;
   breedCount?: Maybe<number>;
   canRefuelAtStation?: Maybe<boolean>;

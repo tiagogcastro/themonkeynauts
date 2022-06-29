@@ -34,7 +34,6 @@ class CreateShipBusinessLogic {
     tankCapacity,
     crewCapacity,
     canRefuelAtStation,
-    crew,
     fuel,
     breedCount,
     onSale,
@@ -77,7 +76,6 @@ class CreateShipBusinessLogic {
       }[_rank];
 
     const _fuel = fuel || _tankCapacity;
-    const _crew = crew ?? 0;
 
     const crewCapacitySchema: Record<ShipRank, number> = {
       B: 2,
@@ -104,7 +102,7 @@ class CreateShipBusinessLogic {
     };
 
     const _bonusDescription =
-      bonusDescription ??
+      bonusDescription ||
       {
         FIGHTER: 'Bounty Hunt Damage',
         MINER: 'Mining Success Rate',
@@ -113,24 +111,22 @@ class CreateShipBusinessLogic {
 
     const _crewCapacity = crewCapacity ?? crewCapacitySchema[_rank];
     const _bonusValue = bonusValue ?? bonusValueSchema[_role][_rank];
-    const _canRefuelAtStation = canRefuelAtStation ?? false;
+    const _canRefuelAtStation = canRefuelAtStation || false;
     const _breedCount = breedCount ?? 0;
-    const _onSale = onSale ?? false;
+    const _onSale = onSale || false;
 
     const { ship } = new Ship({
       ownerId,
-      playerId: playerId ?? ownerId,
+      playerId: playerId || ownerId,
       name: _name,
       role: _role,
       rank: _rank,
       fuel: _fuel,
-      crew: _crew,
       bonusValue: _bonusValue,
       bonusDescription: _bonusDescription,
       tankCapacity: _tankCapacity,
       crewCapacity: _crewCapacity,
       canRefuelAtStation: _canRefuelAtStation,
-      avatar: null,
       breedCount: _breedCount,
       onSale: _onSale,
     });

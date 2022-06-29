@@ -78,13 +78,12 @@ model Monkeynaut {
   player   Player? @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
 
   name             String
-  role             String  @default("SOLDIER")
+  role             String @default("SOLDIER")
   rank             String
   bonusValue       Int
   bonusDescription String
   maxEnergy        Int
   energy           Int
-  avatar           String?
 
   basePower      Int
   baseSpeed      Int
@@ -143,9 +142,7 @@ model Ship {
   tankCapacity     Int
   fuel             Int
   crewCapacity     Int
-  crew             Int
 
-  avatar             String?
   breedCount         Int
   onSale             Boolean @default(false)
   canRefuelAtStation Boolean @default(false)

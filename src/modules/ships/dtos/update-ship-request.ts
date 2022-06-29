@@ -12,7 +12,6 @@ type UpdateShipRequestDTO = {
   bonusDescription?: string;
   tankCapacity?: number;
   crewCapacity?: number;
-  crew?: number;
   fuel?: number;
   breedCount?: number;
   canRefuelAtStation?: boolean;

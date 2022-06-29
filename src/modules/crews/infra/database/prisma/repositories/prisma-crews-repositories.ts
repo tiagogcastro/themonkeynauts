@@ -4,7 +4,7 @@ import { Crew as PrismaCrew } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 import { AsyncMaybe } from '@shared/core/logic/maybe';
 
-const parseCrew = (crew: PrismaCrew): ICrew => {
+export const parseCrew = (crew: PrismaCrew): ICrew => {
   return new Crew(crew, {
     id: crew.id,
     createdAt: crew.createdAt,

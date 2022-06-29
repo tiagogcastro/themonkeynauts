@@ -4,6 +4,8 @@ import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
 import { Ship as PrismaShip } from '@prisma/client';
 import { prisma } from '@shared/infra/database/prisma/client';
 import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { parseCrew } from '@modules/crews/infra/database/prisma/repositories/prisma-crews-repositories';
+import { ICrew } from '@modules/crews/domain/entities/crew';
 
 const parseShip = (ship: PrismaShip): IShip => {
   return new Ship(ship, {
@@ -22,10 +24,13 @@ class PrismaShipsRepository implements IShipsRepository {
     });
   }
 
-  async findById(shipId: string): AsyncMaybe<IShip> {
+  async findById(shipId: string): AsyncMaybe<IShip & { crews: ICrew[] }> {
     const ship = await prisma.ship.findUnique({
       where: {
         id: shipId,
+      },
+      include: {
+        crews: true,
       },
     });
 
@@ -33,17 +38,25 @@ class PrismaShipsRepository implements IShipsRepository {
       return null;
     }
 
-    return parseShip(ship);
+    const { crews, ...shipRest } = ship;
+
+    return {
+      ...parseShip(shipRest),
+      crews: crews.map(parseCrew),
+    };
   }
 
   async findByIdAndPlayerId(
     shipId: string,
     playerId: string,
-  ): AsyncMaybe<IShip> {
+  ): AsyncMaybe<IShip & { crews: ICrew[] }> {
     const ship = await prisma.ship.findFirst({
       where: {
         id: shipId,
         playerId,
+      },
+      include: {
+        crews: true,
       },
     });
 
@@ -51,7 +64,12 @@ class PrismaShipsRepository implements IShipsRepository {
       return null;
     }
 
-    return parseShip(ship);
+    const { crews, ...shipRest } = ship;
+
+    return {
+      ...parseShip(shipRest),
+      crews: crews.map(parseCrew),
+    };
   }
 
   async save(ship: Ship): Promise<void> {
@@ -87,20 +105,49 @@ class PrismaShipsRepository implements IShipsRepository {
     });
   }
 
-  async listAllShips(): Promise<IShip[]> {
-    const ships = await prisma.ship.findMany();
+  async listAllShips(): Promise<
+    (IShip & {
+      crews: ICrew[];
+    })[]
+  > {
+    const ships = await prisma.ship.findMany({
+      include: {
+        crews: true,
+      },
+    });
 
-    return ships.map(parseShip);
+    return ships.map(ship => {
+      const { crews, ...shipRest } = ship;
+
+      return {
+        ...parseShip(shipRest),
+        crews: crews.map(parseCrew),
+      };
+    });
   }
 
-  async listAllShipsFromPlayer(playerId: string): Promise<IShip[]> {
+  async listAllShipsFromPlayer(playerId: string): Promise<
+    (IShip & {
+      crews: ICrew[];
+    })[]
+  > {
     const ships = await prisma.ship.findMany({
       where: {
         playerId,
       },
+      include: {
+        crews: true,
+      },
     });
 
-    return ships.map(parseShip);
+    return ships.map(ship => {
+      const { crews, ...shipRest } = ship;
+
+      return {
+        ...parseShip(shipRest),
+        crews: crews.map(parseCrew),
+      };
+    });
   }
 }
 
