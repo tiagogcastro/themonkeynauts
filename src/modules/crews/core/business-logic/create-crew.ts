@@ -83,8 +83,6 @@ class CreateCrewBusinessLogic {
 
     await this.crewsRepository.create(crew);
 
-    await this.shipsRespository.save(foundShip);
-
     const { log } = new Log({
       action: `Crew has created on player account. CREW_ID: ${crew.id}`,
       playerId,
