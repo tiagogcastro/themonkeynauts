@@ -152,8 +152,6 @@ class CreateMonkeynautBusinessLogic {
       getBonusValueByRoleAndRank()[roleRarity][rankRarity];
 
     const { monkeynaut } = new Monkeynaut({
-      avatar: null,
-
       ...baseAttributes,
 
       ...attributes,

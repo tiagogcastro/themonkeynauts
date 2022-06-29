@@ -9,8 +9,6 @@ type UpdateMonkeynautRequestDTO = {
   role?: MonkeynautRole;
   rank?: MonkeynautRank;
 
-  avatar?: string;
-
   energy?: number;
   maxEnergy?: number;
 

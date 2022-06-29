@@ -205,14 +205,14 @@ saleEventsRouter.post(
               'MAJOR',
               'RANDOM',
             ),
-            class: Joi.string().valid('RANDOM'),
+            role: Joi.string().valid('RANDOM'),
           }),
         }),
         ship: Joi.alternatives().conditional('type', {
           is: 'SHIP',
           then: Joi.object({
             rank: Joi.string().valid('A', 'B', 'S', 'RANDOM'),
-            class: Joi.string().valid('RANDOM'),
+            role: Joi.string().valid('RANDOM'),
           }),
         }),
         pack: Joi.alternatives().conditional('type', {

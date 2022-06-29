@@ -12,7 +12,6 @@ type MonkeynautPropsOmittedCommons = {
   bonusDescription: string;
   maxEnergy: number;
   energy: number;
-  avatar: Maybe<string>;
   basePower: number;
   baseSpeed: number;
   baseResistence: number;
@@ -53,7 +52,6 @@ export class Monkeynaut implements IMonkeynaut {
       bonusDescription: this._props.bonusDescription,
       maxEnergy: this._props.maxEnergy,
       energy: this._props.energy,
-      avatar: this._props.avatar,
       basePower: this._props.basePower,
       baseSpeed: this._props.baseSpeed,
       baseResistence: this._props.baseResistence,
@@ -113,10 +111,6 @@ export class Monkeynaut implements IMonkeynaut {
 
   get energy(): number {
     return this._props.energy;
-  }
-
-  get avatar(): Maybe<string> {
-    return this._props.avatar;
   }
 
   get basePower(): number {
