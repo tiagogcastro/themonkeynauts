@@ -114,10 +114,10 @@ class BuySaleItemBusinessLogic {
       }
 
       const monkeynautRank = await rarity({
-        private: monkeynautSale.private,
-        sergeant: monkeynautSale.sergeant,
-        captain: monkeynautSale.captain,
-        major: monkeynautSale.major,
+        Private: monkeynautSale.private,
+        Sergeant: monkeynautSale.sergeant,
+        Captain: monkeynautSale.captain,
+        Major: monkeynautSale.major,
       });
 
       const confirmTransactionResult =
@@ -179,9 +179,9 @@ class BuySaleItemBusinessLogic {
       }
 
       const shipRank = await rarity({
-        a: shipSale.rankA,
-        b: shipSale.rankB,
-        s: shipSale.rankS,
+        A: shipSale.rankA,
+        B: shipSale.rankB,
+        S: shipSale.rankS,
       });
 
       const confirmTransactionResult =
@@ -257,13 +257,13 @@ class BuySaleItemBusinessLogic {
       }
 
       const packs: Record<PackType, Pack> = {
-        BASIC: {
+        Basic: {
           monkeynauts: [
             {
-              rank: MonkeynautRank.SERGEANT,
+              rank: MonkeynautRank.Sergeant,
             },
             {
-              rank: MonkeynautRank.SERGEANT,
+              rank: MonkeynautRank.Sergeant,
             },
           ],
           ships: [
@@ -272,16 +272,16 @@ class BuySaleItemBusinessLogic {
             },
           ],
         },
-        ADVANCED: {
+        Advanced: {
           monkeynauts: [
             {
-              rank: MonkeynautRank.CAPTAIN,
+              rank: MonkeynautRank.Captain,
             },
             {
-              rank: MonkeynautRank.CAPTAIN,
+              rank: MonkeynautRank.Captain,
             },
             {
-              rank: MonkeynautRank.CAPTAIN,
+              rank: MonkeynautRank.Captain,
             },
           ],
           ships: [
@@ -290,19 +290,19 @@ class BuySaleItemBusinessLogic {
             },
           ],
         },
-        EXPERT: {
+        Expert: {
           monkeynauts: [
             {
-              rank: MonkeynautRank.MAJOR,
+              rank: MonkeynautRank.Major,
             },
             {
-              rank: MonkeynautRank.MAJOR,
+              rank: MonkeynautRank.Major,
             },
             {
-              rank: MonkeynautRank.MAJOR,
+              rank: MonkeynautRank.Major,
             },
             {
-              rank: MonkeynautRank.MAJOR,
+              rank: MonkeynautRank.Major,
             },
           ],
           ships: [
@@ -311,15 +311,15 @@ class BuySaleItemBusinessLogic {
             },
           ],
         },
-        RANDOM: {
+        Random: {
           monkeynauts: [
             {
               rank: await (async () => {
                 const monkeynautRank = await rarity({
-                  private: 50,
-                  sergeant: 30,
-                  captain: 18,
-                  major: 2,
+                  Private: 50,
+                  Sergeant: 30,
+                  Captain: 18,
+                  Major: 2,
                 });
 
                 return monkeynautRank as MonkeynautRank;
@@ -328,10 +328,10 @@ class BuySaleItemBusinessLogic {
             {
               rank: await (async () => {
                 const monkeynautRank = await rarity({
-                  private: 50,
-                  sergeant: 30,
-                  captain: 18,
-                  major: 2,
+                  Private: 50,
+                  Sergeant: 30,
+                  Captain: 18,
+                  Major: 2,
                 });
 
                 return monkeynautRank as MonkeynautRank;
@@ -342,9 +342,9 @@ class BuySaleItemBusinessLogic {
             {
               rank: await (async () => {
                 const shipRank = await rarity({
-                  b: 55,
-                  a: 33,
-                  s: 12,
+                  B: 55,
+                  A: 33,
+                  S: 12,
                 });
 
                 return shipRank as ShipRank;

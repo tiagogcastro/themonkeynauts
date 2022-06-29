@@ -14,9 +14,9 @@ class CreateSaleController {
     const createSaleBusinessLogic = container.resolve(CreateSaleBusinessLogic);
 
     const Sale = {
-      MONKEYNAUT: CreateMonkeynautSaleBusinessLogic,
-      SHIP: CreateShipSaleBusinessLogic,
-      PACK: CreatePackSaleBusinessLogic,
+      Monkeynaut: CreateMonkeynautSaleBusinessLogic,
+      Ship: CreateShipSaleBusinessLogic,
+      Pack: CreatePackSaleBusinessLogic,
     }[data.type];
 
     const createdSale = await createSaleBusinessLogic.execute({

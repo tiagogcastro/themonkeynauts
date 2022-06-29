@@ -10,11 +10,9 @@ type RarityData = {
   [key: string]: number;
 };
 
-type Response<T> = Uppercase<keyof T & string>;
-
 export async function rarity<T extends RarityData>(
   rarityData: T,
-): Promise<Response<T>> {
+): Promise<keyof T & string> {
   // const big = new BigDecimal(100).subtract(new BigDecimal(99.99));
 
   const _rarityPercentages = Object.values(rarityData);
@@ -102,5 +100,5 @@ export async function rarity<T extends RarityData>(
     reject(new AppError('Could not generate a rarity', 409));
   });
 
-  return rarityKey.toUpperCase() as Response<T>;
+  return rarityKey;
 }

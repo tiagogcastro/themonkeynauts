@@ -18,7 +18,7 @@ export default async function ensureAdministrator(
 
   if (!player) throw new AppError('Player does not exist', 401);
 
-  if (player.role !== PlayerRole.ADMIN)
+  if (player.role !== PlayerRole.Admin)
     throw new AppError('Only administrator can access here', 401);
 
   return next();

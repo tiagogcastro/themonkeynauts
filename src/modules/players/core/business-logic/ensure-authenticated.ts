@@ -90,7 +90,7 @@ export class EnsureAuthenticatedBusinessLogic {
       throw new AppError('User does not exist', 403);
     }
 
-    if (foundPlayer.role !== 'ADMIN') {
+    if (foundPlayer.role !== 'Admin') {
       if (!foundPlayer.isEnabled) {
         throw new AppError('User does not have an activated account', 403);
       }

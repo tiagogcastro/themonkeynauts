@@ -853,13 +853,11 @@ const generateSpaceName = async () => {
 
   const spaceNameGeneratedInt = getRandomInt(0, spaceNames.length - 1);
 
-  const spaceNamesRarity = (
-    await rarity({
-      ...spaceNamesAsObject,
-      [spaceNames[spaceNameGeneratedInt]]:
-        spaceNamePercentage + spaceNameTotalRest,
-    })
-  ).toLowerCase() as SpaceNames;
+  const spaceNamesRarity = (await rarity({
+    ...spaceNamesAsObject,
+    [spaceNames[spaceNameGeneratedInt]]:
+      spaceNamePercentage + spaceNameTotalRest,
+  })) as SpaceNames;
 
   return spaceNamesRarity;
 };

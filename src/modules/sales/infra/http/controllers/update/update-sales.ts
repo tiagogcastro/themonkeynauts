@@ -14,9 +14,9 @@ class UpdateSaleController {
     const updateSaleBusinessLogic = container.resolve(UpdateSaleBusinessLogic);
 
     const Sale = {
-      MONKEYNAUT: UpdateMonkeynautSaleBusinessLogic,
-      SHIP: UpdateShipSaleBusinessLogic,
-      PACK: UpdatePackSaleBusinessLogic,
+      Monkeynaut: UpdateMonkeynautSaleBusinessLogic,
+      Ship: UpdateShipSaleBusinessLogic,
+      Pack: UpdatePackSaleBusinessLogic,
     }[data.type];
 
     const updatedSale = await updateSaleBusinessLogic.execute({

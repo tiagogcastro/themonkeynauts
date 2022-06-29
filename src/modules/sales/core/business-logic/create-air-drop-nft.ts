@@ -44,14 +44,14 @@ type CreateAirDropNftResponse = Either<
 
 export type CreateAirDropNftRequestDTO = {
   email: string;
-  type: 'MONKEYNAUT' | 'SHIP' | 'PACK';
+  type: 'Monkeynaut' | 'Ship' | 'Pack';
   monkeynaut?: {
-    rank?: MonkeynautRank | 'RANDOM';
-    role?: 'RANDOM';
+    rank?: MonkeynautRank | 'Random';
+    role?: 'Random';
   };
   ship?: {
-    rank?: ShipRank | 'RANDOM';
-    role?: 'RANDOM';
+    rank?: ShipRank | 'Random';
+    role?: 'Random';
   };
 };
 
@@ -74,12 +74,12 @@ export class CreateAirDropNftBusinessLogic {
   async execute({
     email,
     monkeynaut = {
-      role: 'RANDOM',
-      rank: 'RANDOM',
+      role: 'Random',
+      rank: 'Random',
     },
     ship = {
-      role: 'RANDOM',
-      rank: 'RANDOM',
+      role: 'Random',
+      rank: 'Random',
     },
     type,
   }: CreateAirDropNftRequestDTO): Promise<CreateAirDropNftResponse> {
@@ -110,7 +110,7 @@ export class CreateAirDropNftBusinessLogic {
       await repository.logs.create(log);
     }
 
-    if (type === 'MONKEYNAUT') {
+    if (type === 'Monkeynaut') {
       const createMonkeynautLogic = new CreateMonkeynautBusinessLogic(
         repository.monkeynauts,
         repository.players,
@@ -120,11 +120,11 @@ export class CreateAirDropNftBusinessLogic {
       let roleRarity = monkeynaut?.role as MonkeynautRole;
       let rankRarity = monkeynaut?.rank as MonkeynautRank;
 
-      if (monkeynaut?.role === 'RANDOM') {
+      if (monkeynaut?.role === 'Random') {
         roleRarity = (await getRoleByRarity()) as MonkeynautRole;
       }
 
-      if (monkeynaut?.rank === 'RANDOM') {
+      if (monkeynaut?.rank === 'Random') {
         rankRarity = (await getRankByRarity()) as MonkeynautRank;
       }
       const monkeynautCreated = await createMonkeynautLogic.execute({
@@ -141,7 +141,7 @@ export class CreateAirDropNftBusinessLogic {
       });
     }
 
-    if (type === 'SHIP') {
+    if (type === 'Ship') {
       const createShipLogic = new CreateShipBusinessLogic(
         repository.ships,
         repository.players,
@@ -151,11 +151,11 @@ export class CreateAirDropNftBusinessLogic {
       let roleRarity = ship?.role as ShipRole;
       let rankRarity = ship?.rank as ShipRank;
 
-      if (ship?.role === 'RANDOM') {
+      if (ship?.role === 'Random') {
         roleRarity = (await getShipRoleByRarity()) as ShipRole;
       }
 
-      if (ship?.rank === 'RANDOM') {
+      if (ship?.rank === 'Random') {
         rankRarity = (await getShipRankByRarity()) as ShipRank;
       }
       const shipCreated = await createShipLogic.execute({
@@ -194,7 +194,7 @@ export class CreateAirDropNftBusinessLogic {
       return _ship;
     }
 
-    if (type === 'PACK') {
+    if (type === 'Pack') {
       const createMonkeynautLogic = new CreateMonkeynautBusinessLogic(
         repository.monkeynauts,
         repository.players,

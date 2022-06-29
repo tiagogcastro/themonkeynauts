@@ -32,28 +32,6 @@ privateSalesRouter.post(
   adaptRoute(createPrivateSaleController),
 );
 
-privateSalesRouter.post(
-  '/admins/create-private-sale',
-  ensureAuthenticated,
-  ensureAdministrator,
-  celebrate(
-    {
-      [Segments.BODY]: {
-        wallet: Joi.string().required(),
-        bnbAmount: Joi.number()
-          .required()
-          .min(balanceConfig.bnbAmountMin)
-          .max(balanceConfig.bnbAmountMax),
-        txHash: Joi.string().required().min(66).max(66),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
-  adaptRoute(createPrivateSaleController),
-);
-
 privateSalesRouter.get(
   '/show-player-bnb-balance',
   ensureAuthenticated,

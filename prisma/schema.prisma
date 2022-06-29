@@ -78,7 +78,7 @@ model Monkeynaut {
   player   Player? @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
 
   name             String
-  role             String @default("SOLDIER")
+  role             String @default("Soldier")
   rank             String
   bonusValue       Int
   bonusDescription String
@@ -135,7 +135,7 @@ model Ship {
   activePlayerShip Player?
 
   name             String
-  role             String @default("FIGHTER")
+  role             String @default("Fighter")
   rank             String
   bonusValue       Int
   bonusDescription String
@@ -259,7 +259,7 @@ model PackSale {
   currentQuantityAvailable Int       @default(0)
   totalUnitsSold           Int       @default(0)
 
-  type String @default("BASIC")
+  type String @default("Basic")
 
   active Boolean @default(true)
 
@@ -295,4 +295,15 @@ model InitBountyHuntToken {
   updatedAt DateTime @updatedAt
 
   @@map("init_bounty_hunt_tokens")
+}
+
+model GameParam {
+  id String @id @db.Uuid()
+
+  gameClientVersion String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("game_params")
 }

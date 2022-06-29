@@ -9,9 +9,9 @@ import { saveWalletController } from '../controllers/save-wallet';
 import { withdrawTokensController } from '../controllers/withdraw-tokens';
 import { ensureWalletMiddleware } from '../middlewares/ensure-wallet';
 
-const adminPlayersRouter = Router();
+const _playersRouter = Router();
 
-adminPlayersRouter.patch(
+_playersRouter.patch(
   '/ban-unban-player',
   celebrate(
     {
@@ -27,7 +27,7 @@ adminPlayersRouter.patch(
   adaptRoute(banUnbanPlayerController),
 );
 
-adminPlayersRouter.post(
+_playersRouter.post(
   '/withdraw-tokens',
   celebrate({
     [Segments.BODY]: {
@@ -39,7 +39,7 @@ adminPlayersRouter.post(
   adaptRoute(withdrawTokensController),
 );
 
-adminPlayersRouter.post(
+_playersRouter.post(
   '/deposit-tokens',
   celebrate({
     [Segments.BODY]: {
@@ -51,7 +51,7 @@ adminPlayersRouter.post(
   adaptRoute(depositTokensController),
 );
 
-adminPlayersRouter.patch(
+_playersRouter.patch(
   '/save-wallet',
   celebrate(
     {
@@ -67,7 +67,7 @@ adminPlayersRouter.patch(
   (request, response) => saveWalletController.handle(request, response),
 );
 
-adminPlayersRouter.patch(
+_playersRouter.patch(
   '/disable-enable-player',
   celebrate({
     [Segments.BODY]: {
@@ -77,6 +77,6 @@ adminPlayersRouter.patch(
   adaptRoute(disableEnablePlayerController),
 );
 
-adminPlayersRouter.use('/players', adminPlayersRouter);
+_playersRouter.use('/players', _playersRouter);
 
-export { adminPlayersRouter };
+export { _playersRouter };

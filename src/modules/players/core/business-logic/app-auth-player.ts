@@ -46,7 +46,7 @@ export class AppPlayerAuthBusinessLogic {
       throw new AppError('Player does not exist', 403);
     }
 
-    if (player.role !== 'ADMIN') {
+    if (player.role !== 'Admin') {
       if (!player.isEnabled) {
         throw new AppError('The user is disabled', 403);
       }

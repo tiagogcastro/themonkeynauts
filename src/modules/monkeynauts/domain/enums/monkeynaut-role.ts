@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-shadow
 enum MonkeynautRole {
-  SOLDIER = 'SOLDIER',
-  ENGINEER = 'ENGINEER',
-  SCIENTIST = 'SCIENTIST',
+  Soldier = 'Soldier',
+  Engineer = 'Engineer',
+  Scientist = 'Scientist',
 }
 
 export { MonkeynautRole };

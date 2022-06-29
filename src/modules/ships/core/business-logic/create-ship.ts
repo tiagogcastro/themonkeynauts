@@ -49,20 +49,18 @@ class CreateShipBusinessLogic {
 
     const percentage = 100 / 3;
 
-    const _role =
-      role ||
-      (await rarity<Record<Lowercase<ShipRole>, number>>({
-        explorer: percentage,
-        miner: percentage,
-        fighter: percentage,
-      }));
+    const _role = await rarity<Record<ShipRole, number>>({
+      Explorer: percentage,
+      Miner: percentage,
+      Fighter: percentage,
+    });
 
     const _rank =
       rank ||
-      (await rarity<Record<Lowercase<ShipRank>, number>>({
-        a: 50,
-        b: 35,
-        s: 15,
+      (await rarity<Record<ShipRank, number>>({
+        A: 50,
+        B: 35,
+        S: 15,
       }));
 
     const _name = name || (await generateSpaceName());
@@ -84,17 +82,17 @@ class CreateShipBusinessLogic {
     };
 
     const bonusValueSchema: Record<ShipRole, Record<ShipRank, number>> = {
-      FIGHTER: {
+      Fighter: {
         A: 30,
         B: 60,
         S: 100,
       },
-      MINER: {
+      Miner: {
         A: 15,
         B: 30,
         S: 50,
       },
-      EXPLORER: {
+      Explorer: {
         A: 15,
         B: 30,
         S: 50,
@@ -104,9 +102,9 @@ class CreateShipBusinessLogic {
     const _bonusDescription =
       bonusDescription ||
       {
-        FIGHTER: 'Bounty Hunt Damage',
-        MINER: 'Mining Success Rate',
-        EXPLORER: 'Mission Time',
+        Fighter: 'Bounty Hunt Damage',
+        Miner: 'Mining Success Rate',
+        Explorer: 'Mission Time',
       }[_role];
 
     const _crewCapacity = crewCapacity ?? crewCapacitySchema[_rank];

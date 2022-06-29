@@ -12,7 +12,7 @@ const main = async () => {
   await createPlayerBusinessLogic.execute({
     nickname: process.env.ADMIN_NICKNAME || '*****',
     email: process.env.ADMIN_EMAIL || '******@*****.****',
-    role: PlayerRole.ADMIN,
+    role: PlayerRole.Admin,
     password: process.env.ADMIN_PASS || '********',
   });
 };

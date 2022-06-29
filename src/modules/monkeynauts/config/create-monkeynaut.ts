@@ -12,19 +12,19 @@ type GetAttributesByBase = AttributesBase & {
 };
 
 const ranksPercentageToBonus = {
-  PRIVATE: 0,
-  SERGEANT: 25,
-  CAPTAIN: 50,
-  MAJOR: 75,
+  Private: 0,
+  Sergeant: 25,
+  Captain: 50,
+  Major: 75,
 };
 
 // Add rank and base * percentage
 function getRanksByBase(base: number) {
   return {
-    PRIVATE: base * 0,
-    SERGEANT: base * 0.1,
-    CAPTAIN: base * 0.2,
-    MAJOR: base * 0.3,
+    Private: base * 0,
+    Sergeant: base * 0.1,
+    Captain: base * 0.2,
+    Major: base * 0.3,
   };
 }
 
@@ -34,9 +34,9 @@ function getRanksSchema({
   baseSpeed,
 }: AttributesBase) {
   return {
-    SOLDIER: getRanksByBase(basePower),
-    ENGINEER: getRanksByBase(baseResistence),
-    SCIENTIST: getRanksByBase(baseSpeed),
+    Soldier: getRanksByBase(basePower),
+    Engineer: getRanksByBase(baseResistence),
+    Scientist: getRanksByBase(baseSpeed),
   };
 }
 
@@ -46,26 +46,26 @@ function getRoleSchema({
   baseSpeed,
 }: AttributesBase) {
   return {
-    SOLDIER: basePower * 0.1,
-    ENGINEER: baseResistence * 0.2,
-    SCIENTIST: baseSpeed * 0.3,
+    Soldier: basePower * 0.1,
+    Engineer: baseResistence * 0.2,
+    Scientist: baseSpeed * 0.3,
   };
 }
 
 async function getRoleByRarity() {
   return rarity({
-    soldier: 40,
-    engineer: 30,
-    scientist: 30,
+    Soldier: 40,
+    Engineer: 30,
+    Scientist: 30,
   });
 }
 
 async function getRankByRarity() {
   return rarity({
-    private: 50,
-    sergeant: 30,
-    captain: 15,
-    major: 5,
+    Private: 50,
+    Sergeant: 30,
+    Captain: 15,
+    Major: 5,
   });
 }
 
@@ -106,17 +106,17 @@ function getAttributesByBase({
 }
 
 const bonusRanksValue = {
-  PRIVATE: 0,
-  SERGEANT: 5,
-  CAPTAIN: 10,
-  MAJOR: 15,
+  Private: 0,
+  Sergeant: 5,
+  Captain: 10,
+  Major: 15,
 };
 
 function getBonusValueByRoleAndRank() {
   return {
-    SOLDIER: bonusRanksValue,
-    ENGINEER: bonusRanksValue,
-    SCIENTIST: bonusRanksValue,
+    Soldier: bonusRanksValue,
+    Engineer: bonusRanksValue,
+    Scientist: bonusRanksValue,
   };
 }
 

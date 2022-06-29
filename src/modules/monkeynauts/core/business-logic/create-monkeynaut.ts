@@ -79,10 +79,10 @@ class CreateMonkeynautBusinessLogic {
     const rankRarity = _rank || (await getRankByRarity());
 
     const maxEnergyBasedOnRank = {
-      PRIVATE: 2,
-      SERGEANT: 4,
-      CAPTAIN: 6,
-      MAJOR: 8,
+      Private: 2,
+      Sergeant: 4,
+      Captain: 6,
+      Major: 8,
     };
 
     const maxEnergyBase = maxEnergy || maxEnergyBasedOnRank[rankRarity];
@@ -118,19 +118,19 @@ class CreateMonkeynautBusinessLogic {
     const finalRankValue = ranksSchema[roleRarity][rankRarity];
     const finalroleValue = roleSchema[roleRarity];
 
-    if (rankRarity !== 'PRIVATE') {
+    if (rankRarity !== 'Private') {
       switch (roleRarity) {
-        case 'SOLDIER':
+        case 'Soldier':
           attributes.power = Math.floor(
             baseAttributes.basePower + finalRankValue + finalroleValue,
           );
           break;
-        case 'ENGINEER':
+        case 'Engineer':
           attributes.resistence = Math.floor(
             baseAttributes.baseResistence + finalRankValue + finalroleValue,
           );
           break;
-        case 'SCIENTIST':
+        case 'Scientist':
           attributes.speed = Math.floor(
             baseAttributes.baseSpeed + finalRankValue + finalroleValue,
           );
@@ -143,9 +143,9 @@ class CreateMonkeynautBusinessLogic {
     const _name = name || faker.name.findName();
 
     const bonusDescriptionBaseadRole = {
-      SOLDIER: 'Bounty Hunting Rewards',
-      ENGINEER: 'Mining Rewards',
-      SCIENTIST: 'Exploration Rewards',
+      Soldier: 'Bounty Hunting Rewards',
+      Engineer: 'Mining Rewards',
+      Scientist: 'Exploration Rewards',
     };
 
     const bonusValueBaseadRank =

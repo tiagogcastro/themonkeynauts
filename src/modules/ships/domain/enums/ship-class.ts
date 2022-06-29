@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-shadow
 enum ShipClass {
-  FIGHTER = 'FIGHTER',
-  MINER = 'MINER',
-  EXPLORER = 'EXPLORER',
+  Fighter = 'Fighter',
+  Miner = 'Miner',
+  Explorer = 'Explorer',
 }
 
-type TypeShipClass = 'FIGHTER' | 'MINER' | 'EXPLORER';
+type TypeShipClass = 'Fighter' | 'Miner' | 'Explorer';
 
 export { ShipClass, TypeShipClass };

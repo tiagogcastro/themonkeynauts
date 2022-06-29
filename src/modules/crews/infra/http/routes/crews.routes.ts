@@ -48,7 +48,6 @@ crewsRouter.post(
   celebrate(
     {
       [Segments.BODY]: {
-        playerId: Joi.string().uuid(),
         shipId: Joi.string().uuid().required(),
         monkeynautId: Joi.string().uuid().required(),
       },
@@ -66,7 +65,6 @@ crewsRouter.delete(
   celebrate(
     {
       [Segments.QUERY]: {
-        playerId: Joi.string().uuid(),
         monkeynautId: Joi.string().uuid().required(),
       },
     },

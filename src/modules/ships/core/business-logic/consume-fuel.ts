@@ -31,8 +31,8 @@ class ConsumeFuelBusinessLogic {
     const minutes = this.dateProvider.getMinutes(new Date());
 
     const consumeFuelSchema = {
-      TRAVEL: 100,
-      BOUNTY_HUNT: 100,
+      Travel: 100,
+      BountyHunt: 100,
     };
 
     const _ship = await this.shipsRepository.findById(shipId);

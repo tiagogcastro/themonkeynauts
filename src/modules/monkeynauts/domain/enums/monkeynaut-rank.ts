@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-shadow
 enum MonkeynautRank {
-  PRIVATE = 'PRIVATE',
-  SERGEANT = 'SERGEANT',
-  CAPTAIN = 'CAPTAIN',
-  MAJOR = 'MAJOR',
+  Private = 'Private',
+  Sergeant = 'Sergeant',
+  Captain = 'Captain',
+  Major = 'Major',
 }
 
-type TypeMonkeynautRank = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
+type TypeMonkeynautRank = 'Private' | 'Sergeant' | 'Captain' | 'Major';
 
 export { MonkeynautRank, TypeMonkeynautRank };

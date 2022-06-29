@@ -45,7 +45,7 @@ class CreatePlayerBusinessLogic {
   async execute({
     email,
     nickname,
-    role = PlayerRole.DEFAULT,
+    role = PlayerRole.Default,
     password,
   }: CreatePlayerRequestDTO): Promise<Response> {
     const foundPlayer = await this.playersRepository.findByEmail(email);
