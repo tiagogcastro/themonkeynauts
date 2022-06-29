@@ -10,6 +10,7 @@ import { _playersRouter } from '@modules/players/infra/http/routes/_players.rout
 import { privateSalesRouter } from '@modules/private-sales/infra/http/routes/private-sales.routes';
 import { _privateSalesRouter } from '@modules/private-sales/infra/http/routes/_private-sales.routes';
 import { saleEventsRouter } from '@modules/sales/infra/http/routes/sale-events.routes';
+import { _saleEventsRouter } from '@modules/sales/infra/http/routes/_sale-events.routes';
 import { shipsRouter } from '@modules/ships/infra/http/routes/ships.routes';
 import { _shipsRouter } from '@modules/ships/infra/http/routes/_ships.routes';
 import { Router } from 'express';
@@ -28,6 +29,7 @@ router.use('/admins', ensureAuthenticated, ensureAdministrator, [
   _shipsRouter,
   _monkeynautsRouter,
   _logsRouter,
+  _saleEventsRouter,
 ]);
 
 router.use('/monkeynauts', monkeynautsRouter);

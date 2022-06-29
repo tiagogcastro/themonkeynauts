@@ -1,9 +1,7 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 
-import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
-import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
-
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { createMonkeynautController } from '../controllers/create-monkeynaut';
 
 import { updateMonkeynautController } from '../controllers/update-monkeynaut';
@@ -46,7 +44,7 @@ _monkeynautsRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) => createMonkeynautController.handle(request, response),
+  adaptRoute(createMonkeynautController),
 );
 
 _monkeynautsRouter.put(

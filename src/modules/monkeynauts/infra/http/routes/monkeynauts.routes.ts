@@ -1,14 +1,9 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 
-import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 
-import { createMonkeynautController } from '../controllers/create-monkeynaut';
-
 import { listMonkeynautsController } from '../controllers/list-monkeynauts';
-
-import { updateMonkeynautController } from '../controllers/update-monkeynaut';
 
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';
 import { changePlayerOwnerMonkeynautController } from '../controllers/change-player-owner-monkeynaut';

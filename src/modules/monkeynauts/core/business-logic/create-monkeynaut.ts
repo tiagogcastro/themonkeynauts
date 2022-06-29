@@ -26,13 +26,23 @@ import { AppError } from '@shared/errors/app-error';
 
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { InvalidMonkeynautShipQuantityError } from '@modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
+import { Either, left, right } from '@shared/core/logic/either';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
+type CreateMonkeynautResponse = Either<
+  InvalidMonkeynautShipQuantityError,
+  IMonkeynaut
+>;
 @injectable()
 class CreateMonkeynautBusinessLogic {
   constructor(
     @inject('MonkeynautsRepository')
     private monkeynautsRepository: IMonkeynautsRepository,
+
+    @inject('ShipsRepository')
+    private shipsRepository: IShipsRepository,
 
     @inject('PlayersRepository')
     private playersRepository: IPlayersRepository,
@@ -59,7 +69,7 @@ class CreateMonkeynautBusinessLogic {
 
     playerId,
     ownerId,
-  }: CreateMonkeynautRequestDTO): Promise<IMonkeynaut> {
+  }: CreateMonkeynautRequestDTO): Promise<CreateMonkeynautResponse> {
     const foundOwnerMonkeynautPlayer = await this.playersRepository.findById(
       ownerId,
     );
@@ -73,6 +83,14 @@ class CreateMonkeynautBusinessLogic {
       if (!foundPlayer) {
         throw new AppError('playerId field informed does not exist', 404);
       }
+    }
+
+    const ships = await this.shipsRepository.listAllShipsFromPlayer(
+      playerId || ownerId,
+    );
+
+    if (ships.length === 0) {
+      return left(new InvalidMonkeynautShipQuantityError());
     }
 
     const roleRarity = _role || (await getRoleByRarity());
@@ -183,7 +201,7 @@ class CreateMonkeynautBusinessLogic {
 
     await this.logsRepository.create(log);
 
-    return monkeynaut;
+    return right(monkeynaut);
   }
 }
 

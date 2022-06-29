@@ -21,10 +21,15 @@ import { Either, left, right } from '@shared/core/logic/either';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
+import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { SaleIsEmptyError } from './errors/sale-is-empty-error';
 import { SaleNotFoundError } from './errors/sale-not-found-error';
 import { InvalidSaleStartDateError } from './errors/invalid-sale-start-date-error';
 import { InvalidSaleEndDateError } from './errors/invalid-sale-end-date-error';
+import { InvalidMonkeynautQuantityError } from './errors/invalid-monkeynaut-quantity-error';
+import { InvalidShipQuantityError } from './errors/invalid-ship-quantity-error';
+import { InvalidMonkeynautShipQuantityError } from './errors/invalid-monkeynaut-ship-quantity-error';
 
 type PackMonkeynaut = {
   rank: MonkeynautRank;
@@ -52,6 +57,12 @@ class BuySaleItemBusinessLogic {
 
     @inject('MonkeynautSalesRepository')
     private monkeynautSalesRepository: IMonkeynautSalesRepository,
+
+    @inject('MonkeynautsRepository')
+    private monkeynautsRepository: IMonkeynautsRepository,
+
+    @inject('ShipsRepository')
+    private shipsRepository: IShipsRepository,
 
     @inject('PackSalesRepository')
     private packSalesRepository: IPackSalesRepository,
@@ -89,7 +100,32 @@ class BuySaleItemBusinessLogic {
       return left(new PlayerNotFoundError());
     }
 
+    const ships = await this.shipsRepository.listAllShipsFromPlayer(player.id);
+
+    if (!player.hasAsteroid) {
+      if (ships.length === 1) {
+        const [ship] = ships;
+
+        const monkeynauts =
+          await this.monkeynautsRepository.listAllMonkeynautsFromPlayer(
+            player.id,
+          );
+
+        if (monkeynauts.length >= ship.crewCapacity) {
+          return left(new InvalidMonkeynautQuantityError());
+        }
+
+        if (shipSaleId || packSaleId) {
+          return left(new InvalidShipQuantityError());
+        }
+      }
+    }
+
     if (monkeynautSaleId) {
+      if (ships.length === 0) {
+        return left(new InvalidMonkeynautShipQuantityError());
+      }
+
       const monkeynautSale = await this.monkeynautSalesRepository.findById(
         monkeynautSaleId,
       );
@@ -356,7 +392,7 @@ class BuySaleItemBusinessLogic {
 
       const pack = packs[packSale.type];
 
-      const monkeynauts = pack.monkeynauts.map(monkeynaut => {
+      const monkeynautPromises = pack.monkeynauts.map(monkeynaut => {
         return this.createMonkeynautBusinessLogic.execute({
           ownerId: player.id,
           playerId: player.id,
@@ -364,7 +400,7 @@ class BuySaleItemBusinessLogic {
         });
       });
 
-      const ships = pack.ships.map(ship => {
+      const shipPromises = pack.ships.map(ship => {
         return this.createShipBusinessLogic.execute({
           ownerId: player.id,
           playerId: player.id,
@@ -372,7 +408,7 @@ class BuySaleItemBusinessLogic {
         });
       });
 
-      await Promise.all([...monkeynauts, ...ships]);
+      await Promise.all([...monkeynautPromises, ...shipPromises]);
 
       packSale.currentQuantityAvailable -= 1;
       packSale.totalUnitsSold += 1;
