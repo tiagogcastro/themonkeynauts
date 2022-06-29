@@ -1,2 +1,2 @@
-export * from './monkeynaut-class';
+export * from './monkeynaut-role';
 export * from './monkeynaut-rank';

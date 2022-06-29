@@ -12,9 +12,9 @@ import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-mon
 
 import {
   getAttributesByBase,
-  getBonusValueByClassAndRank,
-  getClassByRarity,
-  getClassSchema,
+  getBonusValueByRoleAndRank,
+  getRoleByRarity,
+  getRoleSchema,
   getRankByRarity,
   getRanksSchema,
   ranksPercentageToBonus,
@@ -47,7 +47,7 @@ class CreateMonkeynautBusinessLogic {
 
     breedCount,
 
-    class: _class,
+    role: _role,
     rank: _rank,
 
     energy,
@@ -75,7 +75,7 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
-    const classRarity = _class || (await getClassByRarity());
+    const roleRarity = _role || (await getRoleByRarity());
     const rankRarity = _rank || (await getRankByRarity());
 
     const maxEnergyBasedOnRank = {
@@ -113,26 +113,26 @@ class CreateMonkeynautBusinessLogic {
     });
 
     const ranksSchema = getRanksSchema(baseAttributes);
-    const classSchema = getClassSchema(baseAttributes);
+    const roleSchema = getRoleSchema(baseAttributes);
 
-    const finalRankValue = ranksSchema[classRarity][rankRarity];
-    const finalClassValue = classSchema[classRarity];
+    const finalRankValue = ranksSchema[roleRarity][rankRarity];
+    const finalroleValue = roleSchema[roleRarity];
 
     if (rankRarity !== 'PRIVATE') {
-      switch (classRarity) {
+      switch (roleRarity) {
         case 'SOLDIER':
           attributes.power = Math.floor(
-            baseAttributes.basePower + finalRankValue + finalClassValue,
+            baseAttributes.basePower + finalRankValue + finalroleValue,
           );
           break;
         case 'ENGINEER':
           attributes.resistence = Math.floor(
-            baseAttributes.baseResistence + finalRankValue + finalClassValue,
+            baseAttributes.baseResistence + finalRankValue + finalroleValue,
           );
           break;
         case 'SCIENTIST':
           attributes.speed = Math.floor(
-            baseAttributes.baseSpeed + finalRankValue + finalClassValue,
+            baseAttributes.baseSpeed + finalRankValue + finalroleValue,
           );
           break;
         default:
@@ -142,14 +142,14 @@ class CreateMonkeynautBusinessLogic {
 
     const _name = name || faker.name.findName();
 
-    const bonusDescriptionBaseadClass = {
+    const bonusDescriptionBaseadRole = {
       SOLDIER: 'Bounty Hunting Rewards',
       ENGINEER: 'Mining Rewards',
       SCIENTIST: 'Exploration Rewards',
     };
 
     const bonusValueBaseadRank =
-      getBonusValueByClassAndRank()[classRarity][rankRarity];
+      getBonusValueByRoleAndRank()[roleRarity][rankRarity];
 
     const { monkeynaut } = new Monkeynaut({
       avatar: null,
@@ -159,11 +159,11 @@ class CreateMonkeynautBusinessLogic {
       ...attributes,
 
       bonusDescription:
-        bonusDescription || bonusDescriptionBaseadClass[classRarity],
+        bonusDescription || bonusDescriptionBaseadRole[roleRarity],
       bonusValue: bonusValue || bonusValueBaseadRank,
       breedCount: breedCount || 0,
 
-      class: classRarity,
+      role: roleRarity,
       rank: rankRarity,
 
       energy: initialEnergyValue,

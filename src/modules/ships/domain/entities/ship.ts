@@ -6,7 +6,7 @@ type ShipPropsOmittedCommons = {
   ownerId: Maybe<string>;
   playerId: Maybe<string>;
   name: string;
-  class: string;
+  role: string;
   rank: string;
   bonusValue: number;
   bonusDescription: string;
@@ -43,7 +43,7 @@ export class Ship implements IShip {
       ownerId: this._props.ownerId,
       playerId: this._props.playerId,
       name: this._props.name,
-      class: this._props.class,
+      role: this._props.role,
       rank: this._props.rank,
       bonusValue: this._props.bonusValue,
       bonusDescription: this._props.bonusDescription,
@@ -83,8 +83,8 @@ export class Ship implements IShip {
     return this._props.name;
   }
 
-  get class(): string {
-    return this._props.class;
+  get role(): string {
+    return this._props.role;
   }
 
   get rank(): string {

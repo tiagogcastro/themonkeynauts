@@ -40,7 +40,7 @@ function getRanksSchema({
   };
 }
 
-function getClassSchema({
+function getRoleSchema({
   basePower,
   baseResistence,
   baseSpeed,
@@ -52,7 +52,7 @@ function getClassSchema({
   };
 }
 
-async function getClassByRarity() {
+async function getRoleByRarity() {
   return rarity({
     soldier: 40,
     engineer: 30,
@@ -112,7 +112,7 @@ const bonusRanksValue = {
   MAJOR: 15,
 };
 
-function getBonusValueByClassAndRank() {
+function getBonusValueByRoleAndRank() {
   return {
     SOLDIER: bonusRanksValue,
     ENGINEER: bonusRanksValue,
@@ -121,11 +121,11 @@ function getBonusValueByClassAndRank() {
 }
 
 export {
-  getClassByRarity,
+  getRoleByRarity,
   getRankByRarity,
   ranksPercentageToBonus,
   getAttributesByBase,
   getRanksSchema,
-  getClassSchema,
-  getBonusValueByClassAndRank,
+  getRoleSchema,
+  getBonusValueByRoleAndRank,
 };

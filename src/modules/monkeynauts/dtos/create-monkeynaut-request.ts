@@ -1,4 +1,4 @@
-import { MonkeynautClass, TypeMonkeynautRank } from '../domain/enums';
+import { MonkeynautRank, MonkeynautRole } from '../domain/enums';
 
 type CreateMonkeynautRequestDTO = {
   bonusDescription?: string;
@@ -6,8 +6,8 @@ type CreateMonkeynautRequestDTO = {
 
   breedCount?: number;
 
-  class?: MonkeynautClass;
-  rank?: TypeMonkeynautRank;
+  role?: MonkeynautRole;
+  rank?: MonkeynautRank;
 
   energy?: number;
   maxEnergy?: number;

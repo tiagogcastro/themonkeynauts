@@ -2,40 +2,40 @@ import { inject, injectable } from 'tsyringe';
 
 import { Either, left, right } from '@shared/core/logic/either';
 
-import { IPlayer } from '@modules/players/domain/entities/player';
 import { Log } from '@modules/logs/domain/entities/log';
-import { IShip } from '@modules/ships/domain/entities/ship';
 import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
+import { IPlayer } from '@modules/players/domain/entities/player';
+import { IShip } from '@modules/ships/domain/entities/ship';
 
-import { ShipRank, TypeShipRank } from '@modules/ships/domain/enums/ship-rank';
-import { TypeShipClass } from '@modules/ships/domain/enums/ship-class';
 import {
-  MonkeynautClass,
-  TypeMonkeynautRank,
+  MonkeynautRank,
+  MonkeynautRole,
 } from '@modules/monkeynauts/domain/enums';
+import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
 
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 
 import {
-  getClassByRarity,
   getRankByRarity,
+  getRoleByRarity,
 } from '@modules/monkeynauts/config/create-monkeynaut';
 import {
-  getShipClassByRarity,
   getShipRankByRarity,
+  getShipRoleByRarity,
 } from '@modules/ships/config/create-ship';
 
 import { CreateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
 import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
 
-import { AirDropNftTypeNotAllowed } from './errors/air-drop-nft-type-not-allowed';
+import { ShipRole } from '@modules/ships/domain/enums/ship-role';
+import { AirDropNftTypeNotAllowedError } from './errors/air-drop-nft-type-not-allowed-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 
 type CreateAirDropNftResponse = Either<
-  PlayerNotFoundError,
+  PlayerNotFoundError | AirDropNftTypeNotAllowedError,
   {
     monkeynauts: IMonkeynaut[] | null;
     ships: IShip[] | null;
@@ -46,12 +46,12 @@ export type CreateAirDropNftRequestDTO = {
   email: string;
   type: 'MONKEYNAUT' | 'SHIP' | 'PACK';
   monkeynaut?: {
-    rank?: TypeMonkeynautRank | 'RANDOM';
-    class?: 'RANDOM';
+    rank?: MonkeynautRank | 'RANDOM';
+    role?: 'RANDOM';
   };
   ship?: {
     rank?: ShipRank | 'RANDOM';
-    class?: 'RANDOM';
+    role?: 'RANDOM';
   };
 };
 
@@ -74,11 +74,11 @@ export class CreateAirDropNftBusinessLogic {
   async execute({
     email,
     monkeynaut = {
-      class: 'RANDOM',
+      role: 'RANDOM',
       rank: 'RANDOM',
     },
     ship = {
-      class: 'RANDOM',
+      role: 'RANDOM',
       rank: 'RANDOM',
     },
     type,
@@ -117,20 +117,20 @@ export class CreateAirDropNftBusinessLogic {
         repository.logs,
       );
 
-      let classRarity = monkeynaut?.class as MonkeynautClass;
-      let rankRarity = monkeynaut?.rank as TypeMonkeynautRank;
+      let roleRarity = monkeynaut?.role as MonkeynautRole;
+      let rankRarity = monkeynaut?.rank as MonkeynautRank;
 
-      if (monkeynaut?.class === 'RANDOM') {
-        classRarity = await getClassByRarity();
+      if (monkeynaut?.role === 'RANDOM') {
+        roleRarity = (await getRoleByRarity()) as MonkeynautRole;
       }
 
       if (monkeynaut?.rank === 'RANDOM') {
-        rankRarity = await getRankByRarity();
+        rankRarity = (await getRankByRarity()) as MonkeynautRank;
       }
       const monkeynautCreated = await createMonkeynautLogic.execute({
         ownerId: player.id,
         rank: rankRarity,
-        class: classRarity,
+        role: roleRarity as MonkeynautRole,
       });
 
       generateLogAfterCreate(`Sent 1 monkeynaut by air drop nft`);
@@ -148,20 +148,20 @@ export class CreateAirDropNftBusinessLogic {
         repository.logs,
       );
 
-      let classRarity = ship?.class as TypeShipClass;
-      let rankRarity = ship?.rank as TypeShipRank;
+      let roleRarity = ship?.role as ShipRole;
+      let rankRarity = ship?.rank as ShipRank;
 
-      if (ship?.class === 'RANDOM') {
-        classRarity = await getShipClassByRarity();
+      if (ship?.role === 'RANDOM') {
+        roleRarity = (await getShipRoleByRarity()) as ShipRole;
       }
 
       if (ship?.rank === 'RANDOM') {
-        rankRarity = await getShipRankByRarity();
+        rankRarity = (await getShipRankByRarity()) as ShipRank;
       }
       const shipCreated = await createShipLogic.execute({
         ownerId: player.id,
         rank: rankRarity,
-        class: classRarity,
+        role: roleRarity,
       });
 
       generateLogAfterCreate(`Sent 1 ship by air drop nft`);
@@ -240,6 +240,6 @@ export class CreateAirDropNftBusinessLogic {
       });
     }
 
-    return left(new AirDropNftTypeNotAllowed());
+    return left(new AirDropNftTypeNotAllowedError());
   }
 }

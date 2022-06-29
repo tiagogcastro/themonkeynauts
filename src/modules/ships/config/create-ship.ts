@@ -2,7 +2,7 @@ import { rarity } from '@shared/helpers';
 
 const percentage = 100 / 3;
 
-async function getShipClassByRarity() {
+async function getShipRoleByRarity() {
   return rarity({
     explorer: percentage,
     miner: percentage,
@@ -18,4 +18,4 @@ async function getShipRankByRarity() {
   });
 }
 
-export { getShipClassByRarity, getShipRankByRarity };
+export { getShipRoleByRarity, getShipRankByRarity };

@@ -1,13 +1,9 @@
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import {
-  getShipClassByRarity,
-  getShipRankByRarity,
-} from '@modules/ships/config/create-ship';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { ShipClass } from '@modules/ships/domain/enums/ship-class';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
+import { ShipRole } from '@modules/ships/domain/enums/ship-role';
 import { CreateShipRequestDTO } from '@modules/ships/dtos/create-ship-request';
 import { AppError } from '@shared/errors/app-error';
 import { generateSpaceName, rarity } from '@shared/helpers';
@@ -31,7 +27,7 @@ class CreateShipBusinessLogic {
     ownerId,
     playerId,
     name,
-    class: _class,
+    role,
     rank,
     bonusValue,
     bonusDescription,
@@ -52,20 +48,36 @@ class CreateShipBusinessLogic {
       );
     }
 
-    const __class = _class || (await getShipClassByRarity());
-    const __rank = rank || (await getShipRankByRarity());
-    const __name = name || (await generateSpaceName());
+    const percentage = 100 / 3;
 
-    const __tankCapacity =
+    const _role =
+      role ||
+      (await rarity<Record<Lowercase<ShipRole>, number>>({
+        explorer: percentage,
+        miner: percentage,
+        fighter: percentage,
+      }));
+
+    const _rank =
+      rank ||
+      (await rarity<Record<Lowercase<ShipRank>, number>>({
+        a: 50,
+        b: 35,
+        s: 15,
+      }));
+
+    const _name = name || (await generateSpaceName());
+
+    const _tankCapacity =
       tankCapacity ||
       {
         B: 200,
         A: 300,
         S: 400,
-      }[__rank];
+      }[_rank];
 
-    const __fuel = fuel || __tankCapacity;
-    const __crew = crew ?? 0;
+    const _fuel = fuel || _tankCapacity;
+    const _crew = crew ?? 0;
 
     const crewCapacitySchema: Record<ShipRank, number> = {
       B: 2,
@@ -73,7 +85,7 @@ class CreateShipBusinessLogic {
       S: 4,
     };
 
-    const bonusValueSchema: Record<ShipClass, Record<ShipRank, number>> = {
+    const bonusValueSchema: Record<ShipRole, Record<ShipRank, number>> = {
       FIGHTER: {
         A: 30,
         B: 60,
@@ -91,36 +103,36 @@ class CreateShipBusinessLogic {
       },
     };
 
-    const __bonusDescription =
+    const _bonusDescription =
       bonusDescription ??
       {
         FIGHTER: 'Bounty Hunt Damage',
         MINER: 'Mining Success Rate',
         EXPLORER: 'Mission Time',
-      }[__class];
+      }[_role];
 
-    const __crewCapacity = crewCapacity ?? crewCapacitySchema[__rank];
-    const __bonusValue = bonusValue ?? bonusValueSchema[__class][__rank];
-    const __canRefuelAtStation = canRefuelAtStation ?? false;
-    const __breedCount = breedCount ?? 0;
-    const __onSale = onSale ?? false;
+    const _crewCapacity = crewCapacity ?? crewCapacitySchema[_rank];
+    const _bonusValue = bonusValue ?? bonusValueSchema[_role][_rank];
+    const _canRefuelAtStation = canRefuelAtStation ?? false;
+    const _breedCount = breedCount ?? 0;
+    const _onSale = onSale ?? false;
 
     const { ship } = new Ship({
       ownerId,
       playerId: playerId ?? ownerId,
-      name: __name,
-      class: __class,
-      rank: __rank,
-      fuel: __fuel,
-      crew: __crew,
-      bonusValue: __bonusValue,
-      bonusDescription: __bonusDescription,
-      tankCapacity: __tankCapacity,
-      crewCapacity: __crewCapacity,
-      canRefuelAtStation: __canRefuelAtStation,
+      name: _name,
+      role: _role,
+      rank: _rank,
+      fuel: _fuel,
+      crew: _crew,
+      bonusValue: _bonusValue,
+      bonusDescription: _bonusDescription,
+      tankCapacity: _tankCapacity,
+      crewCapacity: _crewCapacity,
+      canRefuelAtStation: _canRefuelAtStation,
       avatar: null,
-      breedCount: __breedCount,
-      onSale: __onSale,
+      breedCount: _breedCount,
+      onSale: _onSale,
     });
 
     await this.shipsRepository.create(ship);

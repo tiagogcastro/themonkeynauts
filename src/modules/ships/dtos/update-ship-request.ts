@@ -1,4 +1,4 @@
-import { ShipClass } from '../domain/enums/ship-class';
+import { ShipRole } from '../domain/enums/ship-role';
 import { ShipRank } from '../domain/enums/ship-rank';
 
 type UpdateShipRequestDTO = {
@@ -6,7 +6,7 @@ type UpdateShipRequestDTO = {
   ownerId?: string;
   playerId?: string;
   name?: string;
-  class?: ShipClass;
+  role?: ShipRole;
   rank?: ShipRank;
   bonusValue?: number;
   bonusDescription?: string;

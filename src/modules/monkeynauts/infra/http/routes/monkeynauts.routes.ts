@@ -52,7 +52,7 @@ monkeynautsRouter.post(
 
         breedCount: Joi.number(),
 
-        class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
+        role: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
         rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
 
         energy: Joi.number(),
@@ -97,7 +97,7 @@ monkeynautsRouter.put(
 
         breedCount: Joi.number(),
 
-        class: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
+        role: Joi.string().regex(/^(SOLDIER|ENGINEER|SCIENTIST)$/),
         rank: Joi.string().regex(/^(PRIVATE|SERGEANT|CAPTAIN|MAJOR)$/),
 
         energy: Joi.number(),
