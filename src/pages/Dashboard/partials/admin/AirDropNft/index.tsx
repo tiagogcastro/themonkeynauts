@@ -1,19 +1,37 @@
 import { Button, Input } from '@/components';
 import { InputSelect } from '@/components/HTML/InputSelect';
-import { useAuth } from '@/hooks';
+import { baseApi } from '@/services/api';
+import { COLORS } from '@/theme';
 import { getValidationErrors } from '@/utils';
+import { ApiError } from '@/utils/apiError';
 import { FormHandles } from '@unform/core';
-import { useEffect, useRef, useState } from 'react';
-import { AiOutlineStop } from 'react-icons/ai';
+import { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import * as S from './styles';
 
-type AirDropNftType = 'monkeynaut' | 'ship';
+type AirDropType = 'MONKEYNAUT' | 'SHIP' | 'PACK';
 
-type SelectOptions = {
-  label: string;
-  value: string;
+type CommonAirDropFields<Rank, Class> = {
+  rank: Rank;
+  class: Class;
+}
+
+type MonkeynautRanks = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
+type ShipRanks = 'A' | 'B' |'S';
+
+type AirDropData = {
+  type: AirDropType;
+  email: string;
+  monkeynaut?: {
+    rank: CommonAirDropFields<MonkeynautRanks | 'RANDOM', 'RANDOM'>;
+    class: 'RANDOM';
+  };
+  ship?: {
+    rank: CommonAirDropFields<ShipRanks | 'RANDOM', 'RANDOM'>;
+    class: 'RANDOM';
+  };
 }
 
 const createNftDropSchema = Yup.object().shape({
@@ -22,164 +40,149 @@ const createNftDropSchema = Yup.object().shape({
     .required('This field is required'),
   type: Yup.string()
     .required('This field is required'),
-  class: Yup.string()
-    .required('This field is required'),
-  rank: Yup.string()
-    .required('This field is required'),
+  monkeynaut: Yup.object().when('type', {
+    is: (value: any) => value === 'MONKEYNAUT',
+    then: Yup.object({
+      role: Yup.string()
+        .required('This field is required'),
+      rank: Yup.string()
+        .required('This field is required'),
+    })
+  }),
+  ship: Yup.object().when('type', {
+    is: (value: any) => value === 'SHIP',
+    then: Yup.object({
+      role: Yup.string()
+        .required('This field is required'),
+      rank: Yup.string()
+        .required('This field is required'),
+    })
+  }),
 });
 
-const classFields = {
-  monkeynaut: [
+const roleFields = {
+  MONKEYNAUT: [
     {
-      value: 'soldier',
-      label: 'Soldier'
-    },
-    {
-      value: 'engineer',
-      label: 'Engineer'
-    },
-    {
-      value: 'scientist',
-      label: 'Scientist'
-    },
-    {
-      value: 'random',
+      value: 'RANDOM',
       label: 'Random'
     },
   ],
-  ship: [
+  SHIP: [
     {
-      value: 'figter',
-      label: 'Figter'
-    },
-    {
-      value: 'miner',
-      label: 'Miner'
-    },
-    {
-      value: 'explorer',
-      label: 'Explorer'
-    },
-    {
-      value: 'random',
+      value: 'RANDOM',
       label: 'Random'
     },
-  ]
+  ],
+  PACK: []
 };
 
 const ranksFields = {
-  monkeynaut: [
+  MONKEYNAUT: [
     {
-      value: 'private',
+      value: 'PRIVATE',
       label: 'Private'
     },
     {
-      value: 'sergeant',
+      value: 'SERGEANT',
       label: 'Sergeant'
     },
     {
-      value: 'captain',
+      value: 'CAPTAIN',
       label: 'Captain'
     },
     {
-      value: 'major',
+      value: 'MAJOR',
       label: 'Major'
     },
     {
-      value: 'random',
+      value: 'RANDOM',
       label: 'Random'
     },
   ],
-  ship: [
+  SHIP: [
     {
-      value: 'b',
+      value: 'B',
       label: 'B'
     },
     {
-      value: 'a',
+      value: 'A',
       label: 'A'
     },
     {
-      value: 's',
+      value: 'S',
       label: 'S'
     },
     {
-      value: 'random',
+      value: 'RANDOM',
       label: 'Random'
     },
-  ]
+  ],
+  PACK: []
 };
 
 const types = [
   {
-    value: 'monkeynaut',
+    value: 'MONKEYNAUT',
     label: 'Monkeynaut'
   },
   {
-    value: 'ship',
+    value: 'SHIP',
     label: 'Ship'
+  },
+  {
+    value: 'PACK',
+    label: 'Pack'
   },
 ];
 
 export function AdminAirDropNft() {
-  const { player } = useAuth();
   const formRef = useRef<FormHandles>(null);
 
-  const [type, setType] = useState<AirDropNftType | undefined>(undefined);
-  const [nftClassValue, setNftClassValue] = useState({
-    classe: {
-      value: '',
-      label: ''
-    },
-    rank: {
-      value: '',
-      label: ''
-    }
-  });
+  const [currentType, setCurrentType] = useState<AirDropType | null>(null);
 
-  function changeType(e: any) {
-    setType((prevState) => {
-      if(prevState === e.value) {
-        return prevState;
-      } 
-
-      setNftClassValue({
-        classe: {
-          value: '',
-          label: ''
-        },
-        rank: {
-          value: '',
-          label: ''
-        }
-      });
-
-      return e.value;
-    });
-  }
-
-  function changeSelect(event: any, name: 'rank' | 'classe') {
-    setNftClassValue(prevState => {
-      return {
-        ...prevState,
-        [name]: event
-      }
-    })
-  }
-
-  async function createNftDrop(data: any) {
+  async function createNftDrop(data: AirDropData, rest: any) {
     try {
       await createNftDropSchema.validate(data, {
         abortEarly: false
       });
 
-      console.log(data);
+      await baseApi.post('/sale-events/create-air-drop-nft', data);
+
+      rest.reset();
+
+      toast(`Sent successfully Air Drop NFT to ${data.email}`, {
+        autoClose: 7000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
     } catch (error: any) {
       if(error instanceof Yup.ValidationError) {
         const errors = getValidationErrors(error);
 
         return formRef.current?.setErrors(errors);
       }
+
+      const apiErrors = ApiError(error);
+
+      apiErrors.messages.forEach((message) => {
+        return toast(message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      })
     }
   }
 
@@ -194,31 +197,39 @@ export function AdminAirDropNft() {
               labelText='E-mail' 
             />
             <InputSelect
-              onChange={changeType}
               name='type'
-              labelText='Type' 
+              labelText='Type'
+              onChange={(e: any) => setCurrentType(e.value)}
               fields={types}
             />
-            <InputSelect
-              value={type && {
-                value: nftClassValue.classe.value,
-                label: nftClassValue.classe.label
-              }}
-              onChange={(e: any) => changeSelect(e, 'classe')}
-              name='class'
-              labelText='Class'
-              fields={type ? classFields[type] : []}
-            />
-            <InputSelect
-              value={type && {
-                value: nftClassValue.rank.value,
-                label: nftClassValue.rank.label
-              }}
-              onChange={(e: any) => changeSelect(e, 'rank')}
-              name='rank'
-              labelText='Rank' 
-              fields={type ? ranksFields[type] : []}
-            />
+            {currentType === 'MONKEYNAUT' && (
+              <>
+                <InputSelect
+                  name={`${currentType?.toLowerCase()}.role`}
+                  labelText='Role'
+                  fields={currentType ? roleFields[currentType] : []}
+                />
+                <InputSelect
+                  name={`${currentType?.toLowerCase()}.rank`}
+                  labelText='Rank' 
+                  fields={currentType ? ranksFields[currentType] : []}
+                />
+              </>
+            )}
+            {currentType === 'SHIP' && (
+              <>
+                <InputSelect
+                  name={`${currentType?.toLowerCase()}.role`}
+                  labelText='Role'
+                  fields={currentType ? roleFields[currentType] : []}
+                />
+                <InputSelect
+                  name={`${currentType?.toLowerCase()}.rank`}
+                  labelText='Rank' 
+                  fields={currentType ? ranksFields[currentType] : []}
+                />
+              </>
+            )}
             <Button text="Send" type="submit" />
           </S.FormContainer>
         </S.MainContent>
