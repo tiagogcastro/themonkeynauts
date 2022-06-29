@@ -11,7 +11,6 @@ type ListUniqueShipRequest = {
 };
 
 type ListUniqueShipResponse = {
-  player: IPlayer;
   ship: IShip;
 };
 
@@ -46,7 +45,6 @@ class ListUniqueShipBusinessLogic {
 
     return {
       ship,
-      player: foundPlayer,
     };
   }
 }

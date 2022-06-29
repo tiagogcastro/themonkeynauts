@@ -16,14 +16,13 @@ class ListUniqueShipController {
       ListUniqueShipBusinessLogic,
     );
 
-    const { ship, player } = await listUniqueShipBusinessLogic.execute({
+    const { ship } = await listUniqueShipBusinessLogic.execute({
       playerId: playerId || playerLoggedId,
       shipId,
     });
 
     return response.status(200).json({
       ship,
-      player,
     });
   }
 }
