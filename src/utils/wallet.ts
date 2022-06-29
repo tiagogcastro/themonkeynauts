@@ -5,7 +5,7 @@ export function verifyEthereum() {
   const ethereum = (window as any).ethereum;
 
   if(typeof ethereum === 'undefined') {
-    throw new Error("Activate ethereum in your browser");
+    throw new Error("No Metamask extension found in your browser");
   }
 
   return ethereum;
