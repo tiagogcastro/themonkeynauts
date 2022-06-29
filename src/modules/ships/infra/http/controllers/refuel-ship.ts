@@ -6,10 +6,11 @@ import { container } from 'tsyringe';
 class RefuelShipController {
   async handle(request: Request, response: Response): Promise<Response> {
     const data = request.body as RefuelShipRequestDTO;
+    const playerId = request.player.id;
 
     const refuelShipBusinessLogic = container.resolve(RefuelShipBusinessLogic);
 
-    const ship = await refuelShipBusinessLogic.execute(data);
+    const ship = await refuelShipBusinessLogic.execute({ ...data, playerId });
 
     return response.status(200).json(ship);
   }
