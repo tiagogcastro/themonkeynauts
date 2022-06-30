@@ -43,7 +43,7 @@ export function Menu({
       <Content 
         {...menuContentProps}
       >
-        {Array.isArray(children) && children.map(({props: {render = true, title}}, index) => (
+        {Array.isArray(children) ? children.map(({props: {render = true, title}}, index) => (
           render && (
             <TabChange 
               key={index} 
@@ -59,7 +59,19 @@ export function Menu({
               </TabTitle>
             </TabChange>
           )
-        ))}
+        )) : (
+          <TabChange 
+            selected={true}
+            className="tab_title_btn"
+          >
+            <TabTitle 
+              selected={true}
+              className="tab_title"
+            >
+              {children && (children as any)?.props?.title}
+            </TabTitle>
+          </TabChange>
+        )}
         <button 
           className="signout"
           onClick={signOut}

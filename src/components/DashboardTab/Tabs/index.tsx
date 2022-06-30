@@ -56,7 +56,7 @@ export function Tabs({ children, menuContentProps, menuContainerProps, tabContai
 				changeSelected={handleChangeSelected}
 			/>
 
-			{!menuActive.state && Array.isArray(children) && children[selectedTab]}
+			{!menuActive.state && Array.isArray(children) ? children[selectedTab] : !menuActive.state && children}
 		</Container>
 	);
 }
