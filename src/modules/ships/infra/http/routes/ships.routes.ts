@@ -1,14 +1,13 @@
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { changeActivePlayerShipController } from '../controllers/change-active-player-ship';
 import { consumeFuelController } from '../controllers/consume-fuel';
-import { createShipController } from '../controllers/create-ship';
 import { listShipsController } from '../controllers/list-ships';
 import { listUniqueShipController } from '../controllers/list-unique-ship';
 import { refuelShipController } from '../controllers/refuel-ship';
-import { updateShipController } from '../controllers/update-ship';
 
 const shipsRouter = Router();
 
@@ -59,7 +58,7 @@ shipsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => consumeFuelController.handle(request, response),
+  adaptRoute(consumeFuelController),
 );
 
 shipsRouter.put(
