@@ -10,13 +10,22 @@ import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { Either, right } from '@shared/core/logic/either';
+
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
-type CreateCrewRequestDTO = {
+export type CreateCrewRequestDTO = {
   shipId: string;
   monkeynautId: string;
   playerId: string;
 };
+
+type CreateCrewResponse = Either<
+  Error,
+  {
+    crew: ICrew;
+  }
+>;
 
 @injectable()
 class CreateCrewBusinessLogic {
@@ -41,7 +50,7 @@ class CreateCrewBusinessLogic {
     monkeynautId,
     shipId,
     playerId,
-  }: CreateCrewRequestDTO): Promise<ICrew> {
+  }: CreateCrewRequestDTO): Promise<CreateCrewResponse> {
     const foundPlayer = await this.playersRepository.findById(playerId);
 
     if (!foundPlayer) {
@@ -91,7 +100,9 @@ class CreateCrewBusinessLogic {
 
     await this.logsRepository.create(log);
 
-    return crew;
+    return right({
+      crew,
+    });
   }
 }
 

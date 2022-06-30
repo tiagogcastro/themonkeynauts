@@ -9,7 +9,12 @@ export type SaveWalletRequestDTO = {
   playerId: string;
 };
 
-type SaveWalletResponse = Either<Error, IPlayer>;
+type SaveWalletResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+  }
+>;
 
 @injectable()
 class SaveWalletBusinessLogic {
@@ -44,7 +49,7 @@ class SaveWalletBusinessLogic {
 
     await this.playersRepository.save(player);
 
-    return right(player);
+    return right({ player });
   }
 }
 

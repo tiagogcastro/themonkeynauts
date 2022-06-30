@@ -7,12 +7,15 @@ import { AppError } from '@shared/errors/app-error';
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { Either, right } from '@shared/core/logic/either';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
-type RemoveMonkeynautFromCrewRequestDTO = {
+export type RemoveMonkeynautFromCrewRequestDTO = {
   monkeynautId: string;
   playerId: string;
 };
+
+type RemoveMonkeynautFromCrewResponse = Either<Error, null>;
 
 @injectable()
 class RemoveMonkeynautFromCrewBusinessLogic {
@@ -33,7 +36,7 @@ class RemoveMonkeynautFromCrewBusinessLogic {
   async execute({
     monkeynautId,
     playerId,
-  }: RemoveMonkeynautFromCrewRequestDTO): Promise<void> {
+  }: RemoveMonkeynautFromCrewRequestDTO): Promise<RemoveMonkeynautFromCrewResponse> {
     const foundPlayer = await this.playersRepository.findById(playerId);
 
     if (!foundPlayer) {
@@ -65,6 +68,8 @@ class RemoveMonkeynautFromCrewBusinessLogic {
     });
 
     await this.logsRepository.create(log);
+
+    return right(null);
   }
 }
 

@@ -1,13 +1,17 @@
+import { container } from 'tsyringe';
+
+import { UpdateMonkeynautRequestDTO } from '@modules/crews/dtos/update-monkeynaut-request';
 import { UpdateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/update-monkeynaut';
-import { UpdateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/update-monkeynaut-request';
+import { IController } from '@shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
 } from '@shared/core/infra/http-response';
-import { container } from 'tsyringe';
 
-class UpdateMonkeynautController {
+class UpdateMonkeynautController
+  implements IController<UpdateMonkeynautRequestDTO>
+{
   async handle(data: UpdateMonkeynautRequestDTO): Promise<HttpResponse> {
     const updateMonkeynautBusinessLogic = container.resolve(
       UpdateMonkeynautBusinessLogic,

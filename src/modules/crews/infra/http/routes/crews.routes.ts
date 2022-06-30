@@ -2,6 +2,7 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 
 import { createCrewController } from '../controllers/create-crew';
 
@@ -23,7 +24,7 @@ crewsRouter.get(
       abortEarly: false,
     },
   ),
-  adaptRoute( listCrewsController)
+  adaptRoute(listCrewsController),
 );
 
 crewsRouter.get(
@@ -39,7 +40,7 @@ crewsRouter.get(
       abortEarly: false,
     },
   ),
-  adaptRoute( listCrewsController)
+  adaptRoute(listCrewsController),
 );
 
 crewsRouter.post(
@@ -56,7 +57,7 @@ crewsRouter.post(
       abortEarly: false,
     },
   ),
-  adaptRoute( createCrewController)
+  adaptRoute(createCrewController),
 );
 
 crewsRouter.delete(
@@ -72,8 +73,7 @@ crewsRouter.delete(
       abortEarly: false,
     },
   ),
-  adaptRoute(
-    removeMonkeynautFromCrewController)
+  adaptRoute(removeMonkeynautFromCrewController),
 );
 
 export { crewsRouter };

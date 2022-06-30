@@ -1,6 +1,6 @@
 import { MonkeynautRank, MonkeynautRole } from '../domain/enums';
 
-type CreateMonkeynautRequestDTO = {
+export type CommomsMonkeynautProps = {
   bonusDescription?: string;
   bonusValue?: number;
 
@@ -21,7 +21,4 @@ type CreateMonkeynautRequestDTO = {
 
   name?: string;
   playerId?: string;
-  ownerId: string;
 };
-
-export { CreateMonkeynautRequestDTO };

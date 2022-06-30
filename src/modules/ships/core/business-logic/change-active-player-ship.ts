@@ -1,19 +1,23 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShip } from '@modules/ships/domain/entities/ship';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 
-export type ChangeActivePlayerShipDTO = {
+export type ChangeActivePlayerShipRequestDTO = {
   playerId: string;
   shipId: string;
 };
 
-export type ChangeActivePlayerShipResponse = {
-  player: IPlayer;
-  shipActive: IShip;
-};
+export type ChangeActivePlayerShipResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+    shipActive: IShip;
+  }
+>;
 
 @injectable()
 class ChangeActivePlayerShipBusinessLogic {
@@ -28,7 +32,7 @@ class ChangeActivePlayerShipBusinessLogic {
   async execute({
     playerId,
     shipId,
-  }: ChangeActivePlayerShipDTO): Promise<ChangeActivePlayerShipResponse> {
+  }: ChangeActivePlayerShipRequestDTO): Promise<ChangeActivePlayerShipResponse> {
     const ship = await this.shipsRepository.findById(shipId);
 
     if (!ship) {
@@ -51,10 +55,10 @@ class ChangeActivePlayerShipBusinessLogic {
 
     await this.playersRepository.save(player);
 
-    return {
+    return right({
       player,
       shipActive: ship,
-    };
+    });
   }
 }
 

@@ -69,11 +69,6 @@ _playersRouter.patch(
 
 _playersRouter.patch(
   '/disable-enable-player',
-  celebrate({
-    [Segments.BODY]: {
-      playerId: Joi.string().required().uuid(),
-    },
-  }),
   adaptRoute(disableEnablePlayerController),
 );
 

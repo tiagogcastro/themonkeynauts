@@ -1,27 +1,49 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { ChangePlayerOwnerMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/change-player-owner-monkeynaut';
-import { ChangePlayerOwnerMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-owner-monkeynaut-request';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  fail,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
-class ChangePlayerOwnerMonkeynautController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const user_logged_id = request.player.id;
+import {
+  ChangePlayerOwnerMonkeynautBusinessLogic,
+  ChangePlayerOwnerMonkeynautRequestDTO,
+} from '@modules/monkeynauts/core/business-logic/change-player-owner-monkeynaut';
 
-    const data = request.body as ChangePlayerOwnerMonkeynautRequestDTO;
+type ChangePlayerOwnerMonkeynautControllerRequestDTO =
+  ChangePlayerOwnerMonkeynautRequestDTO & {
+    player: {
+      id: string;
+    };
+  };
 
-    const { currentOwnerPlayerId } = data;
+class ChangePlayerOwnerMonkeynautController
+  implements IController<ChangePlayerOwnerMonkeynautControllerRequestDTO>
+{
+  async handle(
+    data: ChangePlayerOwnerMonkeynautControllerRequestDTO,
+  ): Promise<HttpResponse> {
+    const playerLoggedId = data.player.id;
 
     const changePlayerOwnerMonkeynautBusinessLogic = container.resolve(
       ChangePlayerOwnerMonkeynautBusinessLogic,
     );
 
-    const monkeynaut = await changePlayerOwnerMonkeynautBusinessLogic.execute({
+    const result = await changePlayerOwnerMonkeynautBusinessLogic.execute({
       ...data,
-      currentOwnerPlayerId: currentOwnerPlayerId || user_logged_id,
+      playerLoggedId,
     });
 
-    return response.status(200).json(monkeynaut);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

@@ -1,18 +1,40 @@
-import { RefuelShipRequestDTO } from '@modules/ships/dtos/refuel-ship-request';
-import { RefuelShipBusinessLogic } from '@modules/ships/core/business-logic/refuel-ship';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import {
+  RefuelShipBusinessLogic,
+  RefuelShipRequestDTO,
+} from '@modules/ships/core/business-logic/refuel-ship';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
+
+type RefuelShipControllerRequestDTO = RefuelShipRequestDTO & {
+  player: {
+    id: string;
+  };
+};
+
 class RefuelShipController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body as RefuelShipRequestDTO;
-    const playerId = request.player.id;
+  async handle(data: RefuelShipControllerRequestDTO): Promise<HttpResponse> {
+    const { player, playerId } = data;
+    const playerLoggedId = player.id;
 
     const refuelShipBusinessLogic = container.resolve(RefuelShipBusinessLogic);
 
-    const ship = await refuelShipBusinessLogic.execute({ ...data, playerId });
+    const result = await refuelShipBusinessLogic.execute({
+      ...data,
+      playerId: playerId || playerLoggedId,
+    });
 
-    return response.status(200).json(ship);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

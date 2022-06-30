@@ -1,9 +1,11 @@
-import { ShipRole } from '../domain/enums/ship-role';
+import { Maybe } from '@shared/core/logic/maybe';
 import { ShipRank } from '../domain/enums/ship-rank';
+import { ShipRole } from '../domain/enums/ship-role';
 
-type UpdateShipRequestDTO = {
-  shipId: string;
-  ownerId?: string;
+export type CommonShipRequestDTO = {
+  ownerId: string;
+  shipId?: string;
+
   playerId?: string;
   name?: string;
   role?: ShipRole;
@@ -17,5 +19,3 @@ type UpdateShipRequestDTO = {
   canRefuelAtStation?: boolean;
   onSale?: boolean;
 };
-
-export { UpdateShipRequestDTO };

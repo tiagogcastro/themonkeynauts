@@ -8,8 +8,6 @@ import {
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
 
-import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-monkeynaut-request';
-
 import {
   getAttributesByBase,
   getBonusValueByRoleAndRank,
@@ -29,12 +27,20 @@ import { ILogsRepository } from '@modules/logs/domain/repositories/logs-reposito
 import { InvalidMonkeynautShipQuantityError } from '@modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
 import { Either, left, right } from '@shared/core/logic/either';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { CommomsMonkeynautProps } from '@modules/monkeynauts/dtos/commons-monkeynaut-props';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
+
+export type CreateMonkeynautRequestDTO = CommomsMonkeynautProps & {
+  ownerId: string;
+};
 
 type CreateMonkeynautResponse = Either<
   InvalidMonkeynautShipQuantityError,
-  IMonkeynaut
+  {
+    monkeynaut: IMonkeynaut;
+  }
 >;
+
 @injectable()
 class CreateMonkeynautBusinessLogic {
   constructor(
@@ -205,7 +211,9 @@ class CreateMonkeynautBusinessLogic {
 
     await this.logsRepository.create(log);
 
-    return right(monkeynaut);
+    return right({
+      monkeynaut,
+    });
   }
 }
 

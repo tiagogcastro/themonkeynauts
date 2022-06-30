@@ -1,6 +1,14 @@
 import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
+import { Either, right } from '@shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
+
+type ListMonkeynautsResponse = Either<
+  Error,
+  {
+    monkeynauts: IMonkeynaut[];
+  }
+>;
 
 @injectable()
 class ListMonkeynautsBusinessLogic {
@@ -9,7 +17,7 @@ class ListMonkeynautsBusinessLogic {
     private monkeynautsRepository: IMonkeynautsRepository,
   ) {}
 
-  async execute(playerId?: string): Promise<IMonkeynaut[]> {
+  async execute(playerId?: string): Promise<ListMonkeynautsResponse> {
     let monkeynauts: IMonkeynaut[] = [];
 
     if (playerId) {
@@ -19,7 +27,9 @@ class ListMonkeynautsBusinessLogic {
       monkeynauts = await this.monkeynautsRepository.listAllMonkeynauts();
     }
 
-    return monkeynauts;
+    return right({
+      monkeynauts,
+    });
   }
 }
 

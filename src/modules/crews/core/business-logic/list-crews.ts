@@ -5,12 +5,20 @@ import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repos
 import { AppError } from '@shared/errors/app-error';
 import { Maybe } from '@shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
+import { Either, right } from '@shared/core/logic/either';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
-type ListCrewsRequest = {
+export type ListCrewsRequestDTO = {
   monkeynautId: string;
   shipId: string;
 };
+
+type ListCrewsResponse = Either<
+  Error,
+  {
+    crews: IShip | Maybe<IMonkeynaut>[];
+  }
+>;
 
 @injectable()
 class ListCrewsBusinessLogic {
@@ -28,7 +36,7 @@ class ListCrewsBusinessLogic {
   async execute({
     monkeynautId,
     shipId,
-  }: ListCrewsRequest): Promise<IShip | Maybe<IMonkeynaut>[]> {
+  }: ListCrewsRequestDTO): Promise<ListCrewsResponse> {
     if (monkeynautId) {
       const foundMonkeynaut = await this.monkeynautsRepository.findById(
         monkeynautId,
@@ -52,7 +60,9 @@ class ListCrewsBusinessLogic {
         throw new AppError('Ship does not exist', 404);
       }
 
-      return foundShip;
+      return right({
+        crews: foundShip,
+      });
     }
 
     if (shipId) {
@@ -68,7 +78,9 @@ class ListCrewsBusinessLogic {
         crews,
       );
 
-      return monkeynauts;
+      return right({
+        crews: monkeynauts,
+      });
     }
 
     throw new AppError('shipId or monkeynautId parameter not informed', 403);

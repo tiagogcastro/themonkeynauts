@@ -8,7 +8,6 @@ import {
   ok,
 } from '@shared/core/infra/http-response';
 import { instanceToInstance } from '@shared/helpers/instance-to-instance';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 type SaveWalletControllerRequestDTO = SaveWalletRequestDTO & {
@@ -37,7 +36,7 @@ class SaveWalletController {
       return clientError(result.value);
     }
 
-    return ok(instanceToInstance('player', result.value));
+    return ok(instanceToInstance('player', result.value.player));
   }
 }
 

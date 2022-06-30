@@ -1,17 +1,27 @@
-import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
-import { CreateShipRequestDTO } from '@modules/ships/dtos/create-ship-request';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import {
+  CreateShipBusinessLogic,
+  CreateShipRequestDTO,
+} from '@modules/ships/core/business-logic/create-ship';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
 class CreateShipController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body as CreateShipRequestDTO;
-
+  async handle(data: CreateShipRequestDTO): Promise<HttpResponse> {
     const createShipBusinessLogic = container.resolve(CreateShipBusinessLogic);
 
-    const ship = await createShipBusinessLogic.execute(data);
+    const result = await createShipBusinessLogic.execute(data);
 
-    return response.status(201).json(ship);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

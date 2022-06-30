@@ -1,10 +1,23 @@
+import { inject, injectable } from 'tsyringe';
+
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { UpdateShipRequestDTO } from '@modules/ships/dtos/update-ship-request';
+import { CommonShipRequestDTO } from '@modules/ships/dtos/commons-ships-props';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { updateProps } from '@shared/helpers/update-props';
-import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
+
+export type UpdateShipRequestDTO = CommonShipRequestDTO & {
+  shipId: string;
+};
+
+export type CreateShipResponse = Either<
+  Error,
+  {
+    ship: IShip;
+  }
+>;
 
 @injectable()
 class UpdateShipBusinessLogic {
@@ -16,7 +29,7 @@ class UpdateShipBusinessLogic {
     private playersRepository: IPlayersRepository,
   ) {}
 
-  async execute(data: UpdateShipRequestDTO): Promise<IShip> {
+  async execute(data: UpdateShipRequestDTO): Promise<CreateShipResponse> {
     const { shipId, ...props } = data;
 
     const ship = await this.shipsRepository.findById(shipId);
@@ -58,7 +71,9 @@ class UpdateShipBusinessLogic {
       },
     );
 
-    return updatedShip;
+    return right({
+      ship: updatedShip,
+    });
   }
 }
 

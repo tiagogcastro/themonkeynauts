@@ -1,27 +1,48 @@
-import {
-  ChangeActivePlayerShipBusinessLogic,
-  ChangeActivePlayerShipDTO,
-} from '@modules/ships/core/business-logic/change-active-player-ship';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import {
+  ChangeActivePlayerShipBusinessLogic,
+  ChangeActivePlayerShipRequestDTO,
+} from '@modules/ships/core/business-logic/change-active-player-ship';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
+import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+
+type ChangeActivePlayerShipControllerRequestDTO =
+  ChangeActivePlayerShipRequestDTO & {
+    player: {
+      id: string;
+    };
+  };
+
 class ChangeActivePlayerShipController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body as ChangeActivePlayerShipDTO;
-    const playerId = request.player.id;
+  async handle(
+    data: ChangeActivePlayerShipControllerRequestDTO,
+  ): Promise<HttpResponse> {
+    const { playerId, shipId, player: loggedPlayer } = data;
+    const playerLoggedId = loggedPlayer.id;
 
     const changeActivePlayerShipBusinessLogic = container.resolve(
       ChangeActivePlayerShipBusinessLogic,
     );
 
-    const { player, shipActive } =
-      await changeActivePlayerShipBusinessLogic.execute({
-        ...data,
-        playerId,
-      });
+    const result = await changeActivePlayerShipBusinessLogic.execute({
+      shipId,
+      playerId: playerId || playerLoggedId,
+    });
 
-    return response.status(200).json({
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    const { player, shipActive } = result.value;
+
+    return ok({
       player: instanceToInstance('player', player),
       shipActive,
     });

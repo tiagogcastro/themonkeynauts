@@ -1,20 +1,33 @@
-import { CreateCrewBusinessLogic } from '@modules/crews/core/business-logic/create-crew';
-import { Request, Response } from 'express';
+import {
+  CreateCrewBusinessLogic,
+  CreateCrewRequestDTO,
+} from '@modules/crews/core/business-logic/create-crew';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
-class CreateCrewController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body;
-    const playerId = request.player.id;
+class CreateCrewController implements IController<CreateCrewRequestDTO> {
+  async handle(data: CreateCrewRequestDTO): Promise<HttpResponse> {
+    const { playerId } = data;
 
     const createCrewBusinessLogic = container.resolve(CreateCrewBusinessLogic);
 
-    const crews = await createCrewBusinessLogic.execute({
+    const result = await createCrewBusinessLogic.execute({
       ...data,
       playerId: data.playerId || playerId,
     });
 
-    return response.status(200).json(crews);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

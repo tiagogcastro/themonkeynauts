@@ -5,11 +5,23 @@ import {
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
 
-import { ChangePlayerOperatorMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-operator-monkeynaut-request';
-
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
+import { Either, right } from '@shared/core/logic/either';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
+
+export type ChangePlayerOperatorMonkeynautRequestDTO = {
+  playerLoggedId: string;
+  newOperatorPlayerId: string;
+  monkeynautId: string;
+};
+
+type ChangePlayerOperatorMonkeynautResponse = Either<
+  Error,
+  {
+    monkeynaut: IMonkeynaut;
+  }
+>;
 
 @injectable()
 class ChangePlayerOperatorMonkeynautBusinessLogic {
@@ -22,12 +34,12 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    currentOperatorPlayerId,
+    playerLoggedId,
     newOperatorPlayerId,
     monkeynautId,
-  }: ChangePlayerOperatorMonkeynautRequestDTO): Promise<IMonkeynaut> {
+  }: ChangePlayerOperatorMonkeynautRequestDTO): Promise<ChangePlayerOperatorMonkeynautResponse> {
     const foundActualOperatorPlayer = await this.playerRepository.findById(
-      currentOperatorPlayerId,
+      playerLoggedId,
     );
 
     if (!foundActualOperatorPlayer) {
@@ -50,7 +62,7 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
       throw new AppError('Monkeynaut does not exist', 404);
     }
 
-    if (currentOperatorPlayerId !== foundMonkeynaut.playerId) {
+    if (playerLoggedId !== foundMonkeynaut.playerId) {
       throw new AppError(
         'Current operator reported is different from operator in monkeynaut',
         403,
@@ -71,7 +83,9 @@ class ChangePlayerOperatorMonkeynautBusinessLogic {
 
     await this.monkeynautsRepository.save(monkeynaut);
 
-    return monkeynaut;
+    return right({
+      monkeynaut,
+    });
   }
 }
 

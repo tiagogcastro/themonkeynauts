@@ -1,19 +1,29 @@
-import { ListCrewsBusinessLogic } from '@modules/crews/core/business-logic/list-crews';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-class ListCrewsController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { monkeynautId, shipId } = request.query;
+import {
+  ListCrewsBusinessLogic,
+  ListCrewsRequestDTO,
+} from '@modules/crews/core/business-logic/list-crews';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
+class ListCrewsController implements IController<ListCrewsRequestDTO> {
+  async handle(data: ListCrewsRequestDTO): Promise<HttpResponse> {
     const listCrewsBusinessLogic = container.resolve(ListCrewsBusinessLogic);
 
-    const crews = await listCrewsBusinessLogic.execute({
-      monkeynautId: monkeynautId as string,
-      shipId: shipId as string,
-    });
+    const result = await listCrewsBusinessLogic.execute(data);
 
-    return response.status(200).json(crews);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

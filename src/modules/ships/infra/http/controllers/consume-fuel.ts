@@ -1,7 +1,9 @@
 import { container } from 'tsyringe';
 
-import { ConsumeFuelRequestDTO } from '@modules/ships/dtos/consume-fuel-request';
-import { ConsumeFuelBusinessLogic } from '@modules/ships/core/business-logic/consume-fuel';
+import {
+  ConsumeFuelBusinessLogic,
+  ConsumeFuelRequestDTO,
+} from '@modules/ships/core/business-logic/consume-fuel';
 
 import { IController } from '@shared/core/infra/controller';
 import {

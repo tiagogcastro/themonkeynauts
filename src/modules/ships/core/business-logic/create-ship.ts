@@ -4,11 +4,21 @@ import { IPlayersRepository } from '@modules/players/domain/repositories/players
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
 import { ShipRole } from '@modules/ships/domain/enums/ship-role';
-import { CreateShipRequestDTO } from '@modules/ships/dtos/create-ship-request';
+import { CommonShipRequestDTO } from '@modules/ships/dtos/commons-ships-props';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { generateSpaceName, rarity } from '@shared/helpers';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
+
+export type CreateShipRequestDTO = CommonShipRequestDTO;
+
+export type CreateShipResponse = Either<
+  Error,
+  {
+    ship: IShip;
+  }
+>;
 
 @injectable()
 class CreateShipBusinessLogic {
@@ -37,7 +47,7 @@ class CreateShipBusinessLogic {
     fuel,
     breedCount,
     onSale,
-  }: CreateShipRequestDTO): Promise<IShip> {
+  }: CreateShipRequestDTO): Promise<CreateShipResponse> {
     const player = await this.playersRepository.findById(ownerId);
 
     if (!player) {
@@ -49,11 +59,13 @@ class CreateShipBusinessLogic {
 
     const percentage = 100 / 3;
 
-    const _role = await rarity<Record<ShipRole, number>>({
-      Explorer: percentage,
-      Miner: percentage,
-      Fighter: percentage,
-    });
+    const _role =
+      role ||
+      (await rarity<Record<ShipRole, number>>({
+        Explorer: percentage,
+        Miner: percentage,
+        Fighter: percentage,
+      }));
 
     const _rank =
       rank ||
@@ -139,7 +151,9 @@ class CreateShipBusinessLogic {
 
     await this.logsRepository.create(log);
 
-    return ship;
+    return right({
+      ship,
+    });
   }
 }
 

@@ -51,7 +51,7 @@ _saleEventsRouter.post(
       abortEarly: false,
     },
   ),
-  adaptRoute( createSaleController)
+  (request, response) => createSaleController.handle(request, response),
 );
 
 _saleEventsRouter.put(
@@ -102,7 +102,7 @@ _saleEventsRouter.put(
       abortEarly: false,
     },
   ),
-  adaptRoute( updateSaleController)
+  (request, response) => updateSaleController.handle(request, response),
 );
 
 _saleEventsRouter.post(

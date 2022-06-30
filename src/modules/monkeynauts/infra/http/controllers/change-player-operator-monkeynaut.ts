@@ -1,28 +1,47 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { ChangePlayerOperatorMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/change-player-operator-monkeynaut';
-import { ChangePlayerOperatorMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-operator-monkeynaut-request';
+import {
+  ChangePlayerOperatorMonkeynautBusinessLogic,
+  ChangePlayerOperatorMonkeynautRequestDTO,
+} from '@modules/monkeynauts/core/business-logic/change-player-operator-monkeynaut';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
+import { IController } from '@shared/core/infra/controller';
 
-class ChangePlayerOperatorMonkeynautController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const user_logged_id = request.player.id;
+type ChangePlayerOperatorMonkeynautControllerRequestDTO =
+  ChangePlayerOperatorMonkeynautRequestDTO & {
+    player: {
+      id: string;
+    };
+  };
 
-    const data = request.body as ChangePlayerOperatorMonkeynautRequestDTO;
-
-    const { currentOperatorPlayerId } = data;
+class ChangePlayerOperatorMonkeynautController
+  implements IController<ChangePlayerOperatorMonkeynautControllerRequestDTO>
+{
+  async handle(
+    data: ChangePlayerOperatorMonkeynautControllerRequestDTO,
+  ): Promise<HttpResponse> {
+    const playerLoggedId = data.player.id;
 
     const changePlayerOperatorMonkeynautBusinessLogic = container.resolve(
       ChangePlayerOperatorMonkeynautBusinessLogic,
     );
 
-    const monkeynaut =
-      await changePlayerOperatorMonkeynautBusinessLogic.execute({
-        ...data,
-        currentOperatorPlayerId: currentOperatorPlayerId || user_logged_id,
-      });
+    const result = await changePlayerOperatorMonkeynautBusinessLogic.execute({
+      ...data,
+      playerLoggedId,
+    });
 
-    return response.status(200).json(monkeynaut);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

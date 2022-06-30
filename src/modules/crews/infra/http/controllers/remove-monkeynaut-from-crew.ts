@@ -1,34 +1,43 @@
-import { RemoveMonkeynautFromCrewBusinessLogic } from '@modules/crews/core/business-logic/remove-monkeynaut-from-crew';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-type RequestQuery = {
-  monkeynautId: string;
-  playerId: string;
-};
+import {
+  RemoveMonkeynautFromCrewBusinessLogic,
+  RemoveMonkeynautFromCrewRequestDTO,
+} from '@modules/crews/core/business-logic/remove-monkeynaut-from-crew';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
-class RemoveMonkeynautFromCrewCrewController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.query as unknown as RequestQuery;
-    const playerId = request.player.id;
+class RemoveMonkeynautFromCrewController {
+  async handle(
+    data: RemoveMonkeynautFromCrewRequestDTO,
+  ): Promise<HttpResponse> {
+    const { playerId } = data;
 
     const removeMonkeynautFromCrewBusinessLogic = container.resolve(
       RemoveMonkeynautFromCrewBusinessLogic,
     );
 
-    await removeMonkeynautFromCrewBusinessLogic.execute({
+    const result = await removeMonkeynautFromCrewBusinessLogic.execute({
       ...data,
       playerId: data.playerId || playerId,
     });
 
-    return response.status(200).json({
-      statusCode: 200,
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok({
       success: 'Monkeynaut was successfully removed from crew',
     });
   }
 }
 
 const removeMonkeynautFromCrewController =
-  new RemoveMonkeynautFromCrewCrewController();
+  new RemoveMonkeynautFromCrewController();
 
 export { removeMonkeynautFromCrewController };

@@ -1,10 +1,18 @@
 import { IShip } from '@modules/ships/domain/entities/ship';
+import { Either, right } from '@shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 
-type ListRequest = {
+export type ListShipsRequestDTO = {
   playerId?: string;
 };
+
+export type ListShipsResponse = Either<
+  Error,
+  {
+    ships: IShip[];
+  }
+>;
 
 @injectable()
 class ListShipsBusinessLogic {
@@ -13,14 +21,20 @@ class ListShipsBusinessLogic {
     private shipsRepository: IShipsRepository,
   ) {}
 
-  async execute({ playerId }: ListRequest): Promise<IShip[]> {
+  async execute({ playerId }: ListShipsRequestDTO): Promise<ListShipsResponse> {
     if (playerId) {
-      return this.shipsRepository.listAllShipsFromPlayer(playerId);
+      const ships = await this.shipsRepository.listAllShipsFromPlayer(playerId);
+
+      return right({
+        ships,
+      });
     }
 
     const ships = await this.shipsRepository.listAllShips();
 
-    return ships;
+    return right({
+      ships,
+    });
   }
 }
 

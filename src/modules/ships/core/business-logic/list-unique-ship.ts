@@ -1,18 +1,21 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShip } from '@modules/ships/domain/entities/ship';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 
-type ListUniqueShipRequest = {
+export type ListUniqueShipRequestDTO = {
   playerId: string;
   shipId: string;
 };
 
-type ListUniqueShipResponse = {
-  ship: IShip;
-};
+export type ListUniqueShipResponse = Either<
+  Error,
+  {
+    ship: IShip;
+  }
+>;
 
 @injectable()
 class ListUniqueShipBusinessLogic {
@@ -27,7 +30,7 @@ class ListUniqueShipBusinessLogic {
   async execute({
     playerId,
     shipId,
-  }: ListUniqueShipRequest): Promise<ListUniqueShipResponse> {
+  }: ListUniqueShipRequestDTO): Promise<ListUniqueShipResponse> {
     const foundPlayer = await this.playersRepository.findById(playerId);
 
     if (!foundPlayer) {
@@ -43,9 +46,9 @@ class ListUniqueShipBusinessLogic {
       throw new AppError('Ship does not exist', 404);
     }
 
-    return {
+    return right({
       ship,
-    };
+    });
   }
 }
 

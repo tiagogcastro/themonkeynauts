@@ -1,17 +1,28 @@
-import { UpdateShipBusinessLogic } from '@modules/ships/core/business-logic/update-ship';
-import { UpdateShipRequestDTO } from '@modules/ships/dtos/update-ship-request';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-class UpdateShipController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body as UpdateShipRequestDTO;
+import {
+  UpdateShipBusinessLogic,
+  UpdateShipRequestDTO,
+} from '@modules/ships/core/business-logic/update-ship';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
+class UpdateShipController {
+  async handle(data: UpdateShipRequestDTO): Promise<HttpResponse> {
     const updateShipBusinessLogic = container.resolve(UpdateShipBusinessLogic);
 
-    const ship = await updateShipBusinessLogic.execute(data);
+    const result = await updateShipBusinessLogic.execute(data);
 
-    return response.status(200).json(ship);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

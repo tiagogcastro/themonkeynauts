@@ -1,5 +1,4 @@
 import { balanceConfig } from '@config/balance';
-import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';

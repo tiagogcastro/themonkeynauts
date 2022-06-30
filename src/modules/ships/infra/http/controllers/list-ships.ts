@@ -1,18 +1,32 @@
-import { ListShipsBusinessLogic } from '@modules/ships/core/business-logic/list-ships';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import {
+  ListShipsBusinessLogic,
+  ListShipsRequestDTO,
+} from '@modules/ships/core/business-logic/list-ships';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
+
 class ListShipsController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { playerId } = request.query;
+  async handle(data: ListShipsRequestDTO): Promise<HttpResponse> {
+    const { playerId } = data;
 
     const listShipsBusinessLogic = container.resolve(ListShipsBusinessLogic);
 
-    const ships = await listShipsBusinessLogic.execute({
+    const result = await listShipsBusinessLogic.execute({
       playerId: playerId as string,
     });
 
-    return response.status(200).json(ships);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

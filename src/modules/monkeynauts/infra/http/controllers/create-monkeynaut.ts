@@ -1,12 +1,16 @@
-import { CreateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
-import { CreateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/create-monkeynaut-request';
+import { container } from 'tsyringe';
+
 import { IController } from '@shared/core/infra/controller';
 import {
   clientError,
   created,
   HttpResponse,
 } from '@shared/core/infra/http-response';
-import { container } from 'tsyringe';
+
+import {
+  CreateMonkeynautBusinessLogic,
+  CreateMonkeynautRequestDTO,
+} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
 
 class CreateMonkeynautController
   implements IController<CreateMonkeynautRequestDTO>

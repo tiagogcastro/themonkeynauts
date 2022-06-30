@@ -1,6 +1,5 @@
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
 import {
   Ship as PrismaShip,
   Monkeynaut as PrismaMonkeynaut,
@@ -13,6 +12,10 @@ import {
   IMonkeynaut,
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
+
+type ShipsSaveManyDTO = {
+  canRefuelAtStation: boolean;
+};
 
 const parseShip = (ship: PrismaShip): IShip => {
   return new Ship(ship, {

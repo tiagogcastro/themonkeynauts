@@ -1,10 +1,22 @@
-import { RefuelShipRequestDTO } from '@modules/ships/dtos/refuel-ship-request';
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
+
+export type RefuelShipRequestDTO = {
+  shipId: string;
+  playerId: string;
+};
+
+export type RefuelShipResponse = Either<
+  Error,
+  {
+    ship: IShip;
+  }
+>;
 
 @injectable()
 class RefuelShipBusinessLogic {
@@ -19,7 +31,10 @@ class RefuelShipBusinessLogic {
     private resourcesRepository: IResourcesRepository,
   ) {}
 
-  async execute({ shipId, playerId }: RefuelShipRequestDTO): Promise<IShip> {
+  async execute({
+    shipId,
+    playerId,
+  }: RefuelShipRequestDTO): Promise<RefuelShipResponse> {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
@@ -78,7 +93,9 @@ class RefuelShipBusinessLogic {
 
     await this.shipsRepository.save(updatedShip);
 
-    return updatedShip;
+    return right({
+      ship: updatedShip,
+    });
   }
 }
 

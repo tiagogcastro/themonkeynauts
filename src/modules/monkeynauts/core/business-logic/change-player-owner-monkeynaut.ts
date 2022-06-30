@@ -5,11 +5,24 @@ import {
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
 
-import { ChangePlayerOwnerMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/change-player-owner-monkeynaut-request';
-
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { AppError } from '@shared/errors/app-error';
+import { Either, right } from '@shared/core/logic/either';
+
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
+
+export type ChangePlayerOwnerMonkeynautRequestDTO = {
+  playerLoggedId: string;
+  newOwerPlayerId: string;
+  monkeynautId: string;
+};
+
+type ChangePlayerOwnerMonkeynautResponse = Either<
+  Error,
+  {
+    monkeynaut: IMonkeynaut;
+  }
+>;
 
 @injectable()
 class ChangePlayerOwnerMonkeynautBusinessLogic {
@@ -22,12 +35,12 @@ class ChangePlayerOwnerMonkeynautBusinessLogic {
   ) {}
 
   async execute({
-    currentOwnerPlayerId,
+    playerLoggedId,
     newOwerPlayerId,
     monkeynautId,
-  }: ChangePlayerOwnerMonkeynautRequestDTO): Promise<IMonkeynaut> {
+  }: ChangePlayerOwnerMonkeynautRequestDTO): Promise<ChangePlayerOwnerMonkeynautResponse> {
     const foundCurrentOperatorPlayer = await this.playerRepository.findById(
-      currentOwnerPlayerId,
+      playerLoggedId,
     );
 
     if (!foundCurrentOperatorPlayer) {
@@ -53,7 +66,7 @@ class ChangePlayerOwnerMonkeynautBusinessLogic {
       throw new AppError('Monkeynaut does not exist', 404);
     }
 
-    if (currentOwnerPlayerId !== foundMonkeynaut.ownerId) {
+    if (playerLoggedId !== foundMonkeynaut.ownerId) {
       throw new AppError(
         'Current owner reported is different from owner in monkeynaut',
         403,
@@ -74,7 +87,7 @@ class ChangePlayerOwnerMonkeynautBusinessLogic {
 
     await this.monkeynautsRepository.save(monkeynaut);
 
-    return monkeynaut;
+    return right({ monkeynaut });
   }
 }
 

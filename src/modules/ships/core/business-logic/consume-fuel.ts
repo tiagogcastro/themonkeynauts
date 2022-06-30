@@ -1,6 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
-import { ConsumeFuelRequestDTO } from '@modules/ships/dtos/consume-fuel-request';
 import { Ship } from '@modules/ships/domain/entities/ship';
 
 import { ShipNotFoundError } from '@modules/players/core/business-logic/errors/ship-not-fount-error';
@@ -9,6 +7,12 @@ import { Either, left, right } from '@shared/core/logic/either';
 
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 import { CannotConsumeFuelError } from './errors/cannot-consume-fuel';
+
+export type ConsumeFuelRequestDTO = {
+  shipId: string;
+  playerIp: string;
+  action: 'Travel' | 'BountyHunt';
+};
 
 type ConsumeFuelResponse = Either<
   ShipNotFoundError | CannotConsumeFuelError,
