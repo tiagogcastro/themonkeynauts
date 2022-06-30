@@ -102,27 +102,25 @@ class BuySaleItemBusinessLogic {
 
     const ships = await this.shipsRepository.listAllShipsFromPlayer(player.id);
 
-    if (!player.hasAsteroid) {
-      if (ships.length === 1) {
-        const [ship] = ships;
+    if (!player.hasAsteroid && ships.length >= 1) {
+      const [ship] = ships;
 
-        const monkeynauts =
-          await this.monkeynautsRepository.listAllMonkeynautsFromPlayer(
-            player.id,
-          );
+      const monkeynauts =
+        await this.monkeynautsRepository.listAllMonkeynautsFromPlayer(
+          player.id,
+        );
 
-        if (monkeynauts.length >= ship.crewCapacity) {
-          return left(new InvalidMonkeynautQuantityError());
-        }
+      if (monkeynauts.length >= ship.crewCapacity) {
+        return left(new InvalidMonkeynautQuantityError());
+      }
 
-        if (shipSaleId || packSaleId) {
-          return left(new InvalidShipQuantityError());
-        }
+      if (shipSaleId || packSaleId) {
+        return left(new InvalidShipQuantityError());
       }
     }
 
     if (monkeynautSaleId) {
-      if (ships.length === 0) {
+      if (!player.hasAsteroid && ships.length === 0) {
         return left(new InvalidMonkeynautShipQuantityError());
       }
 

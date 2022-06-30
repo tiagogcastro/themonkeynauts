@@ -83,13 +83,17 @@ class CreateMonkeynautBusinessLogic {
       if (!foundPlayer) {
         throw new AppError('playerId field informed does not exist', 404);
       }
+
+      const ships = await this.shipsRepository.listAllShipsFromPlayer(playerId);
+
+      if (!foundPlayer.hasAsteroid && ships.length === 0) {
+        return left(new InvalidMonkeynautShipQuantityError());
+      }
     }
 
-    const ships = await this.shipsRepository.listAllShipsFromPlayer(
-      playerId || ownerId,
-    );
+    const ships = await this.shipsRepository.listAllShipsFromPlayer(ownerId);
 
-    if (ships.length === 0) {
+    if (!foundOwnerMonkeynautPlayer.hasAsteroid && ships.length === 0) {
       return left(new InvalidMonkeynautShipQuantityError());
     }
 
