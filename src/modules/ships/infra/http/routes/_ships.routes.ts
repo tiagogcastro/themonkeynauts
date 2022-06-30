@@ -29,7 +29,7 @@ _shipsRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) => createShipController.handle(request, response),
+  adaptRoute(createShipController),
 );
 
 _shipsRouter.put(
@@ -57,7 +57,7 @@ _shipsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => updateShipController.handle(request, response),
+  adaptRoute(updateShipController),
 );
 
 _shipsRouter.use('/ships', _shipsRouter);

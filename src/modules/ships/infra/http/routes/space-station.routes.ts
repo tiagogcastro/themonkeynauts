@@ -18,5 +18,5 @@ spaceStationRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => refuelShipController.handle(request, response),
+  adaptRoute(refuelShipController),
 );

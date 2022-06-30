@@ -38,11 +38,13 @@ playersRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) => createPlayerController.handle(request, response),
+  adaptRoute(createPlayerController),
 );
 
-playersRouter.put('/update', ensureAuthenticated, (request, response) =>
-  updatePlayerController.handle(request, response),
+playersRouter.put(
+  '/update',
+  ensureAuthenticated,
+  adaptRoute(updatePlayerController),
 );
 
 playersRouter.get(
@@ -59,7 +61,7 @@ playersRouter.get(
     },
   ),
   ensureAuthenticated,
-  (request, response) => showPlayerController.handle(request, response),
+  adaptRoute(showPlayerController),
 );
 
 playersRouter.patch(
@@ -75,7 +77,7 @@ playersRouter.patch(
     },
   ),
   ensureAuthenticated,
-  (request, response) => saveWalletController.handle(request, response),
+  adaptRoute(saveWalletController),
 );
 
 playersRouter.post(
@@ -90,8 +92,7 @@ playersRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    sendForgotPasswordEmailController.handle(request, response),
+  adaptRoute(sendForgotPasswordEmailController),
 );
 
 playersRouter.put(
@@ -110,7 +111,7 @@ playersRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => resetPasswordController.handle(request, response),
+  adaptRoute(resetPasswordController),
 );
 
 // resource
@@ -136,8 +137,7 @@ playersRouter.put(
     },
   ),
   ensureAuthenticated,
-  (request, response) =>
-    removePlayerResourceAmountController.handle(request, response),
+  adaptRoute(removePlayerResourceAmountController),
 );
 
 playersRouter.post(

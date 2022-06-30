@@ -44,8 +44,7 @@ saleEventsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    listMonkeynautSalesController.handle(request, response),
+  adaptRoute(listMonkeynautSalesController),
 );
 
 saleEventsRouter.get(
@@ -61,7 +60,7 @@ saleEventsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listPackSalesController.handle(request, response),
+  adaptRoute(listPackSalesController),
 );
 
 saleEventsRouter.get(
@@ -77,7 +76,7 @@ saleEventsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listShipSalesController.handle(request, response),
+  adaptRoute(listShipSalesController),
 );
 
 export { saleEventsRouter };

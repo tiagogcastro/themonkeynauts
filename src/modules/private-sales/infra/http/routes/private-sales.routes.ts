@@ -35,8 +35,7 @@ privateSalesRouter.post(
 privateSalesRouter.get(
   '/show-player-bnb-balance',
   ensureAuthenticated,
-  (request, response) =>
-    showPlayerBNBBalanceController.handle(request, response),
+  adaptRoute(showPlayerBNBBalanceController),
 );
 
 export { privateSalesRouter };

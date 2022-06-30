@@ -88,7 +88,7 @@ _monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => updateMonkeynautController.handle(request, response),
+  adaptRoute(updateMonkeynautController),
 );
 
 _monkeynautsRouter.put(
@@ -106,7 +106,7 @@ _monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) => updateMonkeynautController.handle(request, response),
+  adaptRoute(updateMonkeynautController),
 );
 
 _monkeynautsRouter.put(
@@ -123,8 +123,7 @@ _monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    changePlayerOperatorMonkeynautController.handle(request, response),
+  adaptRoute(changePlayerOperatorMonkeynautController),
 );
 
 _monkeynautsRouter.put(
@@ -141,8 +140,7 @@ _monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    changePlayerOwnerMonkeynautController.handle(request, response),
+  adaptRoute(changePlayerOwnerMonkeynautController),
 );
 
 _monkeynautsRouter.use('/monkeynauts', _monkeynautsRouter);

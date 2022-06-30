@@ -9,9 +9,17 @@ import { IPlayersRepository } from '@modules/players/domain/repositories/players
 import { UpdateMonkeynautRequestDTO } from '@modules/monkeynauts/dtos/update-monkeynaut-request';
 
 import { AppError } from '@shared/errors/app-error';
+import { Either, right } from '@shared/core/logic/either';
 
 import { updateProps } from '@shared/helpers/update-props';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
+
+type UpdateMonkeynautResponse = Either<
+  Error,
+  {
+    monkeynaut: IMonkeynaut;
+  }
+>;
 
 @injectable()
 class UpdateMonkeynautBusinessLogic {
@@ -23,7 +31,9 @@ class UpdateMonkeynautBusinessLogic {
     private playerRepository: IPlayersRepository,
   ) {}
 
-  async execute(data: UpdateMonkeynautRequestDTO): Promise<IMonkeynaut> {
+  async execute(
+    data: UpdateMonkeynautRequestDTO,
+  ): Promise<UpdateMonkeynautResponse> {
     const { energy, maxEnergy, monkeynautId, playerId, ownerId } = data;
 
     const foundOwnerPlayer = await this.playerRepository.findById(ownerId);
@@ -91,7 +101,9 @@ class UpdateMonkeynautBusinessLogic {
 
     await this.monkeynautsRepository.update(monkeynaut);
 
-    return monkeynaut;
+    return right({
+      monkeynaut,
+    });
   }
 }
 

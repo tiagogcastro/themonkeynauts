@@ -18,7 +18,7 @@ authRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) => appPlayerAuthController.handle(request, response),
+  adaptRoute(appPlayerAuthController),
 );
 
 export { authRouter };

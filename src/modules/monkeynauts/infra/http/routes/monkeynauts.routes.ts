@@ -23,7 +23,7 @@ monkeynautsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listMonkeynautsController.handle(request, response),
+  adaptRoute(listMonkeynautsController),
 );
 
 monkeynautsRouter.put(
@@ -40,8 +40,7 @@ monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    changePlayerOperatorMonkeynautController.handle(request, response),
+  adaptRoute(changePlayerOperatorMonkeynautController),
 );
 
 monkeynautsRouter.put(
@@ -58,8 +57,7 @@ monkeynautsRouter.put(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    changePlayerOwnerMonkeynautController.handle(request, response),
+  adaptRoute(changePlayerOwnerMonkeynautController),
 );
 
 export { monkeynautsRouter };

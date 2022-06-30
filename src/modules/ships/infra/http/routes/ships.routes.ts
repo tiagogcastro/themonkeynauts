@@ -23,7 +23,7 @@ shipsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listShipsController.handle(request, response),
+  adaptRoute(listShipsController),
 );
 
 shipsRouter.get(
@@ -40,7 +40,7 @@ shipsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listUniqueShipController.handle(request, response),
+  adaptRoute(listUniqueShipController),
 );
 
 shipsRouter.put(
@@ -68,8 +68,7 @@ shipsRouter.patch(
       shipId: Joi.string().uuid().required(),
     },
   }),
-  (request, response) =>
-    changeActivePlayerShipController.handle(request, response),
+  adaptRoute(changeActivePlayerShipController),
 );
 
 export { shipsRouter };

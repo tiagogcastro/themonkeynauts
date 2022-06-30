@@ -64,7 +64,7 @@ _playersRouter.patch(
       abortEarly: false,
     },
   ),
-  (request, response) => saveWalletController.handle(request, response),
+  adaptRoute(saveWalletController),
 );
 
 _playersRouter.patch(

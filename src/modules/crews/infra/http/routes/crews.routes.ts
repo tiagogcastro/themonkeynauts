@@ -23,7 +23,7 @@ crewsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listCrewsController.handle(request, response),
+  adaptRoute( listCrewsController)
 );
 
 crewsRouter.get(
@@ -39,7 +39,7 @@ crewsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listCrewsController.handle(request, response),
+  adaptRoute( listCrewsController)
 );
 
 crewsRouter.post(
@@ -56,7 +56,7 @@ crewsRouter.post(
       abortEarly: false,
     },
   ),
-  (request, response) => createCrewController.handle(request, response),
+  adaptRoute( createCrewController)
 );
 
 crewsRouter.delete(
@@ -72,8 +72,8 @@ crewsRouter.delete(
       abortEarly: false,
     },
   ),
-  (request, response) =>
-    removeMonkeynautFromCrewController.handle(request, response),
+  adaptRoute(
+    removeMonkeynautFromCrewController)
 );
 
 export { crewsRouter };

@@ -16,7 +16,7 @@ _logsRouter.get(
       abortEarly: false,
     },
   ),
-  (request, response) => listLogsController.handle(request, response),
+  adaptRoute(listLogsController),
 );
 
 _logsRouter.use('/logs', _logsRouter);
