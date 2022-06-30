@@ -1,26 +1,37 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import { AppPlayerAuthBusinessLogic } from '@modules/players/core/business-logic/app-auth-player';
 
+import { AppPlayerAuthRequestDTO } from '@modules/players/dtos/auth-player-request';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 
-class AppPlayerAuthController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { email, password } = request.body;
-
+class AppPlayerAuthController implements IController<AppPlayerAuthRequestDTO> {
+  async handle({
+    email,
+    password,
+  }: AppPlayerAuthRequestDTO): Promise<HttpResponse> {
     const appPlayerAuthBusinessLogic = container.resolve(
       AppPlayerAuthBusinessLogic,
     );
 
-    const { player, token } = await appPlayerAuthBusinessLogic.execute({
+    const result = await appPlayerAuthBusinessLogic.execute({
       email,
       password,
     });
 
-    return response.status(200).json({
-      player: instanceToInstance('player', player),
-      token,
+    if (result.isLeft()) {
+      return clientError(result.value);
+    }
+
+    return ok({
+      player: instanceToInstance('player', result.value.player),
+      token: result.value.token,
     });
   }
 }

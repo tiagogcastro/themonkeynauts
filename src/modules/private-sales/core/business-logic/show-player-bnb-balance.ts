@@ -1,16 +1,20 @@
 import { balanceConfig } from '@config/balance';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IPrivateSalesRepository } from '../../domain/repositories/private-sales-repositories';
 
-type ShowPlayerBNBBalanceResponse = {
-  player_balance: {
-    bnbAmount_spent: number;
-    bnbAmount_spent_max: number;
-    wallet: string;
-  };
-};
+type ShowPlayerBNBBalanceResponse = Either<
+  Error,
+  {
+    player_balance: {
+      bnbAmount_spent: number;
+      bnbAmount_spent_max: number;
+      wallet: string;
+    };
+  }
+>;
 
 @injectable()
 class ShowPlayerBNBBalanceBusinessLogic {
@@ -44,13 +48,13 @@ class ShowPlayerBNBBalanceBusinessLogic {
       0,
     );
 
-    return {
+    return right({
       player_balance: {
         bnbAmount_spent: bnbAmountTotal,
         bnbAmount_spent_max: bnbAmountLimit,
         wallet: player.wallet,
       },
-    };
+    });
   }
 }
 

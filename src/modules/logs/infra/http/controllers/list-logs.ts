@@ -1,16 +1,30 @@
 import { ListLogsBusinessLogic } from '@modules/logs/core/business-logic/list-logs';
-import { Request, Response } from 'express';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
-class ListLogsController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { playerId } = request.query;
-
+type ListLogsControllerRequestDTO = {
+  playerId: string;
+};
+class ListLogsController implements IController<ListLogsControllerRequestDTO> {
+  async handle({
+    playerId,
+  }: ListLogsControllerRequestDTO): Promise<HttpResponse> {
     const listLogsBusinessLogic = container.resolve(ListLogsBusinessLogic);
 
-    const logs = await listLogsBusinessLogic.execute(playerId as string);
+    const result = await listLogsBusinessLogic.execute(playerId as string);
 
-    return response.status(200).json(logs);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

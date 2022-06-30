@@ -9,18 +9,22 @@ import { IResourcesRepository } from '@modules/players/domain/repositories/resou
 import { AppError } from '@shared/errors/app-error';
 import { Maybe } from '@shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
+import { Either, right } from '@shared/core/logic/either';
 
-type RemovePlayerResourceAmountRequestDTO = {
+export type RemovePlayerResourceAmountRequestDTO = {
   nickname?: string;
   playerId: string;
 
   resources: Partial<ResourceItems>;
 };
 
-type Response = {
-  player: IPlayer;
-  resource: Maybe<IResource>;
-};
+type RemovePlayerResourceAmountResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+    resource: Maybe<IResource>;
+  }
+>;
 
 @injectable()
 class RemovePlayerResourceAmountBusinessLogic {
@@ -36,7 +40,7 @@ class RemovePlayerResourceAmountBusinessLogic {
     nickname,
     playerId,
     resources,
-  }: RemovePlayerResourceAmountRequestDTO): Promise<Response> {
+  }: RemovePlayerResourceAmountRequestDTO): Promise<RemovePlayerResourceAmountResponse> {
     function getResource(resource: IResource) {
       const playerResources = {
         copper: resource.copper,
@@ -115,10 +119,10 @@ class RemovePlayerResourceAmountBusinessLogic {
 
       await this.resourcesRepository.save(resourcesUpdated);
 
-      return {
+      return right({
         player,
         resource: resourcesUpdated,
-      };
+      });
     }
 
     const player = await this.playersRepository.findById(playerId);
@@ -137,10 +141,10 @@ class RemovePlayerResourceAmountBusinessLogic {
 
     await this.resourcesRepository.save(resourcesUpdated);
 
-    return {
+    return right({
       player,
       resource: resourcesUpdated,
-    };
+    });
   }
 }
 

@@ -1,12 +1,16 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
-type SaveWalletRequestDTO = {
+export type SaveWalletRequestDTO = {
   wallet: string;
   playerId: string;
 };
+
+type SaveWalletResponse = Either<Error, IPlayer>;
+
 @injectable()
 class SaveWalletBusinessLogic {
   constructor(
@@ -14,7 +18,10 @@ class SaveWalletBusinessLogic {
     private playersRepository: IPlayersRepository,
   ) {}
 
-  async execute({ playerId, wallet }: SaveWalletRequestDTO): Promise<IPlayer> {
+  async execute({
+    playerId,
+    wallet,
+  }: SaveWalletRequestDTO): Promise<SaveWalletResponse> {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
@@ -37,7 +44,7 @@ class SaveWalletBusinessLogic {
 
     await this.playersRepository.save(player);
 
-    return player;
+    return right(player);
   }
 }
 

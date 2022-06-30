@@ -1,11 +1,12 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
-type UpdatePlayerRequestDTO = {
+export type UpdatePlayerRequestDTO = {
   playerId: string;
   nickname: string;
   role?: PlayerRole;
@@ -15,9 +16,7 @@ type UpdatePlayerRequestDTO = {
   newPasswordConfirmation?: string;
 };
 
-type Response = {
-  player: IPlayer;
-};
+type UpdatePlayerResponse = Either<Error, IPlayer>;
 
 @injectable()
 class UpdatePlayerBusinessLogic {
@@ -36,7 +35,7 @@ class UpdatePlayerBusinessLogic {
     newPasswordConfirmation,
     oldPassword,
     role,
-  }: UpdatePlayerRequestDTO): Promise<Response> {
+  }: UpdatePlayerRequestDTO): Promise<UpdatePlayerResponse> {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
@@ -87,9 +86,7 @@ class UpdatePlayerBusinessLogic {
 
     await this.playersRepository.save(player);
 
-    return {
-      player,
-    };
+    return right(player);
   }
 }
 

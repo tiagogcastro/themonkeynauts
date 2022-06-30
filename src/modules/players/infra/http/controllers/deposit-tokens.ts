@@ -32,34 +32,38 @@ class DepositTokensController
     player,
     playerId,
   }: DepositTokensControllerRequestDTO): Promise<HttpResponse> {
-    const depositTokensBusinessLogic = container.resolve(
-      DepositTokensBusinessLogic,
-    );
+    try {
+      const depositTokensBusinessLogic = container.resolve(
+        DepositTokensBusinessLogic,
+      );
 
-    const result = await depositTokensBusinessLogic.execute({
-      txHash,
-      playerId: playerId || player.id,
-    });
+      const result = await depositTokensBusinessLogic.execute({
+        txHash,
+        playerId: playerId || player.id,
+      });
 
-    if (result.isLeft()) {
-      const error = result.value;
+      if (result.isLeft()) {
+        const error = result.value;
 
-      switch (error.constructor) {
-        case InvalidTransactionToError:
-          return conflict(error);
+        switch (error.constructor) {
+          case InvalidTransactionToError:
+            return conflict(error);
 
-        case InvalidTransactionFromError:
-          return conflict(error);
+          case InvalidTransactionFromError:
+            return conflict(error);
 
-        case InvalidPrivateKeyError:
-          return conflict(error);
+          case InvalidPrivateKeyError:
+            return conflict(error);
 
-        default:
-          return clientError(error);
+          default:
+            return clientError(error);
+        }
       }
-    }
 
-    return ok(instanceToInstance('player', result.value));
+      return ok(instanceToInstance('player', result.value));
+    } catch (error) {
+      return fail(error as Error, 'DepositTokens');
+    }
   }
 }
 

@@ -1,11 +1,13 @@
 import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { ResetPasswordRequestDTO } from '../../dtos/reset-password-request';
 
+type ResetPasswordResponse = Either<Error, null>;
 @injectable()
 class ResetPasswordBusinessLogic {
   constructor(
@@ -22,7 +24,10 @@ class ResetPasswordBusinessLogic {
     private dateProvider: IDateProvider,
   ) {}
 
-  async execute({ token, password }: ResetPasswordRequestDTO): Promise<void> {
+  async execute({
+    token,
+    password,
+  }: ResetPasswordRequestDTO): Promise<ResetPasswordResponse> {
     const playerTokens = await this.playerTokensRepository.findByToken(token);
 
     if (!playerTokens) throw new AppError('Token does not exists', 401);
@@ -51,6 +56,8 @@ class ResetPasswordBusinessLogic {
     await this.playersRepository.save(player);
 
     await this.playerTokensRepository.destroy(playerTokens.id);
+
+    return right(null);
   }
 }
 

@@ -1,7 +1,9 @@
 import { ILog } from '@modules/logs/domain/entities/log';
+import { Either, right } from '@shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { ILogsRepository } from '../../domain/repositories/logs-repositories';
 
+type ListLogsResponse = Either<Error, ILog[]>;
 @injectable()
 class ListLogsBusinessLogic {
   constructor(
@@ -9,7 +11,7 @@ class ListLogsBusinessLogic {
     private logsRepository: ILogsRepository,
   ) {}
 
-  async execute(playerId?: string): Promise<ILog[]> {
+  async execute(playerId?: string): Promise<ListLogsResponse> {
     let logs: ILog[] = [];
 
     if (playerId) {
@@ -18,7 +20,7 @@ class ListLogsBusinessLogic {
       logs = await this.logsRepository.listAllLogs();
     }
 
-    return logs;
+    return right(logs);
   }
 }
 

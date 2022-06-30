@@ -9,16 +9,20 @@ import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/a
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
 import { CreatePlayerRequestDTO } from '@modules/players/dtos/create-player-request';
+import { Either, right } from '@shared/core/logic/either';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
-type Response = {
-  player: IPlayer;
-  token: IPlayerAuth;
-};
+type CreatePlayerResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+    token: IPlayerAuth;
+  }
+>;
 
 @injectable()
 class CreatePlayerBusinessLogic {
@@ -47,7 +51,7 @@ class CreatePlayerBusinessLogic {
     nickname,
     role = PlayerRole.Default,
     password,
-  }: CreatePlayerRequestDTO): Promise<Response> {
+  }: CreatePlayerRequestDTO): Promise<CreatePlayerResponse> {
     const foundPlayer = await this.playersRepository.findByEmail(email);
 
     if (foundPlayer) {
@@ -73,7 +77,6 @@ class CreatePlayerBusinessLogic {
       isEnabled: true,
       activeShipId: null,
       isBanned: false,
-      activeShipId: null,
     });
 
     await this.playersRepository.create(player);
@@ -108,10 +111,10 @@ class CreatePlayerBusinessLogic {
 
     await this.appPlayerAuthRepository.create(domainPlayerAuth.playerAuth);
 
-    return {
+    return right({
       player,
       token: domainPlayerAuth.playerAuth,
-    };
+    });
   }
 }
 

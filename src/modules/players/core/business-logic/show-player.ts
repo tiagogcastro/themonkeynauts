@@ -5,16 +5,20 @@ import { IResourcesRepository } from '@modules/players/domain/repositories/resou
 import { AppError } from '@shared/errors/app-error';
 import { Maybe } from '@shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
+import { Either, right } from '@shared/core/logic/either';
 
-type ShowPlayerRequestDTO = {
+export type ShowPlayerRequestDTO = {
   nickname?: string;
   playerId: string;
 };
 
-type Response = {
-  player: IPlayer;
-  resource: Maybe<IResource>;
-};
+type ShowPlayerResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+    resource: Maybe<IResource>;
+  }
+>;
 
 @injectable()
 class ShowPlayerBusinessLogic {
@@ -29,7 +33,7 @@ class ShowPlayerBusinessLogic {
   async execute({
     nickname,
     playerId,
-  }: ShowPlayerRequestDTO): Promise<Response> {
+  }: ShowPlayerRequestDTO): Promise<ShowPlayerResponse> {
     if (nickname) {
       const player = await this.playersRepository.findByNickname(
         nickname as string,
@@ -41,10 +45,10 @@ class ShowPlayerBusinessLogic {
 
       const resource = await this.resourcesRepository.findByPlayerId(player.id);
 
-      return {
+      return right({
         player,
         resource,
-      };
+      });
     }
 
     const player = await this.playersRepository.findById(playerId);
@@ -55,10 +59,10 @@ class ShowPlayerBusinessLogic {
 
     const resource = await this.resourcesRepository.findByPlayerId(playerId);
 
-    return {
+    return right({
       player,
       resource,
-    };
+    });
   }
 }
 

@@ -17,7 +17,9 @@ type DisableEnablePlayerControllerRequestDTO = DisableEnablePlayerRequestDTO & {
     id: string;
   };
 };
-class DisableEnablePlayerController implements IController {
+class DisableEnablePlayerController
+  implements IController<DisableEnablePlayerControllerRequestDTO>
+{
   async handle({
     playerId,
     player,
@@ -37,7 +39,7 @@ class DisableEnablePlayerController implements IController {
 
       return ok(instanceToInstance('player', result.value));
     } catch (error) {
-      return fail(error as Error);
+      return fail(error as Error, 'DisableEnablePlayer');
     }
   }
 }

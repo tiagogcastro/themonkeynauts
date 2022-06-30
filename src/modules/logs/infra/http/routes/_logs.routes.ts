@@ -1,3 +1,4 @@
+import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { listLogsController } from '../controllers/list-logs';

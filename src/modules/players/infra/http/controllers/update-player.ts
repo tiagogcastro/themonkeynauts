@@ -1,25 +1,40 @@
-import { UpdatePlayerBusinessLogic } from '@modules/players/core/business-logic/update-player';
+import {
+  UpdatePlayerBusinessLogic,
+  UpdatePlayerRequestDTO,
+} from '@modules/players/core/business-logic/update-player';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { instanceToInstance } from '@shared/helpers/instance-to-instance';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-class UpdatePlayerController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const playerId = request.player.id;
-
-    const {
-      nickname,
-      newPassword,
-      newPasswordConfirmation,
-      oldPassword,
-      role,
-    } = request.body;
+type UpdatePlayerControllerRequestDTO = UpdatePlayerRequestDTO & {
+  player: {
+    id: string;
+  };
+};
+class UpdatePlayerController
+  implements IController<UpdatePlayerControllerRequestDTO>
+{
+  async handle({
+    nickname,
+    newPassword,
+    newPasswordConfirmation,
+    oldPassword,
+    role,
+    player,
+  }: UpdatePlayerControllerRequestDTO): Promise<HttpResponse> {
+    const playerId = player.id;
 
     const updatePlayerBusinessLogic = container.resolve(
       UpdatePlayerBusinessLogic,
     );
 
-    const { player } = await updatePlayerBusinessLogic.execute({
+    const result = await updatePlayerBusinessLogic.execute({
       playerId,
       nickname,
       newPassword,
@@ -28,9 +43,11 @@ class UpdatePlayerController {
       role,
     });
 
-    return response.status(200).json({
-      player: instanceToInstance('player', player),
-    });
+    if (result.isLeft()) {
+      return clientError(result.value);
+    }
+
+    return ok(instanceToInstance('player', result.value));
   }
 }
 

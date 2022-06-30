@@ -3,6 +3,7 @@ import { Nullable } from '../logic/nullable';
 export type HttpBodyResponse = {
   data: any;
   error: Nullable<{
+    where?: string;
     statusCode: number;
     name: string;
     messages: string[];
@@ -126,7 +127,8 @@ export function tooMany(error: Error): HttpResponse {
   };
 }
 
-export function fail(error: Error) {
+export function fail(error: Error, where?: string) {
+  console.log(where);
   console.log(error);
 
   return {
@@ -134,6 +136,7 @@ export function fail(error: Error) {
     body: {
       data: null,
       error: {
+        where,
         statusCode: 500,
         name: error.name,
         messages: [error.message],

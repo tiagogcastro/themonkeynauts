@@ -1,12 +1,14 @@
 import { PlayerToken } from '@modules/players/domain/entities/player-token';
 import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { AppError } from '@shared/errors/app-error';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { inject, injectable } from 'tsyringe';
 
+type SendForgotPasswordEmailResponse = Either<Error, null>;
 @injectable()
 class SendForgotPasswordEmailBusinessLogic {
   constructor(
@@ -20,7 +22,7 @@ class SendForgotPasswordEmailBusinessLogic {
     private mailProvider: IMailProvider,
   ) {}
 
-  async execute(email: string): Promise<void> {
+  async execute(email: string): Promise<SendForgotPasswordEmailResponse> {
     const player = await this.playersRepository.findByEmail(email);
 
     if (!player) throw new AppError('Player does not exists.', 409);
@@ -62,6 +64,8 @@ class SendForgotPasswordEmailBusinessLogic {
         },
       },
     });
+
+    return right(null);
   }
 }
 

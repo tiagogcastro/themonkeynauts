@@ -5,6 +5,7 @@ import {
 } from '@modules/players/domain/entities/player-auth';
 import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { Either, right } from '@shared/core/logic/either';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
@@ -12,10 +13,13 @@ import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { AppPlayerAuthRequestDTO } from '../../dtos/auth-player-request';
 
-type AppPlayerAuthResponse = {
-  player: IPlayer;
-  token: IPlayerAuth;
-};
+type AppPlayerAuthResponse = Either<
+  Error,
+  {
+    player: IPlayer;
+    token: IPlayerAuth;
+  }
+>;
 
 @injectable()
 export class AppPlayerAuthBusinessLogic {
@@ -102,9 +106,9 @@ export class AppPlayerAuthBusinessLogic {
 
     const token = domainPlayerAuth.playerAuth;
 
-    return {
+    return right({
       player,
       token,
-    };
+    });
   }
 }
