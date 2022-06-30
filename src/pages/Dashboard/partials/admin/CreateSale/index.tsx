@@ -192,7 +192,7 @@ export function AdminCreateSale() {
       setOpenSales(prevState => {
         return {
           ...prevState,
-          monkeynauts: response.data,
+          monkeynauts: response.data.data,
         }
       })
     } catch (error: any) {
@@ -211,7 +211,7 @@ export function AdminCreateSale() {
       setOpenSales(prevState => {
         return {
           ...prevState,
-          ships: response.data,
+          ships: response.data.data,
         }
       });
     } catch (error: any) {
@@ -230,12 +230,14 @@ export function AdminCreateSale() {
       setOpenSales(prevState => {
         return {
           ...prevState,
-          packs: response.data,
+          packs: response.data.data,
         }
       })
     } catch (error: any) {
     }
   }
+
+  console.log(openSales)
 
   async function getLastMonkeynautSale() {
     try {
@@ -248,7 +250,7 @@ export function AdminCreateSale() {
       setLastSales(prevState => {
         return {
           ...prevState,
-          monkeynauts: response.data,
+          monkeynauts: response.data.data,
         }
       })
     } catch (error: any) {
@@ -267,7 +269,7 @@ export function AdminCreateSale() {
       setLastSales(prevState => {
         return {
           ...prevState,
-          ships: response.data,
+          ships: response.data.data,
         }
       });
     } catch (error: any) {
@@ -285,7 +287,7 @@ export function AdminCreateSale() {
       setLastSales(prevState => {
         return {
           ...prevState,
-          packs: response.data,
+          packs: response.data.data,
         }
       })
     } catch (error: any) {

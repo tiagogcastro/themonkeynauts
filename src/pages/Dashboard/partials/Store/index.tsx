@@ -75,7 +75,7 @@ export function StoreTab() {
       setSales(prevState => {
         return {
           ...prevState,
-          monkeynauts: response.data,
+          monkeynauts: response.data.data,
         }
       })
     } catch (error: any) {
@@ -94,7 +94,7 @@ export function StoreTab() {
       setSales(prevState => {
         return {
           ...prevState,
-          ships: response.data,
+          ships: response.data.data,
         }
       });
     } catch (error: any) {
@@ -113,7 +113,7 @@ export function StoreTab() {
       setSales(prevState => {
         return {
           ...prevState,
-          packs: response.data,
+          packs: response.data.data,
         }
       })
     } catch (error: any) {

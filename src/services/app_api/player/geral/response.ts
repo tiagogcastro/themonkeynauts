@@ -1,3 +1,6 @@
+export type Data<T> = {
+  data: T
+}
 export type Player = {
   id: string;
   email: string;

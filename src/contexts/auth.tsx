@@ -54,7 +54,7 @@ export function AuthProvider({children}: AuthProviderProps) {
     try {
       const response = await api.player.geral.getPlayer();
       
-      let { player, resource } = response.data;
+      let { player, resource } = response.data.data;
       
       setPlayer({
         player: {
@@ -86,7 +86,7 @@ export function AuthProvider({children}: AuthProviderProps) {
   async function signIn(credentials: PlayerType.AppLoginParams): Promise<PlayerType.AppLoginResponse | undefined> {
     const response = await api.player.geral.authenticate.app_login(credentials);
 
-    const { token: { payload: token } } = response.data;
+    const { token: { payload: token } } = response.data.data;
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -108,13 +108,13 @@ export function AuthProvider({children}: AuthProviderProps) {
       }
     });
 
-    return response.data || undefined;
+    return response.data.data || undefined;
   }
 
   async function register(credentials: PlayerType.AppRegisterParams): Promise<PlayerType.AppRegisterResponse | undefined> {
     const response = await api.player.geral.register(credentials);
 
-    const { player, token: { payload: token } } = response.data;
+    const { player, token: { payload: token } } = response.data.data;
 
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     
@@ -136,7 +136,7 @@ export function AuthProvider({children}: AuthProviderProps) {
       }
     });
 
-    return response.data || undefined;
+    return response.data.data || undefined;
   }
 
   return (

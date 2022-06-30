@@ -32,7 +32,7 @@ export function Monkeynaut({
 
     setMonkeynaut({
       ...monkeynaut,
-      crew: getUniqueShipCrewResponse.data,
+      crew: getUniqueShipCrewResponse.data.data,
     });
   }
 

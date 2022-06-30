@@ -49,7 +49,7 @@ export function MonkeynautsTab({
         }
       });
 
-      monkeynautOwnerName = response.data.nickname;
+      monkeynautOwnerName = response.data.data.nickname;
     }
 
     setMonkeynaut({
@@ -70,7 +70,9 @@ export function MonkeynautsTab({
           }
         });
 
-        setMonkeynauts(response.data);
+        console.log(response.data.data)
+
+        setMonkeynauts(response.data.data.monkeynauts);
       } catch(err) {
         
       } finally {

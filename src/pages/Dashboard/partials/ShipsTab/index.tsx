@@ -56,7 +56,7 @@ export function ShipsTab({
         }
       });
 
-      shipOwnerName = response.data.nickname;
+      shipOwnerName = response.data.data.nickname;
     }
 
     setShip({
@@ -75,7 +75,7 @@ export function ShipsTab({
       }
     });
 
-    setShips(response.data);
+    setShips(response.data.data.ships);
     loadingShips.changeToFalse();
   }
 

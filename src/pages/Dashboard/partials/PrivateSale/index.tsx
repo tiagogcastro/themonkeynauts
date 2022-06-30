@@ -4,6 +4,7 @@ import { ethereum as ethereumConfig } from '@/config/ethereum';
 import { privateSale } from '@/config/privateSale';
 import { useAuth, useBoolean } from '@/hooks';
 import { baseApi } from '@/services/api';
+import { Data } from '@/services/app_api/player/types';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ApiError } from '@/utils/apiError';
@@ -39,9 +40,9 @@ export function PrivateSale() {
   const privateSaleSucessModal = useBoolean();
 
   async function getWalletBalance() {
-    const response = await baseApi.get<WalletBallance>('/private-sales/show-player-bnb-balance');
+    const response = await baseApi.get<Data<WalletBallance>>('/private-sales/show-player-bnb-balance');
 
-    const data = response.data;
+    const data = response.data.data;
 
     setWalletBalance(data)
   }
