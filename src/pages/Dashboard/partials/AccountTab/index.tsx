@@ -60,9 +60,9 @@ export function AccountTab() {
   //   setInputValue(String(value));
   // }
 
-  // function verifyIfHasInputValue(value: any) {
+  // function verifyIfHasInputValue(value: any, message: string) {
   //   if(!value) {
-  //     return toast('You need to enter the number to continue the deposit.', {
+  //     toast(message, {
   //       autoClose: 7000,
   //       pauseOnHover: true,
   //       type: 'warning',
@@ -73,7 +73,10 @@ export function AccountTab() {
   //         fontFamily: 'Orbitron, sans-serif',
   //       }
   //     });
+
+  //     return false;
   //   }
+  //   return true;
   // }
 
   // function commonToast() {
@@ -105,151 +108,156 @@ export function AccountTab() {
   // async function handleSubmitWithdraw(event: React.FormEvent<HTMLButtonElement>) {
   //   event.preventDefault();
 
-  //   verifyIfHasInputValue(inputValue);
-  //   commonToast();
+  //   const verifyHasInputValue = verifyIfHasInputValue(inputValue, 'You need to enter the number to continue the withdraw.');
+  //   if(verifyHasInputValue) {
+  //     commonToast();
 
-  //   withdrawButtonHasBlocked.changeToTrue();
+  //     withdrawButtonHasBlocked.changeToTrue();
 
-  //   try {
-  //     await baseApi.post('/players/withdraw-tokens', {
-  //       amount: inputValue
-  //     });
-      
-  //     toast(`${player?.player.nickname}, your ${inputValue} withdraw was a success`, {
-  //       autoClose: 5000,
-  //       pauseOnHover: true,
-  //       type: 'success',
-  //       style: {
-  //         background: COLORS.global.white_0,
-  //         color: COLORS.global.black_0,
-  //         fontSize: 14,
-  //         fontFamily: 'Orbitron, sans-serif',
-  //       }
-  //     });
-      
-  //     setInputValue('');
-  //   } catch (error: any) {
-  //     const apiErrorResponse = ApiError(error);
-
-  //     apiErrorResponse.messages.map(message => {
-  //       return toast(message, {
+  //     try {
+  //       await baseApi.post('/players/withdraw-tokens', {
+  //         amount: inputValue
+  //       });
+        
+  //       toast(`${player?.player.nickname}, your ${inputValue} withdraw was a success`, {
   //         autoClose: 5000,
   //         pauseOnHover: true,
-  //         type: 'error',
+  //         type: 'success',
   //         style: {
   //           background: COLORS.global.white_0,
-  //           color: COLORS.global.red_0,
+  //           color: COLORS.global.black_0,
   //           fontSize: 14,
   //           fontFamily: 'Orbitron, sans-serif',
   //         }
   //       });
-  //     });
-  //   } finally {
-  //     withdrawButtonHasBlocked.changeToFalse();
+        
+  //       setInputValue('');
+  //     } catch (error: any) {
+  //       const apiErrorResponse = ApiError(error);
+
+  //       apiErrorResponse.messages.map(message => {
+  //         return toast(message, {
+  //           autoClose: 5000,
+  //           pauseOnHover: true,
+  //           type: 'error',
+  //           style: {
+  //             background: COLORS.global.white_0,
+  //             color: COLORS.global.red_0,
+  //             fontSize: 14,
+  //             fontFamily: 'Orbitron, sans-serif',
+  //           }
+  //         });
+  //       });
+  //     } finally {
+  //       withdrawButtonHasBlocked.changeToFalse();
+  //     }
   //   }
+
   // }
 
   // async function handleSubmitDeposit(event: React.FormEvent<HTMLButtonElement>) {
   //   event.preventDefault();
 
-  //   verifyIfHasInputValue(inputValue);
-  //   commonToast();
+  //   const verifyHasInputValue = verifyIfHasInputValue(inputValue, 'You need to enter the number to continue the deposit.');
+  //   if(verifyHasInputValue) {
+  //     commonToast();
 
-  //   depositButtonHasBlocked.changeToTrue();
+  //     depositButtonHasBlocked.changeToTrue();
 
-  //   try {
-  //     if(player) {
-  //       await verifyWallet(player.player);
-  //     }
+  //     try {
+  //       if(player) {
+  //         await verifyWallet(player.player);
+  //       }
 
-  //     const { transaction, error } = await paymentByEthereum({
-  //       ethereum: (window as any).ethereum,
-  //       toAddress: ethereumConfig.privateSaleTransaction.toAddress,
-  //       ether: ethers.utils.parseEther(inputValue)._hex,
-  //       dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
-  //     });
-  
-  //     if(error) {
-  //       return toast(error.message, {
-  //         autoClose: 5000,
-  //         pauseOnHover: true,
-  //         type: 'error',
-  //         style: {
-  //           background: COLORS.global.white_0,
-  //           color: COLORS.global.red_0,
-  //           fontSize: 14,
-  //           fontFamily: 'Orbitron, sans-serif',
-  //         }
+  //       const { transaction, error } = await paymentByEthereum({
+  //         ethereum: (window as any).ethereum,
+  //         toAddress: ethereumConfig.privateSaleTransaction.toAddress,
+  //         ether: ethers.utils.parseEther(inputValue)._hex,
+  //         dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
   //       });
-  //     }
-
-  //     if(transaction) {
-  //       try {
-  //         toast(`Wait for us to confirm the deposit in our database`, {
+    
+  //       if(error) {
+  //         return toast(error.message, {
   //           autoClose: 5000,
   //           pauseOnHover: true,
-  //           type: 'info',
+  //           type: 'error',
   //           style: {
   //             background: COLORS.global.white_0,
-  //             color: COLORS.global.black_0,
+  //             color: COLORS.global.red_0,
   //             fontSize: 14,
   //             fontFamily: 'Orbitron, sans-serif',
   //           }
   //         });
+  //       }
 
-  //         await baseApi.post('/players/deposit-tokens', {
-  //           txHash: transaction
-  //         });
-          
-  //         toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
-  //           autoClose: 5000,
-  //           pauseOnHover: true,
-  //           type: 'success',
-  //           style: {
-  //             background: COLORS.global.white_0,
-  //             color: COLORS.global.black_0,
-  //             fontSize: 14,
-  //             fontFamily: 'Orbitron, sans-serif',
-  //           }
-  //         });
-          
-  //         setInputValue('');
-  //       } catch (error: any) {
-  //         const apiErrorResponse = ApiError(error);
-
-  //         apiErrorResponse.messages.map(message => {
-  //           return toast(message, {
+  //       if(transaction) {
+  //         try {
+  //           toast(`Wait for us to confirm the deposit in our database`, {
   //             autoClose: 5000,
   //             pauseOnHover: true,
-  //             type: 'error',
+  //             type: 'info',
   //             style: {
   //               background: COLORS.global.white_0,
-  //               color: COLORS.global.red_0,
+  //               color: COLORS.global.black_0,
   //               fontSize: 14,
   //               fontFamily: 'Orbitron, sans-serif',
   //             }
   //           });
-  //         });
-  //       }
-  //     }
-  //   } catch(error: any) {
-  //     const apiErrorResponse = ApiError(error);
 
-  //     apiErrorResponse.messages.map(message => {
-  //       return toast(message, {
-  //         autoClose: 5000,
-  //         pauseOnHover: true,
-  //         type: 'error',
-  //         style: {
-  //           background: COLORS.global.white_0,
-  //           color: COLORS.global.red_0,
-  //           fontSize: 14,
-  //           fontFamily: 'Orbitron, sans-serif',
+  //           await baseApi.post('/players/deposit-tokens', {
+  //             txHash: transaction
+  //           });
+            
+  //           toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
+  //             autoClose: 5000,
+  //             pauseOnHover: true,
+  //             type: 'success',
+  //             style: {
+  //               background: COLORS.global.white_0,
+  //               color: COLORS.global.black_0,
+  //               fontSize: 14,
+  //               fontFamily: 'Orbitron, sans-serif',
+  //             }
+  //           });
+            
+  //           setInputValue('');
+  //         } catch (error: any) {
+  //           const apiErrorResponse = ApiError(error);
+
+  //           apiErrorResponse.messages.map(message => {
+  //             return toast(message, {
+  //               autoClose: 5000,
+  //               pauseOnHover: true,
+  //               type: 'error',
+  //               style: {
+  //                 background: COLORS.global.white_0,
+  //                 color: COLORS.global.red_0,
+  //                 fontSize: 14,
+  //                 fontFamily: 'Orbitron, sans-serif',
+  //               }
+  //             });
+  //           });
   //         }
+  //       }
+  //     } catch(error: any) {
+  //       const apiErrorResponse = ApiError(error);
+
+  //       apiErrorResponse.messages.map(message => {
+  //         return toast(message, {
+  //           autoClose: 5000,
+  //           pauseOnHover: true,
+  //           type: 'error',
+  //           style: {
+  //             background: COLORS.global.white_0,
+  //             color: COLORS.global.red_0,
+  //             fontSize: 14,
+  //             fontFamily: 'Orbitron, sans-serif',
+  //           }
+  //         });
   //       });
-  //     });
-  //   } finally {
-  //     depositButtonHasBlocked.changeToFalse();
+  //     } finally {
+  //       depositButtonHasBlocked.changeToFalse();
+  //     }
   //   }
   // }
 
