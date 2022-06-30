@@ -11,26 +11,26 @@ import * as Yup from 'yup';
 
 import * as S from './styles';
 
-type AirDropType = 'MONKEYNAUT' | 'SHIP' | 'PACK';
+type AirDropType = 'Monkeynaut' | 'Ship' | 'Pack';
 
 type CommonAirDropFields<Rank, Class> = {
   rank: Rank;
   class: Class;
 }
 
-type MonkeynautRanks = 'PRIVATE' | 'SERGEANT' | 'CAPTAIN' | 'MAJOR';
-type ShipRanks = 'A' | 'B' |'S';
+type MonkeynautRanks = 'Private' | 'Sergeant' | 'Captain' | 'Major';
+type ShipRanks = 'a' | 'b' |'s';
 
 type AirDropData = {
   type: AirDropType;
   email: string;
   monkeynaut?: {
-    rank: CommonAirDropFields<MonkeynautRanks | 'RANDOM', 'RANDOM'>;
-    class: 'RANDOM';
+    rank: CommonAirDropFields<MonkeynautRanks | 'Random', 'Random'>;
+    class: 'Random';
   };
   ship?: {
-    rank: CommonAirDropFields<ShipRanks | 'RANDOM', 'RANDOM'>;
-    class: 'RANDOM';
+    rank: CommonAirDropFields<ShipRanks | 'Random', 'Random'>;
+    class: 'Random';
   };
 }
 
@@ -41,7 +41,7 @@ const createNftDropSchema = Yup.object().shape({
   type: Yup.string()
     .required('This field is required'),
   monkeynaut: Yup.object().when('type', {
-    is: (value: any) => value === 'MONKEYNAUT',
+    is: (value: any) => value === 'Monkeynaut',
     then: Yup.object({
       role: Yup.string()
         .required('This field is required'),
@@ -50,7 +50,7 @@ const createNftDropSchema = Yup.object().shape({
     })
   }),
   ship: Yup.object().when('type', {
-    is: (value: any) => value === 'SHIP',
+    is: (value: any) => value === 'Ship',
     then: Yup.object({
       role: Yup.string()
         .required('This field is required'),
@@ -61,76 +61,76 @@ const createNftDropSchema = Yup.object().shape({
 });
 
 const roleFields = {
-  MONKEYNAUT: [
+  Monkeynaut: [
     {
-      value: 'RANDOM',
+      value: 'Random',
       label: 'Random'
     },
   ],
-  SHIP: [
+  Ship: [
     {
-      value: 'RANDOM',
+      value: 'Random',
       label: 'Random'
     },
   ],
-  PACK: []
+  Pack: []
 };
 
 const ranksFields = {
-  MONKEYNAUT: [
+  Monkeynaut: [
     {
-      value: 'PRIVATE',
+      value: 'Private',
       label: 'Private'
     },
     {
-      value: 'SERGEANT',
+      value: 'Sergeant',
       label: 'Sergeant'
     },
     {
-      value: 'CAPTAIN',
+      value: 'Captain',
       label: 'Captain'
     },
     {
-      value: 'MAJOR',
+      value: 'Major',
       label: 'Major'
     },
     {
-      value: 'RANDOM',
+      value: 'Random',
       label: 'Random'
     },
   ],
-  SHIP: [
+  Ship: [
     {
-      value: 'B',
+      value: 'b',
       label: 'B'
     },
     {
-      value: 'A',
+      value: 'a',
       label: 'A'
     },
     {
-      value: 'S',
+      value: 's',
       label: 'S'
     },
     {
-      value: 'RANDOM',
+      value: 'Random',
       label: 'Random'
     },
   ],
-  PACK: []
+  Pack: []
 };
 
 const types = [
   {
-    value: 'MONKEYNAUT',
+    value: 'Monkeynaut',
     label: 'Monkeynaut'
   },
   {
-    value: 'SHIP',
+    value: 'Ship',
     label: 'Ship'
   },
   {
-    value: 'PACK',
+    value: 'Pack',
     label: 'Pack'
   },
 ];
@@ -146,7 +146,7 @@ export function AdminAirDropNft() {
         abortEarly: false
       });
 
-      await baseApi.post('/sale-events/create-air-drop-nft', data);
+      await baseApi.post('/admins/sale-events/create-air-drop-nft', data);
 
       rest.reset();
 
@@ -202,7 +202,7 @@ export function AdminAirDropNft() {
               onChange={(e: any) => setCurrentType(e.value)}
               fields={types}
             />
-            {currentType === 'MONKEYNAUT' && (
+            {currentType === 'Monkeynaut' && (
               <>
                 <InputSelect
                   name={`${currentType?.toLowerCase()}.role`}
@@ -216,7 +216,7 @@ export function AdminAirDropNft() {
                 />
               </>
             )}
-            {currentType === 'SHIP' && (
+            {currentType === 'Ship' && (
               <>
                 <InputSelect
                   name={`${currentType?.toLowerCase()}.role`}

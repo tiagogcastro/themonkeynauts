@@ -32,7 +32,7 @@ export function AdminBanAccount() {
         abortEarly: false
       });
 
-      const response = await baseApi.patch<GetPlayer>('/admin/players/ban-unban-player', data);
+      const response = await baseApi.patch<GetPlayer>('/admins/players/ban-unban-player', data);
 
       const player = response.data.data;
 

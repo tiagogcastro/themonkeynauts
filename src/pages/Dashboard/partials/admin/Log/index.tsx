@@ -27,7 +27,7 @@ export function AdminLog() {
 
   async function getLogs() {
     try {
-      const response = await baseApi.get('/logs/list');
+      const response = await baseApi.get('/admins/logs/list-logs');
 
       setLogs(response.data);
     } catch (error: any) {

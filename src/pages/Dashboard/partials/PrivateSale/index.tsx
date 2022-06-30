@@ -228,10 +228,10 @@ export function PrivateSale() {
               <p className="text">To reduce the impact of large whales on our ecosystem, we stipulate that each account will be able to buy a minimum of 0.3 BNB and a maximum of 3 BNB, spreading the tokens among more players.</p>
               <p className="text">1 BNB is equivalent to 13.000 SPC</p>
               <p className="text">Read our whitepaper for more detailed information about our tokenomics. </p>
-              {walletBalance?.player_balance.bnbAmount_spent && (
+              {walletBalance?.player_balance.bnbAmount_spent ? (
                 <p className="text">
                 You already purchased a total of <span>{walletBalance && walletBalance?.player_balance.bnbAmount_spent * 13000} SPCs</span> with your <span>{walletBalance?.player_balance.bnbAmount_spent} BNBs</span> sended.</p>
-              )}
+              ) : <></>}
               
             </div>
             <input 

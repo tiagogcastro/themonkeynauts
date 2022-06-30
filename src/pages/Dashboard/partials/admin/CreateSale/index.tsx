@@ -31,7 +31,7 @@ const schema = Yup.object().shape({
     .required('This field is required'),
 
   saleMonkeynaut: Yup.object().when('type', {
-    is: (value: any) => value === 'MONKEYNAUT',
+    is: (value: any) => value === 'Monkeynaut',
     then: Yup.object({
       private: Yup.number()
       .required('This field is required')
@@ -49,7 +49,7 @@ const schema = Yup.object().shape({
   }),
 
   saleShip: Yup.object().when('type', {
-    is: (value: any) => value === 'SHIP',
+    is: (value: any) => value === 'Ship',
     then: Yup.object({
       rankA: Yup.number()
       .required('This field is required')
@@ -64,7 +64,7 @@ const schema = Yup.object().shape({
   }),
 
   salePack: Yup.object().when('type', {
-    is: (value: any) => value === 'PACK',
+    is: (value: any) => value === 'Pack',
     then: Yup.object({
       type: Yup.string()
       .required('This field is required')
@@ -78,7 +78,7 @@ type CreateSale = {
   startDate: string;
   endDate: string;
   crypto: 'BNB' | 'BUSD' | 'SPC';
-  type: 'MONKEYNAUT' | 'SHIP' | 'PACK';
+  type: 'Monkeynaut' | 'Ship' | 'Pack';
   saleMonkeynaut?: MonkeynautSale;
   saleShip?: ShipSale;
   salePack?: PackSale;
@@ -86,15 +86,15 @@ type CreateSale = {
 
 const types = [
   {
-    value: 'MONKEYNAUT',
+    value: 'Monkeynaut',
     label: 'Monkeynaut'
   },
   {
-    value: 'SHIP',
+    value: 'Ship',
     label: 'Spaceship'
   },
   {
-    value: 'PACK',
+    value: 'Pack',
     label: 'Pack'
   },
 ];
@@ -116,24 +116,24 @@ const cryptoTypes = [
 
 const packType = [
   {
-    value: 'BASIC',
+    value: 'Basic',
     label: 'Basic'
   },
   {
-    value: 'ADVANCED',
+    value: 'Advanced',
     label: 'Advanced'
   },
   {
-    value: 'EXPERT',
+    value: 'Ex',
     label: 'Expert'
   },
   {
-    value: 'RANDOM',
+    value: 'Random',
     label: 'Random'
   },
 ]
 
-type SaleType = 'MONKEYNAUT' | 'SHIP' | 'PACK';
+type SaleType = 'Monkeynaut' | 'Ship' | 'Pack';
 
 type CommonSaleProps = {
   id: string;
@@ -164,7 +164,7 @@ type ShipSale = CommonSaleProps & {
 };
 
 type PackSale = CommonSaleProps & {
-  type: 'BASIC' | 'ADVANCED' | 'EXPERT' | 'RANDOM';
+  type: 'Basic' | 'Advanced' | 'Expert' | 'Random';
 };
 
 type Sales = {
@@ -327,7 +327,7 @@ export function AdminCreateSale() {
 
 
     switch (data.type) {
-      case 'MONKEYNAUT':
+      case 'Monkeynaut':
         dataCommon = {
           ...dataCommon,
           saleMonkeynaut: {
@@ -338,7 +338,7 @@ export function AdminCreateSale() {
           }
         }
         break;
-      case 'SHIP':
+      case 'Ship':
         dataCommon = {
           ...dataCommon,
           saleShip: {
@@ -348,7 +348,7 @@ export function AdminCreateSale() {
           },
         }
         break;
-      case 'PACK':
+      case 'Pack':
         dataCommon = {
           ...dataCommon,
           salePack: {
@@ -384,18 +384,18 @@ export function AdminCreateSale() {
         abortEarly: false
       });
 
-      await baseApi.post('/sale-events/create', postData);
+      await baseApi.post('/admins/sale-events/create', postData);
 
       const executeGetOpenSaleByType = {
-        MONKEYNAUT: getOpenMonkeynautSale,
-        SHIP: getOpenShipSale,
-        PACK: getOpenPackSale,
+        Monkeynaut: getOpenMonkeynautSale,
+        Ship: getOpenShipSale,
+        Pack: getOpenPackSale,
       };
 
       const executeLastOpenSaleByType = {
-        MONKEYNAUT: getLastMonkeynautSale,
-        SHIP: getLastShipSale,
-        PACK: getLastPackSale,
+        Monkeynaut: getLastMonkeynautSale,
+        Ship: getLastShipSale,
+        Pack: getLastPackSale,
       };
 
       executeGetOpenSaleByType[type]();
@@ -443,17 +443,17 @@ export function AdminCreateSale() {
   async function stopSale(sale: MonkeynautSale | ShipSale | PackSale) {
     try {
       const saleDataUnique = {
-        MONKEYNAUT: {
+        Monkeynaut: {
           saleMonkeynaut: {
             saleMonkeynautId: sale.id,
           }
         },
-        SHIP: {
+        Ship: {
           saleShip: {
             saleShipId: sale.id,
           }
         },
-        PACK: {
+        Pack: {
           salePack: {
             salePackId: sale.id,
           }
@@ -469,15 +469,15 @@ export function AdminCreateSale() {
       });
       
       const executeGetOpenSaleByType = {
-        MONKEYNAUT: getOpenMonkeynautSale,
-        SHIP: getOpenShipSale,
-        PACK: getOpenPackSale,
+        Monkeynaut: getOpenMonkeynautSale,
+        Ship: getOpenShipSale,
+        Pack: getOpenPackSale,
       };
 
       const executeGetLastSaleByType = {
-        MONKEYNAUT: getLastMonkeynautSale,
-        SHIP: getLastShipSale,
-        PACK: getLastPackSale,
+        Monkeynaut: getLastMonkeynautSale,
+        Ship: getLastShipSale,
+        Pack: getLastPackSale,
       };
 
       executeGetOpenSaleByType[_type]()
@@ -551,7 +551,7 @@ export function AdminCreateSale() {
               type="number"
               labelText='Quantity'
             />
-            {currentType === 'MONKEYNAUT' && (
+            {currentType === 'Monkeynaut' && (
               <>
                 <Input 
                   name="saleMonkeynaut.private"
@@ -576,7 +576,7 @@ export function AdminCreateSale() {
               </>
             )}
 
-            {currentType === 'SHIP' && (
+            {currentType === 'Ship' && (
               <>
                 <Input 
                   name="saleShip.rankA"
@@ -596,7 +596,7 @@ export function AdminCreateSale() {
               </>
             )}
 
-            {currentType === 'PACK' && (
+            {currentType === 'Pack' && (
               <>
                 <InputSelect 
                   name='salePack.type'
