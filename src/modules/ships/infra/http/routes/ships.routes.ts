@@ -7,7 +7,6 @@ import { changeActivePlayerShipController } from '../controllers/change-active-p
 import { consumeFuelController } from '../controllers/consume-fuel';
 import { listShipsController } from '../controllers/list-ships';
 import { listUniqueShipController } from '../controllers/list-unique-ship';
-import { refuelShipController } from '../controllers/refuel-ship';
 
 const shipsRouter = Router();
 
@@ -59,22 +58,6 @@ shipsRouter.put(
     },
   ),
   adaptRoute(consumeFuelController),
-);
-
-shipsRouter.put(
-  '/refuel-ship',
-  ensureAuthenticated,
-  celebrate(
-    {
-      [Segments.BODY]: {
-        shipId: Joi.string().uuid(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
-  (request, response) => refuelShipController.handle(request, response),
 );
 
 shipsRouter.patch(

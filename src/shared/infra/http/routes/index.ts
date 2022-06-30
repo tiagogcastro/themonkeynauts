@@ -1,3 +1,5 @@
+import { Router } from 'express';
+
 import { crewsRouter } from '@modules/crews/infra/http/routes/crews.routes';
 import { _logsRouter } from '@modules/logs/infra/http/routes/_logs.routes';
 import { monkeynautsRouter } from '@modules/monkeynauts/infra/http/routes/monkeynauts.routes';
@@ -12,8 +14,8 @@ import { _privateSalesRouter } from '@modules/private-sales/infra/http/routes/_p
 import { saleEventsRouter } from '@modules/sales/infra/http/routes/sale-events.routes';
 import { _saleEventsRouter } from '@modules/sales/infra/http/routes/_sale-events.routes';
 import { shipsRouter } from '@modules/ships/infra/http/routes/ships.routes';
+import { spaceStationRouter } from '@modules/ships/infra/http/routes/space-station.routes';
 import { _shipsRouter } from '@modules/ships/infra/http/routes/_ships.routes';
-import { Router } from 'express';
 
 const router = Router();
 
@@ -22,6 +24,7 @@ router.use('/auth', authRouter);
 router.use('/private-sales', privateSalesRouter);
 router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
+router.use('/space-station', spaceStationRouter);
 
 router.use('/admins', ensureAuthenticated, ensureAdministrator, [
   _playersRouter,
