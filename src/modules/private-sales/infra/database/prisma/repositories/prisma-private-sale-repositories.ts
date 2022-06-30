@@ -22,7 +22,7 @@ class PrismaPrivateSalesRepository implements IPrivateSalesRepository {
   ): Promise<IPrivateSale[]> {
     const privateSales = await prisma.privateSale.findMany({
       where: {
-        playerId: playerId,
+        playerId,
       },
     });
 
