@@ -14,6 +14,7 @@ import {
   StoreTab
 } from './partials';
 import { Admin } from './partials/admin';
+import { Owner } from './partials/owner';
 
 import {
   Container,
@@ -63,6 +64,9 @@ export function Dashboard() {
               </Tab>
               <Tab title="Admin" render={player?.player.role.toLowerCase() === 'admin'}>
                 <Admin />
+              </Tab>
+              <Tab title="Owner" render={player?.player.role.toLowerCase() === 'owner'}>
+                <Owner />
               </Tab>
             </Tabs>
           </DashboardTabsProvider>
