@@ -1,7 +1,9 @@
 import { container } from 'tsyringe';
 
-import { CreatePrivateSaleBusinessLogic } from '@modules/private-sales/core/business-logic/create-private-sale';
-import { CreatePrivateSaleRequestDTO } from '@modules/private-sales/dtos/create-private-sale-request';
+import {
+  CreatePrivateSaleBusinessLogic,
+  CreatePrivateSaleRequestDTO,
+} from '@modules/private-sales/core/business-logic/create-private-sale';
 import { IController } from '@shared/core/infra/controller';
 import {
   clientError,

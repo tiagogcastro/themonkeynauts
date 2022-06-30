@@ -7,7 +7,6 @@ import {
   IPrivateSale,
   PrivateSale,
 } from '@modules/private-sales/domain/entities/private-sale';
-import { CreatePrivateSaleRequestDTO } from '@modules/private-sales/dtos/create-private-sale-request';
 import { Either, left, right } from '@shared/core/logic/either';
 import { Maybe } from '@shared/core/logic/maybe';
 import {
@@ -19,6 +18,14 @@ import { inject, injectable } from 'tsyringe';
 import { IPrivateSalesRepository } from '../../domain/repositories/private-sales-repositories';
 
 type CreatePrivateSaleResponse = Either<ConfirmTransactionErrors, IPrivateSale>;
+
+export type CreatePrivateSaleRequestDTO = {
+  bnbAmount: number;
+  playerId: string;
+  txHash: string;
+  wallet: Maybe<string>;
+};
+
 @injectable()
 class CreatePrivateSaleBusinessLogic {
   constructor(
