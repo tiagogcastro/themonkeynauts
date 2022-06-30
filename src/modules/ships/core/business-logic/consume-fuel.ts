@@ -33,7 +33,7 @@ class ConsumeFuelBusinessLogic {
     shipId,
     action,
   }: ConsumeFuelRequestDTO): Promise<ConsumeFuelResponse> {
-    const ship = await this.shipsRepository.findById(shipId);
+    const ship = await this.shipsRepository.findById(shipId, false);
 
     if (!ship) {
       return left(new ShipNotFoundError());

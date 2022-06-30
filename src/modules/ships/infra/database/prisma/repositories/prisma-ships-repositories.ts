@@ -1,5 +1,9 @@
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import {
+  FindByIdResponse,
+  IShipsRepository,
+  ShipsSaveManyDTO,
+} from '@modules/ships/domain/repositories/ships-repositories';
 import {
   Ship as PrismaShip,
   Monkeynaut as PrismaMonkeynaut,
@@ -12,10 +16,6 @@ import {
   IMonkeynaut,
   Monkeynaut,
 } from '@modules/monkeynauts/domain/entities/monkeynaut';
-
-type ShipsSaveManyDTO = {
-  canRefuelAtStation: boolean;
-};
 
 const parseShip = (ship: PrismaShip): IShip => {
   return new Ship(ship, {
@@ -42,11 +42,31 @@ class PrismaShipsRepository implements IShipsRepository {
     });
   }
 
-  async findById(shipId: string): AsyncMaybe<IShip & { crew: ICrew[] }> {
+  async findById<T extends boolean>(
+    shipId: string,
+    relationships?: T,
+  ): Promise<
+    T extends true ? AsyncMaybe<IShip & { crew: ICrew[] }> : AsyncMaybe<IShip>
+  > {
+    if (!relationships) {
+      const ship = await prisma.ship.findUnique({
+        where: {
+          id: shipId,
+        },
+      });
+
+      if (!ship) {
+        return null;
+      }
+
+      return parseShip(ship);
+    }
+
     const ship = await prisma.ship.findUnique({
       where: {
         id: shipId,
       },
+
       include: {
         crew: true,
       },
@@ -61,7 +81,9 @@ class PrismaShipsRepository implements IShipsRepository {
     return {
       ...parseShip(shipRest),
       crew: crew.map(parseCrew),
-    };
+    } as unknown as Promise<
+      T extends true ? AsyncMaybe<IShip & { crew: ICrew[] }> : AsyncMaybe<IShip>
+    >;
   }
 
   async findByIdAndPlayerId(

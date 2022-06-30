@@ -307,3 +307,14 @@ model GameParam {
 
   @@map("game_params")
 }
+
+model PrivateSaleP2P {
+  id String @id @db.Uuid()
+
+  gameClientVersion String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("private_sales_p2p")
+}

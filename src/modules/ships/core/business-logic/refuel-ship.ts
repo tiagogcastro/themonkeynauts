@@ -47,7 +47,7 @@ class RefuelShipBusinessLogic {
       throw new AppError('Resource does not exist', 409);
     }
 
-    const ship = await this.shipsRepository.findById(shipId);
+    const ship = await this.shipsRepository.findById(shipId, false);
 
     if (!ship) {
       throw new AppError(

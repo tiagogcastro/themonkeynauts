@@ -1,13 +1,19 @@
 import { inject, injectable } from 'tsyringe';
 
-import { CreateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
+import {
+  CreateMonkeynautBusinessLogic,
+  CreateMonkeynautErrors,
+} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
 import { MonkeynautRank } from '@modules/monkeynauts/domain/enums';
 import { PackType } from '@modules/sales/domain/enums/pack-type';
 import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
 import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
 import { BuySaleItemRequestDTO } from '@modules/sales/dtos/buy-sale-item-request';
-import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
+import {
+  CreateShipBusinessLogic,
+  CreateShipErrors,
+} from '@modules/ships/core/business-logic/create-ship';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
 import {
   ConfirmTransactionErrors,
@@ -44,8 +50,13 @@ type Pack = {
   ships: PackShip[];
 };
 
+type BuySaleItemErrors = PlayerNotFoundError;
+
 type BuySaleItemResponse = Either<
-  ConfirmTransactionErrors | PlayerNotFoundError,
+  | CreateMonkeynautErrors
+  | CreateShipErrors
+  | ConfirmTransactionErrors
+  | BuySaleItemErrors,
   null
 >;
 
@@ -173,11 +184,15 @@ class BuySaleItemBusinessLogic {
 
       await this.monkeynautSalesRepository.update(monkeynautSale);
 
-      await this.createMonkeynautBusinessLogic.execute({
+      const result = await this.createMonkeynautBusinessLogic.execute({
         ownerId: player.id,
         playerId: player.id,
         rank: monkeynautRank as MonkeynautRank,
       });
+
+      if (result.isLeft()) {
+        return left(result.value);
+      }
 
       const { log } = new Log({
         action: `The player bought a monkeynaut. MONKEYNAUT_SALE_ID:${monkeynautSaleId}`,
@@ -232,11 +247,15 @@ class BuySaleItemBusinessLogic {
         return left(error);
       }
 
-      await this.createShipBusinessLogic.execute({
+      const result = await this.createShipBusinessLogic.execute({
         ownerId: player.id,
         playerId: player.id,
         rank: shipRank as ShipRank,
       });
+
+      if (result.isLeft()) {
+        return left(result.value);
+      }
 
       shipSale.currentQuantityAvailable -= 1;
       shipSale.totalUnitsSold += 1;
@@ -390,14 +409,6 @@ class BuySaleItemBusinessLogic {
 
       const pack = packs[packSale.type];
 
-      const monkeynautPromises = pack.monkeynauts.map(monkeynaut => {
-        return this.createMonkeynautBusinessLogic.execute({
-          ownerId: player.id,
-          playerId: player.id,
-          rank: monkeynaut.rank,
-        });
-      });
-
       const shipPromises = pack.ships.map(ship => {
         return this.createShipBusinessLogic.execute({
           ownerId: player.id,
@@ -406,7 +417,53 @@ class BuySaleItemBusinessLogic {
         });
       });
 
-      await Promise.all([...monkeynautPromises, ...shipPromises]);
+      const createShipResults = await Promise.all([...shipPromises]);
+
+      const createShipErrors = createShipResults.reduce(
+        (previousErrors, createShipResult) => {
+          if (createShipResult.isLeft()) {
+            return [...previousErrors, createShipResult.value];
+          }
+
+          return previousErrors;
+        },
+        [] as CreateShipErrors[],
+      );
+
+      if (createShipErrors.length) {
+        const [createShipError] = createShipErrors;
+
+        return left(createShipError);
+      }
+
+      const monkeynautPromises = pack.monkeynauts.map(monkeynaut => {
+        return this.createMonkeynautBusinessLogic.execute({
+          ownerId: player.id,
+          playerId: player.id,
+          rank: monkeynaut.rank,
+        });
+      });
+
+      const createMonkeynautResults = await Promise.all([
+        ...monkeynautPromises,
+      ]);
+
+      const createMonkeynautErrors = createMonkeynautResults.reduce(
+        (previousErrors, createMonkeynautResult) => {
+          if (createMonkeynautResult.isLeft()) {
+            return [...previousErrors, createMonkeynautResult.value];
+          }
+
+          return previousErrors;
+        },
+        [] as CreateMonkeynautErrors[],
+      );
+
+      if (createMonkeynautErrors.length) {
+        const [createMonkeynautError] = createMonkeynautErrors;
+
+        return left(createMonkeynautError);
+      }
 
       packSale.currentQuantityAvailable -= 1;
       packSale.totalUnitsSold += 1;

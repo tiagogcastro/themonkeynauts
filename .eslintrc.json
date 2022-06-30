@@ -20,6 +20,7 @@
     ],
    
     "rules": {
+      "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "no-underscore-dangle": "off",
       "@typescript-eslint/no-empty-function": "off",

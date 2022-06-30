@@ -1,14 +1,25 @@
 import { ICrew } from '@modules/crews/domain/entities/crew';
-import { ShipsSaveManyDTO } from '@modules/ships/dtos/ships-save-many';
 import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IShip } from '../entities/ship';
 
+export type ShipsSaveManyDTO = {
+  canRefuelAtStation: boolean;
+};
+
+export type FindByIdResponse<T> = T extends true
+  ? AsyncMaybe<IShip & { crew: ICrew[] }>
+  : AsyncMaybe<IShip>;
 interface IShipsRepository {
   create(ship: IShip): Promise<void>;
   save(ship: IShip): Promise<void>;
   saveMany(data: ShipsSaveManyDTO): Promise<void>;
   destroy(shipId: string): Promise<void>;
-  findById(shipId: string): AsyncMaybe<IShip & { crew: ICrew[] }>;
+  findById<T extends boolean>(
+    shipId: string,
+    relationships?: T,
+  ): Promise<
+    T extends true ? AsyncMaybe<IShip & { crew: ICrew[] }> : AsyncMaybe<IShip>
+  >;
   listAllShips(): Promise<IShip[]>;
   listAllShipsFromPlayer(playerId: string): Promise<IShip[]>;
 

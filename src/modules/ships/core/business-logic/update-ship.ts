@@ -32,7 +32,7 @@ class UpdateShipBusinessLogic {
   async execute(data: UpdateShipRequestDTO): Promise<CreateShipResponse> {
     const { shipId, ...props } = data;
 
-    const ship = await this.shipsRepository.findById(shipId);
+    const ship = await this.shipsRepository.findById(shipId, false);
 
     if (props.playerId) {
       const player = await this.playersRepository.findById(props.playerId);

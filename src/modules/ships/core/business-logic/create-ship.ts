@@ -13,8 +13,10 @@ import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 
 export type CreateShipRequestDTO = CommonShipRequestDTO;
 
+export type CreateShipErrors = Error;
+
 export type CreateShipResponse = Either<
-  Error,
+  CreateShipErrors,
   {
     ship: IShip;
   }

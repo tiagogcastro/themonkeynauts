@@ -8,9 +8,9 @@ container.registerSingleton(
   CreateMonkeynautBusinessLogic,
 );
 
+container.registerSingleton('CreateShipBusinessLogic', CreateShipBusinessLogic);
+
 container.registerSingleton(
   'HandleBountyHuntRankBusinessLogic',
   HandleBountyHuntRankBusinessLogic,
 );
-
-container.registerSingleton('CreateShipBusinessLogic', CreateShipBusinessLogic);

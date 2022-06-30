@@ -61,7 +61,10 @@ class InitBountyHuntRunBusinessLogic {
       return left(new InvalidActiveShipError());
     }
 
-    const ship = await this.shipsRepository.findById(player.activeShipId);
+    const ship = await this.shipsRepository.findById(
+      player.activeShipId,
+      false,
+    );
 
     if (!ship) {
       return left(new ShipNotFoundError());

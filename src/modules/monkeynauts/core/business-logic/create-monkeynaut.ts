@@ -11,10 +11,10 @@ import {
 import {
   getAttributesByBase,
   getBonusValueByRoleAndRank,
-  getRoleByRarity,
-  getRoleSchema,
   getRankByRarity,
   getRanksSchema,
+  getRoleByRarity,
+  getRoleSchema,
   ranksPercentageToBonus,
 } from '@modules/monkeynauts/config/create-monkeynaut';
 
@@ -24,18 +24,20 @@ import { AppError } from '@shared/errors/app-error';
 
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { InvalidMonkeynautShipQuantityError } from '@modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
-import { Either, left, right } from '@shared/core/logic/either';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import { CommomsMonkeynautProps } from '@modules/monkeynauts/dtos/commons-monkeynaut-props';
+import { InvalidMonkeynautShipQuantityError } from '@modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { Either, left, right } from '@shared/core/logic/either';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 export type CreateMonkeynautRequestDTO = CommomsMonkeynautProps & {
   ownerId: string;
 };
 
+export type CreateMonkeynautErrors = InvalidMonkeynautShipQuantityError;
+
 type CreateMonkeynautResponse = Either<
-  InvalidMonkeynautShipQuantityError,
+  CreateMonkeynautErrors,
   {
     monkeynaut: IMonkeynaut;
   }

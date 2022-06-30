@@ -27,8 +27,14 @@ import {
   getShipRoleByRarity,
 } from '@modules/ships/config/create-ship';
 
-import { CreateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
-import { CreateShipBusinessLogic } from '@modules/ships/core/business-logic/create-ship';
+import {
+  CreateMonkeynautBusinessLogic,
+  CreateMonkeynautErrors,
+} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
+import {
+  CreateShipBusinessLogic,
+  CreateShipErrors,
+} from '@modules/ships/core/business-logic/create-ship';
 
 import { ShipRole } from '@modules/ships/domain/enums/ship-role';
 import { AirDropNftTypeNotAllowedError } from './errors/air-drop-nft-type-not-allowed-error';
@@ -37,8 +43,8 @@ import { PlayerNotFoundError } from './errors/player-not-fount-error';
 type CreateAirDropNftResponse = Either<
   PlayerNotFoundError | AirDropNftTypeNotAllowedError,
   {
-    monkeynauts: IMonkeynaut[] | null;
-    ships: IShip[] | null;
+    monkeynauts: IMonkeynaut[];
+    ships: IShip[];
   }
 >;
 
@@ -69,6 +75,12 @@ export class CreateAirDropNftBusinessLogic {
 
     @inject('LogsRepository')
     private logsRepository: ILogsRepository,
+
+    @inject('CreateMonkeynautBusinessLogic')
+    private createMonkeynautBusinessLogic: CreateMonkeynautBusinessLogic,
+
+    @inject('CreateShipBusinessLogic')
+    private createShipBusinessLogic: CreateShipBusinessLogic,
   ) {}
 
   async execute({
@@ -111,12 +123,6 @@ export class CreateAirDropNftBusinessLogic {
     }
 
     if (type === 'Monkeynaut') {
-      const createMonkeynautLogic = new CreateMonkeynautBusinessLogic(
-        repository.monkeynauts,
-        repository.players,
-        repository.logs,
-      );
-
       let roleRarity = monkeynaut?.role as MonkeynautRole;
       let rankRarity = monkeynaut?.rank as MonkeynautRank;
 
@@ -127,27 +133,27 @@ export class CreateAirDropNftBusinessLogic {
       if (monkeynaut?.rank === 'Random') {
         rankRarity = (await getRankByRarity()) as MonkeynautRank;
       }
-      const monkeynautCreated = await createMonkeynautLogic.execute({
+      const result = await this.createMonkeynautBusinessLogic.execute({
         ownerId: player.id,
         rank: rankRarity,
         role: roleRarity as MonkeynautRole,
       });
 
+      if (result.isLeft()) {
+        return left(result.value);
+      }
+
+      const monkeynautCreated = result.value.monkeynaut;
+
       generateLogAfterCreate(`Sent 1 monkeynaut by air drop nft`);
 
       return right({
         monkeynauts: [monkeynautCreated],
-        ships: null,
+        ships: [],
       });
     }
 
     if (type === 'Ship') {
-      const createShipLogic = new CreateShipBusinessLogic(
-        repository.ships,
-        repository.players,
-        repository.logs,
-      );
-
       let roleRarity = ship?.role as ShipRole;
       let rankRarity = ship?.rank as ShipRank;
 
@@ -158,85 +164,146 @@ export class CreateAirDropNftBusinessLogic {
       if (ship?.rank === 'Random') {
         rankRarity = (await getShipRankByRarity()) as ShipRank;
       }
-      const shipCreated = await createShipLogic.execute({
+      const result = await this.createShipBusinessLogic.execute({
         ownerId: player.id,
         rank: rankRarity,
         role: roleRarity,
       });
 
+      if (result.isLeft()) {
+        return left(result.value);
+      }
+
+      const shipCreated = result.value.ship;
+
       generateLogAfterCreate(`Sent 1 ship by air drop nft`);
 
       return right({
-        monkeynauts: null,
+        monkeynauts: [],
         ships: [shipCreated],
       });
     }
+    const self = this;
 
-    async function createMonkeynautFromPack(
-      _player: IPlayer,
-      createMonkeynautLogic: CreateMonkeynautBusinessLogic,
-    ) {
-      const _monkeynaut = await createMonkeynautLogic.execute({
+    async function createMonkeynautFromPack(_player: IPlayer) {
+      const _monkeynaut = await self.createMonkeynautBusinessLogic.execute({
         ownerId: _player.id,
       });
 
       return _monkeynaut;
     }
 
-    async function createShipFromPack(
-      _player: IPlayer,
-      createShipLogic: CreateShipBusinessLogic,
-    ) {
-      const _ship = await createShipLogic.execute({
+    async function createShipFromPack(_player: IPlayer) {
+      const _ship = await self.createShipBusinessLogic.execute({
         ownerId: _player.id,
       });
 
       return _ship;
     }
 
+    const toArray = (length: number) => {
+      return Array.from(
+        {
+          length,
+        },
+        (value, key) => key + 1,
+      );
+    };
+
     if (type === 'Pack') {
-      const createMonkeynautLogic = new CreateMonkeynautBusinessLogic(
-        repository.monkeynauts,
-        repository.players,
-        repository.logs,
-      );
-
-      const createShipLogic = new CreateShipBusinessLogic(
-        repository.ships,
-        repository.players,
-        repository.logs,
-      );
-
       const packAmount = {
         monkeynauts: 2,
         ships: 1,
       };
 
-      const _monkeynauts: Promise<IMonkeynaut>[] = [];
-      const _ships: Promise<IShip>[] = [];
+      const pack = {
+        monkeynauts: toArray(packAmount.monkeynauts),
+        ships: toArray(packAmount.ships),
+      };
 
-      for (let index = 0; index < packAmount.monkeynauts; index++) {
-        const result = createMonkeynautFromPack(player, createMonkeynautLogic);
+      const shipPromises = pack.ships.map(() => {
+        return createShipFromPack(player);
+      });
 
-        _monkeynauts.push(result);
+      await Promise.all([...shipPromises]);
+
+      const createShipResults = await Promise.all([...shipPromises]);
+
+      const createShipErrors = createShipResults.reduce(
+        (previousErrors, createShipResult) => {
+          if (createShipResult.isLeft()) {
+            return [...previousErrors, createShipResult.value];
+          }
+
+          return previousErrors;
+        },
+        [] as CreateShipErrors[],
+      );
+
+      if (createShipErrors.length) {
+        const [createShipError] = createShipErrors;
+
+        return left(createShipError);
       }
 
-      for (let index = 0; index < packAmount.ships; index++) {
-        const result = createShipFromPack(player, createShipLogic);
+      const ships = createShipResults.reduce(
+        (previousShips, createShipResult) => {
+          if (createShipResult.isRight()) {
+            return [...previousShips, createShipResult.value.ship];
+          }
 
-        _ships.push(result);
+          return previousShips;
+        },
+        [] as IShip[],
+      );
+
+      const monkeynautPromises = pack.monkeynauts.map(() => {
+        return createMonkeynautFromPack(player);
+      });
+
+      await Promise.all([...monkeynautPromises]);
+
+      const createMonkeynautResults = await Promise.all([
+        ...monkeynautPromises,
+      ]);
+
+      const createMonkeynautErrors = createMonkeynautResults.reduce(
+        (previousErrors, createMonkeynautResult) => {
+          if (createMonkeynautResult.isLeft()) {
+            return [...previousErrors, createMonkeynautResult.value];
+          }
+
+          return previousErrors;
+        },
+        [] as CreateMonkeynautErrors[],
+      );
+
+      if (createMonkeynautErrors.length) {
+        const [createMonkeynautError] = createMonkeynautErrors;
+
+        return left(createMonkeynautError);
       }
+      const monkeynauts = createMonkeynautResults.reduce(
+        (previousMonkeynauts, createMonkeynautResult) => {
+          if (createMonkeynautResult.isRight()) {
+            return [
+              ...previousMonkeynauts,
+              createMonkeynautResult.value.monkeynaut,
+            ];
+          }
 
-      const monkeynautsCreated = await Promise.all(_monkeynauts);
-      const shipsCreated = await Promise.all(_ships);
+          return previousMonkeynauts;
+        },
+        [] as IMonkeynaut[],
+      );
 
       generateLogAfterCreate(
         `Sent ${packAmount.monkeynauts} monkeynaut and ${packAmount.ships} ships from air drop nft`,
       );
 
       return right({
-        monkeynauts: monkeynautsCreated,
-        ships: shipsCreated,
+        monkeynauts,
+        ships,
       });
     }
 

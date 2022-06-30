@@ -74,10 +74,14 @@ class FinishBountyHuntRunBusinessLogic {
 
     await this.initBountyHuntTokenRepository.update(initBountyHuntToken);
 
-    await this.handleBountyHuntRankBusinessLogic.execute({
+    const result = await this.handleBountyHuntRankBusinessLogic.execute({
       playerId,
       points,
     });
+
+    if (result.isLeft()) {
+      return left(result.value);
+    }
 
     if (bossKill) {
       resource.spc += 15;
