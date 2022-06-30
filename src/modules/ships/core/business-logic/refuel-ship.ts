@@ -46,6 +46,13 @@ class RefuelShipBusinessLogic {
     }
 
     const usedFuel = ship.tankCapacity - ship.fuel;
+
+    if (usedFuel === 0) {
+      throw new AppError(
+        `It is not possible to refuel the ship because the fuel is 100%`,
+      );
+    }
+
     const amountPayableInSpc = usedFuel * 0.08;
     const replenished = ship.tankCapacity;
 
