@@ -57,7 +57,7 @@ class CreateCrewBusinessLogic {
       throw new AppError('Player does not exist', 404);
     }
 
-    const foundShip = await this.shipsRespository.findById(shipId);
+    const foundShip = await this.shipsRespository.findById(shipId, true);
 
     if (!foundShip) {
       throw new AppError('Ship does not exist', 404);
