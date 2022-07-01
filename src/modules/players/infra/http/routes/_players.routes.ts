@@ -1,3 +1,4 @@
+import { txHashRegExp } from '@config/regexp';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
@@ -43,7 +44,7 @@ _playersRouter.post(
   '/deposit-tokens',
   celebrate({
     [Segments.BODY]: {
-      txHash: Joi.string().required().min(66).max(66),
+      txHash: Joi.string().required().regex(txHashRegExp),
       playerId: Joi.string().required().uuid(),
     },
   }),
@@ -56,7 +57,7 @@ _playersRouter.patch(
   celebrate(
     {
       [Segments.BODY]: {
-        wallet: Joi.string().required(),
+        wallet: Joi.string().required().lowercase(),
         playerId: Joi.string().required().uuid(),
       },
     },

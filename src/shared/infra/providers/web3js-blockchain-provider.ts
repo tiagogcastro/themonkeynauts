@@ -285,8 +285,21 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     const transaction = waitTransactionResult.value;
 
+    const walletFrom = transaction.from.toLowerCase();
+    const walletTo = process.env.SALES_WALLET?.toLowerCase();
+
+    const transactionTo = transaction.to?.toLowerCase();
+
+    if (!transactionTo || !walletTo) {
+      return left(new InvalidTransactionToError());
+    }
+
+    if (transactionTo !== walletTo) {
+      return left(new AnotherTransactionRecipientError());
+    }
+
     return right({
-      walletFrom: transaction.from,
+      walletFrom,
       amount: Number(this.web3.utils.fromWei(transaction.value, 'ether')),
     });
   }

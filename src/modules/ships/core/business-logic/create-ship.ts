@@ -123,7 +123,8 @@ class CreateShipBusinessLogic {
 
     const _crewCapacity = crewCapacity ?? crewCapacitySchema[_rank];
     const _bonusValue = bonusValue ?? bonusValueSchema[_role][_rank];
-    const _canRefuelAtStation = canRefuelAtStation || false;
+    const _canRefuelAtStation =
+      typeof canRefuelAtStation === 'boolean' ? canRefuelAtStation : true;
     const _breedCount = breedCount ?? 0;
     const _onSale = onSale || false;
 

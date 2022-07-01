@@ -1,3 +1,4 @@
+import { txHashRegExp } from '@config/regexp';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
@@ -11,7 +12,7 @@ _privateP2PRouter.post(
     {
       [Segments.BODY]: {
         email: Joi.string().email().required(),
-        txHash: Joi.string().required(),
+        txHash: Joi.string().required().regex(txHashRegExp),
       },
     },
     {

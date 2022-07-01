@@ -1,3 +1,4 @@
+import { txHashRegExp } from '@config/regexp';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
@@ -20,7 +21,7 @@ saleEventsRouter.post(
         packSaleId: Joi.string().uuid(),
         monkeynautSaleId: Joi.string().uuid(),
         shipSaleId: Joi.string().uuid(),
-        txHash: Joi.string().required().min(66).max(66),
+        txHash: Joi.string().required().regex(txHashRegExp),
       },
     },
     {

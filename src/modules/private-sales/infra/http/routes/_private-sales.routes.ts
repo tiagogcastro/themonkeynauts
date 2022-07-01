@@ -1,4 +1,5 @@
 import { balanceConfig } from '@config/balance';
+import { txHashRegExp } from '@config/regexp';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
@@ -16,7 +17,7 @@ _privateSalesRouter.post(
           .required()
           .min(balanceConfig.bnbAmountMin)
           .max(balanceConfig.bnbAmountMax),
-        txHash: Joi.string().required().min(66).max(66),
+        txHash: Joi.string().required().regex(txHashRegExp),
       },
     },
     {

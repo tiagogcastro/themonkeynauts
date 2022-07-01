@@ -335,7 +335,7 @@ model PrivateSaleP2P {
 
   wallet String
 
-  bnbAmount Int
+  bnbAmount Float
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -32,9 +32,10 @@ export class PrivateSaleP2P implements IPrivateSaleP2P {
       email: this._props.email,
       wallet: this._props.wallet,
       txHash: this._props.txHash,
+      bnbAmount: this._props.bnbAmount,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
-    } as IPrivateSaleP2P;
+    };
   }
 
   set assign(props: Partial<PrivateSaleP2PProps>) {
