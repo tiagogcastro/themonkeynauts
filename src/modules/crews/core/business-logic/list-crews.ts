@@ -54,7 +54,7 @@ class ListCrewsBusinessLogic {
         throw new AppError('Monkeynaut does not exist on a crew', 404);
       }
 
-      const foundShip = await this.shipsRepository.findById(crew.shipId);
+      const foundShip = await this.shipsRepository.findById(crew.shipId, true);
 
       if (!foundShip) {
         throw new AppError('Ship does not exist', 404);
@@ -66,7 +66,7 @@ class ListCrewsBusinessLogic {
     }
 
     if (shipId) {
-      const foundShip = await this.shipsRepository.findById(shipId);
+      const foundShip = await this.shipsRepository.findById(shipId, true);
 
       if (!foundShip) {
         throw new AppError('Ship does not exist', 404);
