@@ -19,16 +19,16 @@ type CommonAirDropFields<Rank, Class> = {
 }
 
 type MonkeynautRanks = 'Private' | 'Sergeant' | 'Captain' | 'Major';
-type ShipRanks = 'a' | 'b' |'s';
+type ShipRanks = 'A' | 'B' |'S';
 
 type AirDropData = {
   type: AirDropType;
   email: string;
-  monkeynaut?: {
+  Monkeynaut?: {
     rank: CommonAirDropFields<MonkeynautRanks | 'Random', 'Random'>;
     class: 'Random';
   };
-  ship?: {
+  Ship?: {
     rank: CommonAirDropFields<ShipRanks | 'Random', 'Random'>;
     class: 'Random';
   };
@@ -101,15 +101,15 @@ const ranksFields = {
   ],
   Ship: [
     {
-      value: 'b',
+      value: 'B',
       label: 'B'
     },
     {
-      value: 'a',
+      value: 'S',
       label: 'A'
     },
     {
-      value: 's',
+      value: 'S',
       label: 'S'
     },
     {
@@ -140,15 +140,13 @@ export function AdminAirDropNft() {
 
   const [currentType, setCurrentType] = useState<AirDropType | null>(null);
 
-  async function createNftDrop(data: AirDropData, rest: any) {
+  async function createNftDrop(data: AirDropData) {
     try {
       await createNftDropSchema.validate(data, {
         abortEarly: false
       });
 
       await baseApi.post('/admins/sale-events/create-air-drop-nft', data);
-
-      rest.reset();
 
       toast(`Sent successfully Air Drop NFT to ${data.email}`, {
         autoClose: 7000,
@@ -161,6 +159,7 @@ export function AdminAirDropNft() {
           fontFamily: 'Orbitron, sans-serif',
         }
       });
+
     } catch (error: any) {
       if(error instanceof Yup.ValidationError) {
         const errors = getValidationErrors(error);
@@ -190,7 +189,7 @@ export function AdminAirDropNft() {
     <S.Container>
       <S.Content>
         <S.MainContent>
-          <S.FormContainer ref={formRef} onSubmit={createNftDrop}>
+          <S.FormContainer ref={formRef} onSubmit={createNftDrop  }>
             <h1>Air drop NFT</h1>
             <Input
               name='email' 
