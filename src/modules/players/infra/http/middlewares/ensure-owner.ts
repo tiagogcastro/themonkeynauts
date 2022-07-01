@@ -8,19 +8,20 @@ import {
 } from '@shared/core/infra/http-response';
 import { IMiddleware } from '@shared/core/infra/middleware';
 import { prisma } from '@shared/infra/database/prisma/client';
-import { InvalidAdminError } from './errors/invalid-admin-error';
+import { Request } from 'express';
+import { InvalidOwnerError } from './errors/invalid-owner-error';
 
-type EnsureAdministratorMiddlewareRequestDTO = {
+type EnsureOwnerMiddlewareRequestDTO = {
   player: {
     id: string;
   };
 };
 
-class EnsureAdministratorMiddleware
-  implements IMiddleware<EnsureAdministratorMiddlewareRequestDTO>
+class EnsureOwnerMiddleware
+  implements IMiddleware<EnsureOwnerMiddlewareRequestDTO>
 {
   async handle(
-    request: EnsureAdministratorMiddlewareRequestDTO,
+    request: EnsureOwnerMiddlewareRequestDTO,
   ): Promise<HttpResponse> {
     const playerId = request.player.id;
 
@@ -34,14 +35,14 @@ class EnsureAdministratorMiddleware
       return unauthorized(new PlayerNotFoundError());
     }
 
-    if (player.role !== PlayerRole.Admin) {
-      return forbidden(new InvalidAdminError());
+    if (player.role !== PlayerRole.Owner) {
+      return forbidden(new InvalidOwnerError());
     }
 
     return ok();
   }
 }
 
-const ensureAdministratorMiddleware = new EnsureAdministratorMiddleware();
+const ensureOwnerMiddleware = new EnsureOwnerMiddleware();
 
-export { ensureAdministratorMiddleware };
+export { ensureOwnerMiddleware };

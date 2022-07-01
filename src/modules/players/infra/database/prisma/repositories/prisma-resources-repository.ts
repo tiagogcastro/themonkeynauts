@@ -28,22 +28,22 @@ class PrismaResourcesRepository implements IResourcesRepository {
   }
 
   async create(resource: IResource): Promise<void> {
-    const { id: resource_id, ...props } = resource;
+    const { id: resourceId, ...props } = resource;
 
     await prisma.resource.create({
       data: {
-        id: resource_id,
+        id: resourceId,
         ...props,
       },
     });
   }
 
   async save(resource: IResource): Promise<void> {
-    const { id: resource_id, ...props } = resource;
+    const { id: resourceId, ...props } = resource;
 
     await prisma.resource.update({
       where: {
-        id: resource_id,
+        id: resourceId,
       },
       data: {
         ...props,

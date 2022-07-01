@@ -14,7 +14,7 @@ export const parseCrew = (crew: PrismaCrew): ICrew => {
 
 class PrismaCrewsRepository implements ICrewsRepository {
   async save(crew: Crew): Promise<void> {
-    const { id: crew_id, ...props } = crew;
+    const { id: crewId, ...props } = crew;
 
     await prisma.crew.update({
       data: {
@@ -22,48 +22,48 @@ class PrismaCrewsRepository implements ICrewsRepository {
         updatedAt: new Date(),
       },
       where: {
-        id: crew_id,
+        id: crewId,
       },
     });
   }
 
-  async destroy(crew_id: string): Promise<void> {
+  async destroy(crewId: string): Promise<void> {
     await prisma.crew.delete({
       where: {
-        id: crew_id,
+        id: crewId,
       },
     });
   }
 
   async create(crew: ICrew): Promise<void> {
-    const { id: crew_id, ...props } = crew;
+    const { id: crewId, ...props } = crew;
 
     await prisma.crew.create({
       data: {
-        id: crew_id,
+        id: crewId,
         ...props,
       },
     });
   }
 
   async update(crew: ICrew): Promise<void> {
-    const { id: crew_id, ...props } = crew;
+    const { id: crewId, ...props } = crew;
 
     await prisma.crew.update({
       data: {
-        id: crew_id,
+        id: crewId,
         ...props,
       },
       where: {
-        id: crew_id,
+        id: crewId,
       },
     });
   }
 
-  async findById(crew_id: string): AsyncMaybe<ICrew> {
+  async findById(crewId: string): AsyncMaybe<ICrew> {
     const crew = await prisma.crew.findUnique({
       where: {
-        id: crew_id,
+        id: crewId,
       },
     });
 

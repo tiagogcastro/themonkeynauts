@@ -28,6 +28,8 @@ import { IBountyHuntRankingRepository } from '@modules/players/domain/repositori
 import { PrismaBountyHuntRankingRepository } from '@modules/players/infra/database/prisma/repositories/prisma-bounty-hunt-ranking-repository';
 import { IInitBountyHuntTokenRepository } from '@modules/players/domain/repositories/init-bounty-hunt-token-repository';
 import { PrismaInitBountyHuntTokenRepository } from '@modules/players/infra/database/prisma/repositories/prisma-init-bounty-hunt-token-repository';
+import { PrismaGameParamsRepository } from '@modules/game-params/infra/database/prisma/repositories/prisma-game-params-repositories';
+import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -96,4 +98,9 @@ container.registerSingleton<IBountyHuntRankingRepository>(
 container.registerSingleton<IInitBountyHuntTokenRepository>(
   'InitBountyHuntTokenRepository',
   PrismaInitBountyHuntTokenRepository,
+);
+
+container.registerSingleton<IGameParamsRepository>(
+  'GameParamsRepository',
+  PrismaGameParamsRepository,
 );

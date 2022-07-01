@@ -93,7 +93,7 @@ class CreateCrewBusinessLogic {
     await this.crewsRepository.create(crew);
 
     const { log } = new Log({
-      action: `Crew has created on player account. CREW_ID: ${crew.id}`,
+      action: `Crew has created on player account. crewId: ${crew.id}`,
       playerId,
       txHash: null,
     });

@@ -2,4 +2,5 @@
 export enum PlayerRole {
   Default = 'Default',
   Admin = 'Admin',
+  Owner = 'Owner',
 }

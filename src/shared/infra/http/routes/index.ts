@@ -4,7 +4,6 @@ import { crewsRouter } from '@modules/crews/infra/http/routes/crews.routes';
 import { _logsRouter } from '@modules/logs/infra/http/routes/_logs.routes';
 import { monkeynautsRouter } from '@modules/monkeynauts/infra/http/routes/monkeynauts.routes';
 import { _monkeynautsRouter } from '@modules/monkeynauts/infra/http/routes/_monkeynauts.routes';
-import ensureAdministrator from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { authRouter } from '@modules/players/infra/http/routes/auth.routes';
 import { playersRouter } from '@modules/players/infra/http/routes/players.routes';
@@ -16,6 +15,8 @@ import { _saleEventsRouter } from '@modules/sales/infra/http/routes/_sale-events
 import { shipsRouter } from '@modules/ships/infra/http/routes/ships.routes';
 import { spaceStationRouter } from '@modules/ships/infra/http/routes/space-station.routes';
 import { _shipsRouter } from '@modules/ships/infra/http/routes/_ships.routes';
+import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
+import { ensureAdministratorMiddleware } from '@modules/players/infra/http/middlewares/ensure-administrator';
 
 const router = Router();
 
@@ -26,14 +27,19 @@ router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
 router.use('/space-station', spaceStationRouter);
 
-router.use('/admins', ensureAuthenticated, ensureAdministrator, [
-  _playersRouter,
-  _privateSalesRouter,
-  _shipsRouter,
-  _monkeynautsRouter,
-  _logsRouter,
-  _saleEventsRouter,
-]);
+router.use(
+  '/admins',
+  ensureAuthenticated,
+  adaptMiddleware(ensureAdministratorMiddleware),
+  [
+    _playersRouter,
+    _privateSalesRouter,
+    _shipsRouter,
+    _monkeynautsRouter,
+    _logsRouter,
+    _saleEventsRouter,
+  ],
+);
 
 router.use('/monkeynauts', monkeynautsRouter);
 router.use('/crews', crewsRouter);

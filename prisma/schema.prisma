@@ -301,23 +301,23 @@ model GameParam {
   id String @id @db.Uuid()
 
   gameClientVersion               String
-  travelFuelConsuption            Int
-  bountyHuntFuelConsuption        Int
-  shipRefuelCostInPercentage      Int
-  bountyHuntMinReward             Int
-  bountyHuntMaxReward             Int
-  mineGoldAverageResourceReward   Int
-  mineGoldAverageSpcReward        Int
-  mineGoldRewardsVariation        Int
-  mineIronAverageResourceReward   Int
-  mineIronAverageSpcReward        Int
-  mineIronRewardsVariation        Int
-  mineCopperAverageResourceReward Int
-  mineCopperAverageSpcReward      Int
-  mineCooperRewardsVariation      Int
-  mineScrapAverageResourceReward  Int
-  mineScrapAverageSpcReward       Int
-  mineScrapRewardsVariation       Int
+  travelFuelConsuption            Int    @default(0)
+  bountyHuntFuelConsuption        Int    @default(0)
+  shipRefuelCostInPercentage      Int    @default(0)
+  bountyHuntMinReward             Int    @default(0)
+  bountyHuntMaxReward             Int    @default(0)
+  mineGoldAverageResourceReward   Int    @default(0)
+  mineGoldAverageSpcReward        Int    @default(0)
+  mineGoldRewardsVariation        Int    @default(0)
+  mineIronAverageResourceReward   Int    @default(0)
+  mineIronAverageSpcReward        Int    @default(0)
+  mineIronRewardsVariation        Int    @default(0)
+  mineCopperAverageResourceReward Int    @default(0)
+  mineCopperAverageSpcReward      Int    @default(0)
+  mineCooperRewardsVariation      Int    @default(0)
+  mineScrapAverageResourceReward  Int    @default(0)
+  mineScrapAverageSpcReward       Int    @default(0)
+  mineScrapRewardsVariation       Int    @default(0)
 
 
   createdAt DateTime @default(now())
