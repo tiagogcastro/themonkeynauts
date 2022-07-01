@@ -53,6 +53,9 @@ class PrismaShipsRepository implements IShipsRepository {
         where: {
           id: shipId,
         },
+        include: {
+          crew: true,
+        },
       });
 
       if (!ship) {
@@ -66,9 +69,12 @@ class PrismaShipsRepository implements IShipsRepository {
       where: {
         id: shipId,
       },
-
       include: {
-        crew: true,
+        crew: {
+          include: {
+            monkeynaut: true,
+          },
+        },
       },
     });
 
@@ -96,7 +102,11 @@ class PrismaShipsRepository implements IShipsRepository {
         playerId,
       },
       include: {
-        crew: true,
+        crew: {
+          include: {
+            monkeynaut: true,
+          },
+        },
       },
     });
 
@@ -152,22 +162,20 @@ class PrismaShipsRepository implements IShipsRepository {
   > {
     const ships = await prisma.ship.findMany({
       include: {
-        crew: true,
+        crew: {
+          include: {
+            monkeynaut: true,
+          },
+        },
       },
     });
 
     const shipsCustom = ships.map(async ship => {
       const { crew, ...shipRest } = ship;
 
-      const monkeys = await prisma.monkeynaut.findMany({
-        where: {
-          OR: ship.crew.map(_crew => ({ id: _crew.monkeynautId })),
-        },
-      });
-
       return {
         ...parseShip(shipRest),
-        crew: monkeys.map(parseMonkeynaut),
+        crew: crew.map(mapCrew => parseMonkeynaut(mapCrew.monkeynaut)),
       };
     });
 

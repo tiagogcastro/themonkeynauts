@@ -33,7 +33,7 @@ class ChangeActivePlayerShipBusinessLogic {
     playerId,
     shipId,
   }: ChangeActivePlayerShipRequestDTO): Promise<ChangeActivePlayerShipResponse> {
-    const ship = await this.shipsRepository.findById(shipId, false);
+    const ship = await this.shipsRepository.findById(shipId, true);
 
     if (!ship) {
       throw new AppError('Ship does not exist');
