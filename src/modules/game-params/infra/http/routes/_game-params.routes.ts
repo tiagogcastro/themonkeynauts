@@ -7,30 +7,30 @@ import { setGameParamsController } from '../controllers/set-game-params';
 
 const _gameParamsRouter = Router();
 
-_gameParamsRouter.get(
-  '/set-game-params',
+_gameParamsRouter.post(
+  '/set',
   ensureAuthenticated,
   celebrate(
     {
-      [Segments.QUERY]: {
-        gameClientVersion: Joi.string(),
-        bountyHuntFuelConsuption: Joi.number().integer(),
-        bountyHuntMaxReward: Joi.number().integer(),
-        bountyHuntMinReward: Joi.number().integer(),
-        mineCooperRewardsVariation: Joi.number().integer(),
-        mineCopperAverageResourceReward: Joi.number().integer(),
-        mineCopperAverageSpcReward: Joi.number().integer(),
-        mineGoldAverageResourceReward: Joi.number().integer(),
-        mineGoldAverageSpcReward: Joi.number().integer(),
-        mineGoldRewardsVariation: Joi.number().integer(),
-        mineIronAverageResourceReward: Joi.number().integer(),
-        mineIronAverageSpcReward: Joi.number().integer(),
-        mineIronRewardsVariation: Joi.number().integer(),
-        mineScrapAverageResourceReward: Joi.number().integer(),
-        mineScrapAverageSpcReward: Joi.number().integer(),
-        mineScrapRewardsVariation: Joi.number().integer(),
-        shipRefuelCostInPercentage: Joi.number().integer(),
-        travelFuelConsuption: Joi.number().integer(),
+      [Segments.BODY]: {
+        gameClientVersion: Joi.string().required(),
+        bountyHuntFuelConsuption: Joi.number().integer().required(),
+        bountyHuntMaxReward: Joi.number().integer().required(),
+        bountyHuntMinReward: Joi.number().integer().required(),
+        mineCooperRewardsVariation: Joi.number().integer().required(),
+        mineCopperAverageResourceReward: Joi.number().integer().required(),
+        mineCopperAverageSpcReward: Joi.number().integer().required(),
+        mineGoldAverageResourceReward: Joi.number().integer().required(),
+        mineGoldAverageSpcReward: Joi.number().integer().required(),
+        mineGoldRewardsVariation: Joi.number().integer().required(),
+        mineIronAverageResourceReward: Joi.number().integer().required(),
+        mineIronAverageSpcReward: Joi.number().integer().required(),
+        mineIronRewardsVariation: Joi.number().integer().required(),
+        mineScrapAverageResourceReward: Joi.number().integer().required(),
+        mineScrapAverageSpcReward: Joi.number().integer().required(),
+        mineScrapRewardsVariation: Joi.number().integer().required(),
+        shipRefuelCostInPercentage: Joi.number().integer().required(),
+        travelFuelConsuption: Joi.number().integer().required(),
       },
     },
     {
@@ -40,6 +40,12 @@ _gameParamsRouter.get(
   adaptRoute(setGameParamsController),
 );
 
-_gameParamsRouter.use('/game-rarams', _gameParamsRouter);
+_gameParamsRouter.get(
+  '/list',
+  ensureAuthenticated,
+  adaptRoute(setGameParamsController),
+);
+
+_gameParamsRouter.use('/game-params', _gameParamsRouter);
 
 export { _gameParamsRouter };

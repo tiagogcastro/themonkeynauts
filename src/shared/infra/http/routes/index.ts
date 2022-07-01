@@ -17,6 +17,7 @@ import { spaceStationRouter } from '@modules/ships/infra/http/routes/space-stati
 import { _shipsRouter } from '@modules/ships/infra/http/routes/_ships.routes';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { ensureAdministratorMiddleware } from '@modules/players/infra/http/middlewares/ensure-administrator';
+import { _gameParamsRouter } from '@modules/game-params/infra/http/routes/_game-params.routes';
 
 const router = Router();
 
@@ -38,6 +39,7 @@ router.use(
     _monkeynautsRouter,
     _logsRouter,
     _saleEventsRouter,
+    _gameParamsRouter,
   ],
 );
 
