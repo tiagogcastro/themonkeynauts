@@ -5,7 +5,6 @@ import { IGameParam } from '@modules/game-params/domain/entities/game-param';
 import { Either, right } from '@shared/core/logic/either';
 import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 import { Maybe } from '@shared/core/logic/maybe';
-import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 
 type ListGameParamsResponse = Either<
   Error,
