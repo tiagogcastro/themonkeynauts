@@ -71,7 +71,7 @@ class SetGameParamsBusinessLogic {
         return left(new InvalidGameClientVersionError());
       }
 
-      const { gameParam } = new GameParam({
+      const { gameParam: gameParamsCreated } = new GameParam({
         gameClientVersion,
         bountyHuntFuelConsuption: bountyHuntFuelConsuption ?? 0,
         bountyHuntMaxReward: bountyHuntMaxReward ?? 0,
@@ -92,9 +92,9 @@ class SetGameParamsBusinessLogic {
         travelFuelConsuption: travelFuelConsuption ?? 0,
       });
 
-      gameParams = gameParam;
+      await this.gameParamsRepository.create(gameParamsCreated);
 
-      return right({ gameParams });
+      return right({ gameParams: gameParamsCreated });
     }
 
     const { gameParam } = new GameParam(
