@@ -21,13 +21,13 @@ type Log = {
 }
 
 export function AdminLog() {
-  // const formRef = useRef<FormHandles>(null);
-
   const [logs, setLogs] = useState<Log[]>([]);
 
   async function getLogs() {
     try {
       const response = await baseApi.get('/admins/logs/list-logs');
+
+      console.log(response.data.data[0]);
 
       setLogs(response.data.data);
     } catch (error: any) {
@@ -89,7 +89,7 @@ export function AdminLog() {
                 <tbody>
                   {logs && logs.map(log => (
                     <tr key={log.id}>
-                      <S.TdCustom title={log.playerId}>{replaceToShortString(log.playerId)}</S.TdCustom>
+                      <S.TdCustom title={log.playerId}>{log.playerId ? replaceToShortString(log.playerId) : 'Undefined'}</S.TdCustom>
                       <S.TdCustom 
                         title={log.action}
                         style={{
