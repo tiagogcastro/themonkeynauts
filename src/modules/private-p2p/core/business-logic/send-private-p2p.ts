@@ -2,7 +2,6 @@ import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
 import { PlayerWithoutWalletError } from '@modules/players/core/business-logic/errors/player-without-wallet-error';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import {
   IPrivateSaleP2P,
   PrivateSaleP2P,
@@ -30,9 +29,6 @@ export class SendPrivateSaleP2PBusinessLogic {
     @inject('PrivateSaleP2PRepository')
     private privateSaleP2PRepository: IPrivateSaleP2PRepository,
 
-    @inject('PlayersRepository')
-    private playersRepository: IPlayersRepository,
-
     @inject('LogsRepository')
     private logsRepository: ILogsRepository,
 
@@ -45,12 +41,6 @@ export class SendPrivateSaleP2PBusinessLogic {
     txHash,
     playerId,
   }: SendPrivateSaleP2PRequestDTO): Promise<SendPrivateSaleP2PResponse> {
-    const foundPlayer = await this.playersRepository.findByEmail(email);
-
-    if (!foundPlayer) {
-      return left(new PlayerNotFoundError());
-    }
-
     const confirmTransactionResult =
       await this.blockchainProvider.confirmTransactionWithTxhashOnly(txHash);
 
