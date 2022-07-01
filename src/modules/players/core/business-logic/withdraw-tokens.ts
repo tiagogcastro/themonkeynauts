@@ -9,7 +9,7 @@ import {
   SendTransactionErrors,
 } from '@shared/domain/providers/blockchain-provider';
 import { inject, injectable } from 'tsyringe';
-import { AmountLessSPCAmountError } from './errors/amount-less-spc-amount-error';
+import { AmountLessMinimumNeededAmountError } from './errors/amount-less-minimum-needed-amount-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 import { ResourceNotFoundError } from './errors/resource-not-fount-error';
 
@@ -20,7 +20,7 @@ export type WithdrawTokensRequestDTO = {
 
 type WithdrawTokensErrors =
   | PlayerNotFoundError
-  | AmountLessSPCAmountError
+  | AmountLessMinimumNeededAmountError
   | ResourceNotFoundError;
 
 type WithdrawTokensResponse = Either<
@@ -58,9 +58,10 @@ class WithdrawTokensBusinessLogic {
     if (!resource) {
       return left(new ResourceNotFoundError());
     }
+    const minimumAmountNeededToWithdraw = 1000;
 
-    if (resource.spc < amount) {
-      return left(new AmountLessSPCAmountError());
+    if (resource.spc < minimumAmountNeededToWithdraw) {
+      return left(new AmountLessMinimumNeededAmountError());
     }
 
     const sendTransactionResult = await this.blockchainProvider.sendTransaction(

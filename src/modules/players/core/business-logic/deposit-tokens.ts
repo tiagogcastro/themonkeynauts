@@ -8,10 +8,8 @@ import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionErrors,
   IBlockchainProvider,
-  SendTransactionErrors,
 } from '@shared/domain/providers/blockchain-provider';
 import { inject, injectable } from 'tsyringe';
-import { AmountLessSPCAmountError } from './errors/amount-less-spc-amount-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 import { ResourceNotFoundError } from './errors/resource-not-fount-error';
 

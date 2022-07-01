@@ -32,7 +32,7 @@ _playersRouter.post(
   '/withdraw-tokens',
   celebrate({
     [Segments.BODY]: {
-      amount: Joi.number().not(0).integer().required(),
+      amount: Joi.number().not(0).min(500).integer().required(),
       playerId: Joi.string().required().uuid(),
     },
   }),
