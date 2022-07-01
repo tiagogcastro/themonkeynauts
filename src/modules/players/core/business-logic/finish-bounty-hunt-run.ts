@@ -84,9 +84,9 @@ class FinishBountyHuntRunBusinessLogic {
     }
 
     if (bossKill) {
-      resource.spc += 15;
+      resource.spc += 11;
     } else {
-      resource.spc += 10;
+      resource.spc += 8;
     }
 
     await this.resourcesRepository.save(resource);
