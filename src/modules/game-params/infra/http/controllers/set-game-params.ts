@@ -10,14 +10,23 @@ import {
 } from '@shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
-class SetGameParamsController implements IController<SetGameParamsRequestDTO> {
-  async handle(data: SetGameParamsRequestDTO): Promise<HttpResponse> {
+type SetGameParamsControllerRequestDTO = SetGameParamsRequestDTO & {
+  player: {
+    id: string;
+  };
+};
+
+class SetGameParamsController
+  implements IController<SetGameParamsControllerRequestDTO>
+{
+  async handle(data: SetGameParamsControllerRequestDTO): Promise<HttpResponse> {
     const setGameParamsBusinessLogic = container.resolve(
       SetGameParamsBusinessLogic,
     );
 
     const result = await setGameParamsBusinessLogic.execute({
       ...data,
+      playerId: data.player.id,
     });
 
     if (result.isLeft()) {

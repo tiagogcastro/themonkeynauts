@@ -7,9 +7,13 @@ import {
 
 import { Either, left, right } from '@shared/core/logic/either';
 import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { Log } from '@modules/logs/domain/entities/log';
 import { InvalidGameClientVersionError } from './errors/invalid-game-client-version-error';
 
 export type SetGameParamsRequestDTO = {
+  playerId: string;
+
   gameClientVersion?: string;
   travelFuelConsuption?: number;
   bountyHuntFuelConsuption?: number;
@@ -42,6 +46,9 @@ class SetGameParamsBusinessLogic {
   constructor(
     @inject('GameParamsRepository')
     private gameParamsRepository: IGameParamsRepository,
+
+    @inject('LogsRepository')
+    private logsRepository: ILogsRepository,
   ) {}
 
   async execute({
@@ -63,6 +70,7 @@ class SetGameParamsBusinessLogic {
     mineScrapRewardsVariation,
     shipRefuelCostInPercentage,
     travelFuelConsuption,
+    playerId,
   }: SetGameParamsRequestDTO): Promise<SetGameParamsResponse> {
     let gameParams = await this.gameParamsRepository.findFirst();
 
@@ -93,6 +101,14 @@ class SetGameParamsBusinessLogic {
       });
 
       await this.gameParamsRepository.create(gameParamsCreated);
+
+      const { log } = new Log({
+        action: 'Set the game parameters',
+        playerId,
+        txHash: null,
+      });
+
+      await this.logsRepository.create(log);
 
       return right({ gameParams: gameParamsCreated });
     }
@@ -148,6 +164,14 @@ class SetGameParamsBusinessLogic {
     gameParams = gameParam;
 
     await this.gameParamsRepository.save(gameParams);
+
+    const { log } = new Log({
+      action: 'Updated game parameters',
+      playerId,
+      txHash: null,
+    });
+
+    await this.logsRepository.create(log);
 
     return right({ gameParams });
   }
