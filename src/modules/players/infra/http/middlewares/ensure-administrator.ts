@@ -34,11 +34,11 @@ class EnsureAdministratorMiddleware
       return unauthorized(new PlayerNotFoundError());
     }
 
-    if (player.role !== PlayerRole.Admin) {
-      return forbidden(new InvalidAdminError());
+    if (player.role === PlayerRole.Admin || player.role === PlayerRole.Owner) {
+      return ok();
     }
 
-    return ok();
+    return forbidden(new InvalidAdminError());
   }
 }
 

@@ -18,6 +18,8 @@ import { _shipsRouter } from '@modules/ships/infra/http/routes/_ships.routes';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { ensureAdministratorMiddleware } from '@modules/players/infra/http/middlewares/ensure-administrator';
 import { _gameParamsRouter } from '@modules/game-params/infra/http/routes/_game-params.routes';
+import { ensureOwnerMiddleware } from '@modules/players/infra/http/middlewares/ensure-owner';
+import { _privateP2PRouter } from '@modules/private-p2p/infra/http/routes/_send-private-p2p.routes';
 
 const router = Router();
 
@@ -28,19 +30,28 @@ router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
 router.use('/space-station', spaceStationRouter);
 
+const adminsRouters = [
+  _playersRouter,
+  _privateSalesRouter,
+  _shipsRouter,
+  _monkeynautsRouter,
+  _logsRouter,
+  _saleEventsRouter,
+  _gameParamsRouter,
+];
+
 router.use(
   '/admins',
   ensureAuthenticated,
   adaptMiddleware(ensureAdministratorMiddleware),
-  [
-    _playersRouter,
-    _privateSalesRouter,
-    _shipsRouter,
-    _monkeynautsRouter,
-    _logsRouter,
-    _saleEventsRouter,
-    _gameParamsRouter,
-  ],
+  adminsRouters,
+);
+
+router.use(
+  '/owners',
+  ensureAuthenticated,
+  adaptMiddleware(ensureOwnerMiddleware),
+  [_privateP2PRouter, ...adminsRouters],
 );
 
 router.use('/monkeynauts', monkeynautsRouter);

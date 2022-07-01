@@ -67,6 +67,7 @@ export type ConfirmTransactionWithTxhashOnlyResponse = Either<
   TransactionCarriedOutError | WaitTransactionErrors | WaitTxReceiptErrors,
   {
     walletFrom: string;
+    amount: number;
   }
 >;
 interface IBlockchainProvider {

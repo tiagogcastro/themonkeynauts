@@ -30,6 +30,8 @@ import { IInitBountyHuntTokenRepository } from '@modules/players/domain/reposito
 import { PrismaInitBountyHuntTokenRepository } from '@modules/players/infra/database/prisma/repositories/prisma-init-bounty-hunt-token-repository';
 import { PrismaGameParamsRepository } from '@modules/game-params/infra/database/prisma/repositories/prisma-game-params-repositories';
 import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+import { PrismaPrivateSaleP2PRepository } from '@modules/private-p2p/infra/database/prisma/repositories/prisma-private-sale-p2p-repositories';
+import { IPrivateSaleP2PRepository } from '@modules/private-p2p/domain/repositories/private-p2p-repositories';
 
 container.registerSingleton<IPlayersRepository>(
   'PlayersRepository',
@@ -103,4 +105,9 @@ container.registerSingleton<IInitBountyHuntTokenRepository>(
 container.registerSingleton<IGameParamsRepository>(
   'GameParamsRepository',
   PrismaGameParamsRepository,
+);
+
+container.registerSingleton<IPrivateSaleP2PRepository>(
+  'PrivateSaleP2PRepository',
+  PrismaPrivateSaleP2PRepository,
 );
