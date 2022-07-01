@@ -6,11 +6,15 @@ import { UpdateSaleRequestDTO } from '@modules/sales/dtos/update-sale-request';
 import { UpdateSaleBusinessLogic } from '@modules/sales/core/business-logic/update-sale';
 import { UpdateShipSaleBusinessLogic } from '@modules/sales/core/business-logic/update-ship-sale';
 import { UpdatePackSaleBusinessLogic } from '@modules/sales/core/business-logic/update-pack-sale';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 
-class UpdateSaleController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const data = request.body as UpdateSaleRequestDTO;
-
+class UpdateSaleController implements IController<UpdateSaleRequestDTO> {
+  async handle(data: UpdateSaleRequestDTO): Promise<HttpResponse> {
     const updateSaleBusinessLogic = container.resolve(UpdateSaleBusinessLogic);
 
     const Sale = {
@@ -19,12 +23,16 @@ class UpdateSaleController {
       Pack: UpdatePackSaleBusinessLogic,
     }[data.type];
 
-    const updatedSale = await updateSaleBusinessLogic.execute({
+    const result = await updateSaleBusinessLogic.execute({
       ...data,
       sale: container.resolve(Sale as any),
     });
 
-    return response.status(201).json(updatedSale);
+    if (result.isLeft()) {
+      return clientError(result.value);
+    }
+
+    return ok(result.value);
   }
 }
 

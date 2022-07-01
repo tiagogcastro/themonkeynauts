@@ -59,10 +59,23 @@ export type SendTransactionResponse = Either<
   }
 >;
 
+export type WaitTransactionErrors = WaitTransactionError;
+
+export type WaitTxReceiptErrors = WaitTxReceiptError;
+
+export type ConfirmTransactionWithTxhashOnlyResponse = Either<
+  TransactionCarriedOutError | WaitTransactionErrors | WaitTxReceiptErrors,
+  {
+    walletFrom: string;
+  }
+>;
 interface IBlockchainProvider {
   confirmTransaction(
     data: ConfirmTransactionDTO,
   ): Promise<ConfirmTransactionResponse>;
+  confirmTransactionWithTxhashOnly(
+    txHash: string,
+  ): Promise<ConfirmTransactionWithTxhashOnlyResponse>;
   sendTransaction(data: SendTransactionDTO): Promise<SendTransactionResponse>;
 }
 

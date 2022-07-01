@@ -18,28 +18,21 @@ export type HttpResponse = {
 export function ok<T>(dto?: T): HttpResponse {
   return {
     statusCode: 200,
-    ...(dto
-      ? {
-          body: {
-            data: dto,
-            error: null,
-          },
-        }
-      : {}),
+    body: {
+      data: dto || null,
+      error: null,
+    },
   };
 }
 
 export function created<T>(dto?: T): HttpResponse {
   return {
     statusCode: 201,
-    ...(dto
-      ? {
-          body: {
-            data: dto,
-            error: null,
-          },
-        }
-      : {}),
+
+    body: {
+      data: dto || null,
+      error: null,
+    },
   };
 }
 

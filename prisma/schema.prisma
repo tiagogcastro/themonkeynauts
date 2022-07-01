@@ -300,7 +300,25 @@ model InitBountyHuntToken {
 model GameParam {
   id String @id @db.Uuid()
 
-  gameClientVersion String
+  gameClientVersion               String
+  travelFuelConsuption            Int
+  bountyHuntFuelConsuption        Int
+  shipRefuelCostInPercentage      Int
+  bountyHuntMinReward             Int
+  bountyHuntMaxReward             Int
+  mineGoldAverageResourceReward   Int
+  mineGoldAverageSpcReward        Int
+  mineGoldRewardsVariation        Int
+  mineIronAverageResourceReward   Int
+  mineIronAverageSpcReward        Int
+  mineIronRewardsVariation        Int
+  mineCopperAverageResourceReward Int
+  mineCopperAverageSpcReward      Int
+  mineCooperRewardsVariation      Int
+  mineScrapAverageResourceReward  Int
+  mineScrapAverageSpcReward       Int
+  mineScrapRewardsVariation       Int
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -311,7 +329,13 @@ model GameParam {
 model PrivateSaleP2P {
   id String @id @db.Uuid()
 
-  gameClientVersion String
+  email String
+
+  txHash String @unique
+
+  wallet String
+
+  bnbAmount Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -8,11 +8,14 @@ import { AppError } from '@shared/errors/app-error';
 import { IMonkeynautSale } from '@modules/sales/domain/entities/monkeynaut-sale';
 import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
 import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
-import { PackType } from '@modules/sales/domain/enums/pack-type';
+import { Either, right } from '@shared/core/logic/either';
 
-type Response = {
-  sale: IPackSale | IShipSale | IMonkeynautSale;
-};
+type UpdateSaleResponse = Either<
+  Error,
+  {
+    sale: IPackSale | IShipSale | IMonkeynautSale;
+  }
+>;
 
 @injectable()
 class UpdateSaleBusinessLogic {
@@ -29,7 +32,7 @@ class UpdateSaleBusinessLogic {
     sale,
     startDate,
     ...data
-  }: UpdateSaleRequestDTO): Promise<Response> {
+  }: UpdateSaleRequestDTO): Promise<UpdateSaleResponse> {
     const currentDate = new Date();
 
     if (endDate) {
@@ -79,9 +82,9 @@ class UpdateSaleBusinessLogic {
       endDate,
     });
 
-    return {
+    return right({
       sale: updatedSale,
-    };
+    });
   }
 }
 

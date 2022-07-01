@@ -34,7 +34,7 @@ class ResetPasswordBusinessLogic {
 
     const player = await this.playersRepository.findById(playerTokens.playerId);
 
-    if (!player) throw new AppError('Player does not exists', 409);
+    if (!player) throw new AppError('Player does not exist', 409);
 
     const amount = 2;
 

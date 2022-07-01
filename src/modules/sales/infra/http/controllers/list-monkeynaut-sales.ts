@@ -1,27 +1,36 @@
 import {
   ListMonkeynautSalesBusinesslogic,
-  SaleAction,
+  ListMonkeynautSalesRequestDTO,
 } from '@modules/sales/core/business-logic/list-monkeynaut-sales';
-import { Request, Response } from 'express';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
-type RequestQuery = {
-  sales: SaleAction;
-};
-
-class ListMonkeynautSalesController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { sales } = request.query as unknown as RequestQuery;
-
+class ListMonkeynautSalesController
+  implements IController<ListMonkeynautSalesRequestDTO>
+{
+  async handle({
+    sales,
+  }: ListMonkeynautSalesRequestDTO): Promise<HttpResponse> {
     const listMonkeynautSalesBusinessLogic = container.resolve(
       ListMonkeynautSalesBusinesslogic,
     );
 
-    const monkeynautSales = await listMonkeynautSalesBusinessLogic.execute({
+    const result = await listMonkeynautSalesBusinessLogic.execute({
       sales: sales ?? 'withoutException',
     });
 
-    return response.status(200).json(monkeynautSales);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 

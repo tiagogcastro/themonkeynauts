@@ -9,10 +9,14 @@ import { IMonkeynautSale } from '@modules/sales/domain/entities/monkeynaut-sale'
 import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
 import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
 import { PackType } from '@modules/sales/domain/enums/pack-type';
+import { Either, right } from '@shared/core/logic/either';
 
-type Response = {
-  sale: IPackSale | IShipSale | IMonkeynautSale;
-};
+type CreateSaleResponse = Either<
+  Error,
+  {
+    sale: IPackSale | IShipSale | IMonkeynautSale;
+  }
+>;
 
 @injectable()
 class CreateSaleBusinessLogic {
@@ -30,7 +34,7 @@ class CreateSaleBusinessLogic {
     adminId,
     startDate,
     ...data
-  }: CreateSaleRequestDTO): Promise<Response> {
+  }: CreateSaleRequestDTO): Promise<CreateSaleResponse> {
     const currentDate = new Date();
 
     if (endDate) {
@@ -73,9 +77,9 @@ class CreateSaleBusinessLogic {
       endDate,
     });
 
-    return {
+    return right({
       sale: createdSale,
-    };
+    });
   }
 }
 

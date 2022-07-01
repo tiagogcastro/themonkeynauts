@@ -39,7 +39,7 @@ class UpdatePlayerBusinessLogic {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
-      throw new AppError('Player does not exists', 403);
+      throw new AppError('Player does not exist', 403);
     }
 
     if (nickname !== player.nickname) {

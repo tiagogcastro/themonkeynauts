@@ -4,9 +4,12 @@ import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionDTO,
   ConfirmTransactionResponse,
+  ConfirmTransactionWithTxhashOnlyResponse,
   IBlockchainProvider,
   SendTransactionDTO,
   SendTransactionResponse,
+  WaitTransactionErrors,
+  WaitTxReceiptErrors,
 } from '@shared/domain/providers/blockchain-provider';
 import { retry } from '@shared/helpers/retry';
 import { inject, injectable } from 'tsyringe';
@@ -29,10 +32,12 @@ import { InvalidTransactionFromError } from './errors/invalid-transaction-from-e
 import { InvalidPrivateKeyError } from './errors/invalid-private-key-error';
 
 type WaitTransactionReceiptResponse = Either<
-  WaitTxReceiptError,
+  WaitTxReceiptErrors,
   TransactionReceipt
 >;
-type WaitTransactionResponse = Either<WaitTransactionError, Transaction>;
+
+type WaitTransactionResponse = Either<WaitTransactionErrors, Transaction>;
+
 @injectable()
 export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
@@ -218,8 +223,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     const transaction = waitTransactionResult.value;
 
-    console.log(transaction);
-    console.log(transactionReceipt);
+    console.log('transaction: ', transaction);
+    console.log('transactionReceipt: ', transactionReceipt);
 
     if (amount) {
       const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
@@ -246,6 +251,42 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }
 
     return right({
+      amount: Number(this.web3.utils.fromWei(transaction.value, 'ether')),
+    });
+  }
+
+  async confirmTransactionWithTxhashOnly(
+    txHash: string,
+  ): Promise<ConfirmTransactionWithTxhashOnlyResponse> {
+    const checkIfTheTransactionHasAlreadyBeenCarriedOut =
+      await this.logsRepository.findByTxHash(txHash);
+
+    if (checkIfTheTransactionHasAlreadyBeenCarriedOut) {
+      return left(new TransactionCarriedOutError());
+    }
+
+    const waitTransactionResult = await this.waitTransaction(txHash);
+
+    if (waitTransactionResult.isLeft()) {
+      const error = waitTransactionResult.value;
+
+      return left(error);
+    }
+
+    const waitTransactionReceiptResult = await this.waitTransactionReceipt(
+      txHash,
+    );
+
+    if (waitTransactionReceiptResult.isLeft()) {
+      const error = waitTransactionReceiptResult.value;
+
+      return left(error);
+    }
+
+    const transaction = waitTransactionResult.value;
+
+    return right({
+      walletFrom: transaction.from,
       amount: Number(this.web3.utils.fromWei(transaction.value, 'ether')),
     });
   }

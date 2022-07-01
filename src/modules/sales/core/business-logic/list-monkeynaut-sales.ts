@@ -1,13 +1,15 @@
 import { IMonkeynautSale } from '@modules/sales/domain/entities/monkeynaut-sale';
+import { Either, right } from '@shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IMonkeynautSalesRepository } from '../../domain/repositories/monkeynaut-sales-repositories';
 
 export type SaleAction = 'actived' | 'withoutException' | 'notActived';
 
-type Request = {
+export type ListMonkeynautSalesRequestDTO = {
   sales?: SaleAction;
 };
 
+type ListMonkeynautSalesResponse = Either<Error, IMonkeynautSale[]>;
 @injectable()
 class ListMonkeynautSalesBusinesslogic {
   constructor(
@@ -15,7 +17,9 @@ class ListMonkeynautSalesBusinesslogic {
     private monkeynautSalesRepository: IMonkeynautSalesRepository,
   ) {}
 
-  async execute(data?: Request): Promise<IMonkeynautSale[]> {
+  async execute(
+    data?: ListMonkeynautSalesRequestDTO,
+  ): Promise<ListMonkeynautSalesResponse> {
     let monkeynautSales: IMonkeynautSale[] = [];
 
     switch (data?.sales) {
@@ -35,12 +39,14 @@ class ListMonkeynautSalesBusinesslogic {
         break;
     }
 
-    return monkeynautSales.map(sale => {
-      return {
-        ...sale,
-        saleType: 'Monkeynaut',
-      };
-    });
+    return right(
+      monkeynautSales.map(sale => {
+        return {
+          ...sale,
+          saleType: 'Monkeynaut',
+        };
+      }),
+    );
   }
 }
 

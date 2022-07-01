@@ -1,27 +1,32 @@
 import {
   ListPackSalesBusinesslogic,
-  SaleAction,
+  ListPackSalesRequestDTO,
 } from '@modules/sales/core/business-logic/list-pack-sales';
-import { Request, Response } from 'express';
+import { IController } from '@shared/core/infra/controller';
+import {
+  clientError,
+  HttpResponse,
+  ok,
+} from '@shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
-type RequestQuery = {
-  sales: SaleAction;
-};
-
-class ListPackSalesController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    const { sales } = request.query as unknown as RequestQuery;
-
+class ListPackSalesController implements IController<ListPackSalesRequestDTO> {
+  async handle({ sales }: ListPackSalesRequestDTO): Promise<HttpResponse> {
     const listPackSalesBusinessLogic = container.resolve(
       ListPackSalesBusinesslogic,
     );
 
-    const packSales = await listPackSalesBusinessLogic.execute({
+    const result = await listPackSalesBusinessLogic.execute({
       sales: sales ?? 'withoutException',
     });
 
-    return response.status(200).json(packSales);
+    if (result.isLeft()) {
+      const error = result.value;
+
+      return clientError(error);
+    }
+
+    return ok(result.value);
   }
 }
 
