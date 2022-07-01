@@ -167,7 +167,6 @@ export function PrivateSale() {
 
               privateSaleSucessModal.changeToTrue();
             } catch(error: any) {
-              console.log(error);
               const apiErrorResponse = ApiError(error);
 
               apiErrorResponse.messages.map(message => {

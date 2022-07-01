@@ -182,117 +182,94 @@ export function AdminCreateSale() {
   const [lastSales, setLastSales] = useState<Sales>({} as Sales);
 
   async function getOpenMonkeynautSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-monkeynauts', {
-        params: {
-          sales: 'actived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-monkeynauts', {
+      params: {
+        sales: 'actived'
+      }
+    });
 
-      setOpenSales(prevState => {
-        return {
-          ...prevState,
-          monkeynauts: response.data.data,
-        }
-      })
-    } catch (error: any) {
-      console.log({error: error.message});
-    }
+    setOpenSales(prevState => {
+      return {
+        ...prevState,
+        monkeynauts: response.data.data,
+      }
+    })
   }
 
   async function getOpenShipSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-ships', {
-        params: {
-          sales: 'actived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-ships', {
+      params: {
+        sales: 'actived'
+      }
+    });
 
-      setOpenSales(prevState => {
-        return {
-          ...prevState,
-          ships: response.data.data,
-        }
-      });
-    } catch (error: any) {
-      console.log({error: error.message});
-    }
+    setOpenSales(prevState => {
+      return {
+        ...prevState,
+        ships: response.data.data,
+      }
+    });
   }
 
   async function getOpenPackSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-packs', {
-        params: {
-          sales: 'actived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-packs', {
+      params: {
+        sales: 'actived'
+      }
+    });
 
-      setOpenSales(prevState => {
-        return {
-          ...prevState,
-          packs: response.data.data,
-        }
-      })
-    } catch (error: any) {
-    }
+    setOpenSales(prevState => {
+      return {
+        ...prevState,
+        packs: response.data.data,
+      }
+    })
   }
 
-  console.log(openSales)
-
   async function getLastMonkeynautSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-monkeynauts', {
-        params: {
-          sales: 'notActived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-monkeynauts', {
+      params: {
+        sales: 'notActived'
+      }
+    });
 
-      setLastSales(prevState => {
-        return {
-          ...prevState,
-          monkeynauts: response.data.data,
-        }
-      })
-    } catch (error: any) {
-      console.log({error: error.message});
-    }
+    setLastSales(prevState => {
+      return {
+        ...prevState,
+        monkeynauts: response.data.data,
+      }
+    })
+
   }
 
   async function getLastShipSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-ships', {
-        params: {
-          sales: 'notActived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-ships', {
+      params: {
+        sales: 'notActived'
+      }
+    });
 
-      setLastSales(prevState => {
-        return {
-          ...prevState,
-          ships: response.data.data,
-        }
-      });
-    } catch (error: any) {
-    }
+    setLastSales(prevState => {
+      return {
+        ...prevState,
+        ships: response.data.data,
+      }
+    });
   }
 
   async function getLastPackSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-packs', {
-        params: {
-          sales: 'notActived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-packs', {
+      params: {
+        sales: 'notActived'
+      }
+    });
 
-      setLastSales(prevState => {
-        return {
-          ...prevState,
-          packs: response.data.data,
-        }
-      })
-    } catch (error: any) {
-      console.log({error: error.message});
-    }
+    setLastSales(prevState => {
+      return {
+        ...prevState,
+        packs: response.data.data,
+      }
+    })
   }
 
   async function getOpenSales() {
@@ -326,7 +303,6 @@ export function AdminCreateSale() {
     } = data;
     
     let dataCommon = {};
-
 
     switch (data.type) {
       case 'Monkeynaut':

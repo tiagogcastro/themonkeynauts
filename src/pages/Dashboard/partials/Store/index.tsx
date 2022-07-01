@@ -65,41 +65,33 @@ export function StoreTab() {
   const { player } = useAuth();
 
   async function getMonkeynautSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-monkeynauts', {
-        params: {
-          sales: 'actived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-monkeynauts', {
+      params: {
+        sales: 'actived'
+      }
+    });
 
-      setSales(prevState => {
-        return {
-          ...prevState,
-          monkeynauts: response.data.data,
-        }
-      })
-    } catch (error: any) {
-      // console.log({error: error.message});
-    }
+    setSales(prevState => {
+      return {
+        ...prevState,
+        monkeynauts: response.data.data,
+      }
+    })
   }
 
   async function getShipSale() {
-    try {
-      const response = await baseApi.get('/sale-events/list-ships', {
-        params: {
-          sales: 'actived'
-        }
-      });
+    const response = await baseApi.get('/sale-events/list-ships', {
+      params: {
+        sales: 'actived'
+      }
+    });
 
-      setSales(prevState => {
-        return {
-          ...prevState,
-          ships: response.data.data,
-        }
-      });
-    } catch (error: any) {
-      // console.log({error: error.message});
-    }
+    setSales(prevState => {
+      return {
+        ...prevState,
+        ships: response.data.data,
+      }
+    });
   }
 
   async function getPackSale() {

@@ -70,8 +70,6 @@ export function MonkeynautsTab({
           }
         });
 
-        console.log(response.data.data)
-
         setMonkeynauts(response.data.data.monkeynauts);
       } catch(err) {
         
