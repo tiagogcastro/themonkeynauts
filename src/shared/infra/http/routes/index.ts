@@ -20,6 +20,7 @@ import { ensureAdministratorMiddleware } from '@modules/players/infra/http/middl
 import { _gameParamsRouter } from '@modules/game-params/infra/http/routes/_game-params.routes';
 import { ensureOwnerMiddleware } from '@modules/players/infra/http/middlewares/ensure-owner';
 import { _privateP2PRouter } from '@modules/private-p2p/infra/http/routes/_send-private-p2p.routes';
+import { systemsRouter } from '@modules/game-params/infra/http/routes/systems.routes';
 
 const router = Router();
 
@@ -29,6 +30,7 @@ router.use('/private-sales', privateSalesRouter);
 router.use('/sale-events', saleEventsRouter);
 router.use('/ships', shipsRouter);
 router.use('/space-station', spaceStationRouter);
+router.use('/system', systemsRouter);
 
 const adminsRouters = [
   _playersRouter,

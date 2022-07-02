@@ -6,7 +6,7 @@ import { Either, right } from '@shared/core/logic/either';
 import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 import { Maybe } from '@shared/core/logic/maybe';
 
-type ListGameParamsResponse = Either<
+type FetchGameParamsResponse = Either<
   Error,
   {
     gameParams: IGameParam | Maybe<null>;
@@ -14,13 +14,13 @@ type ListGameParamsResponse = Either<
 >;
 
 @injectable()
-export class ListGameParamsBusinessLogic {
+export class FetchGameParamsBusinessLogic {
   constructor(
     @inject('GameParamsRepository')
     private gameParamsRepository: IGameParamsRepository,
   ) {}
 
-  async execute(): Promise<ListGameParamsResponse> {
+  async execute(): Promise<FetchGameParamsResponse> {
     const gameParams = await this.gameParamsRepository.findFirst();
 
     return right({ gameParams });

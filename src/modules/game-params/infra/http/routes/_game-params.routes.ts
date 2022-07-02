@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { setGameParamsController } from '../controllers/set-game-params';
-import { listGameParamsController } from '../controllers/list-game-params';
+import { fetchGameParamsController } from '../controllers/fetch-game-params';
 
 const _gameParamsRouter = Router();
 
@@ -42,9 +42,9 @@ _gameParamsRouter.post(
 );
 
 _gameParamsRouter.get(
-  '/list',
+  '/fetch',
   ensureAuthenticated,
-  adaptRoute(listGameParamsController),
+  adaptRoute(fetchGameParamsController),
 );
 
 _gameParamsRouter.use('/game-params', _gameParamsRouter);
