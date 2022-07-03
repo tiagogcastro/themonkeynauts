@@ -27,7 +27,7 @@ export const MainContent = styled.main`
 
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 24px;
 
   @media(max-width: 1399px) {
     flex-direction: column;
@@ -41,9 +41,13 @@ export const FormContainer = styled(Form)`
   grid-template-columns: 1fr;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
+  gap: 24px;
+
+  .groups {
+    label {
+      margin-top: 16px;
+    }
+  }
 
   button {
     margin-top: 16px;

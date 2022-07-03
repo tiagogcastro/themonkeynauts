@@ -152,102 +152,114 @@ export function AdminGameParams() {
           <h1>Game params</h1>
 
           <S.FormContainer ref={formRef} onSubmit={changeGameParams} initialData={gameParams ? gameParams : undefined}>
-            <Input 
-              name="gameClientVersion"
-              type="text"
-              labelText='Game Client version'
-            />
+            <div className="groups">
+              <Input 
+                name="gameClientVersion"
+                type="text"
+                labelText='Game Client version'
+              />
+              <Input 
+                name="bountyHuntMinReward"
+                type="number"
+                labelText='Bounty hunt min reward'
+              />
+              <Input 
+                name="bountyHuntMaxReward"
+                type="number"
+                labelText='Bounty Hunt max reward'
+              />
+            </div>
 
-            <Input 
-              name="travelFuelConsuption"
-              type="number"
-              labelText='Travel Fuel consuption'
-            />
-            <Input 
-              name="bountyHuntFuelConsuption"
-              type="number"
-              labelText='Bounty Hunt fuel consuption'
-            />
-            <Input 
-              name="shipRefuelCostInPercentage"
-              type="number"
-              labelText='Ship Refuel cost in percentage'
-            />
+            <div className="groups">
+              <Input 
+                name="travelFuelConsuption"
+                type="number"
+                labelText='Travel Fuel consuption'
+              />
+              <Input 
+                name="bountyHuntFuelConsuption"
+                type="number"
+                labelText='Bounty Hunt fuel consuption'
+              />
+              <Input 
+                name="shipRefuelCostInPercentage"
+                type="number"
+                labelText='Ship Refuel cost in percentage'
+              />
+            </div>
 
-            <Input 
-              name="bountyHuntMinReward"
-              type="number"
-              labelText='Bounty hunt min reward'
-            />
-            <Input 
-              name="bountyHuntMaxReward"
-              type="number"
-              labelText='Bounty Hunt max reward'
-            />
+            <div className="groups">
+              <Input 
+                name="mineGoldAverageResourceReward"
+                type="number"
+                labelText='Mine Gold average resource reward'
+              />
+              <Input 
+                name="mineGoldAverageSpcReward"
+                type="number"
+                labelText='Mine Gold average spc reward'
+              />
+              <Input 
+                name="mineGoldRewardsVariation"
+                type="number"
+                labelText='Mine Gold rewards variation'
+              />
+            </div>
 
-            <Input 
-              name="mineGoldAverageResourceReward"
-              type="number"
-              labelText='Mine Gold average resource reward'
-            />
-            <Input 
-              name="mineGoldAverageSpcReward"
-              type="number"
-              labelText='Mine Gold average spc reward'
-            />
-            <Input 
-              name="mineGoldRewardsVariation"
-              type="number"
-              labelText='Mine Gold rewards variation'
-            />
+            <div className="groups">
+              <Input 
+                name="mineIronAverageResourceReward"
+                type="number"
+                labelText='Mine Iron average resource reward'
+              />
+              <Input 
+                name="mineIronAverageSpcReward"
+                type="number"
+                labelText='Mine Iron average spc reward'
+              />
+              <Input 
+                name="mineIronRewardsVariation"
+                type="number"
+                labelText='Mine Iron rewards variation'
+              />
+            </div>
 
-            <Input 
-              name="mineIronAverageResourceReward"
-              type="number"
-              labelText='Mine Iron average resource reward'
-            />
-            <Input 
-              name="mineIronAverageSpcReward"
-              type="number"
-              labelText='Mine Iron average spc reward'
-            />
-            <Input 
-              name="mineIronRewardsVariation"
-              type="number"
-              labelText='Mine Iron rewards variation'
-            />
+            <div className="groups">
+              <Input 
+                name="mineCopperAverageResourceReward"
+                type="number"
+                labelText='Mine Copper average resource reward'
+              />
+              <Input 
+                name="mineCopperAverageSpcReward"
+                type="number"
+                labelText='Mine Copper average spc reward'
+              />
+              <Input 
+                name="mineCooperRewardsVariation"
+                type="number"
+                labelText='Mine Cooper rewards variation'
+              />
+            </div>
 
-            <Input 
-              name="mineCopperAverageResourceReward"
-              type="number"
-              labelText='Mine Copper average resource reward'
-            />
-            <Input 
-              name="mineCopperAverageSpcReward"
-              type="number"
-              labelText='Mine Copper average spc reward'
-            />
-            <Input 
-              name="mineCooperRewardsVariation"
-              type="number"
-              labelText='Mine Cooper rewards variation'
-            />
+            <div className="groups">
+              <Input 
+                name="mineScrapAverageResourceReward"
+                type="number"
+                labelText='Mine Scrap average resource reward'
+              />
+              <Input 
+                name="mineScrapAverageSpcReward"
+                type="number"
+                labelText='Mine Scrap average spc reward'
+              />
+              <Input 
+                name="mineScrapRewardsVariation"
+                type="number"
+                labelText='Mine Scrap rewards variation'
+              />
+            </div>
 
-            <Input 
-              name="mineScrapAverageResourceReward"
-              type="number"
-              labelText='Mine Scrap average resource reward'
-            />
-            <Input 
-              name="mineScrapAverageSpcReward"
-              type="number"
-              labelText='Mine Scrap average spc reward'
-            />
-            <Input 
-              name="mineScrapRewardsVariation"
-              type="number"
-              labelText='Mine Scrap rewards variation'
-            />
             <Button text="Update" type="submit" />
           </S.FormContainer>
         </S.MainContent>
