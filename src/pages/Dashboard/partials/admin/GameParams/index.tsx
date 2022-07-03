@@ -92,7 +92,7 @@ export function AdminGameParams() {
   const [gameParams, setGameParams] = useState<GameParams | null>(null);
 
   async function getGameParams() {
-    const response = await baseApi.get('/admins/game-params/fetch');
+    const response = await baseApi.get('/game-params/fetch');
 
     setGameParams(response.data.data.gameParams);
   }
