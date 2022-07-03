@@ -32,6 +32,10 @@ export function Dashboard() {
   const storeIsShow = useBoolean(false);
   const privateSaleIsShow = useBoolean(false);
 
+  const playerRolesAccess = ['admin', 'owner'];
+
+  const playerRole = player?.player.role.toLowerCase();
+
   return (
     <Container>
       <Content>
@@ -62,10 +66,10 @@ export function Dashboard() {
               <Tab title="Private sale" hasButtonToBack={privateSaleIsShow}>
                 <PrivateSale />
               </Tab>
-              <Tab title="Admin" render={player?.player.role.toLowerCase() === 'admin'}>
+              <Tab title="Admin" render={playerRole ? playerRolesAccess.includes(playerRole): false}>
                 <Admin />
               </Tab>
-              <Tab title="Owner" render={player?.player.role.toLowerCase() === 'owner'}>
+              <Tab title="Owner" render={playerRole === 'owner'}>
                 <Owner />
               </Tab>
             </Tabs>
