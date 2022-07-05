@@ -15,7 +15,7 @@ import { ApiError } from '@/utils/apiError';
 const schema = Yup.object().shape({
   email: Yup.string()
     .required('This field is required'),
-  hash: Yup.string()
+  txHash: Yup.string()
     .required('This field is required'),
 });
 
@@ -33,21 +33,21 @@ export function OwnerSendPrivateP2P() {
         abortEarly: false
       });
 
-      // await baseApi.post('/owners/send-private-p2p', data);
+      await baseApi.post('/owners/private-p2p/send', data);
 
-      // rest.reset();
+      rest.reset();
 
-      // toast(`Private P2P sent to ${data.email} successfully`, {
-      //   autoClose: 5000,
-      //   pauseOnHover: true,
-      //   type: 'success',
-      //   style: {
-      //     background: COLORS.global.white_0,
-      //     color: COLORS.global.black_0,
-      //     fontSize: 14,
-      //     fontFamily: 'Orbitron, sans-serif',
-      //   }
-      // });
+      toast(`Private P2P sent to ${data.email} successfully`, {
+        autoClose: 5000,
+        pauseOnHover: true,
+        type: 'success',
+        style: {
+          background: COLORS.global.white_0,
+          color: COLORS.global.black_0,
+          fontSize: 14,
+          fontFamily: 'Orbitron, sans-serif',
+        }
+      });
 
     } catch (error: any) {
       if(error instanceof Yup.ValidationError) {
@@ -90,7 +90,7 @@ export function OwnerSendPrivateP2P() {
             <Input 
               name="txHash"
               type="text"
-              labelText='Tx hash'
+              labelText='Tx Hash'
               containerProps={{
                 className: "tx_hash"
               }}
