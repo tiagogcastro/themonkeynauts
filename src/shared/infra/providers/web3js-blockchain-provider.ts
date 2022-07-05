@@ -112,7 +112,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     const RETRY = true;
 
     try {
-      const transactionReceipt = await new Promise<TransactionReceipt>(
+      const transactionReceipt = await new Promise<TransactionReceipt | null>(
         async resolve => {
           await retry(async () => {
             const obtainedTransactionReceipt =
@@ -129,8 +129,12 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
             return !RETRY;
           }, 500);
+
+          resolve(null);
         },
       );
+
+      if (!transactionReceipt) throw new Error();
 
       return right(transactionReceipt);
     } catch {
@@ -140,23 +144,28 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
   async waitTransaction(txHash: string): Promise<WaitTransactionResponse> {
     const RETRY = true;
-
     try {
-      const transaction = await new Promise<Transaction>(async resolve => {
-        await retry(async () => {
-          const obtainedTransaction = await this.web3.eth.getTransaction(
-            txHash,
-          );
+      const transaction = await new Promise<Transaction | null>(
+        async resolve => {
+          await retry(async () => {
+            const obtainedTransaction = await this.web3.eth.getTransaction(
+              txHash,
+            );
 
-          if (!obtainedTransaction) {
-            return RETRY;
-          }
+            if (!obtainedTransaction) {
+              return RETRY;
+            }
 
-          resolve(obtainedTransaction);
+            resolve(obtainedTransaction);
 
-          return !RETRY;
-        }, 500);
-      });
+            return !RETRY;
+          }, 500);
+
+          resolve(null);
+        },
+      );
+
+      if (!transaction) throw new Error();
 
       return right(transaction);
     } catch {

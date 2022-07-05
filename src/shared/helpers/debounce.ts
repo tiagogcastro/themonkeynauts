@@ -1,6 +1,6 @@
 let timeout: NodeJS.Timeout | null = null;
 
-const debounce = (callback: () => Promise<void>, delay: number) => {
+const debounce = (callback: () => Promise<any>, delay: number) => {
   if (timeout) {
     clearTimeout(timeout);
   }

@@ -4,10 +4,10 @@ let attempts = 0;
 
 const retry = async (
   callback: () => Promise<boolean>,
-  delay?: number,
-  maxAttempts = 2000,
+  delay = 0,
+  maxAttempts = 2,
 ) => {
-  const _retry = await callback();
+  const RETRY = await callback();
 
   if (maxAttempts !== 0) {
     attempts += 1;
@@ -17,8 +17,8 @@ const retry = async (
     return;
   }
 
-  if (_retry) {
-    debounce(() => retry(callback), delay || 0);
+  if (RETRY) {
+    debounce(() => retry(callback), delay);
   }
 };
 
