@@ -5,8 +5,10 @@ import { ShipNotFoundError } from '@modules/players/core/business-logic/errors/s
 
 import { Either, left, right } from '@shared/core/logic/either';
 
+import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 import { CannotConsumeFuelError } from './errors/cannot-consume-fuel';
+import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 
 export type ConsumeFuelRequestDTO = {
   shipId: string;
@@ -27,6 +29,9 @@ class ConsumeFuelBusinessLogic {
   constructor(
     @inject('ShipsRepository')
     private shipsRepository: IShipsRepository,
+
+    @inject('GameParamsRepository')
+    private gameParamsRepository: IGameParamsRepository,
   ) {}
 
   async execute({
@@ -39,9 +44,17 @@ class ConsumeFuelBusinessLogic {
       return left(new ShipNotFoundError());
     }
 
+    const gameParams = await this.gameParamsRepository.findFirst();
+
+    if (!gameParams) {
+      return left(new GameParamsNotFoundError());
+    }
+
+    const { bountyHuntFuelConsuption, travelFuelConsuption } = gameParams;
+
     const consumeFuelSchema = {
-      Travel: 100,
-      BountyHunt: 100,
+      Travel: travelFuelConsuption,
+      BountyHunt: bountyHuntFuelConsuption,
     };
 
     const consumeFuel = consumeFuelSchema[action];

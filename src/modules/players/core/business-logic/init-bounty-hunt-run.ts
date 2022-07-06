@@ -8,11 +8,13 @@ import { Either, left, right } from '@shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { IShip } from '@modules/ships/domain/entities/ship';
+import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 import { InvalidActiveShipError } from './errors/invalid-active-ship-error';
 import { InvalidShipFuelError } from './errors/invalid-ship-fuel-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 import { ResourceNotFoundError } from './errors/resource-not-fount-error';
 import { ShipNotFoundError } from './errors/ship-not-fount-error';
+import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 
 type InitBountyHuntRunResponse = Either<
   PlayerNotFoundError | ResourceNotFoundError,
@@ -40,6 +42,9 @@ class InitBountyHuntRunBusinessLogic {
 
     @inject('InitBountyHuntTokenRepository')
     private initBountyHuntTokenRepository: IInitBountyHuntTokenRepository,
+
+    @inject('GameParamsRepository')
+    private gameParamsRepository: IGameParamsRepository,
   ) {}
 
   async execute({
@@ -70,11 +75,19 @@ class InitBountyHuntRunBusinessLogic {
       return left(new ShipNotFoundError());
     }
 
-    if (ship.fuel < 100) {
+    const gameParams = await this.gameParamsRepository.findFirst();
+
+    if (!gameParams) {
+      return left(new GameParamsNotFoundError());
+    }
+
+    const { bountyHuntFuelConsuption } = gameParams;
+
+    if (ship.fuel < bountyHuntFuelConsuption) {
       return left(new InvalidShipFuelError());
     }
 
-    ship.fuel -= 100;
+    ship.fuel -= bountyHuntFuelConsuption;
 
     const findedInitBountyHuntToken =
       await this.initBountyHuntTokenRepository.findInitBountyHuntTokenByPlayerId(

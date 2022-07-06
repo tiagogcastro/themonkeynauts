@@ -1,17 +1,19 @@
-import { InitBountyHuntToken } from '@modules/players/domain/entities/init-bounty-hunt-token';
+import { inject, injectable } from 'tsyringe';
+
+import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
 import { IInitBountyHuntTokenRepository } from '@modules/players/domain/repositories/init-bounty-hunt-token-repository';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+
 import { Either, left, right } from '@shared/core/logic/either';
-import { inject, injectable } from 'tsyringe';
+
+import { HandleBountyHuntRankBusinessLogic } from './handle-bounty-hunt-rank';
+
+import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 import { InvalidActiveShipError } from './errors/invalid-active-ship-error';
 import { InvalidInitBountyHuntTokenError } from './errors/invalid-init-bounty-hunt-token-error';
-import { InvalidShipFuelError } from './errors/invalid-ship-fuel-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 import { ResourceNotFoundError } from './errors/resource-not-fount-error';
-import { ShipNotFoundError } from './errors/ship-not-fount-error';
-import { HandleBountyHuntRankBusinessLogic } from './handle-bounty-hunt-rank';
 
 type FinishBountyHuntRunResponse = Either<
   PlayerNotFoundError | ResourceNotFoundError,
@@ -38,6 +40,9 @@ class FinishBountyHuntRunBusinessLogic {
 
     @inject('InitBountyHuntTokenRepository')
     private initBountyHuntTokenRepository: IInitBountyHuntTokenRepository,
+
+    @inject('GameParamsRepository')
+    private gameParamsRepository: IGameParamsRepository,
   ) {}
 
   async execute({
@@ -60,6 +65,14 @@ class FinishBountyHuntRunBusinessLogic {
     if (!player.activeShipId) {
       return left(new InvalidActiveShipError());
     }
+
+    const gameParams = await this.gameParamsRepository.findFirst();
+
+    if (!gameParams) {
+      return left(new GameParamsNotFoundError());
+    }
+
+    const { bountyHuntMaxReward, bountyHuntMinReward } = gameParams;
 
     const initBountyHuntToken =
       await this.initBountyHuntTokenRepository.findInitBountyHuntTokenByPlayerId(
@@ -84,9 +97,9 @@ class FinishBountyHuntRunBusinessLogic {
     }
 
     if (bossKill) {
-      resource.spc += 11;
+      resource.spc += bountyHuntMaxReward;
     } else {
-      resource.spc += 8;
+      resource.spc += bountyHuntMinReward;
     }
 
     await this.resourcesRepository.save(resource);

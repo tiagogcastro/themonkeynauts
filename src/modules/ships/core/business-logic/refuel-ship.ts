@@ -1,10 +1,22 @@
-import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { AppError } from '@shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
+
+import { IShip, Ship } from '@modules/ships/domain/entities/ship';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { Either, right } from '@shared/core/logic/either';
+import { Either, left, right } from '@shared/core/logic/either';
+import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
+
+import {
+  GameParamsNotFoundError,
+  CannotRefuelBecauseIsAtMaxError,
+  CannotRefuelShipAtStationError,
+  CannotRefuelShipFoundError,
+  DontEnoughSpcAmountError,
+  PlayerNotFoundError,
+  ResourceNotFoundError,
+} from './errors';
 
 export type RefuelShipRequestDTO = {
   shipId: string;
@@ -29,6 +41,9 @@ class RefuelShipBusinessLogic {
 
     @inject('ResourcesRepository')
     private resourcesRepository: IResourcesRepository,
+
+    @inject('GameParamsRepository')
+    private gameParamsRepository: IGameParamsRepository,
   ) {}
 
   async execute({
@@ -38,41 +53,44 @@ class RefuelShipBusinessLogic {
     const player = await this.playersRepository.findById(playerId);
 
     if (!player) {
-      throw new AppError('Player does not exist', 401);
+      return left(new PlayerNotFoundError());
     }
 
     const resource = await this.resourcesRepository.findByPlayerId(playerId);
 
     if (!resource) {
-      throw new AppError('Resource does not exist', 409);
+      return left(new ResourceNotFoundError());
     }
 
     const ship = await this.shipsRepository.findById(shipId, false);
 
     if (!ship) {
-      throw new AppError(
-        'Could not refuel the ship because the ship you entered does not exist',
-        400,
-      );
+      return left(new CannotRefuelShipFoundError());
     }
 
     if (!ship.canRefuelAtStation) {
-      throw new AppError('You cannot refuel this ship at the station', 400);
+      return left(new CannotRefuelShipAtStationError());
     }
 
     const usedFuel = ship.tankCapacity - ship.fuel;
 
     if (usedFuel === 0) {
-      throw new AppError(
-        `It is not possible to refuel the ship because the fuel is 100%`,
-      );
+      return left(new CannotRefuelBecauseIsAtMaxError());
     }
 
-    const amountPayableInSpc = usedFuel * 0.08;
+    const gameParams = await this.gameParamsRepository.findFirst();
+
+    if (!gameParams) {
+      return left(new GameParamsNotFoundError());
+    }
+
+    const { shipRefuelCostInPercentage } = gameParams;
+
+    const amountPayableInSpc = usedFuel * (shipRefuelCostInPercentage / 100);
     const replenished = ship.tankCapacity;
 
     if (amountPayableInSpc > resource.spc) {
-      throw new AppError(`You don't have enough spc amount`);
+      return left(new DontEnoughSpcAmountError());
     }
 
     resource.spc -= amountPayableInSpc;
