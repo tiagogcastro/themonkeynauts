@@ -38,7 +38,7 @@ class PrismaShipsRepository implements IShipsRepository {
     });
   }
 
-  async saveManyByQueryRaw(): Promise<void> {
+  async saveManyByDirectQuery(): Promise<void> {
     await prisma.$queryRawUnsafe(`
       UPDATE "ships" 
         SET 
