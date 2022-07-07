@@ -1,9 +1,5 @@
 import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import {
-  FindByIdResponse,
-  IShipsRepository,
-  ShipsSaveManyDTO,
-} from '@modules/ships/domain/repositories/ships-repositories';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
 import {
   Ship as PrismaShip,
   Monkeynaut as PrismaMonkeynaut,
@@ -34,12 +30,21 @@ const parseMonkeynaut = (monkeynaut: PrismaMonkeynaut): IMonkeynaut => {
 };
 
 class PrismaShipsRepository implements IShipsRepository {
-  async saveMany({ canRefuelAtStation }: ShipsSaveManyDTO): Promise<void> {
+  async saveMany(ship: Partial<IShip>): Promise<void> {
     await prisma.ship.updateMany({
       data: {
-        canRefuelAtStation,
+        ...ship,
       },
     });
+  }
+
+  async saveManyByQueryRaw(): Promise<void> {
+    await prisma.$queryRawUnsafe(`
+      UPDATE "ships" 
+        SET 
+        fuel = ships."tankCapacity", 
+        "canRefuelAtStation" = true
+    `);
   }
 
   async findById<T extends boolean>(
@@ -153,6 +158,10 @@ class PrismaShipsRepository implements IShipsRepository {
         ...props,
       },
     });
+  }
+
+  async findMany(): Promise<IShip[]> {
+    return prisma.ship.findMany();
   }
 
   async listAllShips(): Promise<

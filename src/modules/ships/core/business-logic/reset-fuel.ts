@@ -16,9 +16,7 @@ class ResetFuelBusinessLogic {
     await this.cronJobProvider.run({
       cronTime: '0 0 * * *',
       onTick: async () => {
-        await this.shipsRepository.saveMany({
-          canRefuelAtStation: true,
-        });
+        await this.shipsRepository.saveManyByQueryRaw();
       },
     });
   }
