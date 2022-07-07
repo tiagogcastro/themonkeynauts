@@ -10,7 +10,7 @@ interface IShipsRepository {
   save(ship: IShip): Promise<void>;
   saveMany(data: Partial<IShip>): Promise<void>;
 
-  saveManyByQueryRaw(): Promise<void>;
+  resetShipsFuel(): Promise<void>;
 
   destroy(shipId: string): Promise<void>;
 
