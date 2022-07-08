@@ -52,16 +52,16 @@ class CreatePlayerBusinessLogic {
     role = PlayerRole.Default,
     password,
   }: CreatePlayerRequestDTO): Promise<CreatePlayerResponse> {
-    const foundPlayer = await this.playersRepository.findByEmail(
-      email.toLowerCase(),
-    );
+    const parsedEmail = email.toLowerCase();
+
+    const foundPlayer = await this.playersRepository.findByEmail(parsedEmail);
 
     if (foundPlayer) {
       throw new AppError('Unable to create player', 400);
     }
 
     const checkNicknameAlreadyExists =
-      await this.playersRepository.findByNickname(nickname.toLowerCase());
+      await this.playersRepository.findByNickname(nickname);
 
     if (checkNicknameAlreadyExists) {
       throw new AppError('Nickname entered already exists', 400);
@@ -70,7 +70,7 @@ class CreatePlayerBusinessLogic {
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     const { player } = new Player({
-      email,
+      email: parsedEmail,
       nickname,
       role,
       wallet: null,
