@@ -44,7 +44,9 @@ export class AppPlayerAuthBusinessLogic {
     email,
     password,
   }: AppPlayerAuthRequestDTO): Promise<AppPlayerAuthResponse> {
-    const player = await this.playersRepository.findByEmail(email);
+    const player = await this.playersRepository.findByEmail(
+      email.toLowerCase(),
+    );
 
     if (!player) {
       throw new AppError('Player does not exist', 403);

@@ -102,7 +102,9 @@ export class CreateAirDropNftBusinessLogic {
       logs: this.logsRepository,
     };
 
-    const player = await this.playersRepository.findByEmail(email);
+    const player = await this.playersRepository.findByEmail(
+      email.toLowerCase(),
+    );
 
     if (!player) {
       return left(new PlayerNotFoundError());

@@ -52,14 +52,16 @@ class CreatePlayerBusinessLogic {
     role = PlayerRole.Default,
     password,
   }: CreatePlayerRequestDTO): Promise<CreatePlayerResponse> {
-    const foundPlayer = await this.playersRepository.findByEmail(email);
+    const foundPlayer = await this.playersRepository.findByEmail(
+      email.toLowerCase(),
+    );
 
     if (foundPlayer) {
       throw new AppError('Unable to create player', 400);
     }
 
     const checkNicknameAlreadyExists =
-      await this.playersRepository.findByNickname(nickname);
+      await this.playersRepository.findByNickname(nickname.toLowerCase());
 
     if (checkNicknameAlreadyExists) {
       throw new AppError('Nickname entered already exists', 400);

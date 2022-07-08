@@ -42,18 +42,16 @@ class UpdatePlayerBusinessLogic {
       throw new AppError('Player does not exist', 403);
     }
 
-    if (nickname !== player.nickname) {
+    if (nickname.toLowerCase() !== player.nickname) {
       const checkNicknameAlreadyExists =
-        await this.playersRepository.findByNickname(nickname);
+        await this.playersRepository.findByNickname(nickname.toLowerCase());
 
       if (checkNicknameAlreadyExists) {
         throw new AppError('Nickname exists another account', 403);
       }
 
-      player.nickname = nickname;
+      player.nickname = nickname.toLowerCase();
     }
-
-    // TODO - Verify if string exist "admin || default"
 
     if (role) {
       player.role = role;

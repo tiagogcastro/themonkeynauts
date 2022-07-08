@@ -23,7 +23,9 @@ class SendForgotPasswordEmailBusinessLogic {
   ) {}
 
   async execute(email: string): Promise<SendForgotPasswordEmailResponse> {
-    const player = await this.playersRepository.findByEmail(email);
+    const player = await this.playersRepository.findByEmail(
+      email.toLowerCase(),
+    );
 
     if (!player) throw new AppError('Player does not exist.', 409);
 
