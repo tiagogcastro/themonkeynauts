@@ -19,8 +19,8 @@ class ResetEnergyMonkeynautBusinessLogic {
 
   async execute(): Promise<void> {
     await this.cronJobProvider.run({
-      // 0 */12 * * * -> A cada 12 horas executa (00h e 12h)
-      cronTime: '0 */12 * * *',
+      // 58 11,23 * * * -> executa em (11:58h e 23:58h)
+      cronTime: '58 11,23 * * *',
       onTick: async () => {
         const foundMonkeynauts = await this.monkeynautsRepository.findMany();
 

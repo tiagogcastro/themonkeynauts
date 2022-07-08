@@ -20,18 +20,20 @@ export class EtherealMailProvider implements IMailProvider {
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
-    createTestAccount().then(account => {
-      const transporter = createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure: account.smtp.secure,
-        auth: {
-          user: account.user,
-          pass: account.pass,
-        },
-      });
-      this.transporter = transporter;
-    });
+    createTestAccount()
+      .then(account => {
+        const transporter = createTransport({
+          host: account.smtp.host,
+          port: account.smtp.port,
+          secure: account.smtp.secure,
+          auth: {
+            user: account.user,
+            pass: account.pass,
+          },
+        });
+        this.transporter = transporter;
+      })
+      .catch(error => error);
   }
 
   async sendMail({
