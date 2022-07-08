@@ -7,7 +7,13 @@ class CronJobProvider implements ICronJobProvider {
   private job: Maybe<CronJob>;
 
   async run({ cronTime, onTick }: CronJobStartDTO): Promise<void> {
-    const job = new CronJob(cronTime, onTick, null, true, 'America/New_York');
+    const job = new CronJob(
+      cronTime,
+      onTick,
+      null,
+      true,
+      'America/Los_Angeles',
+    );
 
     job.start();
 
