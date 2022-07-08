@@ -28,7 +28,10 @@ class PrismaPlayersRepository implements IPlayersRepository {
   async findByWallet(wallet: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
-        wallet,
+        wallet: {
+          mode: 'insensitive',
+          equals: wallet,
+        },
       },
     });
 
@@ -56,7 +59,10 @@ class PrismaPlayersRepository implements IPlayersRepository {
   async findByEmail(email: string): AsyncMaybe<IPlayer> {
     const player = await prisma.player.findFirst({
       where: {
-        email,
+        email: {
+          mode: 'insensitive',
+          equals: email,
+        },
       },
     });
 
