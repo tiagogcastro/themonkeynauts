@@ -2,9 +2,6 @@ import { ICrew } from '@modules/crews/domain/entities/crew';
 import { AsyncMaybe } from '@shared/core/logic/maybe';
 import { IShip } from '../entities/ship';
 
-export type FindByIdResponse<T> = T extends true
-  ? AsyncMaybe<IShip & { crew: ICrew[] }>
-  : AsyncMaybe<IShip>;
 interface IShipsRepository {
   create(ship: IShip): Promise<void>;
   save(ship: IShip): Promise<void>;
