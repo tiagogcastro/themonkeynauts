@@ -14,7 +14,7 @@ class ResetFuelBusinessLogic {
 
   async execute(): Promise<void> {
     await this.cronJobProvider.run({
-      cronTime: '58 23 * * *',
+      cronTime: '10 01 * * *',
       onTick: async () => {
         console.log('resetShipsFuel --------------------------> ', new Date());
 
