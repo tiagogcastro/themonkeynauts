@@ -32,7 +32,7 @@ export function Monkeynaut({
 
     setMonkeynaut({
       ...monkeynaut,
-      crew: getUniqueShipCrewResponse.data.data,
+      ...getUniqueShipCrewResponse.data.data,
     });
   }
 
@@ -59,10 +59,10 @@ export function Monkeynaut({
                 <strong>{capitalize(String(monkeynaut.ownerName))}</strong>
               </S.UniqueInfo>
               <div className="mist_info">
-                <div className="info_left">
+                <div className="info_left">s
                   <S.UniqueInfo>
                     <span>Role</span>
-                    <strong>{capitalize(monkeynaut.role)}</strong>
+                    <strong>{monkeynaut.role}</strong>
                   </S.UniqueInfo>
                   <S.UniqueInfo>
                     <span>Energy</span>
@@ -72,7 +72,7 @@ export function Monkeynaut({
                 <div className="info_right">
                   <S.UniqueInfo>
                     <span>Rank</span>
-                    <strong>{capitalize(monkeynaut.rank)}</strong>
+                    <strong>{monkeynaut.rank}</strong>
                   </S.UniqueInfo>
 
                   <S.UniqueInfo>
@@ -81,14 +81,14 @@ export function Monkeynaut({
                   </S.UniqueInfo>
                 </div>
               </div>
-              <S.UniqueInfo className={`${!monkeynaut.crew && 'none_crew'}`}>
+              <S.UniqueInfo className={`${!monkeynaut.crews && 'none_crew'}`}>
                 <span>Crew in Ship</span>
                 <S.CrewInShipContainer>
-                  {monkeynaut?.crew ? (
+                  {monkeynaut?.crews ? (
                     <S.CrewInShip>
                       <div>
-                        <strong>{monkeynaut.crew.name}</strong>
-                        <p>{capitalize(monkeynaut.crew.role)}</p>
+                        <strong>{monkeynaut.crews.name}</strong>
+                        <p>{monkeynaut.crews.role}</p>
                       </div>
                     </S.CrewInShip>
                   ) : (

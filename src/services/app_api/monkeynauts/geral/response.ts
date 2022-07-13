@@ -41,7 +41,7 @@ export type Monkeynaut = {
   ownerName?: string;
   id_short?: string;
 
-  crew?: Ship | null;
+  crews?: Ship | null;
 };
 
 export type GetMonkeynauts = Monkeynaut[];
