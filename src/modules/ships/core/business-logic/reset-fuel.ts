@@ -16,6 +16,8 @@ class ResetFuelBusinessLogic {
     await this.cronJobProvider.run({
       cronTime: '58 23 * * *',
       onTick: async () => {
+        console.log('resetShipsFuel --------------------------> ', new Date());
+
         await this.shipsRepository.resetShipsFuel();
       },
     });

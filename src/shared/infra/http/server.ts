@@ -14,7 +14,7 @@ app.listen(process.env.PORT || 3333, () => {
   console.log(
     `👾 At [${format(
       new Date(),
-      'MM/dd/yyyy HH:mm:ss',
+      'yyyy/MM/dd HH:mm:ss',
     )} UTC] the monkeynauts server started on port 3333`,
   );
 });
