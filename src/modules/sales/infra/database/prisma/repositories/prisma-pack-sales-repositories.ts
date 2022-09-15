@@ -61,7 +61,14 @@ class PrismaPackSalesRepository implements IPackSalesRepository {
       where: {
         OR: [
           {
-            active: { equals: false },
+            active: {
+              equals: false,
+            },
+          },
+          {
+            currentQuantityAvailable: {
+              equals: 0,
+            },
           },
           {
             startDate: {

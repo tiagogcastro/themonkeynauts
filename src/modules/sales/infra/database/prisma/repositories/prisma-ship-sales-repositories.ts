@@ -67,7 +67,14 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
       where: {
         OR: [
           {
-            active: { equals: false },
+            active: {
+              equals: false,
+            },
+          },
+          {
+            currentQuantityAvailable: {
+              equals: 0,
+            },
           },
           {
             startDate: {
@@ -76,7 +83,7 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
           },
           {
             endDate: {
-              gte: new Date(),
+              lte: new Date(),
             },
           },
         ],
