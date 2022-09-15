@@ -70,8 +70,13 @@ class PrismaShipSalesRepository implements IShipSalesRepository {
             active: { equals: false },
           },
           {
+            startDate: {
+              gt: new Date(),
+            },
+          },
+          {
             endDate: {
-              lte: new Date(),
+              gte: new Date(),
             },
           },
         ],

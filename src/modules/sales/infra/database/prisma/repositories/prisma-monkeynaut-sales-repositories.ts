@@ -70,6 +70,11 @@ class PrismaMonkeynautSalesRepository implements IMonkeynautSalesRepository {
             active: { equals: false },
           },
           {
+            startDate: {
+              gt: new Date(),
+            },
+          },
+          {
             endDate: {
               lte: new Date(),
             },
