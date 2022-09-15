@@ -51,7 +51,7 @@ type ShipSale = CommonSaleProps & {
 };
 
 type PackSale = CommonSaleProps & {
-  type: 'BASIC' | 'ADVANCED' | 'EXPERT' | 'RANDOM';
+  type: 'Basic' | 'Advanced' | 'Expert' | 'Random';
 };
 
 type Sales = {
@@ -346,7 +346,7 @@ export function StoreTab() {
                 <p className="description">
                   Includes: 
                   <br /> <br />
-                  {sale.type === 'BASIC' && (
+                  {sale.type === 'Basic' && (
                     <>
                       2 Monkeynauts - Rank Sergeant <br /><br />
                       1 Ship - Rank B <br /><br />
@@ -354,7 +354,7 @@ export function StoreTab() {
                       <br/>
                     </>
                   )}
-                  {sale.type === 'ADVANCED' && (
+                  {sale.type === 'Advanced' && (
                     <>
                       3 Monkeynauts - Rank Captain <br /><br />
                       1 Ship - Rank A<br /><br />
@@ -362,7 +362,7 @@ export function StoreTab() {
                       <br/>
                     </>
                   )}
-                  {sale.type === 'EXPERT' && (
+                  {sale.type === 'Expert' && (
                     <>
                       4 Monkeynauts - Rank Major <br /><br />
                       1 Ship - Rank S<br /><br />
@@ -370,7 +370,7 @@ export function StoreTab() {
                       <br/>
                     </>
                   )}
-                  {sale.type === 'RANDOM' && (
+                  {sale.type === 'Random' && (
                     <>
                       2 Monkeynauts random <br /><br />
                       1 Ship random<br /><br />

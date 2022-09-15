@@ -341,7 +341,7 @@ export function AdminCreateSale() {
     const currentHour = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
 
     const _startDate = new Date(`${startDate} ${currentHour}`);
-    const _endDate = new Date(`${startDate} ${currentHour}`);
+    const _endDate = new Date(`${endDate} ${currentHour}`);
 
     const dataFormatted = {
       startDate: _startDate,
@@ -438,9 +438,9 @@ export function AdminCreateSale() {
         },
       }
 
-      const _type = sale.saleType.toUpperCase() as SaleType;
+      const _type = sale.saleType as SaleType;
 
-      await baseApi.put('/sale-events/update-sale', {
+      await baseApi.put('/admins/sale-events/update-sale', {
         type: _type,
         active: false,
         ...saleDataUnique[_type],
