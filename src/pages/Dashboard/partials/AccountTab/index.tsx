@@ -181,6 +181,8 @@ export function AccountTab() {
         });
     
         if(error) {
+          depositButtonHasBlocked.changeToFalse();
+
           return toast(error.message, {
             autoClose: 5000,
             pauseOnHover: true,
@@ -195,19 +197,18 @@ export function AccountTab() {
         }
 
         if(transaction) {
+          toast(`Wait for us to confirm the deposit in our database`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
           try {
-            toast(`Wait for us to confirm the deposit in our database`, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'info',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.black_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
-
             await baseApi.post('/players/deposit-tokens', {
               txHash: transaction
             });
@@ -223,7 +224,7 @@ export function AccountTab() {
                 fontFamily: 'Orbitron, sans-serif',
               }
             });
-            
+
             setInputValue('');
           } catch (error: any) {
             const apiErrorResponse = ApiError(error);
@@ -242,7 +243,10 @@ export function AccountTab() {
               });
             });
           }
+
+          depositButtonHasBlocked.changeToFalse();
         }
+
       } catch(error: any) {
         const apiErrorResponse = ApiError(error);
 
@@ -259,7 +263,7 @@ export function AccountTab() {
             }
           });
         });
-      } finally {
+
         depositButtonHasBlocked.changeToFalse();
       }
     }
