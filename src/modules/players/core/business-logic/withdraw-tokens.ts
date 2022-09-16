@@ -64,32 +64,13 @@ class WithdrawTokensBusinessLogic {
       return left(new AmountLessMinimumNeededAmountError());
     }
 
-    const sendTransactionResult = await this.blockchainProvider.sendTransaction(
-      {
-        amount,
-        contract: process.env.SPC_CONTRACT,
-        to: player.wallet as string,
-      },
-    );
+    const transferFromResult = await this.blockchainProvider.transfer({
+      amount,
+      recipient: player.wallet as string,
+    });
 
-    if (sendTransactionResult.isLeft()) {
-      const error = sendTransactionResult.value;
-
-      return left(error);
-    }
-
-    const transaction = sendTransactionResult.value;
-
-    const confirmTransactionResult =
-      await this.blockchainProvider.confirmTransaction({
-        amount,
-        to: player.wallet as string,
-        playerId,
-        txHash: transaction.transactionHash,
-      });
-
-    if (confirmTransactionResult.isLeft()) {
-      const error = confirmTransactionResult.value;
+    if (transferFromResult.isLeft()) {
+      const error = transferFromResult.value;
 
       return left(error);
     }

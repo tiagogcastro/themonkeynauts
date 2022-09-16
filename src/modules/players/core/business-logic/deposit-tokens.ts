@@ -1,3 +1,4 @@
+import { amountOfSpcToBnb } from '@config/game';
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayer } from '@modules/players/domain/entities/player';
@@ -74,13 +75,15 @@ class DepositTokensBusinessLogic {
 
     const { amount } = confirmTransactionResult.value;
 
-    resource.spc += Math.ceil(amount);
+    const spcAmount = amount * amountOfSpcToBnb;
+
+    resource.spc += Math.ceil(spcAmount);
 
     await this.resourcesRepository.save(resource);
 
     const { log } = new Log({
       action: `The player has deposited ${Math.ceil(
-        amount,
+        spcAmount,
       )} SPC into his account`,
       playerId: player.id,
       txHash,

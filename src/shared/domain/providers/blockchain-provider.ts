@@ -70,7 +70,16 @@ export type ConfirmTransactionWithTxhashOnlyResponse = Either<
     amount: number;
   }
 >;
+
+export type TransferFromResponse = Either<InvalidTransactionFromError, null>;
+
+export type TransferFromDTO = {
+  recipient: string;
+  amount: number;
+};
+
 interface IBlockchainProvider {
+  transfer(data: TransferFromDTO): Promise<TransferFromResponse>;
   confirmTransaction(
     data: ConfirmTransactionDTO,
   ): Promise<ConfirmTransactionResponse>;
