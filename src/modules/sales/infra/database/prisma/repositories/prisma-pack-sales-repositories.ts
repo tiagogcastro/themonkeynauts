@@ -37,9 +37,6 @@ class PrismaPackSalesRepository implements IPackSalesRepository {
             equals: 0,
           },
         },
-        startDate: {
-          lte: new Date(),
-        },
         OR: [
           {
             endDate: null,
