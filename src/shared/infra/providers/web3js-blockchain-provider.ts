@@ -965,9 +965,9 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       return left(new AnotherTransactionRecipientError());
     }
 
-    // if (transactionFrom !== walletFrom) {
-    //   return left(new AnotherTransactionSenderError());
-    // }
+    if (transactionFrom !== walletFrom) {
+      return left(new AnotherTransactionSenderError());
+    }
 
     return right({
       amount: Number(this.web3.utils.fromWei(transaction.value, 'ether')),
