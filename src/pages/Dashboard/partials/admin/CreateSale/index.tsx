@@ -124,7 +124,7 @@ const packType = [
     label: 'Advanced'
   },
   {
-    value: 'Ex',
+    value: 'Expert',
     label: 'Expert'
   },
   {
