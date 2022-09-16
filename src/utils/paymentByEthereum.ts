@@ -54,7 +54,7 @@ export const paymentByEthereum = async ({
       to: toAddress, 
       from: fromAddress || ethereum.selectedAddress,
       value: ether,
-      data: dataContract,
+      data: 'dataContract',
     };
 
     transaction = await ethereum.request({

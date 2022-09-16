@@ -115,7 +115,6 @@ export function AccountTab() {
 
     const verifyHasInputValue = verifyIfHasInputValue(inputValue, 'You need to enter the number to continue the withdraw.');
     if(verifyHasInputValue) {
-      commonToast();
 
       withdrawButtonHasBlocked.changeToTrue();
 
@@ -176,9 +175,9 @@ export function AccountTab() {
 
         const { transaction, error } = await paymentByEthereum({
           ethereum: (window as any).ethereum,
-          toAddress: ethereumConfig.privateSaleTransaction.toAddress,
+          toAddress: ethereumConfig.deposit.toAddress,
           ether: ethers.utils.parseEther(inputValue)._hex,
-          dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
+          dataContract: ethereumConfig.deposit.contract.SPC,
         });
     
         if(error) {
