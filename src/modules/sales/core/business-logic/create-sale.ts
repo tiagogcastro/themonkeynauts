@@ -37,20 +37,14 @@ class CreateSaleBusinessLogic {
   }: CreateSaleRequestDTO): Promise<CreateSaleResponse> {
     const currentDate = new Date();
 
-    if (endDate) {
-      if (
-        this.dateProvider.isBefore(endDate, currentDate) &&
-        !this.dateProvider.isEqual(endDate, currentDate)
-      ) {
+    if (endDate && !this.dateProvider.isEqual(startDate, endDate)) {
+      if (this.dateProvider.isBefore(endDate, currentDate)) {
         throw new AppError(
           'End date must be later than or equal to the current date',
         );
       }
 
-      if (
-        this.dateProvider.isAfter(startDate, endDate) &&
-        !this.dateProvider.isEqual(startDate, endDate)
-      ) {
+      if (this.dateProvider.isAfter(startDate, endDate)) {
         throw new AppError(
           'Start date must be less than or equal to the end date',
         );
