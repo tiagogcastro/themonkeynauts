@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, left, right } from '@shared/core/logic/either';
@@ -13,11 +14,11 @@ import {
   WaitTransactionErrors,
   WaitTxReceiptErrors,
 } from '@shared/domain/providers/blockchain-provider';
-import { retry } from '@shared/helpers/retry';
+import { delay } from '@shared/helpers/delay';
 import { ethers } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
-import { SignedTransaction, Transaction, TransactionReceipt } from 'web3-core';
+import { SignedTransaction } from 'web3-core';
 import { AnotherPlayerWalletError } from './errors/another-player-wallet-error';
 import { AnotherTransactionRecipientError } from './errors/another-transaction-recipient-error';
 import { AnotherTransactionSenderError } from './errors/another-transaction-sender-error';
@@ -774,7 +775,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       await transaction.wait();
 
       return right(null);
-    } catch {
+    } catch (error) {
+      console.log({ error });
       return left(new MakeTxError());
     }
   }
@@ -809,7 +811,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
         return left(new GenerateTxSignatureError());
       }
     } catch (error) {
-      console.log(error);
+      console.log({ error });
       return left(new GenerateTxSignatureError());
     }
 
@@ -830,67 +832,35 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   async waitTransactionReceipt(
     txHash: string,
   ): Promise<WaitTransactionReceiptResponse> {
-    const RETRY = true;
-
     try {
-      const transactionReceipt =
-        await new Promise<ethers.providers.TransactionReceipt | null>(
-          async resolve => {
-            await retry(async () => {
-              const obtainedTransactionReceipt =
-                await this.ethers.getTransactionReceipt(txHash);
+      for (let attempt = 1; attempt <= 60; attempt++) {
+        const obtainedTransactionReceipt =
+          await this.ethers.getTransactionReceipt(txHash);
 
-              if (
-                !obtainedTransactionReceipt ||
-                !obtainedTransactionReceipt.status
-              ) {
-                return RETRY;
-              }
+        if (obtainedTransactionReceipt)
+          return right(obtainedTransactionReceipt);
 
-              resolve(obtainedTransactionReceipt);
+        await delay(10 * 1000);
+      }
 
-              return !RETRY;
-            }, 500);
-
-            resolve(null);
-          },
-        );
-
-      if (!transactionReceipt) throw new Error();
-
-      return right(transactionReceipt);
-    } catch {
+      throw new Error();
+    } catch (error) {
+      console.log({ error });
       return left(new WaitTxReceiptError());
     }
   }
 
   async waitTransaction(txHash: string): Promise<WaitTransactionResponse> {
-    const RETRY = true;
     try {
-      const transaction =
-        await new Promise<ethers.providers.TransactionResponse | null>(
-          async resolve => {
-            await retry(async () => {
-              const obtainedTransaction = await this.ethers.getTransaction(
-                txHash,
-              );
+      for (let attempt = 1; attempt <= 60; attempt++) {
+        const obtainedTransaction = await this.ethers.getTransaction(txHash);
 
-              if (!obtainedTransaction) {
-                return RETRY;
-              }
+        if (obtainedTransaction) return right(obtainedTransaction);
 
-              resolve(obtainedTransaction);
+        await delay(10 * 1000);
+      }
 
-              return !RETRY;
-            }, 500);
-
-            resolve(null);
-          },
-        );
-
-      if (!transaction) throw new Error();
-
-      return right(transaction);
+      throw new Error();
     } catch {
       return left(new WaitTransactionError());
     }
@@ -944,9 +914,9 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     const transaction = waitTransactionResult.value;
 
     if (amount) {
-      const amountToWei = this.web3.utils.toWei(String(amount), 'ether');
+      const amountToWei = this.web3.utils.toWei(String(amount));
 
-      if (transaction.value.eq(amountToWei)) {
+      if (!transaction.value.eq(amountToWei)) {
         return left(new InvalidAmountError());
       }
     }

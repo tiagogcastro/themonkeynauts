@@ -5,7 +5,7 @@ let attempts = 0;
 const retry = async (
   callback: () => Promise<boolean>,
   delay = 0,
-  maxAttempts = 2,
+  maxAttempts = 60,
 ) => {
   const RETRY = await callback();
 
