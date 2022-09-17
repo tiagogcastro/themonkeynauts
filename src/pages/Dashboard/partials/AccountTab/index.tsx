@@ -367,7 +367,7 @@ export function AccountTab() {
                 }}
                 onClick={handleSubmitWithdraw}
               />
-              <Button 
+              {/* <Button 
                 type="submit" 
                 text="Deposit"
                 disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
@@ -375,7 +375,7 @@ export function AccountTab() {
                   state: depositButtonHasBlocked.state
                 }}
                 onClick={handleSubmitDeposit}
-              />
+              /> */}
             </Spc>
           )}
         </SecondaryDetails>

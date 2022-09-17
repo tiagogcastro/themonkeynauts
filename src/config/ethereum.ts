@@ -13,6 +13,9 @@ export const ethereum = {
     toAddress: '0x6c4543b80c4A2Bb922e31E045a67217F13caf797',
     contract: contracts
   },
+  withdraw: {
+    toAddress: '0x6538435b1fAA2B2b67ae19d472024275b4B722F6',
+  },
   deposit: {
     toAddress: '0x6c4543b80c4A2Bb922e31E045a67217F13caf797',
     contract: contracts
