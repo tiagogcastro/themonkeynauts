@@ -125,7 +125,39 @@ export function StoreTab() {
       if(player) {
         await verifyWallet(player.player);
       }
-      
+
+      const sale = {
+        Monkeynaut: {
+          monkeynautSaleId: data.id,
+        },
+        Ship: {
+          shipSaleId: data.id,
+        },
+        Pack: {
+          packSaleId: data.id,
+        },
+      }
+  
+      const dataPost = {
+        ...sale[data.saleType]
+      }
+
+      const canBuySaleItem = await baseApi.post('/sale-events/can-buy-sale-item', dataPost);
+
+      if(!canBuySaleItem.data.data.canBuySaleItem) {
+        return toast(canBuySaleItem.data.reason, {
+          autoClose: 7000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+
       toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
         autoClose: 7000,
         pauseOnHover: true,
@@ -185,24 +217,10 @@ export function StoreTab() {
             }
           });
 
-          const sale = {
-            Monkeynaut: {
-              monkeynautSaleId: data.id,
-            },
-            Ship: {
-              shipSaleId: data.id,
-            },
-            Pack: {
-              packSaleId: data.id,
-            },
-          }
-      
-          const dataPost = {
-            txHash: transaction,
-            ...sale[data.saleType]
-          }
-
-          await baseApi.post('/sale-events/buy-sale-item', dataPost);
+          await baseApi.post('/sale-events/buy-sale-item', {
+            ...dataPost,
+            txHash: transaction
+          });
 
           toast(`Successfully ${data.saleType} sale`, {
             autoClose: 5000,
@@ -233,7 +251,6 @@ export function StoreTab() {
           });
         });
       }
-
     } catch (error: any) {
       toast(error.message, {
         autoClose: 5000,
