@@ -6,6 +6,7 @@ import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
 import { buySaleItemController } from '../controllers/buy-sale-item';
+import { canBuySaleItemController } from '../controllers/can-buy-sale-item';
 import { listMonkeynautSalesController } from '../controllers/list-monkeynaut-sales';
 import { listPackSalesController } from '../controllers/list-pack-sales';
 import { listShipSalesController } from '../controllers/list-ship-sales';
@@ -30,6 +31,25 @@ saleEventsRouter.post(
   ),
   adaptMiddleware(ensureWalletMiddleware),
   adaptRoute(buySaleItemController),
+);
+
+saleEventsRouter.post(
+  '/can-buy-sale-item',
+  ensureAuthenticated,
+  celebrate(
+    {
+      [Segments.BODY]: {
+        packSaleId: Joi.string().uuid(),
+        monkeynautSaleId: Joi.string().uuid(),
+        shipSaleId: Joi.string().uuid(),
+      },
+    },
+    {
+      abortEarly: false,
+    },
+  ),
+  adaptMiddleware(ensureWalletMiddleware),
+  adaptRoute(canBuySaleItemController),
 );
 
 saleEventsRouter.get(
