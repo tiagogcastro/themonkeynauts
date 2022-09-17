@@ -140,7 +140,7 @@ class BuySaleItemBusinessLogic {
       );
 
       if (!monkeynautSale) {
-        return left(new SaleIsEmptyError('Monkeynaut'));
+        return left(new SaleNotFoundError('Monkeynaut'));
       }
 
       if (this.dateProvider.isBefore(currentDate, monkeynautSale.startDate)) {
