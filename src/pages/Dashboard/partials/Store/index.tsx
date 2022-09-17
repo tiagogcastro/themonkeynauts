@@ -198,7 +198,6 @@ export function StoreTab() {
           }
       
           const dataPost = {
-            wallet: player?.player.wallet,
             txHash: transaction,
             ...sale[data.saleType]
           }
