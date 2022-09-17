@@ -16,7 +16,7 @@ export type CanBuySaleItemRequestDTO = {
   packSaleId: string;
 };
 
-type CanBuySaleItemResponse = Either<Error, boolean>;
+type CanBuySaleItemResponse = Either<Error, { canBuySaleItem: boolean }>;
 
 @injectable()
 class CanBuySaleItemBusinessLogic {
@@ -53,7 +53,7 @@ class CanBuySaleItemBusinessLogic {
     const currentDate = new Date();
 
     if (!player) {
-      return right(false);
+      return right({ canBuySaleItem: false });
     }
 
     const ships = await this.shipsRepository.listAllShipsFromPlayer(player.id);
@@ -67,17 +67,17 @@ class CanBuySaleItemBusinessLogic {
         );
 
       if (monkeynauts.length >= ship.crewCapacity) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (shipSaleId || packSaleId) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
     }
 
     if (monkeynautSaleId) {
       if (!player.hasAsteroid && ships.length === 0) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       const monkeynautSale = await this.monkeynautSalesRepository.findById(
@@ -85,78 +85,78 @@ class CanBuySaleItemBusinessLogic {
       );
 
       if (!monkeynautSale) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (this.dateProvider.isBefore(currentDate, monkeynautSale.startDate)) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (
         monkeynautSale.endDate &&
         this.dateProvider.isAfter(currentDate, monkeynautSale.endDate)
       ) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (monkeynautSale.currentQuantityAvailable === 0) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
-      return right(true);
+      return right({ canBuySaleItem: true });
     }
 
     if (shipSaleId) {
       const shipSale = await this.shipSalesRepository.findById(shipSaleId);
 
       if (!shipSale) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (shipSale.currentQuantityAvailable === 0) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (this.dateProvider.isBefore(currentDate, shipSale.startDate)) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (
         shipSale.endDate &&
         this.dateProvider.isAfter(currentDate, shipSale.endDate)
       ) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
-      return right(true);
+      return right({ canBuySaleItem: true });
     }
 
     if (packSaleId) {
       const packSale = await this.packSalesRepository.findById(packSaleId);
 
       if (!packSale) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (packSale.currentQuantityAvailable === 0) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (this.dateProvider.isBefore(currentDate, packSale.startDate)) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
       if (
         packSale.endDate &&
         this.dateProvider.isAfter(currentDate, packSale.endDate)
       ) {
-        return right(false);
+        return right({ canBuySaleItem: false });
       }
 
-      return right(true);
+      return right({ canBuySaleItem: true });
     }
 
-    return right(false);
+    return right({ canBuySaleItem: false });
   }
 }
 
