@@ -6,6 +6,7 @@ interface IDateProvider {
   addMinutes(date: Date, amount: number): Date;
   addSeconds(date: Date, amount: number): Date;
   addDays(date: Date, amount: number): Date;
+  isEqual(dateLeft: Date, dateRight: Date): boolean;
 }
 
 export { IDateProvider };

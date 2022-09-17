@@ -42,18 +42,23 @@ class CreateSaleBusinessLogic {
         throw new AppError('End date must be after current date');
       }
 
-      if (this.dateProvider.isAfter(startDate, endDate)) {
-        throw new AppError('The start date must be less than the end time');
+      if (
+        this.dateProvider.isAfter(startDate, endDate) ||
+        !this.dateProvider.isEqual(startDate, endDate)
+      ) {
+        throw new AppError(
+          'Start date must be less than or equal to the end date',
+        );
       }
     }
 
     if (
-      this.dateProvider.isBefore(
-        this.dateProvider.addMinutes(startDate, 5),
-        currentDate,
-      )
+      this.dateProvider.isBefore(startDate, currentDate) ||
+      !this.dateProvider.isEqual(startDate, currentDate)
     ) {
-      throw new AppError('Start date must be after current date');
+      throw new AppError(
+        'Start date must be later than or equal to the current date',
+      );
     }
 
     const createdSale = await sale.execute({

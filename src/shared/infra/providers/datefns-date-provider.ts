@@ -8,11 +8,16 @@ import {
   getMinutes,
   isBefore,
   addMinutes,
+  isEqual,
 } from 'date-fns';
 
 class DateFnsDateProvider implements IDateProvider {
   addMinutes(date: Date, amount: number): Date {
     return addMinutes(date, amount);
+  }
+
+  isEqual(dateLeft: Date, dateRight: Date): boolean {
+    return isEqual(dateLeft, dateRight);
   }
 
   getMinutes(date: Date): number {
