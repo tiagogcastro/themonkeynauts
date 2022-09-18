@@ -35,26 +35,26 @@ class CreateSaleBusinessLogic {
     startDate,
     ...data
   }: CreateSaleRequestDTO): Promise<CreateSaleResponse> {
-    const currentDate = new Date();
+    const currentDate = this.dateProvider.addMinutes(new Date(), -5);
 
-    if (endDate && !this.dateProvider.isEqual(startDate, endDate)) {
+    if (endDate) {
       if (this.dateProvider.isBefore(endDate, currentDate)) {
         throw new AppError(
           'End date must be later than or equal to the current date',
         );
       }
 
-      if (this.dateProvider.isAfter(startDate, endDate)) {
+      if (
+        this.dateProvider.isAfter(startDate, endDate) &&
+        !this.dateProvider.isEqual(startDate, endDate)
+      ) {
         throw new AppError(
           'Start date must be less than or equal to the end date',
         );
       }
     }
 
-    if (
-      this.dateProvider.isBefore(startDate, currentDate) &&
-      !this.dateProvider.isEqual(startDate, currentDate)
-    ) {
+    if (this.dateProvider.isBefore(startDate, currentDate)) {
       throw new AppError(
         'Start date must be later than or equal to the current date',
       );
