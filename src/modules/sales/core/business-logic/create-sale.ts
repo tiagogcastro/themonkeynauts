@@ -52,7 +52,7 @@ class CreateSaleBusinessLogic {
     }
 
     if (
-      this.dateProvider.isBefore(startDate, currentDate) ||
+      this.dateProvider.isBefore(startDate, currentDate) &&
       !this.dateProvider.isEqual(startDate, currentDate)
     ) {
       throw new AppError(
