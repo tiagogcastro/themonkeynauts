@@ -122,6 +122,22 @@ export function StoreTab() {
     event.preventDefault();
 
     try {
+      const canBuySaleItem = await baseApi.post('/sale-events/can-buy-sale-item', dataPost);
+
+      if(!canBuySaleItem.data.data.canBuySaleItem) {
+        return toast(canBuySaleItem.data.reason, {
+          autoClose: 7000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+      
       if(player) {
         await verifyWallet(player.player);
       }
@@ -142,21 +158,6 @@ export function StoreTab() {
         ...sale[data.saleType]
       }
 
-      const canBuySaleItem = await baseApi.post('/sale-events/can-buy-sale-item', dataPost);
-
-      if(!canBuySaleItem.data.data.canBuySaleItem) {
-        return toast(canBuySaleItem.data.reason, {
-          autoClose: 7000,
-          pauseOnHover: true,
-          type: 'error',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.red_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-      }
 
       toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
         autoClose: 7000,
