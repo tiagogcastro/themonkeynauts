@@ -10,6 +10,7 @@ import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
 import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
 import { PackType } from '@modules/sales/domain/enums/pack-type';
 import { Either, right } from '@shared/core/logic/either';
+import { Maybe } from '@shared/core/logic/maybe';
 
 type CreateSaleResponse = Either<
   Error,
@@ -29,7 +30,7 @@ class CreateSaleBusinessLogic {
     salePack,
     saleShip,
     saleMonkeynaut,
-    endDate,
+    endDate: _endDate,
     sale,
     adminId,
     startDate,
@@ -37,27 +38,24 @@ class CreateSaleBusinessLogic {
   }: CreateSaleRequestDTO): Promise<CreateSaleResponse> {
     const currentDate = this.dateProvider.addMinutes(new Date(), -5);
 
-    if (endDate) {
+    let endDate: Date | undefined;
+
+    if (_endDate) {
+      endDate = this.dateProvider.isEqual(_endDate, startDate)
+        ? this.dateProvider.addDays(_endDate, 1)
+        : _endDate;
+
       if (this.dateProvider.isBefore(endDate, currentDate)) {
-        throw new AppError(
-          'End date must be later than or equal to the current date',
-        );
+        throw new AppError('End date must be later than the current date');
       }
 
-      if (
-        this.dateProvider.isAfter(startDate, endDate) &&
-        !this.dateProvider.isEqual(startDate, endDate)
-      ) {
-        throw new AppError(
-          'Start date must be less than or equal to the end date',
-        );
+      if (this.dateProvider.isAfter(startDate, endDate)) {
+        throw new AppError('Start date must be less than the end date');
       }
     }
 
     if (this.dateProvider.isBefore(startDate, currentDate)) {
-      throw new AppError(
-        'Start date must be later than or equal to the current date',
-      );
+      throw new AppError('Start date must be later than the current date');
     }
 
     const createdSale = await sale.execute({
