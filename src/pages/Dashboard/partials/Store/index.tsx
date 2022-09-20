@@ -142,10 +142,13 @@ export function StoreTab() {
         ...sale[data.saleType]
       }
 
-      const canBuySaleItem = await baseApi.post('/sale-events/can-buy-sale-item', dataPost);
+      const response = await baseApi.post('/sale-events/can-buy-sale-item', dataPost);
 
-      if(!canBuySaleItem.data.data.canBuySaleItem) {
-        return toast(canBuySaleItem.data.reason, {
+      const canBuySaleItem = response.data.data.canBuySaleItem;
+      const reason = response.data.data.reason;
+
+      if(!canBuySaleItem) {
+        return toast(reason, {
           autoClose: 7000,
           pauseOnHover: true,
           type: 'error',
