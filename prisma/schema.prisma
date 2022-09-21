@@ -110,12 +110,12 @@ model Resource {
   playerId String @unique @db.Uuid()
   player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
-  spc     Int @default(0)
-  gold    Int @default(0)
-  iron    Int @default(0)
-  copper  Int @default(0)
-  scrap   Int @default(0)
-  science Int @default(0)
+  spc     Float @default(0)
+  gold    Int   @default(0)
+  iron    Int   @default(0)
+  copper  Int   @default(0)
+  scrap   Int   @default(0)
+  science Int   @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -318,7 +318,6 @@ model GameParam {
   mineScrapAverageResourceReward  Int    @default(0)
   mineScrapAverageSpcReward       Int    @default(0)
   mineScrapRewardsVariation       Int    @default(0)
-
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

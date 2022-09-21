@@ -78,7 +78,7 @@ class DepositTokensBusinessLogic {
 
     const spcAmount = amount;
 
-    resource.spc += Math.ceil(spcAmount);
+    resource.spc += spcAmount;
 
     await this.resourcesRepository.save(resource);
 
