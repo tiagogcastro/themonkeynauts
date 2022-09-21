@@ -29,6 +29,7 @@ import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors
 import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { prisma } from '@shared/infra/database/prisma/client';
 import { SaleIsEmptyError } from './errors/sale-is-empty-error';
 import { SaleNotFoundError } from './errors/sale-not-found-error';
 import { InvalidSaleStartDateError } from './errors/invalid-sale-start-date-error';

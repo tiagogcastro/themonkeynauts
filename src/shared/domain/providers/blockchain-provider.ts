@@ -81,7 +81,6 @@ export type TransferFromDTO = {
 };
 
 interface IBlockchainProvider {
-  transfer(data: TransferFromDTO): Promise<TransferFromResponse>;
   confirmTransaction(
     data: ConfirmTransactionDTO,
   ): Promise<ConfirmTransactionResponse>;
