@@ -4,6 +4,7 @@ import { IPlayer } from '@modules/players/domain/entities/player';
 import { IResource } from '@modules/players/domain/entities/resource';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
+import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
 import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionErrors,
@@ -66,6 +67,7 @@ class DepositTokensBusinessLogic {
         from: player.wallet as string,
         playerId,
         txHash,
+        crypto: SaleCrypto.SPC,
       });
 
     if (confirmTransactionResult.isLeft()) {
