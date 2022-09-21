@@ -45,6 +45,7 @@ _playersRouter.post(
   celebrate({
     [Segments.BODY]: {
       txHash: Joi.string().required().regex(txHashRegExp),
+      amount: Joi.number().required().not(0),
       playerId: Joi.string().required().uuid(),
     },
   }),

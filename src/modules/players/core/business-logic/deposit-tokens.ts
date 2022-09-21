@@ -1,4 +1,3 @@
-import { amountOfSpcToBnb } from '@config/game';
 import { Log } from '@modules/logs/domain/entities/log';
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayer } from '@modules/players/domain/entities/player';
@@ -16,6 +15,7 @@ import { ResourceNotFoundError } from './errors/resource-not-fount-error';
 
 export type DepositTokensRequestDTO = {
   playerId: string;
+  amount: number;
   txHash: string;
 };
 
@@ -47,6 +47,7 @@ class DepositTokensBusinessLogic {
   async execute({
     playerId,
     txHash,
+    amount,
   }: DepositTokensRequestDTO): Promise<DepositTokensResponse> {
     const player = await this.playersRepository.findById(playerId);
 
@@ -73,9 +74,9 @@ class DepositTokensBusinessLogic {
       return left(error);
     }
 
-    const { amount } = confirmTransactionResult.value;
+    // const { amount } = confirmTransactionResult.value;
 
-    const spcAmount = amount * amountOfSpcToBnb;
+    const spcAmount = amount;
 
     resource.spc += Math.ceil(spcAmount);
 
