@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
 import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionDTO,
@@ -725,7 +726,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
   private ethers: ethers.providers.JsonRpcProvider;
 
-  private signedContract: any;
+  private signedContract: ethers.Contract;
 
   constructor(
     @inject('LogsRepository')
@@ -870,6 +871,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     txHash,
     amount,
     playerId,
+    crypto = SaleCrypto.BNB,
     to,
     from,
   }: ConfirmTransactionDTO): Promise<ConfirmTransactionResponse> {
@@ -881,7 +883,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }
 
     const walletFrom = (from || process.env.SALES_WALLET)?.toLowerCase();
-    const walletTo = (to || process.env.SALES_WALLET)?.toLowerCase();
+    let walletTo = (to || process.env.SALES_WALLET)?.toLowerCase();
 
     if (!walletFrom) {
       return left(new InvalidTransactionFromError());
@@ -910,13 +912,14 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
       return left(error);
     }
-
     const transaction = waitTransactionResult.value;
+
+    await transaction.wait();
 
     if (amount) {
       const amountToWei = this.web3.utils.toWei(String(amount));
 
-      if (!transaction.value.eq(amountToWei)) {
+      if (crypto === SaleCrypto.BNB && !transaction.value.eq(amountToWei)) {
         return left(new InvalidAmountError());
       }
     }
@@ -929,6 +932,17 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     const transactionFrom = transaction.from.toLowerCase();
 
+    if (crypto !== SaleCrypto.BNB) {
+      const cryptos: Record<SaleCrypto, string> = {
+        BNB: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+        BUSD: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+        SPC: process.env.SMART_CONTRACT as string,
+      };
+
+      walletTo = cryptos[crypto].toLowerCase();
+    }
+
+    console.log({ transactionTo, walletTo });
     if (transactionTo !== walletTo) {
       return left(new AnotherTransactionRecipientError());
     }

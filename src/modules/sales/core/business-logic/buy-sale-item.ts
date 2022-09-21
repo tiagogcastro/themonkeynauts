@@ -168,6 +168,7 @@ class BuySaleItemBusinessLogic {
       const confirmTransactionResult =
         await this.blockchainProvider.confirmTransaction({
           amount: monkeynautSale.price,
+          crypto: monkeynautSale.crypto,
           txHash,
           playerId: player.id,
           from: player.wallet as string,
@@ -237,6 +238,7 @@ class BuySaleItemBusinessLogic {
         await this.blockchainProvider.confirmTransaction({
           amount: shipSale.price,
           txHash,
+          crypto: shipSale.crypto,
           playerId: player.id,
           from: player.wallet as string,
         });
@@ -299,6 +301,7 @@ class BuySaleItemBusinessLogic {
         await this.blockchainProvider.confirmTransaction({
           amount: packSale.price,
           txHash,
+          crypto: packSale.crypto,
           playerId: player.id,
           from: player.wallet as string,
         });

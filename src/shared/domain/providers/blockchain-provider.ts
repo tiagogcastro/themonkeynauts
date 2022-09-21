@@ -1,3 +1,4 @@
+import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
 import { Either } from '@shared/core/logic/either';
 import { AnotherPlayerWalletError } from '@shared/infra/providers/errors/another-player-wallet-error';
 import { AnotherTransactionRecipientError } from '@shared/infra/providers/errors/another-transaction-recipient-error';
@@ -16,6 +17,7 @@ import { WaitTxReceiptError } from '@shared/infra/providers/errors/wait-tx-recei
 type ConfirmTransactionDTO = {
   from?: string;
   to?: string;
+  crypto?: SaleCrypto;
   playerId: string;
   amount?: number;
   txHash: string;
