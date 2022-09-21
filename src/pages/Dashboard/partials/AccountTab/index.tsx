@@ -1,7 +1,7 @@
 import { FaReact } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
-// import { useState } from 'react';
-// import { ethers } from 'ethers';
+import { useState } from 'react';
+import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
 import { useAuth, useBoolean } from '@/hooks';
@@ -35,11 +35,10 @@ import {
 
   Spc,
 } from './styles';
+
 import { ApiError } from '@/utils/apiError';
-import { baseApi } from '@/services/api';
 import { verifyWallet } from '@/utils/wallet';
-import { useState } from 'react';
-import { ethers } from 'ethers';
+import { baseApi } from '@/services/api';
 
 export type HandleChange = {
   event: React.ChangeEvent<HTMLInputElement>;
@@ -175,12 +174,12 @@ export function AccountTab() {
 
         const { transaction, error } = await paymentByEthereum({
           ethereum: (window as any).ethereum,
-          toAddress: ethereumConfig.deposit.toAddress,
           ether: ethers.utils.parseEther(inputValue)._hex,
           dataContract: ethereumConfig.deposit.contract.SPC,
+          cryptoType: 'SPC',
         });
     
-        if(error) {
+        if(error.message) {
           depositButtonHasBlocked.changeToFalse();
 
           return toast(error.message, {
@@ -196,19 +195,19 @@ export function AccountTab() {
           });
         }
 
-        if(transaction) {
-          toast(`Wait for us to confirm the deposit in our database`, {
-            autoClose: 5000,
-            pauseOnHover: true,
-            type: 'info',
-            style: {
-              background: COLORS.global.white_0,
-              color: COLORS.global.black_0,
-              fontSize: 14,
-              fontFamily: 'Orbitron, sans-serif',
-            }
-          });
-          try {
+        try {
+          if(transaction) {
+            toast(`Wait for us to confirm the deposit in our database`, {
+              autoClose: 5000,
+              pauseOnHover: true,
+              type: 'info',
+              style: {
+                background: COLORS.global.white_0,
+                color: COLORS.global.black_0,
+                fontSize: 14,
+                fontFamily: 'Orbitron, sans-serif',
+              }
+            });
             await baseApi.post('/players/deposit-tokens', {
               txHash: transaction
             });
@@ -226,26 +225,26 @@ export function AccountTab() {
             });
 
             setInputValue('');
-          } catch (error: any) {
-            const apiErrorResponse = ApiError(error);
-
-            apiErrorResponse.messages.map(message => {
-              return toast(message, {
-                autoClose: 5000,
-                pauseOnHover: true,
-                type: 'error',
-                style: {
-                  background: COLORS.global.white_0,
-                  color: COLORS.global.red_0,
-                  fontSize: 14,
-                  fontFamily: 'Orbitron, sans-serif',
-                }
-              });
-            });
           }
+        } catch (error: any) {
+          const apiErrorResponse = ApiError(error);
 
-          depositButtonHasBlocked.changeToFalse();
+          apiErrorResponse.messages.map(message => {
+            return toast(message, {
+              autoClose: 5000,
+              pauseOnHover: true,
+              type: 'error',
+              style: {
+                background: COLORS.global.white_0,
+                color: COLORS.global.red_0,
+                fontSize: 14,
+                fontFamily: 'Orbitron, sans-serif',
+              }
+            });
+          });
         }
+
+        depositButtonHasBlocked.changeToFalse();
 
       } catch(error: any) {
         const apiErrorResponse = ApiError(error);
@@ -367,7 +366,7 @@ export function AccountTab() {
                 }}
                 onClick={handleSubmitWithdraw}
               />
-              {/* <Button 
+              <Button 
                 type="submit" 
                 text="Deposit"
                 disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
@@ -375,7 +374,7 @@ export function AccountTab() {
                   state: depositButtonHasBlocked.state
                 }}
                 onClick={handleSubmitDeposit}
-              /> */}
+              />
             </Spc>
           )}
         </SecondaryDetails>
