@@ -210,7 +210,6 @@ export function AccountTab() {
             });
             await baseApi.post('/players/deposit-tokens', {
               txHash: transaction,
-              amount: Number(inputValue),
             });
             
             toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
