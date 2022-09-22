@@ -18,7 +18,6 @@ type ConfirmTransactionDTO = {
   from?: string;
   to?: string;
   crypto?: SaleCrypto;
-  playerId: string;
   amount?: number;
   txHash: string;
 };

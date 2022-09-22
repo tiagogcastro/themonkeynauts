@@ -15,12 +15,11 @@ import {
   WaitTxReceiptErrors,
 } from '@shared/domain/providers/blockchain-provider';
 import { delay } from '@shared/helpers/delay';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
 import { SignedTransaction } from 'web3-core';
 import { InvalidCryptoError } from './errors';
-import { AnotherPlayerWalletError } from './errors/another-player-wallet-error';
 import { AnotherTransactionRecipientError } from './errors/another-transaction-recipient-error';
 import { AnotherTransactionSenderError } from './errors/another-transaction-sender-error';
 import { GenerateTxSignatureError } from './errors/generate-tx-signature-error';
@@ -28,7 +27,6 @@ import { InvalidAmountError } from './errors/invalid-amount-error';
 import { InvalidPrivateKeyError } from './errors/invalid-private-key-error';
 import { InvalidTransactionFromError } from './errors/invalid-transaction-from-error';
 import { InvalidTransactionToError } from './errors/invalid-transaction-to-error';
-import { InvalidWalletError } from './errors/invalid-wallet-error';
 import { MakeTxError } from './errors/make-tx-error';
 import { TransactionCarriedOutError } from './errors/transaction-carried-out-error';
 import { WaitTransactionError } from './errors/wait-transaction-error';
@@ -53,7 +51,7 @@ const cryptos: Record<SaleCrypto, string> = {
 export class Web3jsBlockchainProvider implements IBlockchainProvider {
   private web3: Web3;
 
-  private ethers: ethers.providers.JsonRpcProvider;
+  private ethersProvider: ethers.providers.JsonRpcProvider;
 
   constructor(
     @inject('LogsRepository')
@@ -72,7 +70,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     );
 
     if (process.env.SMART_CONTRACT) {
-      this.ethers = provider;
+      this.ethersProvider = provider;
     }
   }
 
@@ -130,7 +128,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     try {
       for (let attempt = 1; attempt <= 60; attempt++) {
         const obtainedTransactionReceipt =
-          await this.ethers.getTransactionReceipt(txHash);
+          await this.ethersProvider.getTransactionReceipt(txHash);
 
         if (obtainedTransactionReceipt)
           return right(obtainedTransactionReceipt);
@@ -148,7 +146,9 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   async waitTransaction(txHash: string): Promise<WaitTransactionResponse> {
     try {
       for (let attempt = 1; attempt <= 60; attempt++) {
-        const obtainedTransaction = await this.ethers.getTransaction(txHash);
+        const obtainedTransaction = await this.ethersProvider.getTransaction(
+          txHash,
+        );
 
         if (obtainedTransaction) return right(obtainedTransaction);
 
@@ -181,7 +181,6 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
   async confirmTransaction({
     txHash,
     amount,
-    playerId,
     crypto = SaleCrypto.BNB,
     to,
     from,
@@ -192,7 +191,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     if (checkIfTheTransactionHasAlreadyBeenCarriedOut) {
       return left(new TransactionCarriedOutError());
     }
-    const walletFrom = (from || process.env.SALES_WALLET)?.toLowerCase();
+
+    const walletFrom = from?.toLowerCase();
     let walletTo = (to || process.env.SALES_WALLET)?.toLowerCase();
 
     if (!walletFrom) {
@@ -201,18 +201,6 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     if (!walletTo) {
       return left(new InvalidTransactionToError());
-    }
-
-    const player = await this.playersRepository.findByWallet(
-      from || walletFrom,
-    );
-
-    if (!player) {
-      return left(new InvalidWalletError());
-    }
-
-    if (playerId !== player.id) {
-      return left(new AnotherPlayerWalletError());
     }
 
     const waitTransactionResult = await this.waitTransaction(txHash);
@@ -236,15 +224,16 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     console.log({ transaction });
     console.log({ transactionReceipt });
 
-    // const contract = new ethers.Contract(
+    // const contract = new ethersProvider.Contract(
     //   cryptos[crypto],
     //   abis[crypto],
-    //   this.ethers,
+    //   this.ethersProvider,
     // );
 
     // const eventFilter = contract.filters.Transfer(walletFrom);
     // console.log({ eventFilter });
-    // this.ethers.on(eventFilter, log => {
+
+    // this.ethersProvider.on(eventFilter, log => {
     //   console.log('filter', log);
     // });
 
@@ -266,15 +255,27 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
     let txCrypto: Maybe<SaleCrypto> = null;
 
-    if (transactionReceipt.logs.length === 0) {
+    if (transactionReceipt.logs.length === 0 && crypto === SaleCrypto.BNB) {
       txCrypto = SaleCrypto.BNB;
     } else {
       const log = transactionReceipt.logs.find(
         findLog => findLog.transactionHash === txHash,
       );
-      console.log({ log });
       if (!log) {
         return left(new InvalidCryptoError());
+      }
+
+      console.log({ log });
+      console.log({
+        amount: BigNumber.from(log.data).toNumber() / 10 ** 18,
+      });
+
+      if (amount) {
+        const cryptoAmount = BigNumber.from(log.data).toNumber() / 10 ** 18;
+
+        if (amount !== cryptoAmount) {
+          return left(new InvalidAmountError());
+        }
       }
 
       const hasCrypto = Object.entries(cryptos).find(
@@ -344,6 +345,11 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }
 
     const transaction = waitTransactionResult.value;
+    const transactionReceipt = waitTransactionReceiptResult.value;
+
+    if (transactionReceipt.logs.length > 0) {
+      return left(new InvalidCryptoError());
+    }
 
     const walletFrom = transaction.from.toLowerCase();
     const walletTo = process.env.SALES_WALLET?.toLowerCase();

@@ -7,6 +7,7 @@ import {
   IPrivateSale,
   PrivateSale,
 } from '@modules/private-sales/domain/entities/private-sale';
+import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
 import { Either, left, right } from '@shared/core/logic/either';
 import { Maybe } from '@shared/core/logic/maybe';
 import {
@@ -103,8 +104,8 @@ class CreatePrivateSaleBusinessLogic {
       await this.blockchainProvider.confirmTransaction({
         amount: bnbAmount,
         from: player.wallet as string,
-        playerId: player.id,
         txHash,
+        crypto: SaleCrypto.BNB,
       });
 
     if (confirmTransactionResult.isLeft()) {

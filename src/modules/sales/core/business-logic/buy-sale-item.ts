@@ -1,11 +1,17 @@
 import { inject, injectable } from 'tsyringe';
 
+import { Log } from '@modules/logs/domain/entities/log';
+import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
 import {
   CreateMonkeynautBusinessLogic,
   CreateMonkeynautErrors,
 } from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
 import { MonkeynautRank } from '@modules/monkeynauts/domain/enums';
+import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { PackType } from '@modules/sales/domain/enums/pack-type';
+import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
 import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
 import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
@@ -15,28 +21,21 @@ import {
   CreateShipErrors,
 } from '@modules/ships/core/business-logic/create-ship';
 import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
+import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { Either, left, right } from '@shared/core/logic/either';
 import {
   ConfirmTransactionErrors,
   IBlockchainProvider,
 } from '@shared/domain/providers/blockchain-provider';
-import { AppError } from '@shared/errors/app-error';
-import { rarity } from '@shared/helpers';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { Log } from '@modules/logs/domain/entities/log';
-import { Either, left, right } from '@shared/core/logic/either';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
 import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { prisma } from '@shared/infra/database/prisma/client';
+import { rarity } from '@shared/helpers';
+import { InvalidMonkeynautQuantityError } from './errors/invalid-monkeynaut-quantity-error';
+import { InvalidMonkeynautShipQuantityError } from './errors/invalid-monkeynaut-ship-quantity-error';
+import { InvalidSaleEndDateError } from './errors/invalid-sale-end-date-error';
+import { InvalidSaleStartDateError } from './errors/invalid-sale-start-date-error';
+import { InvalidShipQuantityError } from './errors/invalid-ship-quantity-error';
 import { SaleIsEmptyError } from './errors/sale-is-empty-error';
 import { SaleNotFoundError } from './errors/sale-not-found-error';
-import { InvalidSaleStartDateError } from './errors/invalid-sale-start-date-error';
-import { InvalidSaleEndDateError } from './errors/invalid-sale-end-date-error';
-import { InvalidMonkeynautQuantityError } from './errors/invalid-monkeynaut-quantity-error';
-import { InvalidShipQuantityError } from './errors/invalid-ship-quantity-error';
-import { InvalidMonkeynautShipQuantityError } from './errors/invalid-monkeynaut-ship-quantity-error';
 
 type PackMonkeynaut = {
   rank: MonkeynautRank;
@@ -171,7 +170,6 @@ class BuySaleItemBusinessLogic {
           amount: monkeynautSale.price,
           crypto: monkeynautSale.crypto,
           txHash,
-          playerId: player.id,
           from: player.wallet as string,
         });
 
@@ -240,7 +238,6 @@ class BuySaleItemBusinessLogic {
           amount: shipSale.price,
           txHash,
           crypto: shipSale.crypto,
-          playerId: player.id,
           from: player.wallet as string,
         });
 
@@ -303,7 +300,6 @@ class BuySaleItemBusinessLogic {
           amount: packSale.price,
           txHash,
           crypto: packSale.crypto,
-          playerId: player.id,
           from: player.wallet as string,
         });
 
