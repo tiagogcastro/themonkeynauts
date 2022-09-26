@@ -28,10 +28,7 @@ container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 
 container.registerSingleton<IDateProvider>('DateProvider', DateFnsDateProvider);
 
-container.registerSingleton<ICronJobProvider>(
-  'CronJobProvider',
-  CronJobProvider,
-);
+container.register<ICronJobProvider>('CronJobProvider', CronJobProvider);
 
 container.registerSingleton<IMailTemplateProvider>(
   'MailTemplateProvider',
