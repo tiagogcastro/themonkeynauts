@@ -273,6 +273,7 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     }
 
     let txCrypto: Maybe<SaleCrypto> = null;
+    let cryptoAmount: Maybe<number> = null;
 
     if (transactionReceipt.logs.length === 0 && crypto === SaleCrypto.BNB) {
       txCrypto = SaleCrypto.BNB;
@@ -286,15 +287,13 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
       console.log({ log });
       console.log({
-        amount: BigNumber.from(log.data).toNumber() / 10 ** 18,
+        amount: Number(BigNumber.from(log.data).toString()) / 10 ** 18,
       });
 
-      if (amount) {
-        const cryptoAmount = BigNumber.from(log.data).toNumber() / 10 ** 18;
+      cryptoAmount = Number(BigNumber.from(log.data).toString()) / 10 ** 18;
 
-        if (amount !== cryptoAmount) {
-          return left(new InvalidAmountError());
-        }
+      if (amount !== undefined && amount !== cryptoAmount) {
+        return left(new InvalidAmountError());
       }
 
       const hasCrypto = Object.entries(cryptos).find(
@@ -327,10 +326,11 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     if (transactionFrom !== walletFrom) {
       return left(new AnotherTransactionSenderError());
     }
-
     return right({
       amount: Number(
-        this.web3.utils.fromWei(transaction.value.toString(), 'ether'),
+        cryptoAmount !== null && cryptoAmount !== undefined
+          ? cryptoAmount
+          : this.web3.utils.fromWei(transaction.value.toString(), 'ether'),
       ),
     });
   }
