@@ -11,6 +11,8 @@ import {
   IBlockchainProvider,
   SendTransactionDTO,
   SendTransactionResponse,
+  TransferDTO,
+  TransferResponse,
   WaitTransactionErrors,
   WaitTxReceiptErrors,
 } from '@shared/domain/providers/blockchain-provider';
@@ -19,6 +21,7 @@ import { BigNumber, ethers } from 'ethers';
 import { inject, injectable } from 'tsyringe';
 import Web3 from 'web3';
 import { SignedTransaction } from 'web3-core';
+import { abis } from '../abi/sale-crypto';
 import { InvalidCryptoError } from './errors';
 import { AnotherTransactionRecipientError } from './errors/another-transaction-recipient-error';
 import { AnotherTransactionSenderError } from './errors/another-transaction-sender-error';
@@ -53,6 +56,8 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
 
   private ethersProvider: ethers.providers.JsonRpcProvider;
 
+  private signedContract: ethers.Contract;
+
   constructor(
     @inject('LogsRepository')
     private logsRepository: ILogsRepository,
@@ -70,6 +75,20 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
     );
 
     if (process.env.SMART_CONTRACT) {
+      const signer = new ethers.Wallet(
+        process.env.SALES_PRIVATE_KEY as string,
+        provider,
+      );
+
+      const contract = new ethers.Contract(
+        process.env.SMART_CONTRACT,
+        abis.SPC,
+        provider,
+      );
+
+      const signedContract = contract.connect(signer);
+
+      this.signedContract = signedContract;
       this.ethersProvider = provider;
     }
   }
@@ -160,24 +179,24 @@ export class Web3jsBlockchainProvider implements IBlockchainProvider {
       return left(new WaitTransactionError());
     }
   }
-  // async transfer({
-  //   amount,
-  //   recipient,
-  // }: TransferFromDTO): Promise<TransferFromResponse> {
-  //   try {
-  //     const transaction = await this.signedContract.transfer(
-  //       recipient,
-  //       this.web3.utils.toWei(String(amount)),
-  //     );
 
-  //     await transaction.wait();
+  async transfer({
+    amount,
+    recipient,
+  }: TransferDTO): Promise<TransferResponse> {
+    try {
+      const transaction = await this.signedContract.transfer(
+        recipient,
+        this.web3.utils.toWei(String(amount)),
+      );
+      await transaction.wait();
+      return right(null);
+    } catch (error) {
+      console.log({ error });
+      return left(new MakeTxError());
+    }
+  }
 
-  //     return right(null);
-  //   } catch (error) {
-  //     console.log({ error });
-  //     return left(new MakeTxError());
-  //   }
-  // }
   async confirmTransaction({
     txHash,
     amount,

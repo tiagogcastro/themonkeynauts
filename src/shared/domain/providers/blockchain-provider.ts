@@ -72,9 +72,9 @@ export type ConfirmTransactionWithTxhashOnlyResponse = Either<
   }
 >;
 
-export type TransferFromResponse = Either<InvalidTransactionFromError, null>;
+export type TransferResponse = Either<InvalidTransactionFromError, null>;
 
-export type TransferFromDTO = {
+export type TransferDTO = {
   recipient: string;
   amount: number;
 };
@@ -83,6 +83,7 @@ interface IBlockchainProvider {
   confirmTransaction(
     data: ConfirmTransactionDTO,
   ): Promise<ConfirmTransactionResponse>;
+  transfer(data: TransferDTO): Promise<TransferResponse>;
   confirmTransactionWithTxhashOnly(
     txHash: string,
   ): Promise<ConfirmTransactionWithTxhashOnlyResponse>;
