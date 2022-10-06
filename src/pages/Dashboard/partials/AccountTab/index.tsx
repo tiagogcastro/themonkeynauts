@@ -47,7 +47,7 @@ export type HandleChange = {
 export function AccountTab() {
   const { player, signOut } = useAuth();
 
-  const withdrawDepositPermission = ['admin', 'owner'];
+  const withdrawDepositPermission = ['default', 'admin', 'owner'];
   const withdrawDepositShow = player && withdrawDepositPermission.includes(player?.player.role.toLowerCase());
   
   const walletModalIsOpen = useBoolean();
