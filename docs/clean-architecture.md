@@ -177,7 +177,7 @@ Toda operação financeira grava um `Log` com `txHash` único. O provider blockc
 
 | Papel | Tech |
 |---|---|
-| Runtime / linguagem | Node 22 · TypeScript 5 strict |
+| Runtime / linguagem | Node 24 (LTS) · TypeScript 5 strict |
 | HTTP | Express 5 |
 | Validação | zod |
 | Persistência | Prisma 6 · PostgreSQL |

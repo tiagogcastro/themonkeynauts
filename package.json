@@ -5,7 +5,7 @@
   "description": "The Monkeynauts — space P2E game monorepo (web + api + contracts)",
   "packageManager": "pnpm@11.23.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "scripts": {
     "dev:web": "pnpm --filter web dev",

@@ -29,7 +29,7 @@ Bring a dead 2022 crypto game back to life as a clean, fully local, credential-f
 | Layer | Technologies |
 |---|---|
 | **Web** | React 19, Vite, TypeScript 5, styled-components 6, react-router 7, react-hook-form + yup, axios, ethers v6 |
-| **API** | Node 22, Express 5, TypeScript 5 (strict), zod, Prisma 6 + PostgreSQL, tsyringe, jsonwebtoken, ethers v6 |
+| **API** | Node 24 (LTS), Express 5, TypeScript 5 (strict), zod, Prisma 6 + PostgreSQL, tsyringe, jsonwebtoken, ethers v6 |
 | **Infra/dev** | pnpm workspaces, Docker (Postgres), tsx/tsup |
 
 ## The concept behind it

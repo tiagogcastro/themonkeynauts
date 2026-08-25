@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev:server": "tsx watch --clear-screen=false src/shared/infra/http/server.ts",
-    "build": "tsup src/shared/infra/http/server.ts --format cjs --target node22 --outDir build --sourcemap",
+    "build": "tsup src/shared/infra/http/server.ts --format cjs --target node24 --outDir build --sourcemap",
     "start": "node build/server.js",
     "typecheck": "tsc --noEmit",
     "db:migrate": "prisma migrate dev",
