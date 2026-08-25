@@ -1,0 +1,343 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Log {
+  id        String   @id @db.Uuid()
+  playerId  String?  @db.Uuid()
+  player    Player?  @relation(fields: [playerId], references: [id], onDelete: SetNull)
+  action    String
+  txHash    String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("logs")
+}
+
+model Player {
+  id          String  @id @db.Uuid()
+  nickname    String  @unique
+  email       String  @unique
+  password    String
+  wallet      String? @unique
+  role        String  @default("DEFAULT")
+  hasAsteroid Boolean @default(false)
+
+  isBanned  Boolean @default(false)
+  isEnabled Boolean @default(true)
+
+  activeShipId String? @unique @db.Uuid()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  activeShip Ship? @relation(fields: [activeShipId], references: [id])
+
+  resource Resource?
+
+  playerTokens  PlayerToken[]
+  logs          Log[]
+  private_sales PrivateSale[]
+
+  ownerMonkeynauts  Monkeynaut[] @relation("owner_monkeynauts")
+  playerMonkeynauts Monkeynaut[] @relation("player_monkeynauts")
+  ownerShips        Ship[]       @relation("owner_ships")
+  playerShips       Ship[]       @relation("player_ships")
+  playerAuth        PlayerAuth[] @relation("player_auth")
+
+  bountyHuntRanking   BountyHuntRanking?
+  initBountyHuntToken InitBountyHuntToken?
+
+  @@map("players")
+}
+
+model PlayerToken {
+  id        String   @id @db.Uuid()
+  playerId  String   @db.Uuid()
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@map("player_tokens")
+}
+
+model Monkeynaut {
+  id String @id @db.Uuid()
+
+  owner   Player? @relation("owner_monkeynauts", fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String? @db.Uuid()
+
+  playerId String? @db.Uuid()
+  player   Player? @relation("player_monkeynauts", fields: [playerId], references: [id], onDelete: SetNull)
+
+  name             String
+  role             String @default("Soldier")
+  rank             String
+  bonusValue       Int
+  bonusDescription String
+  maxEnergy        Int
+  energy           Int
+
+  basePower      Int
+  baseSpeed      Int
+  baseResistence Int
+  baseHealth     Int
+
+  power      Int
+  speed      Int
+  resistence Int
+  health     Int
+
+  breedCount Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  crew Crew[]
+
+  @@map("monkeynauts")
+}
+
+model Resource {
+  id       String @id @db.Uuid()
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  spc     Float @default(0)
+  gold    Int   @default(0)
+  iron    Int   @default(0)
+  copper  Int   @default(0)
+  scrap   Int   @default(0)
+  science Int   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resources")
+}
+
+model Ship {
+  id String @id @db.Uuid()
+
+  owner   Player? @relation("owner_ships", fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String? @db.Uuid()
+
+  player   Player? @relation("player_ships", fields: [playerId], references: [id], onDelete: SetNull)
+  playerId String? @db.Uuid()
+
+  activePlayerShip Player?
+
+  name             String
+  role             String @default("Fighter")
+  rank             String
+  bonusValue       Int
+  bonusDescription String
+  tankCapacity     Int
+  fuel             Int
+  crewCapacity     Int
+
+  breedCount         Int
+  onSale             Boolean @default(false)
+  canRefuelAtStation Boolean @default(false)
+
+  crew Crew[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ships")
+}
+
+model Crew {
+  id String @id @db.Uuid()
+
+  ship   Ship   @relation(fields: [shipId], references: [id], onDelete: Cascade)
+  shipId String @db.Uuid()
+
+  monkeynaut   Monkeynaut @relation(fields: [monkeynautId], references: [id], onDelete: Cascade)
+  monkeynautId String     @db.Uuid()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("crews")
+}
+
+model PlayerAuth {
+  id String @id @db.Uuid()
+
+  player   Player @relation("player_auth", fields: [playerId], references: [id], onDelete: Cascade)
+  playerId String @db.Uuid()
+
+  isLogged     Boolean @default(false)
+  isValidToken Boolean @default(false)
+
+  payload String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expireIn  DateTime
+
+  @@map("player_auth")
+}
+
+model PrivateSale {
+  id        String   @id @db.Uuid()
+  playerId  String   @db.Uuid()
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  wallet    String
+  txHash    String   @unique
+  bnbAmount Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("private_sales")
+}
+
+model MonkeynautSale {
+  id String @id @db.Uuid()
+
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
+
+  private  Float
+  sergeant Float @default(0)
+  captain  Float
+  major    Float
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("monkeynaut_sales")
+}
+
+model ShipSale {
+  id String @id @db.Uuid()
+
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
+
+  rankB Float
+  rankA Float
+  rankS Float
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ship_sales")
+}
+
+model PackSale {
+  id String @id @db.Uuid()
+
+  crypto                   String
+  price                    Float
+  startDate                DateTime
+  endDate                  DateTime?
+  quantity                 Int
+  currentQuantityAvailable Int       @default(0)
+  totalUnitsSold           Int       @default(0)
+
+  type String @default("Basic")
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pack_sales")
+}
+
+model BountyHuntRanking {
+  id String @id @db.Uuid()
+
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  maxPoints Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bounty_hunt_ranking")
+}
+
+model InitBountyHuntToken {
+  id String @id @db.Uuid()
+
+  playerId String @unique @db.Uuid()
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  token String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("init_bounty_hunt_tokens")
+}
+
+model GameParam {
+  id String @id @db.Uuid()
+
+  gameClientVersion               String
+  travelFuelConsuption            Int    @default(0)
+  bountyHuntFuelConsuption        Int    @default(0)
+  shipRefuelCostInPercentage      Int    @default(0)
+  bountyHuntMinReward             Int    @default(0)
+  bountyHuntMaxReward             Int    @default(0)
+  mineGoldAverageResourceReward   Int    @default(0)
+  mineGoldAverageSpcReward        Int    @default(0)
+  mineGoldRewardsVariation        Int    @default(0)
+  mineIronAverageResourceReward   Int    @default(0)
+  mineIronAverageSpcReward        Int    @default(0)
+  mineIronRewardsVariation        Int    @default(0)
+  mineCopperAverageResourceReward Int    @default(0)
+  mineCopperAverageSpcReward      Int    @default(0)
+  mineCooperRewardsVariation      Int    @default(0)
+  mineScrapAverageResourceReward  Int    @default(0)
+  mineScrapAverageSpcReward       Int    @default(0)
+  mineScrapRewardsVariation       Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("game_params")
+}
+
+model PrivateSaleP2P {
+  id String @id @db.Uuid()
+
+  email String
+
+  txHash String @unique
+
+  wallet String
+
+  bnbAmount Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("private_sales_p2p")
+}

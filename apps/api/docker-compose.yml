@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  database:
+    container_name: the_monkeynauts_postgres
+    image: 'postgres:alpine'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgresql_data:/var/lib/postgresql'
+    environment:
+      - POSTGRES_USER=the-monkeynauts
+      - POSTGRES_PASSWORD=the-monkeynauts
+      - POSTGRES_DATABASE=the-monkeynauts
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  postgresql_data:
+    driver: local
