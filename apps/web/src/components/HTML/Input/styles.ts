@@ -36,29 +36,34 @@ export type InputContentTagProps = {
 }
 
 export const Content = styled.div<InputContentTagProps>`
-  background: ${COLORS.colors.tertiary_100};
-  border: 1px solid ${COLORS.colors.gray_blue};
+  background: rgba(10, 56, 118, 0.28);
+  border: 1px solid ${COLORS.ui.border};
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 0.1rem;
+  border-radius: 0.8rem;
 
   width: 100%;
 
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
   ${props => props.isFocused && css`
-    border: 1px solid ${COLORS.colors.secondary_50};
+    border-color: ${COLORS.colors.secondary_50};
+    box-shadow: 0 0 0 3px rgba(38, 151, 255, 0.18);
   `};
 
   ${props => props.isError && css`
-    border: 1px solid ${COLORS.global.red_0};
+    border-color: ${COLORS.global.red_0};
   `};
 
   input {
-    background: ${COLORS.colors.tertiary_100};
+    background: transparent;
     padding: 1.4rem;
     width: 100%;
     letter-spacing: 1px;
+    font-size: 1.6rem;
+    font-weight: 500;
     color: ${COLORS.fonts.primary};
     caret-color: ${COLORS.fonts.primary};
 
@@ -67,7 +72,7 @@ export const Content = styled.div<InputContentTagProps>`
     }
 
     &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 30px ${COLORS.colors.tertiary_100} inset;
+      -webkit-box-shadow: 0 0 0 30px #0a2c58 inset;
     }
 
     &:-webkit-autofill {

@@ -1,33 +1,45 @@
-import { useBoolean } from '@/hooks';
 import { useEffect, useState } from 'react';
+import { useBoolean, UseBooleanTypes } from '@/hooks';
 import { Menu } from '../Menu';
 import { TabTitle } from '../TabTitle';
 import {
-  Container,
+	Container,
 } from './styles';
 
 export type DashboardTabProps = {
-	children:  React.ReactNode;
-  menuContentProps?: React.HTMLAttributes<HTMLDivElement>;
-  menuContainerProps?: React.HTMLAttributes<HTMLDivElement>;
-  tabContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+	children: React.ReactNode;
+	menuContentProps?: React.HTMLAttributes<HTMLDivElement>;
+	menuContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+	tabContainerProps?: React.HTMLAttributes<HTMLDivElement>;
+	selectedTab?: number;
+	changeSelected?: (index: number) => void;
+	menu?: UseBooleanTypes;
 };
 
-export function Tabs({ children, menuContentProps, menuContainerProps, tabContainerProps }: DashboardTabProps) {
-	const [selectedTab, setSelectedTab] = useState(0);
-	const menuActive = useBoolean(false);
+export function Tabs({
+	children,
+	menuContentProps,
+	menuContainerProps,
+	tabContainerProps,
+	selectedTab: controlledTab,
+	changeSelected: controlledChange,
+	menu: controlledMenu,
+}: DashboardTabProps) {
+	const [internalTab, setInternalTab] = useState(0);
+	const internalMenu = useBoolean(false);
 
-	function handleChangeSelected(index: number) {
-		menuActive.changeToFalse();
-
-		setSelectedTab(index);
-	}
+	const selectedTab = controlledTab ?? internalTab;
+	const changeSelected = controlledChange ?? ((index: number) => {
+		internalMenu.changeToFalse();
+		setInternalTab(index);
+	});
+	const menuActive = controlledMenu ?? internalMenu;
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
-			if(window.innerWidth > 1024 && menuActive.state) {
+			if (window.innerWidth > 1024 && menuActive.state) {
 				menuActive.changeToFalse();
-			}	
+			}
 		});
 	});
 
@@ -40,7 +52,7 @@ export function Tabs({ children, menuContentProps, menuContainerProps, tabContai
 				children={children}
 				selectedTab={selectedTab}
 				hasButtonToBack={
-					Array.isArray(children) && 
+					Array.isArray(children) &&
 					children[selectedTab].props.hasButtonToBack &&
 					children[selectedTab].props.hasButtonToBack
 				}
@@ -50,8 +62,8 @@ export function Tabs({ children, menuContentProps, menuContainerProps, tabContai
 				menuContentProps={menuContentProps}
 				selectedTab={selectedTab}
 				menu={menuActive}
+				changeSelected={changeSelected}
 				children={children}
-				changeSelected={handleChangeSelected}
 			/>
 
 			{!menuActive.state && Array.isArray(children) ? children[selectedTab] : !menuActive.state && children}

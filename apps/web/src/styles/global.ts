@@ -7,6 +7,10 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: ${FONTS.rajdhani}, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6, button {
     font-family: ${FONTS.orbitron}, sans-serif;
   }
 
@@ -18,6 +22,24 @@ export const GlobalStyle = createGlobalStyle`
 
   li {
     list-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(96, 178, 255, 0.25);
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(96, 178, 255, 0.4);
   }
 
   a {
@@ -71,7 +93,8 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     p, span, a, label {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      font-weight: 500;
     }
   }
   
@@ -92,7 +115,8 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     p, span, a, label {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
+      font-weight: 500;
     }
   }
 

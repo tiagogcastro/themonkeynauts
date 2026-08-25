@@ -42,7 +42,7 @@ export function Menu({
       <Content 
         {...menuContentProps}
       >
-        {Array.isArray(children) ? children.map(({props: {render = true, title}}, index) => (
+        {Array.isArray(children) ? children.map(({props: {render = true, title, icon}}, index) => (
           render && (
             <TabChange 
               key={index} 
@@ -54,7 +54,8 @@ export function Menu({
                 selected={index === selectedTab}
                 className="tab_title"
               >
-                {title}
+                {icon}
+                <span>{title}</span>
               </TabTitle>
             </TabChange>
           )

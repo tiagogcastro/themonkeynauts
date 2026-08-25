@@ -4,6 +4,7 @@ import { Container } from "./styles";
 type TabProps = {
 	children?: React.ReactNode;
 	title: string;
+	icon?: React.ReactNode;
 	hasButtonToBack?: UseBooleanTypes;
 	render?: boolean;
 };

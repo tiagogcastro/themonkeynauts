@@ -117,6 +117,10 @@ export const TabChange = styled.button<TabChangeProps>`
 `;
 
 export const TabTitle = styled.span<TabChangeProps>`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
   font-size: 18px;
   font-weight: 700;
   line-height: 2.3rem;
@@ -126,6 +130,14 @@ export const TabTitle = styled.span<TabChangeProps>`
   border-bottom: 2px solid transparent;
 
   margin-bottom: 16px;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+
+    color: ${COLORS.colors.primary_0};
+  }
 
   ${props => props.selected && css`
     border-bottom: 2px solid ${COLORS.colors.primary_0};

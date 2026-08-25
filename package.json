@@ -10,5 +10,8 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev:server"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
   }
 }

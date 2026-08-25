@@ -3,6 +3,14 @@ import {
   Tabs
 } from '@/components/DashboardTab';
 import { DashboardTabsProvider } from '@/contexts/DashboardTabs';
+import {
+  FiSettings,
+  FiShoppingCart,
+  FiTag,
+  FiUser,
+  FiKey,
+} from 'react-icons/fi';
+import { GiSpaceShuttle, GiMonkey } from 'react-icons/gi';
 import { useAuth, useBoolean } from '@/hooks';
 
 import { 
@@ -48,28 +56,28 @@ export function Dashboard() {
                 }
               }}
             >
-              <Tab title="Account" hasButtonToBack={accountIsShow}>
+              <Tab title="Account" icon={<FiUser />} hasButtonToBack={accountIsShow}>
                 <AccountTab />
               </Tab>
-              <Tab title="Store" hasButtonToBack={storeIsShow}>
+              <Tab title="Store" icon={<FiShoppingCart />} hasButtonToBack={storeIsShow}>
                 <StoreTab />
               </Tab>
-              <Tab title="Monkeynauts" hasButtonToBack={monekeynautIsShow}>
+              <Tab title="Monkeynauts" icon={<GiMonkey />} hasButtonToBack={monekeynautIsShow}>
                 <MonkeynautsTab monkeynautIsShow={monekeynautIsShow} />
               </Tab>
-              <Tab title="Ships" hasButtonToBack={shipIsShow}>
+              <Tab title="Ships" icon={<GiSpaceShuttle />} hasButtonToBack={shipIsShow}>
                 <ShipsTab shipIsShow={shipIsShow} />
               </Tab>
               {/* <Tab title="Equipment" hasButtonToBack={equipamentIsShow}>
                 <EquipamentsTab />
               </Tab> */}
-              <Tab title="Private sale" hasButtonToBack={privateSaleIsShow}>
+              <Tab title="Private sale" icon={<FiTag />} hasButtonToBack={privateSaleIsShow}>
                 <PrivateSale />
               </Tab>
-              <Tab title="Admin" render={playerRole ? playerRolesAccess.includes(playerRole): false}>
+              <Tab title="Admin" icon={<FiSettings />} render={playerRole ? playerRolesAccess.includes(playerRole): false}>
                 <Admin />
               </Tab>
-              <Tab title="Owner" render={playerRole === 'owner'}>
+              <Tab title="Owner" icon={<FiKey />} render={playerRole === 'owner'}>
                 <Owner />
               </Tab>
             </Tabs>
