@@ -5,7 +5,7 @@ type MailDefault = {
   };
 };
 
-export type MailDriver = 'ethereal' | 'ses' | 'mailgun' | 'titan';
+export type MailDriver = 'ethereal';
 
 type MailConfig = {
   driver: MailDriver;
@@ -13,55 +13,21 @@ type MailConfig = {
     ethereal: {
       defaults: MailDefault;
     };
-    mailgun: {
-      defaults: MailDefault;
-      domain: string;
-    };
-    ses: {
-      defaults: MailDefault;
-    };
-    titan: {
-      defaults: MailDefault;
-    };
   };
 };
 
-const mailConfig = {
-  driver: process.env.MAIL_DRIVER || 'ethereal',
+const mailConfig: MailConfig = {
+  driver: 'ethereal',
   config: {
     ethereal: {
       defaults: {
         from: {
-          name: 'Equipe Ethereal',
-          address: 'etherealmail@mail.com',
-        },
-      },
-    },
-    mailgun: {
-      defaults: {
-        from: {
           name: 'The Monkeynauts',
-          address: 'support@themonkeynauts.com',
-        },
-      },
-    },
-    titan: {
-      defaults: {
-        from: {
-          name: 'The Monkeynauts',
-          address: 'support@themonkeynauts.com',
-        },
-      },
-    },
-    ses: {
-      defaults: {
-        from: {
-          name: 'The Monkeynauts',
-          address: 'support@themonkeynauts.com',
+          address: 'support@themonkeynauts.local',
         },
       },
     },
   },
-} as MailConfig;
+};
 
 export { mailConfig };

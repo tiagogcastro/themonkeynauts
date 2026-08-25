@@ -5,21 +5,15 @@ import { IDateProvider } from '@shared/domain/providers/date-provider';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { IMailTemplateProvider } from '@shared/domain/providers/mail-template-provider';
-import { IRateLimiterProvider } from '@shared/domain/providers/rate-limiter-provider';
-import { IStorageProvider } from '@shared/domain/providers/storage-provider';
 import { ITokenProvider } from '@shared/domain/providers/token-provider';
 import { BCryptHashProvider } from '@shared/infra/providers/bcrypt-hash-provider';
 import { CronJobProvider } from '@shared/infra/providers/cronjob-provider';
 import { DateFnsDateProvider } from '@shared/infra/providers/datefns-date-provider';
-import { DiskStorageProvider } from '@shared/infra/providers/disk-storage-provider';
+import { EthersBlockchainProvider } from '@shared/infra/providers/ethers-blockchain-provider';
 import { EtherealMailProvider } from '@shared/infra/providers/ethereal-mail-provider';
 import { HandlebarsMailTemplateProvider } from '@shared/infra/providers/handlebars-mail-template-provider';
 import { JWTokenProvider } from '@shared/infra/providers/jwt-token-provider';
-import { MailgunMailProvider } from '@shared/infra/providers/mailgun-mail-provider';
-import { RateLimiterProvider } from '@shared/infra/providers/rate-limiter-provider';
-import { SESMailProvider } from '@shared/infra/providers/ses-mail-provider';
-import { TitanMailProvider } from '@shared/infra/providers/titan-mail-provider';
-import { Web3jsBlockchainProvider } from '@shared/infra/providers/web3js-blockchain-provider';
+import { SandboxBlockchainProvider } from '@shared/infra/providers/sandbox-blockchain-provider';
 import { container } from 'tsyringe';
 
 container.registerSingleton<ITokenProvider>('TokenProvider', JWTokenProvider);
@@ -37,24 +31,20 @@ container.registerSingleton<IMailTemplateProvider>(
 
 const mailProvider: IMailProvider = {
   ethereal: container.resolve(EtherealMailProvider),
-  ses: container.resolve(SESMailProvider),
-  mailgun: container.resolve(MailgunMailProvider),
-  titan: container.resolve(TitanMailProvider),
 }[mailConfig.driver];
 
 container.registerInstance<IMailProvider>('MailProvider', mailProvider);
 
-container.registerSingleton<IStorageProvider>(
-  'StorageProvider',
-  DiskStorageProvider,
-);
-
-container.registerSingleton<IBlockchainProvider>(
-  'BlockchainProvider',
-  Web3jsBlockchainProvider,
-);
-
-container.registerSingleton<IRateLimiterProvider>(
-  'RateLimiterProvider',
-  RateLimiterProvider,
-);
+// sandbox: fictitious currency, no chain calls (default for local/demo)
+// rpc: real BSC integration through ethers
+if ((process.env.BLOCKCHAIN_DRIVER || 'sandbox') === 'rpc') {
+  container.registerSingleton<IBlockchainProvider>(
+    'BlockchainProvider',
+    EthersBlockchainProvider,
+  );
+} else {
+  container.registerSingleton<IBlockchainProvider>(
+    'BlockchainProvider',
+    SandboxBlockchainProvider,
+  );
+}
