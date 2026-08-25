@@ -1,5 +1,9 @@
 # Arquitetura
 
+## O produto (contexto 2026)
+
+O jogo client nunca chegou a existir — era a visão do cliente em 2022. **O produto hoje é o par web + API**: a web é o painel de gerenciamento do jogador/admin, e a API é o backend que poderia servir tanto a web quanto um futuro client. Toda a lógica de negócio vive na API; a web é camada de apresentação.
+
 ## Monorepo
 
 ```

@@ -55,6 +55,36 @@ Tunáveis globais: consumo de combustível (viagem/bounty), custo de refuel (%),
 - txHash é único globalmente (anti-replay via tabela logs)
 - Player desabilitado some das buscas (soft-disable) — só admin reabilita
 
+## Perfis (roles)
+
+| Role | Origem | Acesso |
+|---|---|---|
+| `Default` | qualquer registro | Account, Store, Monkeynauts, Ships |
+| `Admin` | seed (`ADMIN_*` do `.env`) ou SQL | + rotas `/admins/*`: Ban, Create Sale, AirDrop NFT, Game Params, Logs |
+| `Owner` | apenas SQL hoje (não há endpoint de promoção) | + `/owners/*`: Private P2P intake |
+
+Proteção em duas camadas: abas Admin/Owner só renderizam para o papel correto na web, e a API valida role nos middlewares `ensure-administrator`/`ensure-owner`. A escalação de privilégio que permitia virar admin via `PUT /players/update` foi corrigida na restauração.
+
+## Carteira e modos de operação
+
+| Driver da API | Conexão de carteira | Depósito/Compra/Saque |
+|---|---|---|
+| `sandbox` (default) | **Modo demo**: sem MetaMask o app gera endereço/txHash fictícios; com MetaMask instalada usa o fluxo real apontando pra BSC | validados só por formato/uniqueness; crédito usa o valor informado |
+| `rpc` | exige carteira EVM (MetaMask) na rede `VITE_BSC_CHAIN_ID_HEX` | txHash validado on-chain contra o contrato SPC oficial |
+
+O texto da aba Private Sale ("minimum of 0.3 BNB...", "1 BNB = 13.000 SPC") é da rodada de captação de 2022 — ver seção abaixo.
+
+## Private Sale — feature legada (2022)
+
+Era a **pré-venda do token SPC** antes do lançamento: investidores enviavam BNB real para a carteira do projeto e registravam o txHash na plataforma.
+
+- Mínimo **0.3 BNB** e máximo **3 BNB** por conta — mecanismo anti-baleia para distribuir tokens entre mais jogadores (`@/config/balance`: `bnbAmountMin`, `bnbAmountMax`)
+- Teto global de **100 BNB** arrecadados (`bnbAmountTotalMax`)
+- Conversão fixa: **1 BNB = 13.000 SPC** (`@/config/game`: `amountOfSpcToBnb`)
+- A API somava todos os aportes existentes para validar os limites; txHash único impedia replay
+
+Hoje é código morto na prática (captação encerrada, sem fundos) mantido por decisão de escopo da restauração. O módulo `private-p2p` (aba Owner) era o intake manual desses aportes feitos fora da plataforma. Candidato natural a remoção no pruning futuro.
+
 ## Onde cada coisa fica na UI
 
 | Aba (Dashboard) | Conteúdo |
@@ -63,5 +93,6 @@ Tunáveis globais: consumo de combustível (viagem/bounty), custo de refuel (%),
 | Store | eventos de venda ativos (ships/monkeynauts/packs) e compra |
 | Monkeynauts | lista dos seus tripulantes, atributos, montar crew |
 | Ships | suas naves, fuel, nave ativa, viagem |
+| Private Sale | pré-venda de 2022 (legado) — aporte BNB com txHash; ver seção "Private Sale" |
 | Admin *(Admin+)* | Ban, Create Sale, AirDrop NFT, Game Params, Logs |
 | Owner *(Owner)* | Private P2P intake (legado) |
