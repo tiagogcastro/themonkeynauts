@@ -46,7 +46,12 @@ O contrato oficial SPC na mainnet foi validado: símbolo `SPC`, 18 decimais (~20
 
 ## Arquitetura da API
 
-Clean architecture por módulo — `core/business-logic` (use-cases, tsyringe) → `domain` (entidades/repositórios) → `infra` (Prisma/HTTP). Ver [docs/architecture.md](docs/architecture.md).
+Clean architecture por módulo — `core/business-logic` (use-cases, tsyringe) → `domain` (entidades/repositórios) → `infra` (Prisma/HTTP). Detalhes em [docs/](docs/):
+
+- [docs/clean-architecture.md](docs/clean-architecture.md) — Either right/left, DI, providers, validação
+- [docs/game-guide.md](docs/game-guide.md) — entidades, parâmetros e fluxos do jogo
+- [docs/admin-guide.md](docs/admin-guide.md) — painel admin/owner campo a campo
+- [docs/architecture.md](docs/architecture.md) — visão geral e decisões de restauração
 
 ```
 src/modules/{players,ships,monkeynauts,crews,sales,private-sales,private-p2p,game-params,logs}
