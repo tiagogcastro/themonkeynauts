@@ -47,6 +47,45 @@ Tunáveis globais: consumo de combustível (viagem/bounty), custo de refuel (%),
 7. Refuel na Space Station quando acabar o combustível (custa % conforme GameParams)
 8. **Withdraw**: saca SPC ≥ 1000 pro wallet vinculado (na sandbox debita e confirma sem chain real)
 
+## Sales Event (a vitrine com prazo)
+
+É o evento que coloca itens à venda de forma controlada — tipo janela sazonal de loja. Vive em `@/modules/sales`, com três repositórios separados (monkeynaut/ship/pack sales) orquestrados pelo `create-sale`.
+
+### Anatomia
+
+| Campo | O que faz |
+|---|---|
+| `type` | Monkeynaut · Ship · Pack |
+| `crypto` | moeda aceita: BNB, BUSD ou SPC |
+| `price` | preço unitário naquela crypto |
+| `startDate` / `endDate` | janela em que dá pra comprar (fora dela, bloqueado) |
+| `quantity` / `currentQuantityAvailable` | estoque total vs restante |
+| `totalUnitsSold` | contador de vendidos |
+| `active` | admin pode parar a venda manualmente antes do fim |
+
+### Distribuição de raridade (soma obrigatória = 100%)
+
+- **Monkeynaut Sale**: % de nascer Private / Sergeant / Captain / Major
+- **Ship Sale**: % de rank B / A / S
+- **Pack Sale**: pack sorteado (Basic / Advanced / Expert / Random)
+
+Ao comprar, a API sorteia nessas percentagens e cria a entidade já com atributos derivados do rank.
+
+### Ciclo de vida
+
+```
+Admin cria evento ──► ativo dentro da janela ──► players compram
+        (Admin → Create Sale)      (Store)         │
+                                                   ▼
+                              estoque diminui, raridade sorteada,
+                              entidade criada pro comprador
+                                   │
+                    encerra: estoque zero, endDate passou,
+                    ou admin para manualmente ("Stop" em Open Sales)
+```
+
+Cada compra é **1 item por transação** com txHash único (anti-replay). A checagem `can-buy-sale-item` valida: venda ativa, dentro da janela, estoque disponível e regras específicas (ex.: possuir ship antes de comprar monkeynaut).
+
 ## Regras que costumam surpreender
 
 - Comprar monkeynaut exige possuir ship ("It is necessary to buy a ship before buying monkeynaut")
