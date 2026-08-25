@@ -8,7 +8,7 @@ import { Data } from '@/services/app_api/player/types';
 import { COLORS } from '@/theme';
 import { paymentByEthereum } from '@/utils';
 import { ApiError } from '@/utils/apiError';
-import { verifyWallet } from '@/utils/wallet';
+import { generateDemoTxHash, hasMetaMask, verifyWallet } from '@/utils/wallet';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -92,112 +92,116 @@ export function PrivateSale() {
       isButtonLoading.changeToTrue();
 
       if(validatedInput) {
-        if(player) {
+        const demoMode = !hasMetaMask();
+        let transaction = '';
+        let paymentError: any;
+
+        if (!demoMode && player) {
           await verifyWallet(player.player);
         }
 
-        toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
-          autoClose: 7000,
-          pauseOnHover: true,
-          type: 'info',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-        
-        toast(`if it doesn't open a popup, check your metamask`, {
-          autoClose: 9000,
-          pauseOnHover: true,
-          type: 'info',
-          style: {
-            background: COLORS.global.white_0,
-            color: COLORS.global.black_0,
-            fontSize: 14,
-            fontFamily: 'Orbitron, sans-serif',
-          }
-        });
-    
-        if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.contract.BNB) {
-          const { transaction, error } = await paymentByEthereum({
-            ethereum,
-            ether: ethers.parseEther(inputValue).toString(),
-            dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
-            cryptoType: 'BNB'
-          });
-    
-          if(transaction || error) {
-            isButtonLoading.changeToFalse();
-          }
-    
-          if(transaction && player) {
-            try {
-              toast(`Wait for the transaction to be confirmed and saved in our database. This can take time`, {
-                autoClose: 9000,
-                pauseOnHover: true,
-                type: 'info',
-                style: {
-                  background: COLORS.global.white_0,
-                  color: COLORS.global.black_0,
-                  fontSize: 14,
-                  fontFamily: 'Orbitron, sans-serif',
-                }
-              });
-  
-              await baseApi.post('/private-sales/create-private-sale', {
-                bnbAmount: Number(inputValue),
-                txHash: transaction,
-              })
-    
-              toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
-                autoClose: 5000,
-                pauseOnHover: true,
-                type: 'success',
-                style: {
-                  background: COLORS.global.white_0,
-                  color: COLORS.global.black_0,
-                  fontSize: 14,
-                  fontFamily: 'Orbitron, sans-serif',
-                }
-              });
-  
-              setInputValue('');
+        if (demoMode) {
+          transaction = generateDemoTxHash();
 
-              privateSaleSucessModal.changeToTrue();
-            } catch(error: any) {
-              const apiErrorResponse = ApiError(error);
-
-              apiErrorResponse.messages.map(message => {
-                return toast(message, {
-                  autoClose: 5000,
-                  pauseOnHover: true,
-                  type: 'error',
-                  style: {
-                    background: COLORS.global.white_0,
-                    color: COLORS.global.red_0,
-                    fontSize: 14,
-                    fontFamily: 'Orbitron, sans-serif',
-                  }
-                });
-              })
+          toast(`Demo mode: fictitious transaction generated`, {
+            autoClose: 7000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
             }
-          }
-    
-          if(error) {
-            toast(error.message, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'error',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.red_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
+          });
+        } else {
+          toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
+            autoClose: 7000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          toast(`if it doesn't open a popup, check your metamask`, {
+            autoClose: 9000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.contract.BNB) {
+            const payment = await paymentByEthereum({
+              ethereum,
+              ether: ethers.parseEther(inputValue).toString(),
+              dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
+              cryptoType: 'BNB'
             });
+
+            transaction = payment.transaction;
+            paymentError = payment.error;
           }
+        }
+
+        if(transaction || paymentError) {
+          isButtonLoading.changeToFalse();
+        }
+
+        if(paymentError?.message) {
+          return toast(paymentError.message, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'error',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.red_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        }
+        if(transaction && player) {
+          toast(`Wait for the transaction to be confirmed and saved in our database. This can take time`, {
+            autoClose: 9000,
+            pauseOnHover: true,
+            type: 'info',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          await baseApi.post('/private-sales/create-private-sale', {
+            bnbAmount: Number(inputValue),
+            txHash: transaction,
+          })
+
+          toast(`${player?.player.nickname}, your ${inputValue} transaction was a success`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          setInputValue('');
+
+          privateSaleSucessModal.changeToTrue();
         }
       }
     } catch (error: any) {

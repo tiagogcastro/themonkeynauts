@@ -9,11 +9,12 @@ export const Container = styled.div`
   height: 100vh;
   min-height: 100vh;
 
-  overflow: auto;
-  
+  overflow-x: hidden;
+  overflow-y: auto;
+
   background: url(${background_1}) no-repeat center;
   background-size: cover;
-  
+
   padding-top: 2.4rem;
 `;
 
@@ -21,11 +22,11 @@ export const Content = styled.div`
   max-width: 32rem;
   width: 100%;
 
-  height: ${window.innerHeight}px;
+  min-height: calc(100vh - 2.4rem);
 
   margin: 0 auto 24px;
 
-  padding: 0 3.2rem 128px;
+  padding: 0 3.2rem 12.8rem;
 
   background: url(${dashboard_bg_1}) no-repeat top;
 
@@ -37,10 +38,10 @@ export const Content = styled.div`
   @media(min-width: 1024px) {
     max-width: 1024px;
 
-    height: 900px;
+    min-height: 900px;
 
     padding-top: 32px;
-    
+
     background: url(${dashboard_bg_3}) no-repeat top;
   }
 

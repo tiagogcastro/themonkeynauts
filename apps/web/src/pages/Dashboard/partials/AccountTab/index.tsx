@@ -31,6 +31,7 @@ import {
 } from './styles';
 
 import { ApiError } from '@/utils/apiError';
+import { shortenWallet } from '@/utils/shortenWallet';
 import { generateDemoTxHash, hasMetaMask, verifyWallet } from '@/utils/wallet';
 import { baseApi } from '@/services/api';
 
@@ -306,7 +307,8 @@ export function AccountTab() {
                   ) : (
                     <strong
                       className="wallet"
-                    >{player.player.wallet}</strong>
+                      title={player.player.wallet}
+                    >{shortenWallet(player.player.wallet)}</strong>
                   )}
                 </UniqueInfo>
               </div>
