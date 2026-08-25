@@ -22,4 +22,7 @@ pnpm-debug.log*
 Thumbs.db
 
 # local-only files
-PLAN.local.md
+# local-only workspace
+tmp/
+apps/api/scripts/smoke-test.mjs
+nohup.out
