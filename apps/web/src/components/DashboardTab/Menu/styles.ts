@@ -99,6 +99,8 @@ export const Content = styled.div`
 
 export const TabChange = styled.button<TabChangeProps>`
   display: flex;
+  align-items: center;
+  justify-content: center;
 
   @media(min-width: 1400px) {
     max-width: max-content;
@@ -144,11 +146,13 @@ export const TabTitle = styled.span<TabChangeProps>`
   `};
 
   @media(min-width: 1400px) {
-    display: inline-block; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
     margin-bottom: 0;
 
-    padding: 1rem 4.8rem;
+    padding: 1rem 2.4rem;
 
     text-transform: uppercase;
     font-size: 1.6rem;

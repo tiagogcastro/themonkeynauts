@@ -8,13 +8,14 @@ import {
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   text?: string;
+  icon?: React.ReactNode;
   loading?: {
     state: boolean;
     size?: number;
   }
 }
 
-export function Button({text, loading, ...rest}: ButtonProps) {
+export function Button({text, icon, loading, children, ...rest}: ButtonProps) {
   return (
     <Container
       isLoading={loading?.state}
@@ -27,7 +28,11 @@ export function Button({text, loading, ...rest}: ButtonProps) {
           size={loading.size}
         />
       ): (
-        text
+        <>
+          {icon}
+          {text}
+          {children}
+        </>
       )}
     </Container>
   )

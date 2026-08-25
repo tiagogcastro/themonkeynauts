@@ -1,5 +1,5 @@
 import { FaReact } from 'react-icons/fa';
-import { FiLogOut } from 'react-icons/fi';
+import { FiDownload, FiLogOut, FiUpload } from 'react-icons/fi';
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
@@ -359,6 +359,7 @@ export function AccountTab() {
               <Button 
                 type="submit" 
                 text="Withdraw"
+                icon={<FiUpload />}
                 disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
                 loading={{
                   state: withdrawButtonHasBlocked.state
@@ -368,6 +369,7 @@ export function AccountTab() {
               <Button 
                 type="submit" 
                 text="Deposit"
+                icon={<FiDownload />}
                 disabled={withdrawButtonHasBlocked.state || depositButtonHasBlocked.state}
                 loading={{
                   state: depositButtonHasBlocked.state

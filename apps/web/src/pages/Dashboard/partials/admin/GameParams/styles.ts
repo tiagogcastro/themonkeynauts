@@ -5,20 +5,8 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  overflow: auto;
-  overflow-x: hidden;
-  max-height: 40rem;
-
   padding-left: 24px;
   margin-right: 16px;
-
-  @media(min-width: 1024px) {
-    max-height: 64rem;
-  }
-
-  @media(max-width: 1023px) {
-    max-height: 32rem;
-  }
 `;
 
 export const MainContent = styled.main`
@@ -36,24 +24,29 @@ export const MainContent = styled.main`
 `;
 
 export const FormContainer = styled.form`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   gap: 24px;
 
+  width: 100%;
+
   .groups {
-    label {
-      margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 16px 24px;
+
+    @media(min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media(min-width: 1200px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   button {
-    margin-top: 16px;
-  }
-
-  @media(min-width: 768px) {
-    max-width: 560px;
-    grid-template-columns: 1fr 1fr;
+    margin-top: 8px;
+    max-width: 320px;
   }
 `;

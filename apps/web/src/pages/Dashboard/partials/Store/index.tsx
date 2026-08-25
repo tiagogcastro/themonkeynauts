@@ -328,7 +328,6 @@ export function StoreTab() {
                 </p>
                 <img src={'/founderPack/monkeynauts.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
-                <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
                   type="submit"
@@ -364,7 +363,6 @@ export function StoreTab() {
 
                 <img src={'/founderPack/ships.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
-                <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
                   type="submit"
@@ -427,7 +425,6 @@ export function StoreTab() {
 
                 <img src={'/founderPack/pack.png'} />
                 <span className="price">Price {sale.price} ${sale.crypto}</span>
-                <span className="more_info_text">Hover mouse for more info</span>
                 <Button 
                   text="BUY PACK" 
                   type="submit"

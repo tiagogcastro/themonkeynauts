@@ -28,16 +28,15 @@ export const MainContent = styled.main`
 `;
 
 export const FormContainer = styled.form`
-  max-width: 220px;
+  width: 100%;
+  max-width: 420px;
 
-  label {
-    :not(:first-child) {
-      margin-top: 16px;
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   button {
-    margin-top: 16px;
+    margin-top: 8px;
   }
 `;
 

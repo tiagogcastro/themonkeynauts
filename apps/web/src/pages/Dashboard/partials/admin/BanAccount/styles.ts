@@ -27,47 +27,21 @@ export const MainContent = styled.main`
 `;
 
 export const FormContainer = styled.form`
-  .textarea_label {
-    max-width: 380px;
-    min-width: 380px;
+  width: 100%;
+  max-width: 560px;
 
-    textarea {
-      max-width: 380px;
-      min-width: 378px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-      max-height: 280px;
-      min-height: 280px;
-      height: 280px;
-      resize: none;
-    }
-  }
-
-  .input_label {
-    max-width: 300px;
-  }
-
-  label {
-    :not(:first-child) {
-      margin-top: 16px;
-    }
+  .textarea_label textarea {
+    min-height: 200px;
+    height: 200px;
+    resize: none;
   }
 
   button {
-    margin-top: 16px;
-  }
-
-  @media(max-width: 768px) {
-    max-width: 210px;
-    margin: 0 auto;
-
-    .textarea_label {
-      max-width: 200px;
-      min-width: 200px;
-
-    textarea {
-      max-width: 200px;
-      min-width: 198px;
-    }
-  }
+    margin-top: 8px;
+    max-width: 320px;
   }
 `;

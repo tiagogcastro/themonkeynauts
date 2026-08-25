@@ -30,16 +30,17 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: rgba(2, 6, 16, 0.35);
+    border-radius: 8px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(96, 178, 255, 0.25);
+    background: rgba(6, 32, 67, 0.85);
     border-radius: 8px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(96, 178, 255, 0.4);
+    background: rgba(12, 58, 106, 0.95);
   }
 
   a {

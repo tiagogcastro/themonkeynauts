@@ -16,6 +16,13 @@ export const Container = styled.button<ButtonContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.8rem;
+
+  svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    flex-shrink: 0;
+  }
 
   font-weight: bold;
   font-size: 1.3rem;
