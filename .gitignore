@@ -1,8 +1,30 @@
-node_modules
-.DS_Store
-dist-ssr
-*.local
+# dependencies
+node_modules/
 
-yarn-error.log
+# builds
+dist/
+build/
+coverage/
+cache/
 
+# env
 .env
+.env.*
+!.env.example
+
+# logs
+*.log
+yarn-error.log
+pnpm-debug.log*
+
+# os/editor
+.DS_Store
+Thumbs.db
+
+# hardhat
+packages/contracts/artifacts/
+packages/contracts/cache/
+packages/contracts/deployments/localhost/
+
+# local-only files
+PLAN.local.md
