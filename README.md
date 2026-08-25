@@ -1,110 +1,70 @@
-<h1 align="center"> The monkeynauts </h1>
+# The Monkeynauts 🚀
 
-<p align="center">🔍 Navegação dentro do Readme. </p>
+Jogo espacial play-and-earn (P2E) com naves, tripulações e token $SPC na BSC — restaurado e modernizado como projeto de portfólio.
 
-<div align="center">
+> **Monorepo**: `apps/web` (React SPA) · `apps/api` (Express + Prisma) — blockchain opcional via driver `sandbox` (moeda fictícia) ou `rpc` (BSC real).
 
-  [![](https://img.shields.io/badge/-Sobre-5276f2)](#sobre-o-projeto)
-  [![](https://img.shields.io/badge/-Tecnologias-5276f2)](#techs)
-  [![](https://img.shields.io/badge/-Começando-5276f2)](#rodar-projeto)
+## Stack
 
-</div>
+| Camada | Tecnologias |
+|---|---|
+| **Web** | React 19, Vite, TypeScript 5, styled-components 6, react-router 7, react-hook-form + yup, axios, ethers v6 |
+| **API** | Node 22, Express 5, TypeScript 5 (strict), zod, Prisma 6 + PostgreSQL, tsyringe (clean architecture), jsonwebtoken, ethers v6 |
+| **Infra dev** | pnpm workspaces, Docker (Postgres), tsx/tsup |
 
-</br>
+## Como rodar (100% local, sem credenciais externas)
 
-<div align="left">
-  <h1 id="sobre-o-projeto"> ✅ Sobre o projeto </h1>
-  <p>
-    Descreva sobre o projeto
-  </p>
-</div>
+```bash
+# 1. dependências
+pnpm install
 
-</br>
+# 2. banco (docker)
+docker compose up -d
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env.local
 
-___
+# 3. schema + admin seed
+pnpm --filter api db:migrate
 
-<div align="left"> 
-  <h1 id="techs">🚀 Tecnologias Utilizadas </h1> 
-  <p>
-    Utilizei o VsCode para fazer os códigos em ReactJS e Typescript. 
-  </p>
-  <p>
-    Utilizei o Styled-components para fazer a estilização das telas.
-  </p>
-  <div>
-    <p>
-      ➡
-      <a href="https://pt-br.reactjs.org"> ReactJS</a>
-    </p>
-    <p>
-      ➡
-      <a href="https://www.typescriptlang.org"> Typescript</a>
-    </p>
-    <p>
-      ➡
-      <a href="https://code.visualstudio.com"> VsCode</a>
-    </p>
-    <p>
-      ➡
-      <a href="https://styled-components.com"> Styled-components</a>
-    </p>
-  </div>
-</div> 
+# 4. api (porta 3333) e web (porta 5173)
+pnpm dev:api
+pnpm dev:web   # em outro terminal
+```
 
-</br>
+Contas iniciais:
+- **Admin**: `admin@themonkeynauts.local` / `Admin@1234`
+- Crie jogadores pela tela de registro.
 
-___
+## Modo blockchain
 
-<div align="left">
-  <h1 id="rodar-projeto">💻 Como rodar o projeto na sua máquina da forma que rodei na minha</h1>
-  <p>➡ Instalar o NodeJS na sua máquina. <p>
+| `BLOCKCHAIN_DRIVER` | Comportamento |
+|---|---|
+| `sandbox` *(default)* | Moeda fictícia. Depósitos/compras/withdraws funcionam offline; nenhum acesso a chain. Ideal para demo/testes. |
+| `rpc` | Integração real com BSC (`BSC_RPC_URL`) validando transações on-chain do contrato SPC oficial (`SMART_CONTRACT`). Payouts exigem `SALES_PRIVATE_KEY`. |
 
-  <p>➡ Vá no cmd dele(no Vscode o nome é "terminal") ou abra o cmd da sua máquina, digite e execute: </p>
-  <p> 
+O contrato oficial SPC na mainnet foi validado: símbolo `SPC`, 18 decimais (~200M supply).
 
-    git clone https://github.com/projects-to-client/monkeynauts
-  </p>
-	<p>➡ Você precisa ter o Nodejs instalado na sua máquina.</p>
+## Arquitetura da API
 
-  <p>➡ Entre na pasta do projeto(a que acabou de clonar), digite e execute o comando: </p>
-  <p>
+Clean architecture por módulo — `core/business-logic` (use-cases, tsyringe) → `domain` (entidades/repositórios) → `infra` (Prisma/HTTP). Ver [docs/architecture.md](docs/architecture.md).
 
-    yarn
-  </p>
-  <p>➡ Para ver os comandos disponíveis e dependências instaladas, vá no arquivo package.json. </p>
-  
-  <p>➡ Você precisa ter o backend rodando para poder fazer coisas como: Login, listar usuário e outros.</p>
+```
+src/modules/{players,ships,monkeynauts,crews,sales,private-sales,private-p2p,game-params,logs}
+src/shared/{core,domain,infra}
+```
 
-  <p>➡ Para isso, entre no backend do projeto <a href="">clicando aqui</a> e siga os procedimentos para rodar o backend.</p>
+## Qualidade
 
-  <p>➡ Por fim, ao fazer tudo certinho, execute o comando:</p>
-  <p>
+- `pnpm --filter api typecheck` — TypeScript estrito, 0 erros
+- Smoke test E2E cobrindo as 55 rotas (registro → compra → crews → fuel → bounty → withdraw → admin/owner)
+- Correções de segurança aplicadas sobre o código de 2022 (senha em texto puro no reset, escalação de privilégio, toggle de ban sem persistência)
 
-    yarn dev
-  </p>
+## Roadmap
 
-  <p>❤ Pronto, seu projeto está certinho para funcionar.</p>
-  <p> Algum erro? Contate-me. </p>
-</div>
+- [ ] Responsividade mobile completa (em andamento)
+- [ ] Avaliação Next.js / Fastify (fase futura)
+- [ ] CI (GitHub Actions), testes automatizados
+- [ ] Docker para web/api além do Postgres
 
-</br>
-
-___
-
-<div align="left">
-  <h1 id="contribuir">🔗 Como contribuir com o projeto</h1>
-  <div>
-    <p> 1° - Faça um Fork do repositório; </p>
-    <p> 2° - Clone o repositório; </p>
-    <p> 3° - Crie uma branch com a sua feature; </p>
-    <p> 4° - Faça um commit bem descritivo com suas mudanças; </p>
-    <p> 5° - Dê 'Push' a sua branch; </p>
-    <p> 6° - Ir em Pull Requests do projeto original e criar uma pull request com o seu commit; </p>
-    <p>
-     ➡ Caso tenha dúvidas sobre como criar um pull request, 
-      <a 
-        href="https://docs.github.com/pt/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request"> clique neste link.
-      </a>  
-    </p>
-  </div>
-</div>
+---
+Projeto original: The Monkeynauts (2022) · Restaurado por [@tiagogcastro](https://tiagogcastro.com.br)
