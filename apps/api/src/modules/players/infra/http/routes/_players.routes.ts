@@ -1,8 +1,12 @@
 import { txHashRegExp } from '@config/regexp';
+import { balanceConfig } from '@config/balance';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { banUnbanPlayerController } from '../controllers/ban-unban-player';
 import { depositTokensController } from '../controllers/deposit-tokens';
 import { disableEnablePlayerController } from '../controllers/disable-enable-player';
@@ -14,27 +18,22 @@ const _playersRouter = Router();
 
 _playersRouter.patch(
   '/ban-unban-player',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        playerIdOrWallet: Joi.string().required(),
-        reason: Joi.string().required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      playerIdOrWallet: z.string(),
+      reason: z.string(),
+    }),
+  }),
   adaptRoute(banUnbanPlayerController),
 );
 
 _playersRouter.post(
   '/withdraw-tokens',
-  celebrate({
-    [Segments.BODY]: {
-      amount: Joi.number().not(0).min(500).integer().required(),
-      playerId: Joi.string().required().uuid(),
-    },
+  validate({
+    body: z.object({
+      amount: z.number().min(balanceConfig.withdrawMinAmount).int().refine(v => v !== 0, { message: 'must not be zero' }),
+      playerId: z.uuid(),
+    }),
   }),
   adaptMiddleware(ensureWalletMiddleware),
   adaptRoute(withdrawTokensController),
@@ -42,11 +41,12 @@ _playersRouter.post(
 
 _playersRouter.post(
   '/deposit-tokens',
-  celebrate({
-    [Segments.BODY]: {
-      txHash: Joi.string().required().regex(txHashRegExp),
-      playerId: Joi.string().required().uuid(),
-    },
+  validate({
+    body: z.object({
+      txHash: z.string().regex(txHashRegExp),
+      amount: z.number().int().positive().optional(),
+      playerId: z.uuid(),
+    }),
   }),
   adaptMiddleware(ensureWalletMiddleware),
   adaptRoute(depositTokensController),
@@ -54,22 +54,22 @@ _playersRouter.post(
 
 _playersRouter.patch(
   '/save-wallet',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        wallet: Joi.string().required().lowercase(),
-        playerId: Joi.string().required().uuid(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      wallet: z.string().toLowerCase(),
+      playerId: z.uuid(),
+    }),
+  }),
   adaptRoute(saveWalletController),
 );
 
 _playersRouter.patch(
   '/disable-enable-player',
+  validate({
+    body: z.object({
+      playerId: z.uuid(),
+    }),
+  }),
   adaptRoute(disableEnablePlayerController),
 );
 

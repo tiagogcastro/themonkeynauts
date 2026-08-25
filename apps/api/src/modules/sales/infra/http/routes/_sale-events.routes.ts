@@ -1,147 +1,169 @@
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { createAirDropNftPlayerController } from '../controllers/create-air-drop-nft';
 import { createSaleController } from '../controllers/create-sale';
 import { updateSaleController } from '../controllers/update/update-sales';
+
+const saleTypeSchema = z.enum(['Monkeynaut', 'Ship', 'Pack']);
+
+const createSaleSchema = z
+  .object({
+    crypto: z.enum(['BNB', 'BUSD', 'SPC']).optional(),
+    type: saleTypeSchema,
+    price: z.number(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+    quantity: z.number(),
+    totalUnitsSold: z.number().optional(),
+
+    saleMonkeynaut: z
+      .object({
+        private: z.number(),
+        sergeant: z.number(),
+        captain: z.number(),
+        major: z.number(),
+      })
+      .optional(),
+    saleShip: z
+      .object({
+        rankB: z.number(),
+        rankA: z.number(),
+        rankS: z.number(),
+      })
+      .optional(),
+    salePack: z
+      .object({
+        type: z.enum(['Basic', 'Random', 'Advanced', 'Expert']),
+      })
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === 'Monkeynaut' && !data.saleMonkeynaut) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'saleMonkeynaut is required when type is Monkeynaut',
+        path: ['saleMonkeynaut'],
+      });
+    }
+
+    if (data.type === 'Ship' && !data.saleShip) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'saleShip is required when type is Ship',
+        path: ['saleShip'],
+      });
+    }
+
+    if (data.type === 'Pack' && !data.salePack) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'salePack is required when type is Pack',
+        path: ['salePack'],
+      });
+    }
+  });
+
+const updateSaleSchema = z
+  .object({
+    crypto: z.enum(['BNB', 'BUSD', 'SPC']).optional(),
+    price: z.number().optional(),
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
+    quantity: z.number().optional(),
+    totalUnitsSold: z.number().optional(),
+    currentQuantityAvailable: z.number().optional(),
+    active: z.boolean().optional(),
+
+    type: saleTypeSchema,
+
+    saleMonkeynaut: z
+      .object({
+        saleMonkeynautId: z.uuid(),
+        private: z.number().optional(),
+        sergeant: z.number().optional(),
+        captain: z.number().optional(),
+        major: z.number().optional(),
+      })
+      .optional(),
+    saleShip: z
+      .object({
+        saleShipId: z.uuid(),
+        rankB: z.number().optional(),
+        rankA: z.number().optional(),
+        rankS: z.number().optional(),
+      })
+      .optional(),
+    salePack: z
+      .object({
+        salePackId: z.uuid(),
+        type: z.enum(['Basic', 'Random', 'Advanced', 'Expert']).optional(),
+      })
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === 'Monkeynaut' && !data.saleMonkeynaut) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'saleMonkeynaut is required when type is Monkeynaut',
+        path: ['saleMonkeynaut'],
+      });
+    }
+
+    if (data.type === 'Ship' && !data.saleShip) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'saleShip is required when type is Ship',
+        path: ['saleShip'],
+      });
+    }
+
+    if (data.type === 'Pack' && !data.salePack) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'salePack is required when type is Pack',
+        path: ['salePack'],
+      });
+    }
+  });
+
+const createAirDropNftSchema = z.object({
+  email: z.email(),
+  type: saleTypeSchema,
+  monkeynaut: z
+    .object({
+      rank: z.enum(['Private', 'Sergeant', 'Captain', 'Major', 'Random']),
+      role: z.enum(['Random']),
+    })
+    .optional(),
+  ship: z
+    .object({
+      rank: z.enum(['A', 'B', 'S', 'Random']),
+      role: z.enum(['Random']),
+    })
+    .optional(),
+});
 
 const _saleEventsRouter = Router();
 
 _saleEventsRouter.post(
   '/create',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
-        type: Joi.string().valid('Monkeynaut', 'Ship', 'Pack').required(),
-        price: Joi.number().required(),
-        startDate: Joi.date().required(),
-        endDate: Joi.date().optional(),
-        quantity: Joi.number().required(),
-        totalUnitsSold: Joi.number(),
-
-        saleMonkeynaut: Joi.alternatives().conditional('type', {
-          is: 'Monkeynaut',
-          then: Joi.object({
-            private: Joi.number().required(),
-            sergeant: Joi.number().required(),
-            captain: Joi.number().required(),
-            major: Joi.number().required(),
-          }).required(),
-        }),
-        saleShip: Joi.alternatives().conditional('type', {
-          is: 'Ship',
-          then: Joi.object({
-            rankB: Joi.number().required(),
-            rankA: Joi.number().required(),
-            rankS: Joi.number().required(),
-          }).required(),
-        }),
-        salePack: Joi.alternatives().conditional('type', {
-          is: 'Pack',
-          then: Joi.object({
-            type: Joi.string()
-              .valid('Basic', 'Random', 'Advanced', 'Expert')
-              .required(),
-          }).required(),
-        }),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({ body: createSaleSchema }),
   adaptRoute(createSaleController),
 );
 
 _saleEventsRouter.put(
   '/update-sale',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        crypto: Joi.string().valid('BNB', 'BUSD', 'SPC'),
-        price: Joi.number(),
-        startDate: Joi.date(),
-        endDate: Joi.date().optional(),
-        quantity: Joi.number(),
-        totalUnitsSold: Joi.number(),
-        currentQuantityAvailable: Joi.number(),
-        active: Joi.boolean(),
-
-        type: Joi.string().valid('Monkeynaut', 'Ship', 'Pack').required(),
-
-        saleMonkeynaut: Joi.alternatives().conditional('type', {
-          is: 'Monkeynaut',
-          then: Joi.object({
-            saleMonkeynautId: Joi.string().uuid().required(),
-            private: Joi.number(),
-            sergeant: Joi.number(),
-            captain: Joi.number(),
-            major: Joi.number(),
-          }),
-        }),
-        saleShip: Joi.alternatives().conditional('type', {
-          is: 'Ship',
-          then: Joi.object({
-            saleShipId: Joi.string().uuid().required(),
-            rankB: Joi.number(),
-            rankA: Joi.number(),
-            rankS: Joi.number(),
-          }),
-        }),
-        salePack: Joi.alternatives().conditional('type', {
-          is: 'Pack',
-          then: Joi.object({
-            salePackId: Joi.string().uuid().required(),
-            type: Joi.string().valid('Basic', 'Random', 'Advanced', 'Expert'),
-          }),
-        }),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({ body: updateSaleSchema }),
   adaptRoute(updateSaleController),
 );
 
 _saleEventsRouter.post(
   '/create-air-drop-nft',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        email: Joi.string().email().required(),
-        type: Joi.string().valid('Monkeynaut', 'Ship', 'Pack').required(),
-        monkeynaut: Joi.alternatives().conditional('type', {
-          is: 'Monkeynaut',
-          then: Joi.object({
-            rank: Joi.string().valid(
-              'Private',
-              'Sergeant',
-              'Captain',
-              'Major',
-              'Random',
-            ),
-            role: Joi.string().valid('Random'),
-          }),
-        }),
-        ship: Joi.alternatives().conditional('type', {
-          is: 'Ship',
-          then: Joi.object({
-            rank: Joi.string().valid('A', 'B', 'S', 'Random'),
-            role: Joi.string().valid('Random'),
-          }),
-        }),
-        pack: Joi.alternatives().conditional('type', {
-          is: 'Pack',
-          then: Joi.optional(),
-        }),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({ body: createAirDropNftSchema }),
   adaptRoute(createAirDropNftPlayerController),
 );
 

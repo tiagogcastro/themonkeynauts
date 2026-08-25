@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import 'dotenv/config';
-import 'express-async-errors';
 import '@shared/infra/container';
 import cors from 'cors';
 import express from 'express';

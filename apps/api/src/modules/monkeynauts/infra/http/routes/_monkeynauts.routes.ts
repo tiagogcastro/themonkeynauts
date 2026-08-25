@@ -1,145 +1,111 @@
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
 
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { createMonkeynautController } from '../controllers/create-monkeynaut';
-
 import { updateMonkeynautController } from '../controllers/update-monkeynaut';
-
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';
 import { changePlayerOwnerMonkeynautController } from '../controllers/change-player-owner-monkeynaut';
+import {
+  attributesSchema,
+  baseAttributesSchema,
+  monkeynautRankSchema,
+  monkeynautRoleSchema,
+} from './monkeynauts.routes';
 
 const _monkeynautsRouter = Router();
 
 _monkeynautsRouter.post(
   '/create-monkeynaut',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        ownerId: Joi.string().uuid().required(),
-        playerId: Joi.string().uuid(),
+  validate({
+    body: z.looseObject({
+        ownerId: z.uuid(),
+        playerId: z.uuid().optional(),
 
-        bonusDescription: Joi.string(),
-        bonusValue: Joi.number(),
+        bonusDescription: z.string().optional(),
+        bonusValue: z.number().optional(),
 
-        baseAttributes: Joi.object({
-          baseHealth: Joi.number().min(250).max(350),
-          baseSpeed: Joi.number().min(20).max(50),
-          basePower: Joi.number().min(20).max(50),
-          baseResistence: Joi.number().min(20).max(50),
-        }),
+        baseAttributes: baseAttributesSchema,
 
-        breedCount: Joi.number(),
+        breedCount: z.number().optional(),
 
-        role: Joi.string().regex(/^(Soldier|Engineer|Scientist)$/),
-        rank: Joi.string().regex(/^(Private|Sergeant|Captain|Major)$/),
+        role: monkeynautRoleSchema.optional(),
+        rank: monkeynautRankSchema.optional(),
 
-        energy: Joi.number(),
-        maxEnergy: Joi.number(),
+        energy: z.number().optional(),
+        maxEnergy: z.number().optional(),
 
-        name: Joi.string(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+        name: z.string().optional(),
+      }),
+  }),
   adaptRoute(createMonkeynautController),
 );
 
 _monkeynautsRouter.put(
   '/update-monkeynaut',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        ownerId: Joi.string().uuid().required(),
-        playerId: Joi.string().uuid(),
-        monkeynautId: Joi.string().uuid().required(),
+  validate({
+    body: z.looseObject({
+        ownerId: z.uuid(),
+        playerId: z.uuid().optional(),
+        monkeynautId: z.uuid(),
 
-        bonusDescription: Joi.string(),
-        bonusValue: Joi.number(),
+        bonusDescription: z.string().optional(),
+        bonusValue: z.number().optional(),
 
-        baseAttributes: Joi.object({
-          baseHealth: Joi.number().min(250).max(350),
-          baseSpeed: Joi.number().min(20).max(50),
-          basePower: Joi.number().min(20).max(50),
-          baseResistence: Joi.number().min(20).max(50),
-        }),
+        baseAttributes: baseAttributesSchema,
+        attributes: attributesSchema,
 
-        attributes: Joi.object({
-          health: Joi.number().min(250).max(350),
-          speed: Joi.number().min(20).max(50),
-          power: Joi.number().min(20).max(50),
-          resistence: Joi.number().min(20).max(50),
-        }),
+        breedCount: z.number().optional(),
 
-        breedCount: Joi.number(),
+        role: monkeynautRoleSchema.optional(),
+        rank: monkeynautRankSchema.optional(),
 
-        role: Joi.string().regex(/^(Soldier|Engineer|Scientist)$/),
-        rank: Joi.string().regex(/^(Private|Sergeant|Captain|Major)$/),
+        energy: z.number().optional(),
+        maxEnergy: z.number().optional(),
 
-        energy: Joi.number(),
-        maxEnergy: Joi.number(),
-
-        name: Joi.string(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+        name: z.string().optional(),
+      }),
+  }),
   adaptRoute(updateMonkeynautController),
 );
 
 _monkeynautsRouter.put(
   '/update-name',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        ownerId: Joi.string().uuid().required(),
-        monkeynautId: Joi.string().uuid().required(),
+  validate({
+    body: z.object({
+      ownerId: z.uuid(),
+      monkeynautId: z.uuid(),
 
-        name: Joi.string(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+      name: z.string().optional(),
+    }),
+  }),
   adaptRoute(updateMonkeynautController),
 );
 
 _monkeynautsRouter.put(
   '/change-player-operator',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        currentOperatorPlayerId: Joi.string().uuid().required(),
-        newOperatorPlayerId: Joi.string().uuid().required(),
-        monkeynautId: Joi.string().uuid().required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      currentOperatorPlayerId: z.uuid(),
+      newOperatorPlayerId: z.uuid(),
+      monkeynautId: z.uuid(),
+    }),
+  }),
   adaptRoute(changePlayerOperatorMonkeynautController),
 );
 
 _monkeynautsRouter.put(
   '/change-player-owner',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        currentOwnerPlayerId: Joi.string().uuid().required(),
-        newOwnerPlayerId: Joi.string().uuid().required(),
-        monkeynautId: Joi.string().uuid().required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      currentOwnerPlayerId: z.uuid(),
+      newOwnerPlayerId: z.uuid(),
+      monkeynautId: z.uuid(),
+    }),
+  }),
   adaptRoute(changePlayerOwnerMonkeynautController),
 );
 

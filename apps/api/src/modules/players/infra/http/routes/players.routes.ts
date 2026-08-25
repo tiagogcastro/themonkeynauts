@@ -1,10 +1,11 @@
-import { celebrate, Joi, Segments } from 'celebrate';
-import { Router } from 'express';
-
 import { passwordRegExp, txHashRegExp } from '@config/regexp';
-
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+import { balanceConfig } from '@config/balance';
+import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
 
 import { createPlayerController } from '../controllers/create-player';
 import { depositTokensController } from '../controllers/deposit-tokens';
@@ -26,126 +27,107 @@ const playersRouter = Router();
 
 playersRouter.post(
   '/create',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        email: Joi.string().email().required(),
-        nickname: Joi.string().min(2).max(32).required(),
-        password: Joi.string().min(6).max(100).required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.looseObject({
+        email: z.email(),
+        nickname: z.string().min(2).max(32),
+        password: z.string().min(6).max(100),
+      }),
+  }),
   adaptRoute(createPlayerController),
 );
 
 playersRouter.put(
   '/update',
   ensureAuthenticated,
+  validate({
+    body: z.looseObject({
+        nickname: z.string().min(2).max(32).optional(),
+        oldPassword: z.string().optional(),
+        newPassword: z.string().optional(),
+        newPasswordConfirmation: z.string().optional(),
+      }),
+  }),
   adaptRoute(updatePlayerController),
 );
 
 playersRouter.get(
   '/show',
-  celebrate(
-    {
-      [Segments.QUERY]: {
-        nickname: Joi.string().min(2).max(100),
-        playerId: Joi.string().uuid(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    query: z.object({
+      nickname: z.string().min(2).max(100).optional(),
+      playerId: z.uuid().optional(),
+    }),
+  }),
   ensureAuthenticated,
   adaptRoute(showPlayerController),
 );
 
 playersRouter.patch(
   '/save-wallet',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        wallet: Joi.string().required().lowercase(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      wallet: z.string().min(1).toLowerCase(),
+    }),
+  }),
   ensureAuthenticated,
   adaptRoute(saveWalletController),
 );
 
 playersRouter.post(
   '/forgot-password',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        email: Joi.string().email().required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      email: z.email(),
+    }),
+  }),
   adaptRoute(sendForgotPasswordEmailController),
 );
 
 playersRouter.put(
   '/reset-password',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        token: Joi.string().uuid().required(),
-        password: Joi.string().regex(passwordRegExp).min(8).max(100).required(),
-        passwordConfirmation: Joi.string()
-          .required()
-          .valid(Joi.ref('password')),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.looseObject({
+        token: z.uuid(),
+        password: z.string().regex(passwordRegExp).min(8).max(100),
+        passwordConfirmation: z.string(),
+      })
+      .refine(data => data.password === data.passwordConfirmation, {
+        message: 'Password confirmation does not match',
+        path: ['passwordConfirmation'],
+      }),
+  }),
   adaptRoute(resetPasswordController),
 );
 
 // resource
 playersRouter.put(
   '/update-resource',
-  celebrate(
-    {
-      [Segments.BODY]: {
-        nickname: Joi.string(),
-        playerId: Joi.string(),
-        resources: Joi.object({
-          spc: Joi.number(),
-          gold: Joi.number(),
-          iron: Joi.number(),
-          copper: Joi.number(),
-          scrap: Joi.number(),
-          science: Joi.number(),
-        }),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.looseObject({
+        nickname: z.string().optional(),
+        playerId: z.string().optional(),
+        resources: z.looseObject({
+            spc: z.number().optional(),
+            gold: z.number().optional(),
+            iron: z.number().optional(),
+            copper: z.number().optional(),
+            scrap: z.number().optional(),
+            science: z.number().optional(),
+          })
+          .optional(),
+      }),
+  }),
   ensureAuthenticated,
   adaptRoute(removePlayerResourceAmountController),
 );
 
 playersRouter.post(
   '/withdraw-tokens',
-  celebrate({
-    [Segments.BODY]: {
-      amount: Joi.number().not(0).min(500).integer().required(),
-    },
+  validate({
+    body: z.object({
+      amount: z.number().min(balanceConfig.withdrawMinAmount).int().refine(v => v !== 0, { message: 'must not be zero' }),
+    }),
   }),
   ensureAuthenticated,
   adaptMiddleware(ensureWalletMiddleware),
@@ -154,10 +136,11 @@ playersRouter.post(
 
 playersRouter.post(
   '/deposit-tokens',
-  celebrate({
-    [Segments.BODY]: {
-      txHash: Joi.string().required().regex(txHashRegExp),
-    },
+  validate({
+    body: z.object({
+      txHash: z.string().regex(txHashRegExp),
+      amount: z.number().int().positive().optional(),
+    }),
   }),
   ensureAuthenticated,
   adaptMiddleware(ensureWalletMiddleware),
@@ -179,11 +162,11 @@ playersRouter.post(
 
 playersRouter.post(
   '/finish-bounty-hunt-run',
-  celebrate({
-    [Segments.BODY]: {
-      bossKill: Joi.boolean().required(),
-      points: Joi.number().not(0).required(),
-    },
+  validate({
+    body: z.object({
+      bossKill: z.boolean(),
+      points: z.number().refine(v => v !== 0, { message: 'must not be zero' }),
+    }),
   }),
   ensureAuthenticated,
   adaptRoute(finishBountyHuntRunController),

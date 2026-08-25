@@ -1,22 +1,20 @@
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { listLogsController } from '../controllers/list-logs';
 
 const _logsRouter = Router();
 
 _logsRouter.get(
   '/list-logs',
-  celebrate(
-    {
-      [Segments.QUERY]: {
-        playerId: Joi.string().uuid(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    query: z.object({
+      playerId: z.uuid().optional(),
+    }),
+  }),
   adaptRoute(listLogsController),
 );
 

@@ -4,8 +4,11 @@ import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ens
 import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
 import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { createPrivateSaleController } from '../controllers/create-private-sale';
 import { showPlayerBNBBalanceController } from '../controllers/show-player-bnb-balance';
 
@@ -14,20 +17,15 @@ const privateSalesRouter = Router();
 privateSalesRouter.post(
   '/create-private-sale',
   ensureAuthenticated,
-  celebrate(
-    {
-      [Segments.BODY]: {
-        bnbAmount: Joi.number()
-          .required()
-          .min(balanceConfig.bnbAmountMin)
-          .max(balanceConfig.bnbAmountMax),
-        txHash: Joi.string().required().regex(txHashRegExp),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.object({
+      bnbAmount: z
+        .number()
+        .min(balanceConfig.bnbAmountMin)
+        .max(balanceConfig.bnbAmountMax),
+      txHash: z.string().regex(txHashRegExp),
+    }),
+  }),
   adaptMiddleware(ensureWalletMiddleware),
   adaptRoute(createPrivateSaleController),
 );

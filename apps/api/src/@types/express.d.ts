@@ -1,8 +1,11 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-declare namespace Express {
-  export interface Request {
-    player: {
-      id: string;
-    };
+declare global {
+  namespace Express {
+    export interface Request {
+      player: {
+        id: string;
+      };
+    }
   }
 }
+
+export {};

@@ -1,8 +1,11 @@
 import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
 import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
 
-import { celebrate, Joi, Segments } from 'celebrate';
 import { Router } from 'express';
+import { z } from 'zod';
+
+import { validate } from '@shared/infra/http/validation';
+
 import { changeActivePlayerShipController } from '../controllers/change-active-player-ship';
 import { consumeFuelController } from '../controllers/consume-fuel';
 import { listShipsController } from '../controllers/list-ships';
@@ -13,60 +16,45 @@ const shipsRouter = Router();
 shipsRouter.get(
   '/list',
   ensureAuthenticated,
-  celebrate(
-    {
-      [Segments.QUERY]: {
-        playerId: Joi.string().uuid(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    query: z.object({
+      playerId: z.uuid().optional(),
+    }),
+  }),
   adaptRoute(listShipsController),
 );
 
 shipsRouter.get(
   '/list-unique',
   ensureAuthenticated,
-  celebrate(
-    {
-      [Segments.QUERY]: {
-        playerId: Joi.string().uuid(),
-        shipId: Joi.string().uuid().required(),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    query: z.object({
+      playerId: z.uuid().optional(),
+      shipId: z.uuid(),
+    }),
+  }),
   adaptRoute(listUniqueShipController),
 );
 
 shipsRouter.put(
   '/consume-fuel',
   ensureAuthenticated,
-  celebrate(
-    {
-      [Segments.BODY]: {
-        shipId: Joi.string().uuid(),
-        action: Joi.string().valid('Travel', 'BountyHunt'),
-      },
-    },
-    {
-      abortEarly: false,
-    },
-  ),
+  validate({
+    body: z.looseObject({
+        shipId: z.uuid().optional(),
+        action: z.enum(['Travel', 'BountyHunt']).optional(),
+      }),
+  }),
   adaptRoute(consumeFuelController),
 );
 
 shipsRouter.patch(
   '/change-active-ship',
   ensureAuthenticated,
-  celebrate({
-    [Segments.BODY]: {
-      shipId: Joi.string().uuid().required(),
-    },
+  validate({
+    body: z.object({
+      shipId: z.uuid(),
+    }),
   }),
   adaptRoute(changeActivePlayerShipController),
 );

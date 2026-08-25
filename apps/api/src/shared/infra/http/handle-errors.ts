@@ -1,7 +1,7 @@
 import { HttpBodyResponse } from '@shared/core/infra/http-response';
 import { AppError } from '@shared/errors/app-error';
-import { isCelebrateError } from 'celebrate';
 import { NextFunction, Request, Response } from 'express';
+import { ZodError } from 'zod';
 
 export const handleErrors = (
   error: Error,
@@ -20,22 +20,16 @@ export const handleErrors = (
     });
   }
 
-  if (isCelebrateError(error)) {
-    let messages: string[] = [];
-
-    const detailsValues = error.details.values();
-
-    for (const joiError of detailsValues) {
-      messages = joiError.details.map(mapError => {
-        return mapError.message.replace(/"/g, "'");
-      });
-    }
+  if (error instanceof ZodError) {
+    const messages = error.issues.map(issue =>
+      `${issue.path.join('.') || 'body'}: ${issue.message}`.replace(/"/g, "'"),
+    );
 
     const result: HttpBodyResponse = {
       data: null,
       error: {
         messages,
-        name: 'CelebrateError',
+        name: 'ValidationError',
         statusCode: 400,
       },
     };
