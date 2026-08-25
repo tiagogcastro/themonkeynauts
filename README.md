@@ -1,8 +1,8 @@
 # The Monkeynauts 🚀
 
-Jogo espacial play-and-earn (P2E) com naves, tripulações e token $SPC na BSC — restaurado e modernizado como projeto de portfólio.
+Jogo espacial play-and-earn (P2E) com naves, tripulações e token $SPC na BSC , restaurado e modernizado como projeto de portfólio.
 
-> **Monorepo**: `apps/web` (React SPA) · `apps/api` (Express + Prisma) — blockchain opcional via driver `sandbox` (moeda fictícia) ou `rpc` (BSC real).
+> **Monorepo**: `apps/web` (React SPA) · `apps/api` (Express + Prisma) , blockchain opcional via driver `sandbox` (moeda fictícia) ou `rpc` (BSC real).
 
 ## Stack
 
@@ -46,12 +46,12 @@ O contrato oficial SPC na mainnet foi validado: símbolo `SPC`, 18 decimais (~20
 
 ## Arquitetura da API
 
-Clean architecture por módulo — `core/business-logic` (use-cases, tsyringe) → `domain` (entidades/repositórios) → `infra` (Prisma/HTTP). Detalhes em [docs/](docs/):
+Clean architecture por módulo , `core/business-logic` (use-cases, tsyringe) → `domain` (entidades/repositórios) → `infra` (Prisma/HTTP). Detalhes em [docs/](docs/):
 
-- [docs/clean-architecture.md](docs/clean-architecture.md) — Either right/left, DI, providers, validação
-- [docs/game-guide.md](docs/game-guide.md) — entidades, parâmetros e fluxos do jogo
-- [docs/admin-guide.md](docs/admin-guide.md) — painel admin/owner campo a campo
-- [docs/architecture.md](docs/architecture.md) — visão geral e decisões de restauração
+- [docs/clean-architecture.md](docs/clean-architecture.md) , Either right/left, DI, providers, validação
+- [docs/game-guide.md](docs/game-guide.md) , entidades, parâmetros e fluxos do jogo
+- [docs/admin-guide.md](docs/admin-guide.md) , painel admin/owner campo a campo
+- [docs/architecture.md](docs/architecture.md) , visão geral e decisões de restauração
 
 ```
 src/modules/{players,ships,monkeynauts,crews,sales,private-sales,private-p2p,game-params,logs}
@@ -60,7 +60,7 @@ src/shared/{core,domain,infra}
 
 ## Qualidade
 
-- `pnpm --filter api typecheck` — TypeScript estrito, 0 erros
+- `pnpm --filter api typecheck` , TypeScript estrito, 0 erros
 - Smoke test E2E cobrindo as 55 rotas (registro → compra → crews → fuel → bounty → withdraw → admin/owner)
 - Correções de segurança aplicadas sobre o código de 2022 (senha em texto puro no reset, escalação de privilégio, toggle de ban sem persistência)
 
@@ -72,4 +72,8 @@ src/shared/{core,domain,infra}
 - [ ] Docker para web/api além do Postgres
 
 ---
-Projeto original: The Monkeynauts (2022) · Restaurado por [@tiagogcastro](https://tiagogcastro.com.br)
+## Author
+
+Built by [Tiago Gonçalves de Castro](https://github.com/tiagogcastro) · [LinkedIn](https://www.linkedin.com/in/tiagogcastro)
+
+Original project: The Monkeynauts (2022), restored in 2026 as a portfolio case study.
