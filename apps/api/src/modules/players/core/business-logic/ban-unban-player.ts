@@ -2,7 +2,7 @@ import { IPlayer } from '@modules/players/domain/entities/player';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, left, right } from '@shared/core/logic/either';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
-import path from 'node:path';
+import { playerViewPath } from '@shared/helpers/player-view-path';
 import { inject, injectable } from 'tsyringe';
 import { Maybe } from '@shared/core/logic/maybe';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
@@ -51,14 +51,7 @@ class BanUnbanPlayerBusinessLogic {
     await this.mailProvider.sendMail({
       subject: 'You have been banned on our platform',
       template_data: {
-        file: path.resolve(
-          __dirname,
-          '..',
-          '..',
-          'infra',
-          'views',
-          'ban-unban-player-template.hbs',
-        ),
+        file: playerViewPath('ban-unban-player-template.hbs'),
         variables: {
           reason,
         },

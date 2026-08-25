@@ -64,10 +64,14 @@ class PrismaShipsRepository implements IShipsRepository {
       });
 
       if (!ship) {
-        return null;
+        return null as unknown as T extends true
+          ? AsyncMaybe<IShip & { crew: ICrew[] }>
+          : AsyncMaybe<IShip>;
       }
 
-      return parseShip(ship);
+      return parseShip(ship) as unknown as T extends true
+        ? AsyncMaybe<IShip & { crew: ICrew[] }>
+        : AsyncMaybe<IShip>;
     }
 
     const ship = await prisma.ship.findUnique({
@@ -84,7 +88,9 @@ class PrismaShipsRepository implements IShipsRepository {
     });
 
     if (!ship) {
-      return null;
+      return null as unknown as T extends true
+        ? AsyncMaybe<IShip & { crew: ICrew[] }>
+        : AsyncMaybe<IShip>;
     }
 
     const { crew, ...shipRest } = ship;

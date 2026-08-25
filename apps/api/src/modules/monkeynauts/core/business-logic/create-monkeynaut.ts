@@ -170,7 +170,7 @@ class CreateMonkeynautBusinessLogic {
       }
     }
 
-    const _name = name || faker.name.findName();
+    const _name = name || faker.person.fullName();
 
     const bonusDescriptionBaseadRole = {
       Soldier: 'Bounty Hunting Rewards',

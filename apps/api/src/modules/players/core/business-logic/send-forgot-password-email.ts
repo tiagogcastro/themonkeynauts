@@ -5,7 +5,7 @@ import { Either, right } from '@shared/core/logic/either';
 import { IMailProvider } from '@shared/domain/providers/mail-provider';
 import { AppError } from '@shared/errors/app-error';
 import crypto from 'node:crypto';
-import path from 'node:path';
+import { playerViewPath } from '@shared/helpers/player-view-path';
 import { inject, injectable } from 'tsyringe';
 
 type SendForgotPasswordEmailResponse = Either<Error, null>;
@@ -43,14 +43,7 @@ class SendForgotPasswordEmailBusinessLogic {
 
     await this.playerTokensRepository.generate(playerToken);
 
-    const forgotPasswordTemplatePath = path.resolve(
-      __dirname,
-      '..',
-      '..',
-      'infra',
-      'views',
-      'forgot-password-email-template.hbs',
-    );
+    const forgotPasswordTemplatePath = playerViewPath('forgot-password-email-template.hbs');
 
     await this.mailProvider.sendMail({
       to: {
