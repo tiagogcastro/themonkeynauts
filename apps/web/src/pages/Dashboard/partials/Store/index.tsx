@@ -17,7 +17,7 @@ import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useAuth } from '@/hooks';
 import { ethers } from 'ethers';
 import { ApiError } from '@/utils/apiError';
-import { verifyWallet } from '@/utils/wallet';
+import { generateDemoTxHash, hasMetaMask, verifyWallet } from '@/utils/wallet';
 
 type CommonSaleProps = {
   id: string;
@@ -118,8 +118,10 @@ export function StoreTab() {
   async function handleSubmit(event: React.FormEvent, data: MonkeynautSale | ShipSale | PackSale) {
     event.preventDefault();
 
+    const demoMode = !hasMetaMask();
+
     try {
-      if(player) {
+      if (!demoMode && player) {
         await verifyWallet(player.player);
       }
 
@@ -134,7 +136,7 @@ export function StoreTab() {
           packSaleId: data.id,
         },
       }
-  
+
       const dataPost = {
         ...sale[data.saleType]
       }
@@ -158,49 +160,69 @@ export function StoreTab() {
         });
       }
 
-      toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
-        autoClose: 7000,
-        pauseOnHover: true,
-        type: 'info',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
-      
-      toast(`if it doesn't open a popup, check your metamask`, {
-        autoClose: 9000,
-        pauseOnHover: true,
-        type: 'info',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
-        }
-      });
+      let transaction = '';
 
-      const { error, transaction } = await paymentByEthereum({
-        ethereum: (window as any).ethereum,
-        ether: ethers.parseEther(String(data.price)).toString(),
-        dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
-        cryptoType: data.crypto,
-      });
+      if (demoMode) {
+        transaction = generateDemoTxHash();
 
-      if(error.message) {
-        return toast(error.message, {
-          autoClose: 5000,
+        toast(`Demo mode: fictitious transaction ${transaction.slice(0, 14)}... generated`, {
+          autoClose: 7000,
           pauseOnHover: true,
-          type: 'error',
+          type: 'info',
           style: {
             background: COLORS.global.white_0,
-            color: COLORS.global.red_0,
+            color: COLORS.global.black_0,
             fontSize: 14,
             fontFamily: 'Orbitron, sans-serif',
           }
         });
+      } else {
+        toast(`${player?.player.nickname}, please wait for the metamask window to open.`, {
+          autoClose: 7000,
+          pauseOnHover: true,
+          type: 'info',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+
+        toast(`if it doesn't open a popup, check your metamask`, {
+          autoClose: 9000,
+          pauseOnHover: true,
+          type: 'info',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+
+        const payment = await paymentByEthereum({
+          ethereum: (window as any).ethereum,
+          ether: ethers.parseEther(String(data.price)).toString(),
+          dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
+          cryptoType: data.crypto,
+        });
+
+        if (payment.error.message) {
+          return toast(payment.error.message, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'error',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.red_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+        }
+
+        transaction = payment.transaction;
       }
       
       try {

@@ -60,3 +60,23 @@ export async function connectWallet(): Promise<string> {
 
   return account;
 }
+/**
+ * Demo/sandbox helpers: allow the full game loop without a wallet extension.
+ * Used when the API runs with BLOCKCHAIN_DRIVER=sandbox (fictitious currency).
+ */
+export function hasMetaMask(): boolean {
+  return typeof (window as any).ethereum !== 'undefined';
+}
+
+const randomHex = (length: number) =>
+  [...Array(length)]
+    .map(() => Math.floor(Math.random() * 16).toString(16))
+    .join('');
+
+export function generateDemoTxHash(): string {
+  return `0x${randomHex(64)}`;
+}
+
+export function randomDemoAddress(): string {
+  return `0x${randomHex(40)}`;
+}

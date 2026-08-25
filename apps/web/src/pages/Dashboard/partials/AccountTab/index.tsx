@@ -31,7 +31,7 @@ import {
 } from './styles';
 
 import { ApiError } from '@/utils/apiError';
-import { verifyWallet } from '@/utils/wallet';
+import { generateDemoTxHash, hasMetaMask, verifyWallet } from '@/utils/wallet';
 import { baseApi } from '@/services/api';
 
 export type HandleChange = {
@@ -161,86 +161,89 @@ export function AccountTab() {
 
       depositButtonHasBlocked.changeToTrue();
 
-      try {
-        if(player) {
-          await verifyWallet(player.player);
-        }
+      const demoMode = !hasMetaMask();
+      let transaction = '';
+      let paymentError: any;
 
-        const { transaction, error } = await paymentByEthereum({
+      if (!demoMode && player) {
+        await verifyWallet(player.player);
+      }
+
+      if (demoMode) {
+        transaction = generateDemoTxHash();
+
+        toast(`Demo mode: fictitious transaction generated`, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'info',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      } else {
+        const payment = await paymentByEthereum({
           ethereum: (window as any).ethereum,
           ether: ethers.parseEther(inputValue).toString(),
           dataContract: ethereumConfig.deposit.contract.SPC,
           cryptoType: 'SPC',
         });
-    
-        if(error.message) {
-          depositButtonHasBlocked.changeToFalse();
 
-          return toast(error.message, {
+        transaction = payment.transaction;
+        paymentError = payment.error;
+      }
+
+      if(paymentError?.message) {
+        depositButtonHasBlocked.changeToFalse();
+
+        return toast(paymentError.message, {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'error',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.red_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
+        });
+      }
+
+      try {
+        if(transaction) {
+          toast(`Wait for us to confirm the deposit in our database`, {
             autoClose: 5000,
             pauseOnHover: true,
-            type: 'error',
+            type: 'info',
             style: {
               background: COLORS.global.white_0,
-              color: COLORS.global.red_0,
+              color: COLORS.global.black_0,
               fontSize: 14,
               fontFamily: 'Orbitron, sans-serif',
             }
           });
-        }
-
-        try {
-          if(transaction) {
-            toast(`Wait for us to confirm the deposit in our database`, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'info',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.black_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
-            await baseApi.post('/players/deposit-tokens', {
-              txHash: transaction,
-            });
-            
-            toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'success',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.black_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
-
-            setInputValue('');
-          }
-        } catch (error: any) {
-          const apiErrorResponse = ApiError(error);
-
-          apiErrorResponse.messages.map(message => {
-            return toast(message, {
-              autoClose: 5000,
-              pauseOnHover: true,
-              type: 'error',
-              style: {
-                background: COLORS.global.white_0,
-                color: COLORS.global.red_0,
-                fontSize: 14,
-                fontFamily: 'Orbitron, sans-serif',
-              }
-            });
+          await baseApi.post('/players/deposit-tokens', {
+            txHash: transaction,
+            amount: Number(inputValue),
           });
+
+          toast(`${player?.player.nickname}, your ${inputValue} deposit was a success`, {
+            autoClose: 5000,
+            pauseOnHover: true,
+            type: 'success',
+            style: {
+              background: COLORS.global.white_0,
+              color: COLORS.global.black_0,
+              fontSize: 14,
+              fontFamily: 'Orbitron, sans-serif',
+            }
+          });
+
+          setInputValue('');
         }
-
-        depositButtonHasBlocked.changeToFalse();
-
-      } catch(error: any) {
+      } catch (error: any) {
         const apiErrorResponse = ApiError(error);
 
         apiErrorResponse.messages.map(message => {
@@ -256,9 +259,9 @@ export function AccountTab() {
             }
           });
         });
-
-        depositButtonHasBlocked.changeToFalse();
       }
+
+      depositButtonHasBlocked.changeToFalse();
     }
   }
 

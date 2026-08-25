@@ -8,7 +8,7 @@ import {
   Container
 } from './styles';
 import { useAuth } from '@/hooks';
-import { connectWallet } from '@/utils/wallet';
+import { connectWallet, hasMetaMask, randomDemoAddress } from '@/utils/wallet';
 import { ApiError } from '@/utils/apiError';
 
 export type ModalCustomProps = ModalProps;
@@ -21,23 +21,31 @@ export function Wallet({
 
   async function connectMetaMask() {
     try {
-      const account = await connectWallet();
-  
+      // demo/sandbox mode: no extension needed, generate a fictitious wallet
+      const account = hasMetaMask()
+        ? await connectWallet()
+        : randomDemoAddress();
+
       await api.wallet.geral.saveWallet({
         wallet: account
       });
 
-      toast(`Success, you have connected your metamask account in our app.`, {
-        autoClose: 5000,
-        pauseOnHover: true,
-        type: 'success',
-        style: {
-          background: COLORS.global.white_0,
-          color: COLORS.global.black_0,
-          fontSize: 14,
-          fontFamily: 'Orbitron, sans-serif',
+      toast(
+        hasMetaMask()
+          ? `Success, you have connected your metamask account in our app.`
+          : `Demo mode: a fictitious wallet was linked to your account.`,
+        {
+          autoClose: 5000,
+          pauseOnHover: true,
+          type: 'success',
+          style: {
+            background: COLORS.global.white_0,
+            color: COLORS.global.black_0,
+            fontSize: 14,
+            fontFamily: 'Orbitron, sans-serif',
+          }
         }
-      });
+      );
 
       await getPlayer();
 
