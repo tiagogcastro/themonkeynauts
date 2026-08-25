@@ -1,5 +1,5 @@
-import { IShip } from '@modules/ships/domain/entities/ship';
-import { Either, right } from '@shared/core/logic/either';
+import { IShip } from '@/modules/ships/domain/entities/ship';
+import { Either, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 

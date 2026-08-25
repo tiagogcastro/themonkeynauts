@@ -1,14 +1,14 @@
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
-import { PlayerWithoutWalletError } from '@modules/players/core/business-logic/errors/player-without-wallet-error';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { PlayerNotFoundError } from '@/modules/players/core/business-logic/errors/player-not-fount-error';
+import { PlayerWithoutWalletError } from '@/modules/players/core/business-logic/errors/player-without-wallet-error';
 import {
   IPrivateSaleP2P,
   PrivateSaleP2P,
-} from '@modules/private-p2p/domain/entities/private-p2p';
-import { IPrivateSaleP2PRepository } from '@modules/private-p2p/domain/repositories/private-p2p-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
-import { IBlockchainProvider } from '@shared/domain/providers/blockchain-provider';
+} from '@/modules/private-p2p/domain/entities/private-p2p';
+import { IPrivateSaleP2PRepository } from '@/modules/private-p2p/domain/repositories/private-p2p-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { IBlockchainProvider } from '@/shared/domain/providers/blockchain-provider';
 import { inject, injectable } from 'tsyringe';
 
 export type SendPrivateSaleP2PRequestDTO = {

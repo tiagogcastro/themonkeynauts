@@ -1,10 +1,10 @@
-import { SendForgotPasswordEmailBusinessLogic } from '@modules/players/core/business-logic/send-forgot-password-email';
-import { IController } from '@shared/core/infra/controller';
+import { SendForgotPasswordEmailBusinessLogic } from '@/modules/players/core/business-logic/send-forgot-password-email';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 type SendForgotPasswordEmailControllerRequestDTO = {

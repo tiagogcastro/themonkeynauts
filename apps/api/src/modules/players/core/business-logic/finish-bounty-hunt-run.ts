@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
-import { IInitBountyHuntTokenRepository } from '@modules/players/domain/repositories/init-bounty-hunt-token-repository';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
+import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
+import { IInitBountyHuntTokenRepository } from '@/modules/players/domain/repositories/init-bounty-hunt-token-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
 
-import { Either, left, right } from '@shared/core/logic/either';
+import { Either, left, right } from '@/shared/core/logic/either';
 
 import { HandleBountyHuntRankBusinessLogic } from './handle-bounty-hunt-rank';
 

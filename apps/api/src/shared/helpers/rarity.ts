@@ -1,4 +1,4 @@
-import { AppError } from '@shared/errors/app-error';
+import { AppError } from '@/shared/errors/app-error';
 // import BigDecimal from 'js-big-decimal';
 import { getRandomInt } from './get-random-int';
 

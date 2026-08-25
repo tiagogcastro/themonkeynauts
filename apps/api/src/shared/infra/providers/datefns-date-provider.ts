@@ -1,4 +1,4 @@
-import { IDateProvider } from '@shared/domain/providers/date-provider';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
 import {
   addDays,
   addHours,

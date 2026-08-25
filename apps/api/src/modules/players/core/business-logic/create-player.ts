@@ -1,19 +1,19 @@
-import { IPlayer, Player } from '@modules/players/domain/entities/player';
+import { IPlayer, Player } from '@/modules/players/domain/entities/player';
 import {
   IPlayerAuth,
   PlayerAuth,
-} from '@modules/players/domain/entities/player-auth';
-import { Resource } from '@modules/players/domain/entities/resource';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
-import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { CreatePlayerRequestDTO } from '@modules/players/dtos/create-player-request';
-import { Either, right } from '@shared/core/logic/either';
-import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
-import { ITokenProvider } from '@shared/domain/providers/token-provider';
-import { AppError } from '@shared/errors/app-error';
+} from '@/modules/players/domain/entities/player-auth';
+import { Resource } from '@/modules/players/domain/entities/resource';
+import { PlayerRole } from '@/modules/players/domain/enums/player-role';
+import { IAppPlayerAuthRepository } from '@/modules/players/domain/repositories/app-player-auth-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
+import { CreatePlayerRequestDTO } from '@/modules/players/dtos/create-player-request';
+import { Either, right } from '@/shared/core/logic/either';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
+import { IHashProvider } from '@/shared/domain/providers/hash-provider';
+import { ITokenProvider } from '@/shared/domain/providers/token-provider';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
 type CreatePlayerResponse = Either<

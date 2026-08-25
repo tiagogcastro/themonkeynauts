@@ -1,14 +1,14 @@
-import { CreateMonkeynautSaleBusinessLogic } from '@modules/sales/core/business-logic/create-monkeynaut-sale';
-import { CreatePackSaleBusinessLogic } from '@modules/sales/core/business-logic/create-pack-sale';
-import { CreateSaleBusinessLogic } from '@modules/sales/core/business-logic/create-sale';
-import { CreateShipSaleBusinessLogic } from '@modules/sales/core/business-logic/create-ship-sale';
-import { CreateSaleRequestDTO } from '@modules/sales/dtos/create-sale-request';
-import { IController } from '@shared/core/infra/controller';
+import { CreateMonkeynautSaleBusinessLogic } from '@/modules/sales/core/business-logic/create-monkeynaut-sale';
+import { CreatePackSaleBusinessLogic } from '@/modules/sales/core/business-logic/create-pack-sale';
+import { CreateSaleBusinessLogic } from '@/modules/sales/core/business-logic/create-sale';
+import { CreateShipSaleBusinessLogic } from '@/modules/sales/core/business-logic/create-ship-sale';
+import { CreateSaleRequestDTO } from '@/modules/sales/dtos/create-sale-request';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   created,
   HttpResponse,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 

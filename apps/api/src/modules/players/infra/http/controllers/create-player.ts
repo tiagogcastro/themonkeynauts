@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 
-import { CreatePlayerBusinessLogic } from '@modules/players/core/business-logic/create-player';
+import { CreatePlayerBusinessLogic } from '@/modules/players/core/business-logic/create-player';
 import { container } from 'tsyringe';
 import {
   clientError,
   created,
   HttpResponse,
-} from '@shared/core/infra/http-response';
-import { CreatePlayerRequestDTO } from '@modules/players/dtos/create-player-request';
-import { IController } from '@shared/core/infra/controller';
+} from '@/shared/core/infra/http-response';
+import { CreatePlayerRequestDTO } from '@/modules/players/dtos/create-player-request';
+import { IController } from '@/shared/core/infra/controller';
 
 class CreatePlayerController implements IController<CreatePlayerRequestDTO> {
   async handle({

@@ -1,11 +1,11 @@
 import {
   IPlayerAuth,
   PlayerAuth,
-} from '@modules/players/domain/entities/player-auth';
-import { IAppPlayerAuthRepository } from '@modules/players/domain/repositories/app-player-auth-repository';
+} from '@/modules/players/domain/entities/player-auth';
+import { IAppPlayerAuthRepository } from '@/modules/players/domain/repositories/app-player-auth-repository';
 import { PlayerAuth as PrismaPlayerAuth } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parsePlayerAuth = (playerAuth: PrismaPlayerAuth): IPlayerAuth => {
   return new PlayerAuth(playerAuth, {

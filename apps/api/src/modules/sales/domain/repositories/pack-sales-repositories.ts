@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IPackSale } from '../entities/pack-sale';
 
 interface IPackSalesRepository {

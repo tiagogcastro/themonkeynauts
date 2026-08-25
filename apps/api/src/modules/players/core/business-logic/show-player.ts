@@ -1,11 +1,11 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IResource } from '@modules/players/domain/entities/resource';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { AppError } from '@shared/errors/app-error';
-import { Maybe } from '@shared/core/logic/maybe';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IResource } from '@/modules/players/domain/entities/resource';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
+import { AppError } from '@/shared/errors/app-error';
+import { Maybe } from '@/shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
-import { Either, right } from '@shared/core/logic/either';
+import { Either, right } from '@/shared/core/logic/either';
 
 export type ShowPlayerRequestDTO = {
   nickname?: string;

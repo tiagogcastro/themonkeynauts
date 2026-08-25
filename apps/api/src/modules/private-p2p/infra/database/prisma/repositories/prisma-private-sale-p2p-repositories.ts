@@ -1,11 +1,11 @@
 import {
   IPrivateSaleP2P,
   PrivateSaleP2P,
-} from '@modules/private-p2p/domain/entities/private-p2p';
-import { IPrivateSaleP2PRepository } from '@modules/private-p2p/domain/repositories/private-p2p-repositories';
+} from '@/modules/private-p2p/domain/entities/private-p2p';
+import { IPrivateSaleP2PRepository } from '@/modules/private-p2p/domain/repositories/private-p2p-repositories';
 import { PrivateSaleP2P as PrismaPrivateSaleP2P } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parsePrivateSaleP2P = (
   privateSaleP2P: PrismaPrivateSaleP2P,

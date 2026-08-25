@@ -1,5 +1,5 @@
-import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
-import { Either, right } from '@shared/core/logic/either';
+import { IShipSale } from '@/modules/sales/domain/entities/ship-sale';
+import { Either, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IShipSalesRepository } from '../../domain/repositories/ship-sales-repositories';
 

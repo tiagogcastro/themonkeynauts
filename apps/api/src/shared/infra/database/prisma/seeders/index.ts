@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import '@shared/infra/container';
-import { CreatePlayerBusinessLogic } from '@modules/players/core/business-logic/create-player';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import '@/shared/infra/container';
+import { CreatePlayerBusinessLogic } from '@/modules/players/core/business-logic/create-player';
+import { PlayerRole } from '@/modules/players/domain/enums/player-role';
 import { container } from 'tsyringe';
 
 const main = async () => {

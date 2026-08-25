@@ -1,8 +1,8 @@
 /* eslint-disable no-await-in-loop */
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
-import { Either, left, right } from '@shared/core/logic/either';
-import { Maybe } from '@shared/core/logic/maybe';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { SaleCrypto } from '@/modules/sales/domain/enums/sale-crypto';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { Maybe } from '@/shared/core/logic/maybe';
 import {
   ConfirmTransactionDTO,
   ConfirmTransactionResponse,
@@ -14,8 +14,8 @@ import {
   TransferResponse,
   WaitTransactionErrors,
   WaitTxReceiptErrors,
-} from '@shared/domain/providers/blockchain-provider';
-import { delay } from '@shared/helpers/delay';
+} from '@/shared/domain/providers/blockchain-provider';
+import { delay } from '@/shared/helpers/delay';
 import {
   Contract,
   JsonRpcProvider,

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, left, right } from '@shared/core/logic/either';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, left, right } from '@/shared/core/logic/either';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 import { PlayerWithoutWalletError } from './errors/player-without-wallet-error';
 

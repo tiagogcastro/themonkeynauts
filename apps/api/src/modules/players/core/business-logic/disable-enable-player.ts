@@ -1,6 +1,6 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, left, right } from '@shared/core/logic/either';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, left, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 

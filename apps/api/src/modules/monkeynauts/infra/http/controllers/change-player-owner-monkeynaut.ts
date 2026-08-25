@@ -1,17 +1,17 @@
 import { container } from 'tsyringe';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 import {
   ChangePlayerOwnerMonkeynautBusinessLogic,
   ChangePlayerOwnerMonkeynautRequestDTO,
-} from '@modules/monkeynauts/core/business-logic/change-player-owner-monkeynaut';
+} from '@/modules/monkeynauts/core/business-logic/change-player-owner-monkeynaut';
 
 type ChangePlayerOwnerMonkeynautControllerRequestDTO =
   ChangePlayerOwnerMonkeynautRequestDTO & {

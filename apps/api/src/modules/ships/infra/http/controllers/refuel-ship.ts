@@ -3,12 +3,12 @@ import { container } from 'tsyringe';
 import {
   RefuelShipBusinessLogic,
   RefuelShipRequestDTO,
-} from '@modules/ships/core/business-logic/refuel-ship';
+} from '@/modules/ships/core/business-logic/refuel-ship';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 type RefuelShipControllerRequestDTO = RefuelShipRequestDTO & {
   player: {

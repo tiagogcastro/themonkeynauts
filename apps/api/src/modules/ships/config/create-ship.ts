@@ -1,4 +1,4 @@
-import { rarity } from '@shared/helpers';
+import { rarity } from '@/shared/helpers';
 
 const percentage = 100 / 3;
 

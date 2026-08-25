@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IPlayerAuth } from '../entities/player-auth';
 
 export interface IAppPlayerAuthRepository {

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
 import {
   ConfirmTransactionDTO,
   ConfirmTransactionResponse,
@@ -10,7 +10,7 @@ import {
   SendTransactionResponse,
   TransferDTO,
   TransferResponse,
-} from '@shared/domain/providers/blockchain-provider';
+} from '@/shared/domain/providers/blockchain-provider';
 import { randomBytes } from 'node:crypto';
 import { inject, injectable } from 'tsyringe';
 import { TransactionCarriedOutError } from './errors/transaction-carried-out-error';

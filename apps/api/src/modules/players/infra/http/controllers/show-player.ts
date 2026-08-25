@@ -1,14 +1,14 @@
 import {
   ShowPlayerBusinessLogic,
   ShowPlayerRequestDTO,
-} from '@modules/players/core/business-logic/show-player';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/players/core/business-logic/show-player';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import { container } from 'tsyringe';
 
 type ShowPlayerControllerRequestDTO = ShowPlayerRequestDTO & {

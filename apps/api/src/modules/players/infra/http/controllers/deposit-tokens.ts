@@ -1,22 +1,22 @@
 import { container } from 'tsyringe';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   conflict,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import {
   DepositTokensBusinessLogic,
   DepositTokensRequestDTO,
-} from '@modules/players/core/business-logic/deposit-tokens';
-import { InvalidTransactionToError } from '@shared/infra/providers/errors/invalid-transaction-to-error';
-import { InvalidTransactionFromError } from '@shared/infra/providers/errors/invalid-transaction-from-error';
-import { InvalidPrivateKeyError } from '@shared/infra/providers/errors/invalid-private-key-error';
+} from '@/modules/players/core/business-logic/deposit-tokens';
+import { InvalidTransactionToError } from '@/shared/infra/providers/errors/invalid-transaction-to-error';
+import { InvalidTransactionFromError } from '@/shared/infra/providers/errors/invalid-transaction-from-error';
+import { InvalidPrivateKeyError } from '@/shared/infra/providers/errors/invalid-private-key-error';
 
 type DepositTokensControllerRequestDTO = DepositTokensRequestDTO & {
   player: {

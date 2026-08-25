@@ -1,5 +1,5 @@
-import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
-import { Either, right } from '@shared/core/logic/either';
+import { IPackSale } from '@/modules/sales/domain/entities/pack-sale';
+import { Either, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IPackSalesRepository } from '../../domain/repositories/pack-sales-repositories';
 

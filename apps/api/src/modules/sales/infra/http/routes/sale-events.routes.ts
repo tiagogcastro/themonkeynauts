@@ -1,12 +1,12 @@
-import { txHashRegExp } from '@config/regexp';
-import { ensureAuthenticated } from '@modules/players/infra/http/middlewares/ensure-authenticated';
-import { ensureWalletMiddleware } from '@modules/players/infra/http/middlewares/ensure-wallet';
-import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
-import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+import { txHashRegExp } from '@/config/regexp';
+import { ensureAuthenticated } from '@/modules/players/infra/http/middlewares/ensure-authenticated';
+import { ensureWalletMiddleware } from '@/modules/players/infra/http/middlewares/ensure-wallet';
+import { adaptMiddleware } from '@/shared/core/infra/adapters/express-middleware-adapter';
+import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { validate } from '@shared/infra/http/validation';
+import { validate } from '@/shared/infra/http/validation';
 
 import { buySaleItemController } from '../controllers/buy-sale-item';
 import { canBuySaleItemController } from '../controllers/can-buy-sale-item';

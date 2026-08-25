@@ -1,11 +1,11 @@
-import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
-import { IShip } from '@modules/ships/domain/entities/ship';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { AppError } from '@shared/errors/app-error';
-import { Maybe } from '@shared/core/logic/maybe';
+import { IMonkeynaut } from '@/modules/monkeynauts/domain/entities/monkeynaut';
+import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IShip } from '@/modules/ships/domain/entities/ship';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
+import { AppError } from '@/shared/errors/app-error';
+import { Maybe } from '@/shared/core/logic/maybe';
 import { inject, injectable } from 'tsyringe';
-import { Either, right } from '@shared/core/logic/either';
+import { Either, right } from '@/shared/core/logic/either';
 import { ICrewsRepository } from '../../domain/repositories/crews-repositories';
 
 export type ListCrewsRequestDTO = {

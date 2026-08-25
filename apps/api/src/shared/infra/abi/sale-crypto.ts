@@ -1,4 +1,4 @@
-import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
+import { SaleCrypto } from '@/modules/sales/domain/enums/sale-crypto';
 
 export const abis: Record<SaleCrypto, any> = {
   BNB: [

@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { Commons } from '@shared/types/commons';
+import { Commons } from '@/shared/types/commons';
 
 export type ResourceItems = {
   spc: number;

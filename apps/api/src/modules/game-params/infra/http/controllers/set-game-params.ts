@@ -1,13 +1,13 @@
 import {
   SetGameParamsBusinessLogic,
   SetGameParamsRequestDTO,
-} from '@modules/game-params/core/business-logic/set-game-params';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/game-params/core/business-logic/set-game-params';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 type SetGameParamsControllerRequestDTO = SetGameParamsRequestDTO & {

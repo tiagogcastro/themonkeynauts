@@ -1,5 +1,5 @@
-import { HttpBodyResponse } from '@shared/core/infra/http-response';
-import { AppError } from '@shared/errors/app-error';
+import { HttpBodyResponse } from '@/shared/core/infra/http-response';
+import { AppError } from '@/shared/errors/app-error';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 

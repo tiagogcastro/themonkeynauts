@@ -1,10 +1,10 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, left, right } from '@shared/core/logic/either';
-import { IMailProvider } from '@shared/domain/providers/mail-provider';
-import { playerViewPath } from '@shared/helpers/player-view-path';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { IMailProvider } from '@/shared/domain/providers/mail-provider';
+import { playerViewPath } from '@/shared/helpers/player-view-path';
 import { inject, injectable } from 'tsyringe';
-import { Maybe } from '@shared/core/logic/maybe';
+import { Maybe } from '@/shared/core/logic/maybe';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 
 type BanUnbanPlayerResponse = Either<PlayerNotFoundError, IPlayer>;

@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IPackSale, PackSale } from '@modules/sales/domain/entities/pack-sale';
-import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
-import { CreatePackSaleRequestDTO } from '@modules/sales/dtos/create-pack-sale-request';
-import { AppError } from '@shared/errors/app-error';
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { IPackSale, PackSale } from '@/modules/sales/domain/entities/pack-sale';
+import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
+import { CreatePackSaleRequestDTO } from '@/modules/sales/dtos/create-pack-sale-request';
+import { AppError } from '@/shared/errors/app-error';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
 
 @injectable()
 class CreatePackSaleBusinessLogic {

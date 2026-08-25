@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IPrivateSaleP2P } from '../entities/private-p2p';
 
 interface IPrivateSaleP2PRepository {

@@ -1,15 +1,15 @@
 import {
   DisableEnablePlayerBusinessLogic,
   DisableEnablePlayerRequestDTO,
-} from '@modules/players/core/business-logic/disable-enable-player';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/players/core/business-logic/disable-enable-player';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import { container } from 'tsyringe';
 
 type DisableEnablePlayerControllerRequestDTO = DisableEnablePlayerRequestDTO & {

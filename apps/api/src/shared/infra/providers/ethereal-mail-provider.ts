@@ -1,8 +1,8 @@
 import {
   IMailProvider,
   SendMailDTO,
-} from '@shared/domain/providers/mail-provider';
-import { IMailTemplateProvider } from '@shared/domain/providers/mail-template-provider';
+} from '@/shared/domain/providers/mail-provider';
+import { IMailTemplateProvider } from '@/shared/domain/providers/mail-template-provider';
 import {
   createTestAccount,
   createTransport,
@@ -10,7 +10,7 @@ import {
   Transporter,
 } from 'nodemailer';
 import { inject, injectable } from 'tsyringe';
-import { mailConfig } from '../../../config/mail';
+import { mailConfig } from '@/config/mail';
 
 @injectable()
 export class EtherealMailProvider implements IMailProvider {

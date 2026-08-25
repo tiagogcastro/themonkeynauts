@@ -1,4 +1,4 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
+import { IPlayer } from '@/modules/players/domain/entities/player';
 
 type Player = Omit<IPlayer, 'password'>;
 

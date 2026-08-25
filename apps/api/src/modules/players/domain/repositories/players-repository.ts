@@ -1,5 +1,5 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 interface IPlayersRepository {
   findByEmail(email: string): AsyncMaybe<IPlayer>;

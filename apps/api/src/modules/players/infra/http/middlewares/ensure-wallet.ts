@@ -1,10 +1,10 @@
-import { EnsureWalletBusinessLogic } from '@modules/players/core/business-logic/ensure-wallet';
+import { EnsureWalletBusinessLogic } from '@/modules/players/core/business-logic/ensure-wallet';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { IMiddleware } from '@shared/core/infra/middleware';
+} from '@/shared/core/infra/http-response';
+import { IMiddleware } from '@/shared/core/infra/middleware';
 
 import { container } from 'tsyringe';
 

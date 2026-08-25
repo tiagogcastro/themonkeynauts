@@ -1,4 +1,4 @@
-import { getPercentageInt, rarity } from '@shared/helpers';
+import { getPercentageInt, rarity } from '@/shared/helpers';
 
 type AttributesBase = {
   baseHealth: number;

@@ -2,11 +2,11 @@ import {
   IMonkeynautSale,
   MonkeynautSale,
   MonkeynautSalePropsOmittedCommons,
-} from '@modules/sales/domain/entities/monkeynaut-sale';
-import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
+} from '@/modules/sales/domain/entities/monkeynaut-sale';
+import { IMonkeynautSalesRepository } from '@/modules/sales/domain/repositories/monkeynaut-sales-repositories';
 import { MonkeynautSale as PrismaMonkeynautSale } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parseMonkeynautSale = (
   monkeynautsale: PrismaMonkeynautSale,

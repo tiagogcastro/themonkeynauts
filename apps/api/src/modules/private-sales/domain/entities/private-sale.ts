@@ -1,4 +1,4 @@
-import { Commons } from '@shared/types/commons';
+import { Commons } from '@/shared/types/commons';
 import crypto from 'node:crypto';
 
 type PrivateSalePropsOmittedCommons = {

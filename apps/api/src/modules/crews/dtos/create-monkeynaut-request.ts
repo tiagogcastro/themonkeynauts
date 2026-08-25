@@ -1,7 +1,7 @@
 import {
   MonkeynautRank,
   MonkeynautRole,
-} from '@modules/monkeynauts/domain/enums';
+} from '@/modules/monkeynauts/domain/enums';
 
 type CreateMonkeynautRequestDTO = {
   bonusDescription?: string;

@@ -1,13 +1,13 @@
 import { container } from 'tsyringe';
 
-import { UpdateMonkeynautRequestDTO } from '@modules/crews/dtos/update-monkeynaut-request';
-import { UpdateMonkeynautBusinessLogic } from '@modules/monkeynauts/core/business-logic/update-monkeynaut';
-import { IController } from '@shared/core/infra/controller';
+import { UpdateMonkeynautRequestDTO } from '@/modules/crews/dtos/update-monkeynaut-request';
+import { UpdateMonkeynautBusinessLogic } from '@/modules/monkeynauts/core/business-logic/update-monkeynaut';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 class UpdateMonkeynautController
   implements IController<UpdateMonkeynautRequestDTO>

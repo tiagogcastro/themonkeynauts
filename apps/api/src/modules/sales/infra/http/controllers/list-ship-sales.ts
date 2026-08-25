@@ -2,13 +2,13 @@ import {
   ListShipSalesBusinesslogic,
   ListShipSalesRequestDTO,
   SaleAction,
-} from '@modules/sales/core/business-logic/list-ship-sales';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/sales/core/business-logic/list-ship-sales';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 

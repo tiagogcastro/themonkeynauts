@@ -1,17 +1,17 @@
-import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { IShip, Ship } from '@/modules/ships/domain/entities/ship';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
 import {
   Ship as PrismaShip,
   Monkeynaut as PrismaMonkeynaut,
 } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
-import { parseCrew } from '@modules/crews/infra/database/prisma/repositories/prisma-crews-repositories';
-import { ICrew } from '@modules/crews/domain/entities/crew';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
+import { parseCrew } from '@/modules/crews/infra/database/prisma/repositories/prisma-crews-repositories';
+import { ICrew } from '@/modules/crews/domain/entities/crew';
 import {
   IMonkeynaut,
   Monkeynaut,
-} from '@modules/monkeynauts/domain/entities/monkeynaut';
+} from '@/modules/monkeynauts/domain/entities/monkeynaut';
 
 const parseShip = (ship: PrismaShip): IShip => {
   return new Ship(ship, {

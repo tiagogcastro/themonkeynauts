@@ -1,10 +1,10 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { Either, left, right } from '@shared/core/logic/either';
-import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+import { IShip, Ship } from '@/modules/ships/domain/entities/ship';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
 
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 

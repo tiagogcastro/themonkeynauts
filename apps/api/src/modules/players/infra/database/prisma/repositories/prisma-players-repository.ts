@@ -1,8 +1,8 @@
-import { IPlayer, Player } from '@modules/players/domain/entities/player';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { IPlayer, Player } from '@/modules/players/domain/entities/player';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import { Player as PrismaPlayer } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parsePlayer = (player: PrismaPlayer): IPlayer => {
   return new Player(player as Player, {

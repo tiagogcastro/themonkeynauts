@@ -1,10 +1,10 @@
-import { ShowPlayerBNBBalanceBusinessLogic } from '@modules/private-sales/core/business-logic/show-player-bnb-balance';
-import { IController } from '@shared/core/infra/controller';
+import { ShowPlayerBNBBalanceBusinessLogic } from '@/modules/private-sales/core/business-logic/show-player-bnb-balance';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { Response } from 'express';
 import { container } from 'tsyringe';
 

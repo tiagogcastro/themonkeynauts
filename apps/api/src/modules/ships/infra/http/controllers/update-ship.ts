@@ -3,12 +3,12 @@ import { container } from 'tsyringe';
 import {
   UpdateShipBusinessLogic,
   UpdateShipRequestDTO,
-} from '@modules/ships/core/business-logic/update-ship';
+} from '@/modules/ships/core/business-logic/update-ship';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 class UpdateShipController {
   async handle(data: UpdateShipRequestDTO): Promise<HttpResponse> {

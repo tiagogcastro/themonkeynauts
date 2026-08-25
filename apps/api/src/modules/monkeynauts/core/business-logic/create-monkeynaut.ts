@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { inject, injectable } from 'tsyringe';
 
-import { getRandomInt } from '@shared/helpers';
+import { getRandomInt } from '@/shared/helpers';
 
 import {
   IMonkeynaut,
   Monkeynaut,
-} from '@modules/monkeynauts/domain/entities/monkeynaut';
+} from '@/modules/monkeynauts/domain/entities/monkeynaut';
 
 import {
   getAttributesByBase,
@@ -16,18 +16,18 @@ import {
   getRoleByRarity,
   getRoleSchema,
   ranksPercentageToBonus,
-} from '@modules/monkeynauts/config/create-monkeynaut';
+} from '@/modules/monkeynauts/config/create-monkeynaut';
 
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 
-import { AppError } from '@shared/errors/app-error';
+import { AppError } from '@/shared/errors/app-error';
 
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { CommomsMonkeynautProps } from '@modules/monkeynauts/dtos/commons-monkeynaut-props';
-import { InvalidMonkeynautShipQuantityError } from '@modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { CommomsMonkeynautProps } from '@/modules/monkeynauts/dtos/commons-monkeynaut-props';
+import { InvalidMonkeynautShipQuantityError } from '@/modules/sales/core/business-logic/errors/invalid-monkeynaut-ship-quantity-error';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 export type CreateMonkeynautRequestDTO = CommomsMonkeynautProps & {

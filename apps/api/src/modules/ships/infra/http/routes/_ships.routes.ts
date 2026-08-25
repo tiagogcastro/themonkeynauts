@@ -1,8 +1,8 @@
-import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { validate } from '@shared/infra/http/validation';
+import { validate } from '@/shared/infra/http/validation';
 
 import { createShipController } from '../controllers/create-ship';
 import { updateShipController } from '../controllers/update-ship';

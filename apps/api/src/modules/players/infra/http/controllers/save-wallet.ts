@@ -1,13 +1,13 @@
 import {
   SaveWalletBusinessLogic,
   SaveWalletRequestDTO,
-} from '@modules/players/core/business-logic/save-wallet';
+} from '@/modules/players/core/business-logic/save-wallet';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import { container } from 'tsyringe';
 
 type SaveWalletControllerRequestDTO = SaveWalletRequestDTO & {

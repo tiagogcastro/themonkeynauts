@@ -3,12 +3,12 @@ import { container } from 'tsyringe';
 import {
   ListUniqueShipBusinessLogic,
   ListUniqueShipRequestDTO,
-} from '@modules/ships/core/business-logic/list-unique-ship';
+} from '@/modules/ships/core/business-logic/list-unique-ship';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 type RequestQuery = {
   shipId: string;

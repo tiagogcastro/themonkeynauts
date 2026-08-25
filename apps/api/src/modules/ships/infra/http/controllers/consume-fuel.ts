@@ -3,14 +3,14 @@ import { container } from 'tsyringe';
 import {
   ConsumeFuelBusinessLogic,
   ConsumeFuelRequestDTO,
-} from '@modules/ships/core/business-logic/consume-fuel';
+} from '@/modules/ships/core/business-logic/consume-fuel';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 type ConsumeFuelControllerRequestDTO = ConsumeFuelRequestDTO & {
   player: {

@@ -1,10 +1,10 @@
-import { ListMonkeynautsBusinessLogic } from '@modules/monkeynauts/core/business-logic/list-monkeynauts';
-import { IController } from '@shared/core/infra/controller';
+import { ListMonkeynautsBusinessLogic } from '@/modules/monkeynauts/core/business-logic/list-monkeynauts';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 type ListMonkeynautsDTO = {

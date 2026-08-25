@@ -1,11 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IShipSale, ShipSale } from '@modules/sales/domain/entities/ship-sale';
-import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
-import { CreateShipSaleRequestDTO } from '@modules/sales/dtos/create-ship-sale-request';
-import { AppError } from '@shared/errors/app-error';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { Log } from '@modules/logs/domain/entities/log';
+import { IShipSale, ShipSale } from '@/modules/sales/domain/entities/ship-sale';
+import { IShipSalesRepository } from '@/modules/sales/domain/repositories/ship-sales-repositories';
+import { CreateShipSaleRequestDTO } from '@/modules/sales/dtos/create-ship-sale-request';
+import { AppError } from '@/shared/errors/app-error';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { Log } from '@/modules/logs/domain/entities/log';
 
 @injectable()
 class CreateShipSaleBusinessLogic {

@@ -1,10 +1,10 @@
-import { ListLogsBusinessLogic } from '@modules/logs/core/business-logic/list-logs';
-import { IController } from '@shared/core/infra/controller';
+import { ListLogsBusinessLogic } from '@/modules/logs/core/business-logic/list-logs';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 type ListLogsControllerRequestDTO = {

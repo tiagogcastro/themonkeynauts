@@ -1,7 +1,7 @@
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IShip } from '@modules/ships/domain/entities/ship';
-import { Either, right } from '@shared/core/logic/either';
-import { AppError } from '@shared/errors/app-error';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IShip } from '@/modules/ships/domain/entities/ship';
+import { Either, right } from '@/shared/core/logic/either';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 

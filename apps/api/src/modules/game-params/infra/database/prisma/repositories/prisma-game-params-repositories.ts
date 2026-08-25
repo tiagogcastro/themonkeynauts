@@ -1,11 +1,11 @@
 import { GameParam as PrismaGameParam } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import {
   GameParam,
   IGameParam,
-} from '@modules/game-params/domain/entities/game-param';
-import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+} from '@/modules/game-params/domain/entities/game-param';
+import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
 
 export const parseGameParam = (gameParam: PrismaGameParam): IGameParam => {
   return new GameParam(gameParam, {

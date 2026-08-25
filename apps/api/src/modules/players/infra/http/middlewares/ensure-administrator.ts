@@ -1,13 +1,13 @@
-import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import { PlayerNotFoundError } from '@/modules/players/core/business-logic/errors/player-not-fount-error';
+import { PlayerRole } from '@/modules/players/domain/enums/player-role';
 import {
   forbidden,
   HttpResponse,
   ok,
   unauthorized,
-} from '@shared/core/infra/http-response';
-import { IMiddleware } from '@shared/core/infra/middleware';
-import { prisma } from '@shared/infra/database/prisma/client';
+} from '@/shared/core/infra/http-response';
+import { IMiddleware } from '@/shared/core/infra/middleware';
+import { prisma } from '@/shared/infra/database/prisma/client';
 import { InvalidAdminError } from './errors/invalid-admin-error';
 
 type EnsureAdministratorMiddlewareRequestDTO = {

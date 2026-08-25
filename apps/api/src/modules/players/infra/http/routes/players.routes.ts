@@ -1,11 +1,11 @@
-import { passwordRegExp, txHashRegExp } from '@config/regexp';
-import { adaptMiddleware } from '@shared/core/infra/adapters/express-middleware-adapter';
-import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
-import { balanceConfig } from '@config/balance';
+import { passwordRegExp, txHashRegExp } from '@/config/regexp';
+import { adaptMiddleware } from '@/shared/core/infra/adapters/express-middleware-adapter';
+import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
+import { balanceConfig } from '@/config/balance';
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { validate } from '@shared/infra/http/validation';
+import { validate } from '@/shared/infra/http/validation';
 
 import { createPlayerController } from '../controllers/create-player';
 import { depositTokensController } from '../controllers/deposit-tokens';

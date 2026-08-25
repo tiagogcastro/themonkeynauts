@@ -2,11 +2,11 @@ import {
   IPackSale,
   PackSale,
   PackSalePropsOmittedCommons,
-} from '@modules/sales/domain/entities/pack-sale';
-import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
+} from '@/modules/sales/domain/entities/pack-sale';
+import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
 import { PackSale as PrismaPackSale } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parsePackSale = (packSale: PrismaPackSale): IPackSale => {
   return new PackSale(packSale as PackSalePropsOmittedCommons, {

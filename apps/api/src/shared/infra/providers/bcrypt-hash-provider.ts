@@ -1,4 +1,4 @@
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
+import { IHashProvider } from '@/shared/domain/providers/hash-provider';
 import { compare, compareSync, hash } from 'bcryptjs';
 
 class BCryptHashProvider implements IHashProvider {

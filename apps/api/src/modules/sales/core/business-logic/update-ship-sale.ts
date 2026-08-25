@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IShipSale, ShipSale } from '@modules/sales/domain/entities/ship-sale';
-import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
-import { AppError } from '@shared/errors/app-error';
-import { UpdateShipSaleRequestDTO } from '@modules/sales/dtos/update-ship-sale-request';
+import { IShipSale, ShipSale } from '@/modules/sales/domain/entities/ship-sale';
+import { IShipSalesRepository } from '@/modules/sales/domain/repositories/ship-sales-repositories';
+import { AppError } from '@/shared/errors/app-error';
+import { UpdateShipSaleRequestDTO } from '@/modules/sales/dtos/update-ship-sale-request';
 
 @injectable()
 class UpdateShipSaleBusinessLogic {

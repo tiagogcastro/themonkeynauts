@@ -1,5 +1,5 @@
-import { ILog } from '@modules/logs/domain/entities/log';
-import { Either, right } from '@shared/core/logic/either';
+import { ILog } from '@/modules/logs/domain/entities/log';
+import { Either, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { ILogsRepository } from '../../domain/repositories/logs-repositories';
 

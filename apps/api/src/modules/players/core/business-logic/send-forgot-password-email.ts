@@ -1,11 +1,11 @@
-import { PlayerToken } from '@modules/players/domain/entities/player-token';
-import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, right } from '@shared/core/logic/either';
-import { IMailProvider } from '@shared/domain/providers/mail-provider';
-import { AppError } from '@shared/errors/app-error';
+import { PlayerToken } from '@/modules/players/domain/entities/player-token';
+import { IPlayerTokensRepository } from '@/modules/players/domain/repositories/player-tokens-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, right } from '@/shared/core/logic/either';
+import { IMailProvider } from '@/shared/domain/providers/mail-provider';
+import { AppError } from '@/shared/errors/app-error';
 import crypto from 'node:crypto';
-import { playerViewPath } from '@shared/helpers/player-view-path';
+import { playerViewPath } from '@/shared/helpers/player-view-path';
 import { inject, injectable } from 'tsyringe';
 
 type SendForgotPasswordEmailResponse = Either<Error, null>;

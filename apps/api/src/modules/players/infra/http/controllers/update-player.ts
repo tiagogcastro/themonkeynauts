@@ -1,14 +1,14 @@
 import {
   UpdatePlayerBusinessLogic,
   UpdatePlayerRequestDTO,
-} from '@modules/players/core/business-logic/update-player';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/players/core/business-logic/update-player';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 

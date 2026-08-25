@@ -1,16 +1,16 @@
 import { container } from 'tsyringe';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import {
   CreateAirDropNftBusinessLogic,
   CreateAirDropNftRequestDTO,
-} from '@modules/sales/core/business-logic/create-air-drop-nft';
+} from '@/modules/sales/core/business-logic/create-air-drop-nft';
 
 class CreateAirDropNftPlayerController
   implements IController<CreateAirDropNftRequestDTO>

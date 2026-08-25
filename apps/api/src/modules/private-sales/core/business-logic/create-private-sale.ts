@@ -1,20 +1,20 @@
-import { balanceConfig } from '@config/balance';
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { balanceConfig } from '@/config/balance';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import {
   IPrivateSale,
   PrivateSale,
-} from '@modules/private-sales/domain/entities/private-sale';
-import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
-import { Either, left, right } from '@shared/core/logic/either';
-import { Maybe } from '@shared/core/logic/maybe';
+} from '@/modules/private-sales/domain/entities/private-sale';
+import { SaleCrypto } from '@/modules/sales/domain/enums/sale-crypto';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { Maybe } from '@/shared/core/logic/maybe';
 import {
   ConfirmTransactionErrors,
   IBlockchainProvider,
-} from '@shared/domain/providers/blockchain-provider';
-import { AppError } from '@shared/errors/app-error';
+} from '@/shared/domain/providers/blockchain-provider';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IPrivateSalesRepository } from '../../domain/repositories/private-sales-repositories';
 

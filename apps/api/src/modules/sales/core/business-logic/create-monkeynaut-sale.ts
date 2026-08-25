@@ -3,12 +3,12 @@ import { inject, injectable } from 'tsyringe';
 import {
   IMonkeynautSale,
   MonkeynautSale,
-} from '@modules/sales/domain/entities/monkeynaut-sale';
-import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
-import { CreateMonkeynautSaleRequestDTO } from '@modules/sales/dtos/create-monkeynaut-sale-request';
-import { AppError } from '@shared/errors/app-error';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { Log } from '@modules/logs/domain/entities/log';
+} from '@/modules/sales/domain/entities/monkeynaut-sale';
+import { IMonkeynautSalesRepository } from '@/modules/sales/domain/repositories/monkeynaut-sales-repositories';
+import { CreateMonkeynautSaleRequestDTO } from '@/modules/sales/dtos/create-monkeynaut-sale-request';
+import { AppError } from '@/shared/errors/app-error';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { Log } from '@/modules/logs/domain/entities/log';
 
 @injectable()
 class CreateMonkeynautSaleBusinessLogic {

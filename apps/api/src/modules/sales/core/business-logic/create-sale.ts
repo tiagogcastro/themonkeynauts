@@ -1,16 +1,16 @@
 import { inject, injectable } from 'tsyringe';
 
-import { CreateSaleRequestDTO } from '@modules/sales/dtos/create-sale-request';
+import { CreateSaleRequestDTO } from '@/modules/sales/dtos/create-sale-request';
 
-import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { AppError } from '@shared/errors/app-error';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
+import { AppError } from '@/shared/errors/app-error';
 
-import { IMonkeynautSale } from '@modules/sales/domain/entities/monkeynaut-sale';
-import { IPackSale } from '@modules/sales/domain/entities/pack-sale';
-import { IShipSale } from '@modules/sales/domain/entities/ship-sale';
-import { PackType } from '@modules/sales/domain/enums/pack-type';
-import { Either, right } from '@shared/core/logic/either';
-import { Maybe } from '@shared/core/logic/maybe';
+import { IMonkeynautSale } from '@/modules/sales/domain/entities/monkeynaut-sale';
+import { IPackSale } from '@/modules/sales/domain/entities/pack-sale';
+import { IShipSale } from '@/modules/sales/domain/entities/ship-sale';
+import { PackType } from '@/modules/sales/domain/enums/pack-type';
+import { Either, right } from '@/shared/core/logic/either';
+import { Maybe } from '@/shared/core/logic/maybe';
 
 type CreateSaleResponse = Either<
   Error,

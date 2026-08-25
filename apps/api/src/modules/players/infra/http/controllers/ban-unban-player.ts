@@ -3,15 +3,15 @@ import { container } from 'tsyringe';
 import {
   BanUnbanPlayerBusinessLogic,
   BanUnbanPlayerRequestDTO,
-} from '@modules/players/core/business-logic/ban-unban-player';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/players/core/business-logic/ban-unban-player';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 
 class BanUnbanPlayerController
   implements IController<BanUnbanPlayerRequestDTO>

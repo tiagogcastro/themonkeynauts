@@ -1,8 +1,8 @@
-import { ICrew, Crew } from '@modules/crews/domain/entities/crew';
-import { ICrewsRepository } from '@modules/crews/domain/repositories/crews-repositories';
+import { ICrew, Crew } from '@/modules/crews/domain/entities/crew';
+import { ICrewsRepository } from '@/modules/crews/domain/repositories/crews-repositories';
 import { Crew as PrismaCrew } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 export const parseCrew = (crew: PrismaCrew): ICrew => {
   return new Crew(crew, {

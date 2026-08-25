@@ -1,16 +1,16 @@
 import { container } from 'tsyringe';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   created,
   HttpResponse,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 import {
   CreateMonkeynautBusinessLogic,
   CreateMonkeynautRequestDTO,
-} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
+} from '@/modules/monkeynauts/core/business-logic/create-monkeynaut';
 
 class CreateMonkeynautController
   implements IController<CreateMonkeynautRequestDTO>

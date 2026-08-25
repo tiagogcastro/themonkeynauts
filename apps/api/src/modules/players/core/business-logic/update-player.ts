@@ -1,8 +1,8 @@
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, right } from '@shared/core/logic/either';
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
-import { AppError } from '@shared/errors/app-error';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, right } from '@/shared/core/logic/either';
+import { IHashProvider } from '@/shared/domain/providers/hash-provider';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 
 export type UpdatePlayerRequestDTO = {

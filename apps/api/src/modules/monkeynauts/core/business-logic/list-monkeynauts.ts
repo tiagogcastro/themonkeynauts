@@ -1,5 +1,5 @@
-import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
-import { Either, right } from '@shared/core/logic/either';
+import { IMonkeynaut } from '@/modules/monkeynauts/domain/entities/monkeynaut';
+import { Either, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 

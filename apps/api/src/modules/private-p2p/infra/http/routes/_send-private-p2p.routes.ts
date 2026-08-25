@@ -1,9 +1,9 @@
-import { txHashRegExp } from '@config/regexp';
-import { adaptRoute } from '@shared/core/infra/adapters/express-route-adapter';
+import { txHashRegExp } from '@/config/regexp';
+import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { validate } from '@shared/infra/http/validation';
+import { validate } from '@/shared/infra/http/validation';
 
 import { sendPrivateP2PController } from '../controllers/send-private-p2p';
 

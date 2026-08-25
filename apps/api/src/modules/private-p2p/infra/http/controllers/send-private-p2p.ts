@@ -1,13 +1,13 @@
 import {
   SendPrivateSaleP2PBusinessLogic,
   SendPrivateSaleP2PRequestDTO,
-} from '@modules/private-p2p/core/business-logic/send-private-p2p';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/private-p2p/core/business-logic/send-private-p2p';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 type SendPrivateP2PControllerRequestDTO = SendPrivateSaleP2PRequestDTO & {

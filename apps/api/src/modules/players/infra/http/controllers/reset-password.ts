@@ -1,11 +1,11 @@
-import { ResetPasswordBusinessLogic } from '@modules/players/core/business-logic/reset-password';
-import { ResetPasswordRequestDTO } from '@modules/players/dtos/reset-password-request';
-import { IController } from '@shared/core/infra/controller';
+import { ResetPasswordBusinessLogic } from '@/modules/players/core/business-logic/reset-password';
+import { ResetPasswordRequestDTO } from '@/modules/players/dtos/reset-password-request';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 class ResetPasswordController implements IController<ResetPasswordRequestDTO> {

@@ -3,12 +3,12 @@ import { container } from 'tsyringe';
 import {
   ListShipsBusinessLogic,
   ListShipsRequestDTO,
-} from '@modules/ships/core/business-logic/list-ships';
+} from '@/modules/ships/core/business-logic/list-ships';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 class ListShipsController {
   async handle(data: ListShipsRequestDTO): Promise<HttpResponse> {

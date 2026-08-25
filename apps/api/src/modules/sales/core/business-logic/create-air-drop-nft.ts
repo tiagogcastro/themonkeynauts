@@ -1,42 +1,42 @@
 import { inject, injectable } from 'tsyringe';
 
-import { Either, left, right } from '@shared/core/logic/either';
+import { Either, left, right } from '@/shared/core/logic/either';
 
-import { Log } from '@modules/logs/domain/entities/log';
-import { IMonkeynaut } from '@modules/monkeynauts/domain/entities/monkeynaut';
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IShip } from '@modules/ships/domain/entities/ship';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { IMonkeynaut } from '@/modules/monkeynauts/domain/entities/monkeynaut';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IShip } from '@/modules/ships/domain/entities/ship';
 
 import {
   MonkeynautRank,
   MonkeynautRole,
-} from '@modules/monkeynauts/domain/enums';
-import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
+} from '@/modules/monkeynauts/domain/enums';
+import { ShipRank } from '@/modules/ships/domain/enums/ship-rank';
 
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
 
 import {
   getRankByRarity,
   getRoleByRarity,
-} from '@modules/monkeynauts/config/create-monkeynaut';
+} from '@/modules/monkeynauts/config/create-monkeynaut';
 import {
   getShipRankByRarity,
   getShipRoleByRarity,
-} from '@modules/ships/config/create-ship';
+} from '@/modules/ships/config/create-ship';
 
 import {
   CreateMonkeynautBusinessLogic,
   CreateMonkeynautErrors,
-} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
+} from '@/modules/monkeynauts/core/business-logic/create-monkeynaut';
 import {
   CreateShipBusinessLogic,
   CreateShipErrors,
-} from '@modules/ships/core/business-logic/create-ship';
+} from '@/modules/ships/core/business-logic/create-ship';
 
-import { ShipRole } from '@modules/ships/domain/enums/ship-role';
+import { ShipRole } from '@/modules/ships/domain/enums/ship-role';
 import { AirDropNftTypeNotAllowedError } from './errors/air-drop-nft-type-not-allowed-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';
 

@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { Commons } from '@shared/types/commons';
+import { Commons } from '@/shared/types/commons';
 
 type BountyHuntRankingPropsOmittedCommons = {
   playerId: string;

@@ -1,11 +1,11 @@
 import { InitBountyHuntToken as PrismaInitBountyHuntToken } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
-import { IInitBountyHuntTokenRepository } from '@modules/players/domain/repositories/init-bounty-hunt-token-repository';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
+import { IInitBountyHuntTokenRepository } from '@/modules/players/domain/repositories/init-bounty-hunt-token-repository';
 import {
   InitBountyHuntToken,
   IInitBountyHuntToken,
-} from '@modules/players/domain/entities/init-bounty-hunt-token';
+} from '@/modules/players/domain/entities/init-bounty-hunt-token';
 
 const parseInitBountyHuntToken = (
   initBountyHuntToken: PrismaInitBountyHuntToken,

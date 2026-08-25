@@ -3,13 +3,13 @@ import { container } from 'tsyringe';
 import {
   ChangeActivePlayerShipBusinessLogic,
   ChangeActivePlayerShipRequestDTO,
-} from '@modules/ships/core/business-logic/change-active-player-ship';
+} from '@/modules/ships/core/business-logic/change-active-player-ship';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 
 type ChangeActivePlayerShipControllerRequestDTO =
   ChangeActivePlayerShipRequestDTO & {

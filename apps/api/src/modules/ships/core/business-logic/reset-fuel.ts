@@ -1,4 +1,4 @@
-import { ICronJobProvider } from '@shared/domain/providers/cronjob-provider';
+import { ICronJobProvider } from '@/shared/domain/providers/cronjob-provider';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 

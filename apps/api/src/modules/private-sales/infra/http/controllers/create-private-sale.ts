@@ -3,17 +3,17 @@ import { container } from 'tsyringe';
 import {
   CreatePrivateSaleBusinessLogic,
   CreatePrivateSaleRequestDTO,
-} from '@modules/private-sales/core/business-logic/create-private-sale';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/private-sales/core/business-logic/create-private-sale';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   conflict,
   created,
   HttpResponse,
-} from '@shared/core/infra/http-response';
-import { InvalidTransactionToError } from '@shared/infra/providers/errors/invalid-transaction-to-error';
-import { InvalidTransactionFromError } from '@shared/infra/providers/errors/invalid-transaction-from-error';
-import { InvalidPrivateKeyError } from '@shared/infra/providers/errors/invalid-private-key-error';
+} from '@/shared/core/infra/http-response';
+import { InvalidTransactionToError } from '@/shared/infra/providers/errors/invalid-transaction-to-error';
+import { InvalidTransactionFromError } from '@/shared/infra/providers/errors/invalid-transaction-from-error';
+import { InvalidPrivateKeyError } from '@/shared/infra/providers/errors/invalid-private-key-error';
 
 class CreatePrivateSaleController implements IController {
   async handle(

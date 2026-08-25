@@ -1,11 +1,11 @@
 import {
   IPlayerToken,
   PlayerToken,
-} from '@modules/players/domain/entities/player-token';
-import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
+} from '@/modules/players/domain/entities/player-token';
+import { IPlayerTokensRepository } from '@/modules/players/domain/repositories/player-tokens-repository';
 import { PlayerToken as PrismaPlayerToken } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parsePlayerToken = (player_token: PrismaPlayerToken): IPlayerToken => {
   return new PlayerToken(player_token, {

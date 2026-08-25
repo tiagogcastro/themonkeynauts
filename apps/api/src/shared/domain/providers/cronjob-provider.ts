@@ -1,4 +1,4 @@
-import { CronJobStartDTO } from '@shared/dtos/cronjob-start-dto';
+import { CronJobStartDTO } from '@/shared/dtos/cronjob-start-dto';
 
 interface ICronJobProvider {
   run(data: CronJobStartDTO): Promise<void>;

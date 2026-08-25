@@ -3,12 +3,12 @@ import { container } from 'tsyringe';
 import {
   RemoveMonkeynautFromCrewBusinessLogic,
   RemoveMonkeynautFromCrewRequestDTO,
-} from '@modules/crews/core/business-logic/remove-monkeynaut-from-crew';
+} from '@/modules/crews/core/business-logic/remove-monkeynaut-from-crew';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 class RemoveMonkeynautFromCrewController {
   async handle(

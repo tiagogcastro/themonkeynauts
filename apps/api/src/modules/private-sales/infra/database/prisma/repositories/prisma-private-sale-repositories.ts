@@ -1,11 +1,11 @@
-import { prisma } from '@shared/infra/database/prisma/client';
+import { prisma } from '@/shared/infra/database/prisma/client';
 
 import {
   IPrivateSale,
   PrivateSale,
-} from '@modules/private-sales/domain/entities/private-sale';
-import { IPrivateSalesRepository } from '@modules/private-sales/domain/repositories/private-sales-repositories';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+} from '@/modules/private-sales/domain/entities/private-sale';
+import { IPrivateSalesRepository } from '@/modules/private-sales/domain/repositories/private-sales-repositories';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { PrivateSale as PrismaPrivateSale } from '@prisma/client';
 
 const parsePrivateSale = (log: PrismaPrivateSale): IPrivateSale => {

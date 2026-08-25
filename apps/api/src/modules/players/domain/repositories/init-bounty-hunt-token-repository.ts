@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IInitBountyHuntToken } from '../entities/init-bounty-hunt-token';
 
 export interface IInitBountyHuntTokenRepository {

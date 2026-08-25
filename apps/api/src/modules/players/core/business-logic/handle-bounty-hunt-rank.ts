@@ -1,9 +1,9 @@
-import { BountyHuntRanking } from '@modules/players/domain/entities/bounty-hunt-ranking';
-import { IBountyHuntRankingRepository } from '@modules/players/domain/repositories/bounty-hunt-ranking-repository';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
+import { BountyHuntRanking } from '@/modules/players/domain/entities/bounty-hunt-ranking';
+import { IBountyHuntRankingRepository } from '@/modules/players/domain/repositories/bounty-hunt-ranking-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
 import { inject, injectable } from 'tsyringe';
 import { InvalidActiveShipError } from './errors/invalid-active-ship-error';
 import { InvalidShipFuelError } from './errors/invalid-ship-fuel-error';

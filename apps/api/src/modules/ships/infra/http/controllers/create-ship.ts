@@ -2,12 +2,12 @@ import { container } from 'tsyringe';
 import {
   CreateShipBusinessLogic,
   CreateShipRequestDTO,
-} from '@modules/ships/core/business-logic/create-ship';
+} from '@/modules/ships/core/business-logic/create-ship';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 
 class CreateShipController {
   async handle(data: CreateShipRequestDTO): Promise<HttpResponse> {

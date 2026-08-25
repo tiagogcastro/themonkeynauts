@@ -1,5 +1,5 @@
-import { ICrew } from '@modules/crews/domain/entities/crew';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { ICrew } from '@/modules/crews/domain/entities/crew';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IShip } from '../entities/ship';
 
 interface IShipsRepository {

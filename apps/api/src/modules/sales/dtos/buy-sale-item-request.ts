@@ -1,4 +1,4 @@
-import { Maybe } from '@shared/core/logic/maybe';
+import { Maybe } from '@/shared/core/logic/maybe';
 
 type BuySaleItemRequestDTO = {
   playerId: string;

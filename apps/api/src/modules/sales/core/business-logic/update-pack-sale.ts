@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IPackSale, PackSale } from '@modules/sales/domain/entities/pack-sale';
-import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
-import { AppError } from '@shared/errors/app-error';
-import { UpdatePackSaleRequestDTO } from '@modules/sales/dtos/update-pack-sale-request';
+import { IPackSale, PackSale } from '@/modules/sales/domain/entities/pack-sale';
+import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
+import { AppError } from '@/shared/errors/app-error';
+import { UpdatePackSaleRequestDTO } from '@/modules/sales/dtos/update-pack-sale-request';
 
 @injectable()
 class UpdatePackSaleBusinessLogic {

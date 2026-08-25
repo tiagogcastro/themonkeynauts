@@ -1,13 +1,13 @@
 import {
   ListPackSalesBusinesslogic,
   ListPackSalesRequestDTO,
-} from '@modules/sales/core/business-logic/list-pack-sales';
-import { IController } from '@shared/core/infra/controller';
+} from '@/modules/sales/core/business-logic/list-pack-sales';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 class ListPackSalesController implements IController<ListPackSalesRequestDTO> {

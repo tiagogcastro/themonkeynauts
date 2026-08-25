@@ -1,34 +1,34 @@
 import { inject, injectable } from 'tsyringe';
 
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
 import {
   CreateMonkeynautBusinessLogic,
   CreateMonkeynautErrors,
-} from '@modules/monkeynauts/core/business-logic/create-monkeynaut';
-import { MonkeynautRank } from '@modules/monkeynauts/domain/enums';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
-import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { PackType } from '@modules/sales/domain/enums/pack-type';
-import { SaleCrypto } from '@modules/sales/domain/enums/sale-crypto';
-import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
-import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
-import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
-import { BuySaleItemRequestDTO } from '@modules/sales/dtos/buy-sale-item-request';
+} from '@/modules/monkeynauts/core/business-logic/create-monkeynaut';
+import { MonkeynautRank } from '@/modules/monkeynauts/domain/enums';
+import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { PlayerNotFoundError } from '@/modules/players/core/business-logic/errors/player-not-fount-error';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { PackType } from '@/modules/sales/domain/enums/pack-type';
+import { SaleCrypto } from '@/modules/sales/domain/enums/sale-crypto';
+import { IMonkeynautSalesRepository } from '@/modules/sales/domain/repositories/monkeynaut-sales-repositories';
+import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
+import { IShipSalesRepository } from '@/modules/sales/domain/repositories/ship-sales-repositories';
+import { BuySaleItemRequestDTO } from '@/modules/sales/dtos/buy-sale-item-request';
 import {
   CreateShipBusinessLogic,
   CreateShipErrors,
-} from '@modules/ships/core/business-logic/create-ship';
-import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
+} from '@/modules/ships/core/business-logic/create-ship';
+import { ShipRank } from '@/modules/ships/domain/enums/ship-rank';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
 import {
   ConfirmTransactionErrors,
   IBlockchainProvider,
-} from '@shared/domain/providers/blockchain-provider';
-import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { rarity } from '@shared/helpers';
+} from '@/shared/domain/providers/blockchain-provider';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
+import { rarity } from '@/shared/helpers';
 import { InvalidMonkeynautQuantityError } from './errors/invalid-monkeynaut-quantity-error';
 import { InvalidMonkeynautShipQuantityError } from './errors/invalid-monkeynaut-ship-quantity-error';
 import { InvalidSaleEndDateError } from './errors/invalid-sale-end-date-error';

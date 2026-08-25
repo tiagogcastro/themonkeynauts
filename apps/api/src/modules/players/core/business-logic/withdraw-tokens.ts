@@ -1,14 +1,14 @@
-import { balanceConfig } from '@config/balance';
-import { IPlayer } from '@modules/players/domain/entities/player';
-import { IResource } from '@modules/players/domain/entities/resource';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IResourcesRepository } from '@modules/players/domain/repositories/resources-repository';
-import { Either, left, right } from '@shared/core/logic/either';
+import { balanceConfig } from '@/config/balance';
+import { IPlayer } from '@/modules/players/domain/entities/player';
+import { IResource } from '@/modules/players/domain/entities/resource';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
+import { Either, left, right } from '@/shared/core/logic/either';
 import {
   ConfirmTransactionErrors,
   IBlockchainProvider,
   SendTransactionErrors,
-} from '@shared/domain/providers/blockchain-provider';
+} from '@/shared/domain/providers/blockchain-provider';
 import { inject, injectable } from 'tsyringe';
 import { AmountLessMinimumNeededAmountError } from './errors/amount-less-minimum-needed-amount-error';
 import { PlayerNotFoundError } from './errors/player-not-fount-error';

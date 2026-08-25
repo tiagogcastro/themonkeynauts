@@ -1,4 +1,4 @@
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 import { IMonkeynautSale } from '../entities/monkeynaut-sale';
 
 interface IMonkeynautSalesRepository {

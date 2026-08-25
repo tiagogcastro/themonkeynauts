@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { IController } from '@shared/core/infra/controller';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   fail,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 import {
   InitBountyHuntRunBusinessLogic,
   InitBountyHuntRunRequestDTO,
-} from '@modules/players/core/business-logic/init-bounty-hunt-run';
+} from '@/modules/players/core/business-logic/init-bounty-hunt-run';
 
 type InitBountyHuntRunControllerRequestDTO = InitBountyHuntRunRequestDTO & {
   player: {

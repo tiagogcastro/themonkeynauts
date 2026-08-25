@@ -1,9 +1,9 @@
-import { IPlayerTokensRepository } from '@modules/players/domain/repositories/player-tokens-repository';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, right } from '@shared/core/logic/either';
-import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { IHashProvider } from '@shared/domain/providers/hash-provider';
-import { AppError } from '@shared/errors/app-error';
+import { IPlayerTokensRepository } from '@/modules/players/domain/repositories/player-tokens-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, right } from '@/shared/core/logic/either';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
+import { IHashProvider } from '@/shared/domain/providers/hash-provider';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { ResetPasswordRequestDTO } from '../../dtos/reset-password-request';
 

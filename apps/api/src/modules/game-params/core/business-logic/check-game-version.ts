@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
-import { Either, left, right } from '@shared/core/logic/either';
+import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
+import { Either, left, right } from '@/shared/core/logic/either';
 import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 import { InvalidGameVersionError } from './errors/invalid-game-version-error';
 

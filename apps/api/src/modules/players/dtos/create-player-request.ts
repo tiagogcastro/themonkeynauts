@@ -1,4 +1,4 @@
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
+import { PlayerRole } from '@/modules/players/domain/enums/player-role';
 
 export type CreatePlayerRequestDTO = {
   email: string;

@@ -1,7 +1,7 @@
 import {
   IMailTemplateProvider,
   ParseMailTemplateDTO,
-} from '@shared/domain/providers/mail-template-provider';
+} from '@/shared/domain/providers/mail-template-provider';
 import fs from 'node:fs';
 import { compile } from 'handlebars';
 

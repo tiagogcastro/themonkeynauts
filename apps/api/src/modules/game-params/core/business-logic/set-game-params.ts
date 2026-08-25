@@ -3,12 +3,12 @@ import { inject, injectable } from 'tsyringe';
 import {
   GameParam,
   IGameParam,
-} from '@modules/game-params/domain/entities/game-param';
+} from '@/modules/game-params/domain/entities/game-param';
 
-import { Either, left, right } from '@shared/core/logic/either';
-import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { Log } from '@modules/logs/domain/entities/log';
+import { Either, left, right } from '@/shared/core/logic/either';
+import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { Log } from '@/modules/logs/domain/entities/log';
 import { InvalidGameClientVersionError } from './errors/invalid-game-client-version-error';
 
 export type SetGameParamsRequestDTO = {

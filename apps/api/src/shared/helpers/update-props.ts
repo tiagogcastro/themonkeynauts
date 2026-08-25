@@ -1,4 +1,4 @@
-import { AppError } from '@shared/errors/app-error';
+import { AppError } from '@/shared/errors/app-error';
 
 function updateProps<T>(props: T): T {
   const updateData = {} as T;

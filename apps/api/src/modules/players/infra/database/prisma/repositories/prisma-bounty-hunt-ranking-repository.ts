@@ -1,11 +1,11 @@
 import { BountyHuntRanking as PrismaBountyHuntRanking } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
-import { IBountyHuntRankingRepository } from '@modules/players/domain/repositories/bounty-hunt-ranking-repository';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
+import { IBountyHuntRankingRepository } from '@/modules/players/domain/repositories/bounty-hunt-ranking-repository';
 import {
   BountyHuntRanking,
   IBountyHuntRanking,
-} from '@modules/players/domain/entities/bounty-hunt-ranking';
+} from '@/modules/players/domain/entities/bounty-hunt-ranking';
 
 const parseBountyHuntRanking = (
   bountyHuntRanking: PrismaBountyHuntRanking,

@@ -1,15 +1,15 @@
-import { BuySaleItemBusinessLogic } from '@modules/sales/core/business-logic/buy-sale-item';
-import { BuySaleItemRequestDTO } from '@modules/sales/dtos/buy-sale-item-request';
-import { IController } from '@shared/core/infra/controller';
+import { BuySaleItemBusinessLogic } from '@/modules/sales/core/business-logic/buy-sale-item';
+import { BuySaleItemRequestDTO } from '@/modules/sales/dtos/buy-sale-item-request';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   conflict,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { InvalidPrivateKeyError } from '@shared/infra/providers/errors/invalid-private-key-error';
-import { InvalidTransactionFromError } from '@shared/infra/providers/errors/invalid-transaction-from-error';
-import { InvalidTransactionToError } from '@shared/infra/providers/errors/invalid-transaction-to-error';
+} from '@/shared/core/infra/http-response';
+import { InvalidPrivateKeyError } from '@/shared/infra/providers/errors/invalid-private-key-error';
+import { InvalidTransactionFromError } from '@/shared/infra/providers/errors/invalid-transaction-from-error';
+import { InvalidTransactionToError } from '@/shared/infra/providers/errors/invalid-transaction-to-error';
 import { container } from 'tsyringe';
 
 type BuySaleItemControllerRequestDTO = BuySaleItemRequestDTO & {

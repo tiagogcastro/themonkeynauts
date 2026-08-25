@@ -1,15 +1,15 @@
 import { container } from 'tsyringe';
 
-import { AppPlayerAuthBusinessLogic } from '@modules/players/core/business-logic/app-auth-player';
+import { AppPlayerAuthBusinessLogic } from '@/modules/players/core/business-logic/app-auth-player';
 
-import { AppPlayerAuthRequestDTO } from '@modules/players/dtos/auth-player-request';
-import { IController } from '@shared/core/infra/controller';
+import { AppPlayerAuthRequestDTO } from '@/modules/players/dtos/auth-player-request';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+} from '@/shared/core/infra/http-response';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 
 class AppPlayerAuthController implements IController<AppPlayerAuthRequestDTO> {
   async handle({

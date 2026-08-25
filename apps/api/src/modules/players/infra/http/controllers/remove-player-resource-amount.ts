@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
 
-import { instanceToInstance } from '@shared/helpers/instance-to-instance';
+import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
 
 import { container } from 'tsyringe';
 import {
   RemovePlayerResourceAmountBusinessLogic,
   RemovePlayerResourceAmountRequestDTO,
-} from '@modules/players/core/business-logic/remove-player-resource-amount';
-import { IResource } from '@modules/players/domain/entities/resource';
+} from '@/modules/players/core/business-logic/remove-player-resource-amount';
+import { IResource } from '@/modules/players/domain/entities/resource';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { IController } from '@shared/core/infra/controller';
+} from '@/shared/core/infra/http-response';
+import { IController } from '@/shared/core/infra/controller';
 
 type RemovePlayerResourceAmountControllerRequestDTO = {
   player: {

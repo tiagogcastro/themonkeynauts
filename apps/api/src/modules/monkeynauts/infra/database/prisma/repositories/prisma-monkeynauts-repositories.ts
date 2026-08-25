@@ -1,12 +1,12 @@
-import { ICrew } from '@modules/crews/domain/entities/crew';
+import { ICrew } from '@/modules/crews/domain/entities/crew';
 import {
   IMonkeynaut,
   Monkeynaut,
-} from '@modules/monkeynauts/domain/entities/monkeynaut';
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+} from '@/modules/monkeynauts/domain/entities/monkeynaut';
+import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { Monkeynaut as PrismaMonkeynaut } from '@prisma/client';
-import { prisma } from '@shared/infra/database/prisma/client';
-import { AsyncMaybe } from '@shared/core/logic/maybe';
+import { prisma } from '@/shared/infra/database/prisma/client';
+import { AsyncMaybe } from '@/shared/core/logic/maybe';
 
 const parseMonkeynaut = (monkeynaut: PrismaMonkeynaut): IMonkeynaut => {
   return new Monkeynaut(monkeynaut, {

@@ -3,13 +3,13 @@ import { container } from 'tsyringe';
 import {
   ChangePlayerOperatorMonkeynautBusinessLogic,
   ChangePlayerOperatorMonkeynautRequestDTO,
-} from '@modules/monkeynauts/core/business-logic/change-player-operator-monkeynaut';
+} from '@/modules/monkeynauts/core/business-logic/change-player-operator-monkeynaut';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
-import { IController } from '@shared/core/infra/controller';
+} from '@/shared/core/infra/http-response';
+import { IController } from '@/shared/core/infra/controller';
 
 type ChangePlayerOperatorMonkeynautControllerRequestDTO =
   ChangePlayerOperatorMonkeynautRequestDTO & {

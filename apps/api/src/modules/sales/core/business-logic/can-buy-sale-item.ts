@@ -1,14 +1,14 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IMonkeynautsRepository } from '@modules/monkeynauts/domain/repositories/monkeynauts-repositories';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IMonkeynautSalesRepository } from '@modules/sales/domain/repositories/monkeynaut-sales-repositories';
-import { IPackSalesRepository } from '@modules/sales/domain/repositories/pack-sales-repositories';
-import { IShipSalesRepository } from '@modules/sales/domain/repositories/ship-sales-repositories';
-import { IShipsRepository } from '@modules/ships/domain/repositories/ships-repositories';
-import { Either, right } from '@shared/core/logic/either';
-import { IDateProvider } from '@shared/domain/providers/date-provider';
-import { Maybe } from '@shared/core/logic/maybe';
+import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IMonkeynautSalesRepository } from '@/modules/sales/domain/repositories/monkeynaut-sales-repositories';
+import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
+import { IShipSalesRepository } from '@/modules/sales/domain/repositories/ship-sales-repositories';
+import { IShipsRepository } from '@/modules/ships/domain/repositories/ships-repositories';
+import { Either, right } from '@/shared/core/logic/either';
+import { IDateProvider } from '@/shared/domain/providers/date-provider';
+import { Maybe } from '@/shared/core/logic/maybe';
 
 export type CanBuySaleItemRequestDTO = {
   playerId: string;

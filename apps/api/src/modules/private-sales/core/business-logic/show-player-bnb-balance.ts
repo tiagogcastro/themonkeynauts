@@ -1,7 +1,7 @@
-import { balanceConfig } from '@config/balance';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { Either, right } from '@shared/core/logic/either';
-import { AppError } from '@shared/errors/app-error';
+import { balanceConfig } from '@/config/balance';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { Either, right } from '@/shared/core/logic/either';
+import { AppError } from '@/shared/errors/app-error';
 import { inject, injectable } from 'tsyringe';
 import { IPrivateSalesRepository } from '../../domain/repositories/private-sales-repositories';
 

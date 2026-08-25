@@ -1,13 +1,13 @@
-import { Log } from '@modules/logs/domain/entities/log';
-import { ILogsRepository } from '@modules/logs/domain/repositories/logs-repositories';
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
-import { IShip, Ship } from '@modules/ships/domain/entities/ship';
-import { ShipRank } from '@modules/ships/domain/enums/ship-rank';
-import { ShipRole } from '@modules/ships/domain/enums/ship-role';
-import { CommonShipRequestDTO } from '@modules/ships/dtos/commons-ships-props';
-import { Either, right } from '@shared/core/logic/either';
-import { AppError } from '@shared/errors/app-error';
-import { generateSpaceName, rarity } from '@shared/helpers';
+import { Log } from '@/modules/logs/domain/entities/log';
+import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
+import { IShip, Ship } from '@/modules/ships/domain/entities/ship';
+import { ShipRank } from '@/modules/ships/domain/enums/ship-rank';
+import { ShipRole } from '@/modules/ships/domain/enums/ship-role';
+import { CommonShipRequestDTO } from '@/modules/ships/dtos/commons-ships-props';
+import { Either, right } from '@/shared/core/logic/either';
+import { AppError } from '@/shared/errors/app-error';
+import { generateSpaceName, rarity } from '@/shared/helpers';
 import { inject, injectable } from 'tsyringe';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 

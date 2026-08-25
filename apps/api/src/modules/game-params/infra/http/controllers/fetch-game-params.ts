@@ -1,10 +1,10 @@
-import { FetchGameParamsBusinessLogic } from '@modules/game-params/core/business-logic/fetch-game-params';
-import { IController } from '@shared/core/infra/controller';
+import { FetchGameParamsBusinessLogic } from '@/modules/game-params/core/business-logic/fetch-game-params';
+import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,
   HttpResponse,
   ok,
-} from '@shared/core/infra/http-response';
+} from '@/shared/core/infra/http-response';
 import { container } from 'tsyringe';
 
 class FetchGameParamsController implements IController {

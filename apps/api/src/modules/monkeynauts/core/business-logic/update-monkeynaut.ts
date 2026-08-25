@@ -3,15 +3,15 @@ import { inject, injectable } from 'tsyringe';
 import {
   IMonkeynaut,
   Monkeynaut,
-} from '@modules/monkeynauts/domain/entities/monkeynaut';
+} from '@/modules/monkeynauts/domain/entities/monkeynaut';
 
-import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
+import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 
-import { AppError } from '@shared/errors/app-error';
-import { Either, right } from '@shared/core/logic/either';
+import { AppError } from '@/shared/errors/app-error';
+import { Either, right } from '@/shared/core/logic/either';
 
-import { updateProps } from '@shared/helpers/update-props';
-import { CommomsMonkeynautProps } from '@modules/monkeynauts/dtos/commons-monkeynaut-props';
+import { updateProps } from '@/shared/helpers/update-props';
+import { CommomsMonkeynautProps } from '@/modules/monkeynauts/dtos/commons-monkeynaut-props';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 
 export type UpdateMonkeynautRequestDTO = CommomsMonkeynautProps & {
