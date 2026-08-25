@@ -1,5 +1,4 @@
 import crypto from 'node:crypto';
-
 import { Commons } from '@/shared/types/commons';
 
 type InitBountyHuntTokenPropsOmittedCommons = {

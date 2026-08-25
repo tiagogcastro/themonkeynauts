@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import {
   player,
   ships,
@@ -15,7 +14,7 @@ import {
 export const monkeynautsApiToken = '@monkeynauts:token@';
 
 export const baseApi = axios.create({
-  baseURL: 'https://the-monkeynauts.herokuapp.com',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3333',
   headers: {
     'Content-type': 'application/json',
   }

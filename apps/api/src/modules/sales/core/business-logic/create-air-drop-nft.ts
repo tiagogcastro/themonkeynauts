@@ -1,12 +1,9 @@
 import { inject, injectable } from 'tsyringe';
-
 import { Either, left, right } from '@/shared/core/logic/either';
-
 import { Log } from '@/modules/logs/domain/entities/log';
 import { IMonkeynaut } from '@/modules/monkeynauts/domain/entities/monkeynaut';
 import { IPlayer } from '@/modules/players/domain/entities/player';
 import { IShip } from '@/modules/ships/domain/entities/ship';
-
 import {
   MonkeynautRank,
   MonkeynautRole,

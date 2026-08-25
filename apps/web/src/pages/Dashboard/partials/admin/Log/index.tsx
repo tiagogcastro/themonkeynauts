@@ -6,7 +6,6 @@ import { ApiError } from '@/utils/apiError';
 import { getFormattedDate } from '@/utils/getFormattedDate';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
 import * as S from './styles';
 
 type Log = {

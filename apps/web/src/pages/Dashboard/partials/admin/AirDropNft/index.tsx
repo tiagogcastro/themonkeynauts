@@ -1,38 +1,31 @@
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import { Button, Input } from '@/components';
 import { InputSelect } from '@/components/HTML/InputSelect';
 import { baseApi } from '@/services/api';
 import { COLORS } from '@/theme';
-import { getValidationErrors } from '@/utils';
 import { ApiError } from '@/utils/apiError';
-import { FormHandles } from '@unform/core';
-import { useRef, useState } from 'react';
-import { toast } from 'react-toastify';
-import * as Yup from 'yup';
-
 import * as S from './styles';
 
 type AirDropType = 'Monkeynaut' | 'Ship' | 'Pack';
 
-type CommonAirDropFields<Rank, Class> = {
-  rank: Rank;
-  class: Class;
-}
-
 type MonkeynautRanks = 'Private' | 'Sergeant' | 'Captain' | 'Major';
-type ShipRanks = 'A' | 'B' |'S';
+type ShipRanks = 'A' | 'B' | 'S';
 
-type AirDropData = {
-  type: AirDropType;
+type AirDropFormData = {
   email: string;
-  Monkeynaut?: {
-    rank: CommonAirDropFields<MonkeynautRanks | 'Random', 'Random'>;
-    class: 'Random';
+  type: AirDropType;
+  monkeynaut?: {
+    rank: MonkeynautRanks | 'Random';
+    role: 'Random';
   };
-  Ship?: {
-    rank: CommonAirDropFields<ShipRanks | 'Random', 'Random'>;
-    class: 'Random';
+  ship?: {
+    rank: ShipRanks | 'Random';
+    role: 'Random';
   };
-}
+};
 
 const createNftDropSchema = Yup.object().shape({
   email: Yup.string()
@@ -40,24 +33,22 @@ const createNftDropSchema = Yup.object().shape({
     .required('This field is required'),
   type: Yup.string()
     .required('This field is required'),
-  monkeynaut: Yup.object().when('type', {
-    is: (value: any) => value === 'Monkeynaut',
-    then: Yup.object({
-      role: Yup.string()
-        .required('This field is required'),
-      rank: Yup.string()
-        .required('This field is required'),
-    })
-  }),
-  ship: Yup.object().when('type', {
-    is: (value: any) => value === 'Ship',
-    then: Yup.object({
-      role: Yup.string()
-        .required('This field is required'),
-      rank: Yup.string()
-        .required('This field is required'),
-    })
-  }),
+  monkeynaut: Yup.object().when('type', ([type], schema) =>
+    type === 'Monkeynaut'
+      ? schema.shape({
+          role: Yup.string().required('This field is required'),
+          rank: Yup.string().required('This field is required'),
+        })
+      : schema.notRequired(),
+  ),
+  ship: Yup.object().when('type', ([type], schema) =>
+    type === 'Ship'
+      ? schema.shape({
+          role: Yup.string().required('This field is required'),
+          rank: Yup.string().required('This field is required'),
+        })
+      : schema.notRequired(),
+  ),
 });
 
 const roleFields = {
@@ -74,7 +65,7 @@ const roleFields = {
     },
   ],
   Pack: []
-};
+} as const;
 
 const ranksFields = {
   Monkeynaut: [
@@ -105,7 +96,7 @@ const ranksFields = {
       label: 'B'
     },
     {
-      value: 'S',
+      value: 'A',
       label: 'A'
     },
     {
@@ -118,7 +109,7 @@ const ranksFields = {
     },
   ],
   Pack: []
-};
+} as const;
 
 const types = [
   {
@@ -136,16 +127,14 @@ const types = [
 ];
 
 export function AdminAirDropNft() {
-  const formRef = useRef<FormHandles>(null);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<AirDropFormData>({
+    resolver: yupResolver(createNftDropSchema) as never,
+  });
 
-  const [currentType, setCurrentType] = useState<AirDropType | null>(null);
+  const currentType = watch('type');
 
-  async function createNftDrop(data: AirDropData) {
+  async function createNftDrop(data: AirDropFormData) {
     try {
-      await createNftDropSchema.validate(data, {
-        abortEarly: false
-      });
-
       await baseApi.post('/admins/sale-events/create-air-drop-nft', data);
 
       toast(`Sent successfully Air Drop NFT to ${data.email}`, {
@@ -161,12 +150,6 @@ export function AdminAirDropNft() {
       });
 
     } catch (error: any) {
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-
-        return formRef.current?.setErrors(errors);
-      }
-
       const apiErrors = ApiError(error);
 
       apiErrors.messages.forEach((message) => {
@@ -181,7 +164,7 @@ export function AdminAirDropNft() {
             fontFamily: 'Orbitron, sans-serif',
           }
         });
-      })
+      });
     }
   }
 
@@ -189,43 +172,48 @@ export function AdminAirDropNft() {
     <S.Container>
       <S.Content>
         <S.MainContent>
-          <S.FormContainer ref={formRef} onSubmit={createNftDrop  }>
+          <S.FormContainer onSubmit={handleSubmit(createNftDrop)}>
             <h1>Air drop NFT</h1>
             <Input
-              name='email' 
-              labelText='E-mail' 
+              labelText='E-mail'
+              error={errors.email?.message}
+              registration={register('email')}
             />
             <InputSelect
-              name='type'
               labelText='Type'
-              onChange={(e: any) => setCurrentType(e.value)}
               fields={types}
+              error={errors.type?.message}
+              registration={register('type')}
             />
             {currentType === 'Monkeynaut' && (
               <>
                 <InputSelect
-                  name={`${currentType?.toLowerCase()}.role`}
                   labelText='Role'
-                  fields={currentType ? roleFields[currentType] : []}
+                  fields={[...roleFields[currentType]]}
+                  error={(errors.monkeynaut as any)?.role?.message}
+                  registration={register('monkeynaut.role')}
                 />
                 <InputSelect
-                  name={`${currentType?.toLowerCase()}.rank`}
-                  labelText='Rank' 
-                  fields={currentType ? ranksFields[currentType] : []}
+                  labelText='Rank'
+                  fields={[...ranksFields[currentType]]}
+                  error={(errors.monkeynaut as any)?.rank?.message}
+                  registration={register('monkeynaut.rank')}
                 />
               </>
             )}
             {currentType === 'Ship' && (
               <>
                 <InputSelect
-                  name={`${currentType?.toLowerCase()}.role`}
                   labelText='Role'
-                  fields={currentType ? roleFields[currentType] : []}
+                  fields={[...roleFields[currentType]]}
+                  error={(errors.ship as any)?.role?.message}
+                  registration={register('ship.role')}
                 />
                 <InputSelect
-                  name={`${currentType?.toLowerCase()}.rank`}
-                  labelText='Rank' 
-                  fields={currentType ? ranksFields[currentType] : []}
+                  labelText='Rank'
+                  fields={[...ranksFields[currentType]]}
+                  error={(errors.ship as any)?.rank?.message}
+                  registration={register('ship.rank')}
                 />
               </>
             )}

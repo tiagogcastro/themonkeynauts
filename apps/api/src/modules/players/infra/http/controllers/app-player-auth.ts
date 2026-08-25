@@ -1,7 +1,5 @@
 import { container } from 'tsyringe';
-
 import { AppPlayerAuthBusinessLogic } from '@/modules/players/core/business-logic/app-auth-player';
-
 import { AppPlayerAuthRequestDTO } from '@/modules/players/dtos/auth-player-request';
 import { IController } from '@/shared/core/infra/controller';
 import {

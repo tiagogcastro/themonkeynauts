@@ -1,18 +1,13 @@
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-      
-import { FormHandles } from '@unform/core';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import axios from 'axios';
-
 import { Button, Input } from '@/components';
-
 import {
   PlayerType,
 } from '@/services/api';
 
-import { getValidationErrors } from '@/utils';
 import { useAuth, useBoolean } from '@/hooks';
 import { COLORS } from '@/theme';
 
@@ -26,37 +21,27 @@ import {
 } from './styles';
 import { ApiError } from '@/utils/apiError';
 
-export function Register() {
-  const { register } = useAuth();
-  const formRef = useRef<FormHandles>(null);
+const schema = Yup.object().shape({
+  nickname: Yup.string().required('This field is required'),
+  email: Yup.string().required('This field is required').email('Enter a valid email address'),
+  password: Yup.string().required('This field is required'),
+});
 
+export function Register() {
+  const { register: registerPlayer } = useAuth();
   const loadingRegister = useBoolean(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<PlayerType.AppRegisterParams>({
+    resolver: yupResolver(schema),
+  });
 
   async function handleRegisterPlayer(data: PlayerType.AppRegisterParams) {
     loadingRegister.changeToTrue();
 
     try {
-      formRef.current?.setErrors({});
-
-      const schema = Yup.object().shape({
-        nickname: Yup.string().required('This field is required'),
-        email: Yup.string().required('This field is required').email('Enter a valid email address'),
-        password: Yup.string().required('This field is required'),
-      });
-  
-      await schema.validate(data, {
-        abortEarly: false
-      });
-      
-      await register(data);
+      await registerPlayer(data);
     } catch(error: any) {
       loadingRegister.changeToFalse();
-
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-        
-        return formRef.current?.setErrors(errors);
-      }
 
       const apiErrorResponse = ApiError(error);
 
@@ -81,30 +66,33 @@ export function Register() {
       <Content>
         <MainContent>
           <img src={logo} alt="App Logo" className="app_logo"/>
-          <FormContainer ref={formRef} onSubmit={handleRegisterPlayer}>
+          <FormContainer onSubmit={handleSubmit(handleRegisterPlayer)}>
             <h1 className="page_title">Sign up</h1>
             <div className="inputs">
-              <Input 
-                name="nickname" 
+              <Input
                 labelText="Nickname"
                 placeholder="Nickname..."
                 type="text"
+                error={errors.nickname?.message}
+                registration={register('nickname')}
               />
-              <Input 
-                name="email" 
+              <Input
                 labelText="E-mail"
                 placeholder="E-mail..."
                 type="text"
+                error={errors.email?.message}
+                registration={register('email')}
               />
               <Input
-                name="password" 
                 labelText="Password"
                 placeholder="Password..."
                 type="password"
+                error={errors.password?.message}
+                registration={register('password')}
               />
             </div>
-            <Button 
-              className="button_submit" 
+            <Button
+              className="button_submit"
               type="submit"
               text="Sign up"
               loading={{
@@ -124,5 +112,5 @@ export function Register() {
         </MainContent>
       </Content>
     </Container>
-  )
+  );
 }

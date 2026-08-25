@@ -1,6 +1,5 @@
 import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import { container } from 'tsyringe';
-
 import { IPlayerTokensRepository } from '@/modules/players/domain/repositories/player-tokens-repository';
 import { PrismaPlayerTokensRepository } from '@/modules/players/infra/database/prisma/repositories/prisma-player-tokens-repository';
 import { PrismaPlayersRepository } from '@/modules/players/infra/database/prisma/repositories/prisma-players-repository';

@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components';
-
 import { COLORS } from '@/theme';
-
 import bg_items from '@/assets/images/bg_items.png';
 
 export type ListShipsPropsContainer = {

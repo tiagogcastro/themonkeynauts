@@ -1,7 +1,5 @@
 import { BsArrowLeft } from 'react-icons/bs';
-
 import { UseBooleanTypes } from '@/hooks';
-
 import {
 	Container,
 	Content,

@@ -1,5 +1,4 @@
 import { container } from 'tsyringe';
-
 import { IController } from '@/shared/core/infra/controller';
 import {
   clientError,

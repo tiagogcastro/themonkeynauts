@@ -4,9 +4,7 @@ import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { balanceConfig } from '@/config/balance';
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { createPlayerController } from '../controllers/create-player';
 import { depositTokensController } from '../controllers/deposit-tokens';
 import { disableEnablePlayerController } from '../controllers/disable-enable-player';
@@ -19,7 +17,6 @@ import { sendForgotPasswordEmailController } from '../controllers/send-forgot-pa
 import { showPlayerController } from '../controllers/show-player';
 import { updatePlayerController } from '../controllers/update-player';
 import { withdrawTokensController } from '../controllers/withdraw-tokens';
-
 import { ensureAuthenticated } from '../middlewares/ensure-authenticated';
 import { ensureWalletMiddleware } from '../middlewares/ensure-wallet';
 

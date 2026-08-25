@@ -1,6 +1,5 @@
-import { COLORS } from '@/theme';
-import { Form } from '@unform/web';
 import styled from 'styled-components';
+import { COLORS } from '@/theme';
 
 export const Container = styled.div`
 `;
@@ -36,7 +35,7 @@ export const MainContent = styled.main`
   }
 `;
 
-export const FormContainer = styled(Form)`
+export const FormContainer = styled.form`
   display: grid;
   grid-template-columns: 1fr;
   flex-direction: column;

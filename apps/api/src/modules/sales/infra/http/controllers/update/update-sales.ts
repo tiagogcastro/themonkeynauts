@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-
 import { UpdateMonkeynautSaleBusinessLogic } from '@/modules/sales/core/business-logic/update-monkeynaut-sale';
 import { UpdateSaleRequestDTO } from '@/modules/sales/dtos/update-sale-request';
 import { UpdateSaleBusinessLogic } from '@/modules/sales/core/business-logic/update-sale';

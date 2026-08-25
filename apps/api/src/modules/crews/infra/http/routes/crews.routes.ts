@@ -1,13 +1,9 @@
 import { ensureAuthenticated } from '@/modules/players/infra/http/middlewares/ensure-authenticated';
 import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
-
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { createCrewController } from '../controllers/create-crew';
-
 import { listCrewsController } from '../controllers/list-crews';
 import { removeMonkeynautFromCrewController } from '../controllers/remove-monkeynaut-from-crew';
 

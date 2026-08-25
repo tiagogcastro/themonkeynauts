@@ -1,11 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { ensureAuthenticated } from '@/modules/players/infra/http/middlewares/ensure-authenticated';
 import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { listMonkeynautsController } from '../controllers/list-monkeynauts';
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';
 import { changePlayerOwnerMonkeynautController } from '../controllers/change-player-owner-monkeynaut';

@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-
 import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
-
 import { CreatePlayerBusinessLogic } from '@/modules/players/core/business-logic/create-player';
 import { container } from 'tsyringe';
 import {

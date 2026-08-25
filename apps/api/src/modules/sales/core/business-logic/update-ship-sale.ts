@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
 import { IShipSale, ShipSale } from '@/modules/sales/domain/entities/ship-sale';
 import { IShipSalesRepository } from '@/modules/sales/domain/repositories/ship-sales-repositories';
 import { AppError } from '@/shared/errors/app-error';

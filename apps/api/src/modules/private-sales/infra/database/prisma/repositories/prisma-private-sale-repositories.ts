@@ -1,5 +1,4 @@
 import { prisma } from '@/shared/infra/database/prisma/client';
-
 import {
   IPrivateSale,
   PrivateSale,

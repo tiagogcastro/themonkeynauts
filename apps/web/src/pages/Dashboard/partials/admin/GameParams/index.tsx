@@ -1,60 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import * as Yup from 'yup';
-import { FormHandles } from '@unform/core';
-
-import { getValidationErrors } from '@/utils';
-
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
 import { Button, Input } from '@/components';
-
 import * as S from './styles';
 import { baseApi } from '@/services/api';
-import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
 import { ApiError } from '@/utils/apiError';
+
+const numberField = Yup.number().integer().transform(
+  (value, originalValue) => (originalValue === '' ? undefined : value),
+).required('This field is required');
 
 const schema = Yup.object().shape({
   gameClientVersion: Yup.string()
     .required('This field is required'),
 
-  travelFuelConsuption: Yup.number().integer()
-    .required('This field is required'),
-  bountyHuntFuelConsuption: Yup.number().integer()
-    .required('This field is required'),
-  shipRefuelCostInPercentage: Yup.number().integer()
-    .required('This field is required'),
+  travelFuelConsuption: numberField,
+  bountyHuntFuelConsuption: numberField,
+  shipRefuelCostInPercentage: numberField,
 
-  bountyHuntMinReward: Yup.number().integer()
-    .required('This field is required'),
-  bountyHuntMaxReward: Yup.number().integer()
-    .required('This field is required'),
+  bountyHuntMinReward: numberField,
+  bountyHuntMaxReward: numberField,
 
-  mineGoldAverageResourceReward: Yup.number().integer()
-    .required('This field is required'),
-  mineGoldAverageSpcReward: Yup.number().integer()
-    .required('This field is required'),
-  mineGoldRewardsVariation: Yup.number().integer()
-    .required('This field is required'),
+  mineGoldAverageResourceReward: numberField,
+  mineGoldAverageSpcReward: numberField,
+  mineGoldRewardsVariation: numberField,
 
-  mineIronAverageResourceReward: Yup.number().integer()
-    .required('This field is required'),
-  mineIronAverageSpcReward: Yup.number().integer()
-    .required('This field is required'),
-  mineIronRewardsVariation: Yup.number().integer()
-    .required('This field is required'),
+  mineIronAverageResourceReward: numberField,
+  mineIronAverageSpcReward: numberField,
+  mineIronRewardsVariation: numberField,
 
-  mineCopperAverageResourceReward: Yup.number().integer()
-    .required('This field is required'),
-  mineCopperAverageSpcReward: Yup.number().integer()
-    .required('This field is required'),
-  mineCooperRewardsVariation: Yup.number().integer()
-    .required('This field is required'),
+  mineCopperAverageResourceReward: numberField,
+  mineCopperAverageSpcReward: numberField,
+  mineCooperRewardsVariation: numberField,
 
-  mineScrapAverageResourceReward: Yup.number().integer()
-    .required('This field is required'),
-  mineScrapAverageSpcReward: Yup.number().integer()
-    .required('This field is required'),
-  mineScrapRewardsVariation: Yup.number().integer()
-    .required('This field is required'),
+  mineScrapAverageResourceReward: numberField,
+  mineScrapAverageSpcReward: numberField,
+  mineScrapRewardsVariation: numberField,
 });
 
 type GameParams = {
@@ -82,31 +66,35 @@ type GameParams = {
   mineScrapAverageResourceReward: number;
   mineScrapAverageSpcReward: number;
   mineScrapRewardsVariation: number;
-}
+};
 
 type CreateGameParamsData = GameParams;
 
-export function AdminGameParams() {
-  const formRef = useRef<FormHandles>(null);
+const numeric = {
+  valueAsNumber: true,
+} as const;
 
-  const [gameParams, setGameParams] = useState<GameParams | null>(null);
+export function AdminGameParams() {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateGameParamsData>({
+    resolver: yupResolver(schema),
+  });
 
   async function getGameParams() {
     const response = await baseApi.get('/game-params/fetch');
 
-    setGameParams(response.data.data.gameParams);
+    const gameParams = response.data.data.gameParams as GameParams | null;
+
+    if (gameParams) {
+      reset(gameParams);
+    }
   }
 
   useEffect(() => {
     getGameParams();
   }, []);
 
-  async function changeGameParams(data: CreateGameParamsData, rest: any) {
+  async function changeGameParams(data: CreateGameParamsData) {
     try {
-      await schema.validate(data, {
-        abortEarly: false
-      });
-
       await baseApi.post('/admins/game-params/set', data);
 
       toast(`Game params updated successfully`, {
@@ -121,12 +109,6 @@ export function AdminGameParams() {
         }
       });
     } catch (error: any) {
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-
-        return formRef.current?.setErrors(errors);
-      }
-
       const apiErrorResponse = ApiError(error);
 
       apiErrorResponse.messages.map(message => {
@@ -144,6 +126,7 @@ export function AdminGameParams() {
       });
     }
   }
+
   return (
     <S.Container>
       <S.Content>
@@ -151,112 +134,130 @@ export function AdminGameParams() {
 
           <h1>Game params</h1>
 
-          <S.FormContainer ref={formRef} onSubmit={changeGameParams} initialData={gameParams ? gameParams : undefined}>
+          <S.FormContainer onSubmit={handleSubmit(changeGameParams)}>
             <div className="groups">
-              <Input 
-                name="gameClientVersion"
+              <Input
                 type="text"
                 labelText='Game Client version'
+                error={errors.gameClientVersion?.message}
+                registration={register('gameClientVersion')}
               />
-              <Input 
-                name="bountyHuntMinReward"
+              <Input
                 type="number"
                 labelText='Bounty hunt min reward'
+                error={errors.bountyHuntMinReward?.message}
+                registration={register('bountyHuntMinReward', numeric)}
               />
-              <Input 
-                name="bountyHuntMaxReward"
+              <Input
                 type="number"
                 labelText='Bounty Hunt max reward'
+                error={errors.bountyHuntMaxReward?.message}
+                registration={register('bountyHuntMaxReward', numeric)}
               />
             </div>
 
             <div className="groups">
-              <Input 
-                name="travelFuelConsuption"
+              <Input
                 type="number"
                 labelText='Travel Fuel consuption'
+                error={errors.travelFuelConsuption?.message}
+                registration={register('travelFuelConsuption', numeric)}
               />
-              <Input 
-                name="bountyHuntFuelConsuption"
+              <Input
                 type="number"
                 labelText='Bounty Hunt fuel consuption'
+                error={errors.bountyHuntFuelConsuption?.message}
+                registration={register('bountyHuntFuelConsuption', numeric)}
               />
-              <Input 
-                name="shipRefuelCostInPercentage"
+              <Input
                 type="number"
                 labelText='Ship Refuel cost in percentage'
+                error={errors.shipRefuelCostInPercentage?.message}
+                registration={register('shipRefuelCostInPercentage', numeric)}
               />
             </div>
 
             <div className="groups">
-              <Input 
-                name="mineGoldAverageResourceReward"
+              <Input
                 type="number"
                 labelText='Mine Gold average resource reward'
+                error={errors.mineGoldAverageResourceReward?.message}
+                registration={register('mineGoldAverageResourceReward', numeric)}
               />
-              <Input 
-                name="mineGoldAverageSpcReward"
+              <Input
                 type="number"
                 labelText='Mine Gold average spc reward'
+                error={errors.mineGoldAverageSpcReward?.message}
+                registration={register('mineGoldAverageSpcReward', numeric)}
               />
-              <Input 
-                name="mineGoldRewardsVariation"
+              <Input
                 type="number"
                 labelText='Mine Gold rewards variation'
+                error={errors.mineGoldRewardsVariation?.message}
+                registration={register('mineGoldRewardsVariation', numeric)}
               />
             </div>
 
             <div className="groups">
-              <Input 
-                name="mineIronAverageResourceReward"
+              <Input
                 type="number"
                 labelText='Mine Iron average resource reward'
+                error={errors.mineIronAverageResourceReward?.message}
+                registration={register('mineIronAverageResourceReward', numeric)}
               />
-              <Input 
-                name="mineIronAverageSpcReward"
+              <Input
                 type="number"
                 labelText='Mine Iron average spc reward'
+                error={errors.mineIronAverageSpcReward?.message}
+                registration={register('mineIronAverageSpcReward', numeric)}
               />
-              <Input 
-                name="mineIronRewardsVariation"
+              <Input
                 type="number"
                 labelText='Mine Iron rewards variation'
+                error={errors.mineIronRewardsVariation?.message}
+                registration={register('mineIronRewardsVariation', numeric)}
               />
             </div>
 
             <div className="groups">
-              <Input 
-                name="mineCopperAverageResourceReward"
+              <Input
                 type="number"
                 labelText='Mine Copper average resource reward'
+                error={errors.mineCopperAverageResourceReward?.message}
+                registration={register('mineCopperAverageResourceReward', numeric)}
               />
-              <Input 
-                name="mineCopperAverageSpcReward"
+              <Input
                 type="number"
                 labelText='Mine Copper average spc reward'
+                error={errors.mineCopperAverageSpcReward?.message}
+                registration={register('mineCopperAverageSpcReward', numeric)}
               />
-              <Input 
-                name="mineCooperRewardsVariation"
+              <Input
                 type="number"
                 labelText='Mine Cooper rewards variation'
+                error={errors.mineCooperRewardsVariation?.message}
+                registration={register('mineCooperRewardsVariation', numeric)}
               />
             </div>
 
             <div className="groups">
-              <Input 
-                name="mineScrapAverageResourceReward"
+              <Input
                 type="number"
                 labelText='Mine Scrap average resource reward'
+                error={errors.mineScrapAverageResourceReward?.message}
+                registration={register('mineScrapAverageResourceReward', numeric)}
               />
-              <Input 
-                name="mineScrapAverageSpcReward"
+              <Input
                 type="number"
                 labelText='Mine Scrap average spc reward'
+                error={errors.mineScrapAverageSpcReward?.message}
+                registration={register('mineScrapAverageSpcReward', numeric)}
               />
-              <Input 
-                name="mineScrapRewardsVariation"
+              <Input
                 type="number"
                 labelText='Mine Scrap rewards variation'
+                error={errors.mineScrapRewardsVariation?.message}
+                registration={register('mineScrapRewardsVariation', numeric)}
               />
             </div>
 

@@ -4,7 +4,6 @@ import { AdminBanAccount } from './BanAccount';
 import { AdminCreateSale } from './CreateSale';
 import { AdminGameParams } from './GameParams';
 import { AdminLog } from './Log';
-
 import * as S from './styles';
 
 export function Admin() {

@@ -123,7 +123,7 @@ export function PrivateSale() {
         if(ethereumConfig.privateSaleTransaction.toAddress && ethereumConfig.privateSaleTransaction.contract.BNB) {
           const { transaction, error } = await paymentByEthereum({
             ethereum,
-            ether: ethers.utils.parseEther(inputValue)._hex,
+            ether: ethers.parseEther(inputValue).toString(),
             dataContract: ethereumConfig.privateSaleTransaction.contract.BNB,
             cryptoType: 'BNB'
           });

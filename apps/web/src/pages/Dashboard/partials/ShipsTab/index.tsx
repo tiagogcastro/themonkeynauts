@@ -1,25 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-
 import { baseApi, ShipType } from '@/services/api';
-
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
-
 import { Loading } from '@/components';
-
 import { capitalize, replaceToShortString, verifyRole } from '@/utils';
-
 import fighter from '@/assets/images/fighter.png';
 import explorer from '@/assets/images/explorer.png';
 import miner from '@/assets/images/miner.png';
-
 import engineer from '@/assets/images/engineer.png';
 import scientist from '@/assets/images/scientist.png';
 import soldier from '@/assets/images/soldier.png';
-
 import { Ship } from '../Ship';
-
 import { Title_1 } from '@/styles/global';
-import { 
+import {
   Container,
   ListShipsContainer,
   Content, 

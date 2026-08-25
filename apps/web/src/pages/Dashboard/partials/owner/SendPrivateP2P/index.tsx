@@ -1,14 +1,10 @@
-import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { FormHandles } from '@unform/core';
-
-import { getValidationErrors } from '@/utils';
-
+import { toast } from 'react-toastify';
 import { Button, Input } from '@/components';
-
 import * as S from './styles';
 import { baseApi } from '@/services/api';
-import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
 import { ApiError } from '@/utils/apiError';
 
@@ -19,23 +15,18 @@ const schema = Yup.object().shape({
     .required('This field is required'),
 });
 
-type SendPrivateP2P = {
-  email: string;
-  txHash: string;
-}
+type SendPrivateP2PFormData = Yup.InferType<typeof schema>;
 
 export function OwnerSendPrivateP2P() {
-  const formRef = useRef<FormHandles>(null);
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<SendPrivateP2PFormData>({
+    resolver: yupResolver(schema),
+  });
 
-  async function sendPrivateP2P(data: SendPrivateP2P, rest: any) {
+  async function sendPrivateP2P(data: SendPrivateP2PFormData) {
     try {
-      await schema.validate(data, {
-        abortEarly: false
-      });
-
       await baseApi.post('/owners/private-p2p/send', data);
 
-      rest.reset();
+      reset();
 
       toast(`Private P2P sent to ${data.email} successfully`, {
         autoClose: 5000,
@@ -50,12 +41,6 @@ export function OwnerSendPrivateP2P() {
       });
 
     } catch (error: any) {
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-
-        return formRef.current?.setErrors(errors);
-      }
-
       const apiErrorResponse = ApiError(error);
 
       apiErrorResponse.messages.map(message => {
@@ -79,23 +64,25 @@ export function OwnerSendPrivateP2P() {
       <S.Content>
         <S.MainContent>
 
-          <S.FormContainer ref={formRef} onSubmit={sendPrivateP2P}>
+          <S.FormContainer onSubmit={handleSubmit(sendPrivateP2P)}>
             <h1>Send Private P2P</h1>
-            
-            <Input 
-              name="email"
+
+            <Input
               type="text"
               labelText='E-mail'
+              error={errors.email?.message}
+              registration={register('email')}
             />
-            <Input 
-              name="txHash"
+            <Input
               type="text"
               labelText='Tx Hash'
               containerProps={{
                 className: "tx_hash"
               }}
+              error={errors.txHash?.message}
+              registration={register('txHash')}
             />
-            
+
             <Button text="Send" type="submit" />
           </S.FormContainer>
         </S.MainContent>

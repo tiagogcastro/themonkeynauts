@@ -1,7 +1,5 @@
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
-
 import { capitalize } from '@/utils';
-
 import {
   Title_1
 } from '@/styles/global';

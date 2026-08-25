@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
 import { Log } from '@/modules/logs/domain/entities/log';
 import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
 import {

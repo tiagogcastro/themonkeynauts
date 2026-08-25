@@ -1,9 +1,6 @@
 import { inject, injectable } from 'tsyringe';
-
 import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
-
 import { AppError } from '@/shared/errors/app-error';
-
 import { Log } from '@/modules/logs/domain/entities/log';
 import { ILogsRepository } from '@/modules/logs/domain/repositories/logs-repositories';
 import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';

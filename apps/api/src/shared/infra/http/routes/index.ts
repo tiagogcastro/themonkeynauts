@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import { crewsRouter } from '@/modules/crews/infra/http/routes/crews.routes';
 import { _logsRouter } from '@/modules/logs/infra/http/routes/_logs.routes';
 import { monkeynautsRouter } from '@/modules/monkeynauts/infra/http/routes/monkeynauts.routes';

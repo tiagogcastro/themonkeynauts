@@ -1,4 +1,4 @@
-import { 
+import {
   Container,
   Content,
   Equipaments,

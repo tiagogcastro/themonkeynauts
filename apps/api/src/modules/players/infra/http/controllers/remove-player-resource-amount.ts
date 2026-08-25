@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-
 import { instanceToInstance } from '@/shared/helpers/instance-to-instance';
-
 import { container } from 'tsyringe';
 import {
   RemovePlayerResourceAmountBusinessLogic,

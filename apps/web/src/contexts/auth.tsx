@@ -1,11 +1,8 @@
 import { useBoolean } from '@/hooks';
 import { createContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { replaceToShortString } from '@/utils/replaceToShortString';
-
 import { COLORS } from '@/theme';
-
 import {
   PlayerType,
   api,

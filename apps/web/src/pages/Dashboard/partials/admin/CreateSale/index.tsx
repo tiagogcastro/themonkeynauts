@@ -1,13 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { AiOutlineStop } from 'react-icons/ai';
-import { FormHandles } from '@unform/core';
-
-import { getValidationErrors } from '@/utils';
-
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Input } from '@/components';
 import { InputSelect } from '@/components/HTML/InputSelect';
-
 import * as S from './styles';
 import { baseApi } from '@/services/api';
 import { toast } from 'react-toastify';
@@ -15,74 +12,75 @@ import { COLORS } from '@/theme';
 import { getFormattedDate } from '@/utils/getFormattedDate';
 import { ApiError } from '@/utils/apiError';
 
+const numberField = (min: number) => Yup.number()
+  .transform((value, originalValue) => (originalValue === '' ? undefined : value))
+  .typeError('Enter a valid number')
+  .min(min, `Min quantity is ${min}`)
+  .required('This field is required');
+
 const schema = Yup.object().shape({
   type: Yup.string()
     .required('This field is required'),
   crypto: Yup.string()
     .required('This field is required'),
-  price: Yup.number()
-    .min(0.000001, 'Min quantity is 0.000001')
-    .required('This field is required'),
+  price: numberField(0.000001),
   startDate: Yup.string()
     .required('This field is required'),
   endDate: Yup.string(),
-  quantity: Yup.number()
-    .min(1, 'Min quantity is 1')
-    .required('This field is required'),
+  quantity: numberField(1),
 
-  saleMonkeynaut: Yup.object().when('type', {
-    is: (value: any) => value === 'Monkeynaut',
-    then: Yup.object({
-      private: Yup.number()
-      .required('This field is required')
-      .min(0.01, 'Value min is 0.001'),
-      sergeant: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-      captain: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-      major: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-    })
-  }),
+  saleMonkeynaut: Yup.object().when('type', ([type], schema) =>
+    type === 'Monkeynaut'
+      ? schema.shape({
+          private: numberField(0.01),
+          sergeant: numberField(0.01),
+          captain: numberField(0.01),
+          major: numberField(0.01),
+        })
+      : schema.notRequired(),
+  ),
 
-  saleShip: Yup.object().when('type', {
-    is: (value: any) => value === 'Ship',
-    then: Yup.object({
-      rankA: Yup.number()
-      .required('This field is required')
-      .min(0.01, 'Value min is 0.001'),
-      rankB: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-      rankS: Yup.number()
-        .required('This field is required')
-        .min(0.01, 'Value min is 0.001'),
-    })
-  }),
+  saleShip: Yup.object().when('type', ([type], schema) =>
+    type === 'Ship'
+      ? schema.shape({
+          rankA: numberField(0.01),
+          rankB: numberField(0.01),
+          rankS: numberField(0.01),
+        })
+      : schema.notRequired(),
+  ),
 
-  salePack: Yup.object().when('type', {
-    is: (value: any) => value === 'Pack',
-    then: Yup.object({
-      type: Yup.string()
-      .required('This field is required')
-    })
-  })
+  salePack: Yup.object().when('type', ([type], schema) =>
+    type === 'Pack'
+      ? schema.shape({
+          type: Yup.string().required('This field is required'),
+        })
+      : schema.notRequired(),
+  ),
 });
 
-type CreateSale = {
-  price: number;
-  quantity: number;
-  startDate: string;
-  endDate: string;
+type CreateSaleFormData = {
   crypto: 'BNB' | 'BUSD' | 'SPC';
   type: 'Monkeynaut' | 'Ship' | 'Pack';
-  saleMonkeynaut?: MonkeynautSale;
-  saleShip?: ShipSale;
-  salePack?: PackSale;
-}
+  price: number | string;
+  quantity: number | string;
+  startDate: string;
+  endDate?: string;
+  saleMonkeynaut?: {
+    private: number | string;
+    sergeant: number | string;
+    captain: number | string;
+    major: number | string;
+  };
+  saleShip?: {
+    rankA: number | string;
+    rankB: number | string;
+    rankS: number | string;
+  };
+  salePack?: {
+    type: 'Basic' | 'Advanced' | 'Expert' | 'Random';
+  };
+};
 
 const types = [
   {
@@ -131,7 +129,7 @@ const packType = [
     value: 'Random',
     label: 'Random'
   },
-]
+];
 
 type SaleType = 'Monkeynaut' | 'Ship' | 'Pack';
 
@@ -148,7 +146,7 @@ type CommonSaleProps = {
   active: boolean;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 type MonkeynautSale = CommonSaleProps & {
   private: number;
@@ -171,15 +169,23 @@ type Sales = {
   monkeynauts: MonkeynautSale[];
   ships: ShipSale[];
   packs: PackSale[];
-}
+};
 
 export function AdminCreateSale() {
-  const formRef = useRef<FormHandles>(null);
-
-  const [currentType, setCurrentType] = useState('');
-
   const [openSales, setOpenSales] = useState<Sales>({} as Sales);
   const [lastSales, setLastSales] = useState<Sales>({} as Sales);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<CreateSaleFormData>({
+    resolver: yupResolver(schema) as never,
+  });
+
+  const currentType = watch('type');
 
   async function getOpenMonkeynautSale() {
     const response = await baseApi.get('/sale-events/list-monkeynauts', {
@@ -274,22 +280,22 @@ export function AdminCreateSale() {
 
   async function getOpenSales() {
     await getOpenMonkeynautSale();
-    await getOpenShipSale()
-    await getOpenPackSale()
+    await getOpenShipSale();
+    await getOpenPackSale();
   }
 
   async function getLastSales() {
     await getLastMonkeynautSale();
-    await getLastShipSale()
-    await getLastPackSale()
+    await getLastShipSale();
+    await getLastPackSale();
   }
 
   useEffect(() => {
-    getOpenSales()
-    getLastSales()
+    getOpenSales();
+    getLastSales();
   }, []);
 
-  async function createSale(data: CreateSale, rest: any) {
+  async function createSale(data: CreateSaleFormData) {
     const {
       price,
       quantity,
@@ -301,7 +307,7 @@ export function AdminCreateSale() {
       type,
       crypto
     } = data;
-    
+
     let dataCommon = {};
 
     switch (data.type) {
@@ -350,7 +356,7 @@ export function AdminCreateSale() {
       price: Number(price),
       quantity: Number(quantity),
       ...dataCommon
-    }
+    };
 
     const postData = endDate ? {
       ...dataFormatted,
@@ -358,10 +364,6 @@ export function AdminCreateSale() {
     } : dataFormatted;
 
     try {
-      await schema.validate(postData, {
-        abortEarly: false
-      });
-
       await baseApi.post('/admins/sale-events/create', postData);
 
       const executeGetOpenSaleByType = {
@@ -379,7 +381,7 @@ export function AdminCreateSale() {
       executeGetOpenSaleByType[type]();
       executeLastOpenSaleByType[type]();
 
-      rest.reset();
+      reset();
 
       toast(`Sale created successfully`, {
         autoClose: 5000,
@@ -394,12 +396,6 @@ export function AdminCreateSale() {
       });
 
     } catch (error: any) {
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-
-        return formRef.current?.setErrors(errors);
-      }
-
       const apiErrorResponse = ApiError(error);
 
       apiErrorResponse.messages.map(message => {
@@ -436,7 +432,7 @@ export function AdminCreateSale() {
             salePackId: sale.id,
           }
         },
-      }
+      };
 
       const _type = sale.saleType as SaleType;
 
@@ -445,7 +441,7 @@ export function AdminCreateSale() {
         active: false,
         ...saleDataUnique[_type],
       });
-      
+
       const executeGetOpenSaleByType = {
         Monkeynaut: getOpenMonkeynautSale,
         Ship: getOpenShipSale,
@@ -458,8 +454,8 @@ export function AdminCreateSale() {
         Pack: getLastPackSale,
       };
 
-      executeGetOpenSaleByType[_type]()
-      executeGetLastSaleByType[_type]()
+      executeGetOpenSaleByType[_type]();
+      executeGetLastSaleByType[_type]();
 
       toast(`Sale stopped successfully`, {
         autoClose: 5000,
@@ -491,104 +487,123 @@ export function AdminCreateSale() {
     }
   }
 
+  const inputError = (path: keyof CreateSaleFormData | string): string | undefined => {
+    const keys = path.split('.') as (keyof CreateSaleFormData)[];
+    let node: any = errors;
+
+    for (const key of keys) {
+      if (!node) return undefined;
+      node = node[key];
+    }
+
+    return node?.message;
+  };
+
   return (
     <S.Container>
       <S.Content>
         <S.MainContent>
 
-          <S.FormContainer ref={formRef} onSubmit={createSale}>
+          <S.FormContainer onSubmit={handleSubmit(createSale)}>
             <h1>Create a new sales event</h1>
-            <InputSelect 
-              name='type' 
+            <InputSelect
               labelText='Type'
-              onChange={(e: any) => e && setCurrentType(e.value)}
               fields={types}
+              error={inputError('type')}
+              registration={register('type')}
             />
-            <InputSelect 
-              name='crypto'
-              labelText='Crypto' 
+            <InputSelect
+              labelText='Crypto'
               fields={cryptoTypes}
+              error={inputError('crypto')}
+              registration={register('crypto')}
             />
-            <Input 
-              name="price"
+            <Input
               type="text"
               labelText='Price'
+              error={inputError('price')}
+              registration={register('price')}
             />
-            <Input 
-              name="startDate"
+            <Input
               type="date"
               labelText='Start Date'
+              error={inputError('startDate')}
+              registration={register('startDate')}
             />
-            <Input 
-              name="endDate"
+            <Input
               type="date"
               labelText='End Date'
+              error={inputError('endDate')}
+              registration={register('endDate')}
             />
-            <Input 
-              name="quantity"
+            <Input
               type="number"
               labelText='Quantity'
+              error={inputError('quantity')}
+              registration={register('quantity')}
             />
             {currentType === 'Monkeynaut' && (
               <>
-                <Input 
-                  name="saleMonkeynaut.private"
+                <Input
                   type="number"
                   labelText='Private (%)'
+                  error={inputError('saleMonkeynaut.private')}
+                  registration={register('saleMonkeynaut.private')}
                 />
-                <Input 
-                  name="saleMonkeynaut.sergeant"
+                <Input
                   type="number"
                   labelText='Sargeant (%)'
+                  error={inputError('saleMonkeynaut.sergeant')}
+                  registration={register('saleMonkeynaut.sergeant')}
                 />
-                <Input 
-                  name="saleMonkeynaut.captain"
+                <Input
                   type="number"
                   labelText='Captain (%)'
+                  error={inputError('saleMonkeynaut.captain')}
+                  registration={register('saleMonkeynaut.captain')}
                 />
-                <Input 
-                  name="saleMonkeynaut.major"
+                <Input
                   type="number"
                   labelText='Major (%)'
+                  error={inputError('saleMonkeynaut.major')}
+                  registration={register('saleMonkeynaut.major')}
                 />
               </>
             )}
 
             {currentType === 'Ship' && (
               <>
-                <Input 
-                  name="saleShip.rankA"
+                <Input
                   type="number"
                   labelText='Rank A (%)'
+                  error={inputError('saleShip.rankA')}
+                  registration={register('saleShip.rankA')}
                 />
-                <Input 
-                  name="saleShip.rankB"
+                <Input
                   type="number"
                   labelText='Rank B (%)'
+                  error={inputError('saleShip.rankB')}
+                  registration={register('saleShip.rankB')}
                 />
-                <Input 
-                  name="saleShip.rankS"
+                <Input
                   type="number"
                   labelText='Rank S (%)'
+                  error={inputError('saleShip.rankS')}
+                  registration={register('saleShip.rankS')}
                 />
               </>
             )}
 
             {currentType === 'Pack' && (
               <>
-                <InputSelect 
-                  name='salePack.type'
-                  labelText='Pack type' 
+                <InputSelect
+                  labelText='Pack type'
                   fields={packType}
+                  error={inputError('salePack.type')}
+                  registration={register('salePack.type')}
                 />
               </>
             )}
-            
-            {/* <Input 
-              name="buy_limit"
-              type="number"
-              labelText='Buy limit'
-            /> */}
             <Button text="Create" type="submit" />
           </S.FormContainer>
 
@@ -653,7 +668,7 @@ export function AdminCreateSale() {
                       </S.TdCustom>
                     </tr>
                   ))}
-                  
+
                 </tbody>
               </S.TableCustom>
             </div>

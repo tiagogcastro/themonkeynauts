@@ -1,36 +1,21 @@
-import {
-  Modal,
-  ModalProps
-} from '@tg0/react-modal';
-
+import { Modal, type ModalProps } from '@/components/Modal';
 import { Button } from '@/components';
-
 import {
   Container
 } from './styles';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
-export type ModalCustomProps = ModalProps & {
-  handleClose: () => void;
-};
+export type ModalCustomProps = ModalProps;
 
 export function PrivateSaleSuccess({
   isOpen,
   handleClose,
-  ...rest
 }: ModalCustomProps) {
 
   return (
-    <Modal 
+    <Modal
       isOpen={isOpen}
-      containerTag={{
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }
-      }}
-      {...rest}
+      handleClose={handleClose}
     >
       <Container>
         <div className="cubic cubic1" />

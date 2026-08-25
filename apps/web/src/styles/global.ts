@@ -1,7 +1,5 @@
 import styled, { createGlobalStyle, css } from 'styled-components';
-
 import { COLORS, FONTS } from '@/theme';
-
 import bg_item_title from '@/assets/images/bg_item_title.png';
 
 export const GlobalStyle = createGlobalStyle`

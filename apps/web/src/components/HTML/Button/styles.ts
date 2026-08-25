@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-
 import button_background_1 from '@/assets/svg/button_background_1.svg';
 
 export type ButtonContainerProps = {

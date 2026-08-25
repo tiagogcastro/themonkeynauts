@@ -1,9 +1,6 @@
 import { inject, injectable } from 'tsyringe';
-
 import { Monkeynaut } from '@/modules/monkeynauts/domain/entities/monkeynaut';
-
 import { ICronJobProvider } from '@/shared/domain/providers/cronjob-provider';
-
 import { getPercentageInt } from '@/shared/helpers';
 import { IMonkeynautsRepository } from '../../domain/repositories/monkeynauts-repositories';
 

@@ -1,18 +1,14 @@
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-
-import { Login, Register, ForgotPassword } from '@/pages';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { ForgotPassword, Login, Register } from '@/pages';
 
 export function PublicRouters() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route component={Login} exact path="/" />
-        <Route component={Login} path="/login" />
-        <Route component={ForgotPassword} path="/forgot-password" />
-        <Route component={Register} path="/register" />
-
-        <Route path="*" component={() => <Redirect to="/login" />} />
-      </Switch>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }

@@ -1,4 +1,4 @@
-import { 
+import {
   Tab,
   Tabs
 } from '@/components/DashboardTab';

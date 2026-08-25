@@ -1,11 +1,8 @@
 import { toast } from 'react-toastify';
-
 import { address, ethereum as ethereumConfig } from '@/config/ethereum';
 import { paymentByEthereum } from '@/utils';
-
 import { Button } from '@/components';
 import { COLORS } from '@/theme';
-
 import {
   Container,
   Content,
@@ -187,7 +184,7 @@ export function StoreTab() {
 
       const { error, transaction } = await paymentByEthereum({
         ethereum: (window as any).ethereum,
-        ether: ethers.utils.parseEther(String(data.price))._hex,
+        ether: ethers.parseEther(String(data.price)).toString(),
         dataContract: ethereumConfig.sendTransaction.contract[data.crypto],
         cryptoType: data.crypto,
       });

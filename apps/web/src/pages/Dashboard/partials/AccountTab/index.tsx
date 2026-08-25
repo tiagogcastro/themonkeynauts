@@ -3,23 +3,17 @@ import { FiLogOut } from 'react-icons/fi';
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
-
 import { useAuth, useBoolean } from '@/hooks';
 import { paymentByEthereum } from '@/utils';
-
 import { Wallet } from '@/components/modals/Wallet';
 import { Button } from '@/components';
-
 import { ethereum as ethereumConfig } from '@/config/ethereum';
-
 import bronze_ore from '@/assets/images/bronze_ore.png';
 import iron_ore from '@/assets/images/iron_ore.png';
 import gold_ore from '@/assets/images/gold_ore.png';
 import scrap from '@/assets/images/scrap.png';
 import spc from '@/assets/images/spc.png';
-
 import { COLORS } from '@/theme';
-
 import {
   Container,
   Content,
@@ -174,7 +168,7 @@ export function AccountTab() {
 
         const { transaction, error } = await paymentByEthereum({
           ethereum: (window as any).ethereum,
-          ether: ethers.utils.parseEther(inputValue)._hex,
+          ether: ethers.parseEther(inputValue).toString(),
           dataContract: ethereumConfig.deposit.contract.SPC,
           cryptoType: 'SPC',
         });

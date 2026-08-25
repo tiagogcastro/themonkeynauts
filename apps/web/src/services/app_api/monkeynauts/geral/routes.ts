@@ -1,6 +1,5 @@
 import { baseApi } from '@/services/api';
 import { AxiosResponse } from 'axios';
-
 import {
   GetMonkeynauts,
 } from './response';

@@ -1,9 +1,7 @@
 import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { createAirDropNftPlayerController } from '../controllers/create-air-drop-nft';
 import { createSaleController } from '../controllers/create-sale';
 import { updateSaleController } from '../controllers/update/update-sales';

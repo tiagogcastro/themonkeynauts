@@ -1,11 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 import { Ship } from '@/modules/ships/domain/entities/ship';
-
 import { ShipNotFoundError } from '@/modules/players/core/business-logic/errors/ship-not-fount-error';
 import { PlayerNotFoundError } from '@/modules/players/core/business-logic/errors/player-not-fount-error';
-
 import { Either, left, right } from '@/shared/core/logic/either';
-
 import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
 import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';

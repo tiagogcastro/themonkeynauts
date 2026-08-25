@@ -1,6 +1,6 @@
+import { Contract, BrowserProvider, parseUnits } from 'ethers';
 import { address } from '@/config/ethereum';
 import { spcABI } from '@/services/SPCCrypto/abi';
-import Web3 from 'web3';
 
 export type MetaMaskPaymentParams = {
   ether: string;
@@ -24,10 +24,10 @@ export type PaymentByEthereumResponse = {
   error: any;
 }
 
-export const paymentByEthereum = async ({ 
-  ether, 
-  fromAddress, 
-  toAddress, 
+export const paymentByEthereum = async ({
+  ether,
+  fromAddress,
+  toAddress,
   dataContract,
   ethereum,
   cryptoType,
@@ -41,41 +41,37 @@ export const paymentByEthereum = async ({
       transaction: ''
     }
   }
-  
+
   try {
-    if(!ethereum.selectedAddress) {
-      await ethereum.request({
-        method: 'eth_requestAccounts'
+    const provider = new BrowserProvider(ethereum);
+    const signer = fromAddress
+      ? await provider.getSigner(fromAddress)
+      : await provider.getSigner();
+    const signerAddress = await signer.getAddress();
+
+    if (cryptoType === 'BNB') {
+      const sent = await signer.sendTransaction({
+        to: toAddress || address.SALES,
+        value: parseUnits(ether, 'ether'),
       });
-    }
 
-    const web3 = new Web3(ethereum);
-    const newContract = new web3.eth.Contract(spcABI as any, dataContract);
-
-    const transactionParameters = {
-      to: toAddress || cryptoType === 'SPC' ? address.SPC : address.SALES, 
-      from: fromAddress || ethereum.selectedAddress,
-      value: ether,
-      data: dataContract,
-    };
-
-    if(cryptoType === 'BNB') {
-      transaction = await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters]
-      });
+      transaction = sent.hash;
     } else {
-      const { transactionHash } = await newContract.methods.transfer(
-        transactionParameters.to, 
-        transactionParameters.value
-      )
-      .send({
-        from: transactionParameters.from
-      })
-      transaction = transactionHash;
+      const contract = new Contract(address.SPC, spcABI, signer);
+
+      const sent = await contract.transfer(
+        toAddress || address.SALES,
+        parseUnits(ether, 'ether'),
+      );
+
+      const receipt = await sent.wait();
+
+      transaction = receipt?.hash || sent.hash;
     }
+
+    void signerAddress;
   } catch (err) {
-    error = err
+    error = err;
   }
 
   return {

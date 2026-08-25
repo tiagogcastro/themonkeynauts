@@ -1,8 +1,5 @@
 import styled from 'styled-components';
-import { Form } from '@unform/web';
-
 import { COLORS } from '@/theme';
-
 import background_1 from '@/assets/images/background_1.png';
 import panel_character_attribute_1 from '@/assets/images/panel_character_attribute_1.png';
 import panel_character_attribute_2 from '@/assets/images/panel_character_attribute_2.png';
@@ -64,7 +61,7 @@ export const MainContent = styled.main`
   }
 `;
 
-export const FormContainer = styled(Form)`
+export const FormContainer = styled.form`
   .page_title {
     line-height: 3rem;
     

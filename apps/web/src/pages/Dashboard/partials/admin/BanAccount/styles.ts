@@ -1,4 +1,3 @@
-import { Form } from '@unform/web';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -27,7 +26,7 @@ export const MainContent = styled.main`
   }
 `;
 
-export const FormContainer = styled(Form)`
+export const FormContainer = styled.form`
   .textarea_label {
     max-width: 380px;
     min-width: 380px;

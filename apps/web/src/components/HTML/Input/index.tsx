@@ -1,44 +1,36 @@
-import { 
-  HTMLInputTypeAttribute, 
-  useEffect, 
-  useRef,
-} from 'react';
-import { useField } from '@unform/core';
+import { HTMLInputTypeAttribute, useRef } from 'react';
+import type { UseFormRegisterReturn } from 'react-hook-form';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-
 import { useBoolean } from '@/hooks';
-
 import {
   Container,
   Content
 } from './styles';
 
-export type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
-  name: string;
+export type InputProps = Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, 'ref'> & {
+  name?: string;
   labelText?: string;
   type?: HTMLInputTypeAttribute;
-  containerProps?: React.HTMLAttributes<HTMLLabelElement>
+  error?: string;
+  containerProps?: React.HTMLAttributes<HTMLLabelElement>;
+  registration?: UseFormRegisterReturn;
 }
 
 export function Input({
   type = 'text',
-  name,
   labelText,
+  error,
   containerProps,
+  registration,
   ...rest
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { fieldName, defaultValue, registerField, error, clearError } = useField(name)
 
   const passwordVisible = useBoolean(false);
   const isFocused = useBoolean(false);
 
   function handleFocusInput() {
-    isFocused.changeToTrue()
-
-    if(error) {
-      clearError();
-    }
+    isFocused.changeToTrue();
   }
 
   function handlePasswordVisible(changeStateTo: boolean) {
@@ -51,38 +43,28 @@ export function Input({
     handleFocusInput();
   }
 
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef,
-      getValue: ref => {
-        return ref.current.value
-      },
-      setValue: (ref, value) => {
-        ref.current.value = value
-      },
-      clearValue: ref => {
-        ref.current.value = ''
-      },
-    })
-  }, [fieldName, registerField]);
-
   return (
     <Container className="input_label" {...containerProps} isError={!!error}>
       <span className="input_text">{labelText}</span>
       <Content
         isFocused={isFocused.state}
         isError={!!error}
-        onClick={() => isFocused.changeToTrue()}
+        onClick={() => inputRef.current?.focus()}
       >
-        <input 
+        <input
           type={type === 'password' && passwordVisible.state ? 'text': type}
-          name={name}
-          ref={inputRef}
-          defaultValue={defaultValue}
+          id={registration?.name}
+          ref={(element) => {
+            inputRef.current = element;
+            registration?.ref(element);
+          }}
           onFocus={handleFocusInput}
-          onBlur={() => isFocused.changeToFalse()}
+          onBlur={() => {
+            isFocused.changeToFalse();
+            registration?.onBlur(event as never);
+          }}
           {...rest}
+          {...(registration ? { onChange: registration.onChange, name: registration.name } : {})}
         />
         {type === 'password' && (
           passwordVisible.state ? (
@@ -108,5 +90,5 @@ export function Input({
       </Content>
       <span className="input_error">{error}</span>
     </Container>
-  )
+  );
 }

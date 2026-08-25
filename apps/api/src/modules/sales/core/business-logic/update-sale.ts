@@ -1,10 +1,7 @@
 import { inject, injectable } from 'tsyringe';
-
 import { UpdateSaleRequestDTO } from '@/modules/sales/dtos/update-sale-request';
-
 import { IDateProvider } from '@/shared/domain/providers/date-provider';
 import { AppError } from '@/shared/errors/app-error';
-
 import { IMonkeynautSale } from '@/modules/sales/domain/entities/monkeynaut-sale';
 import { IPackSale } from '@/modules/sales/domain/entities/pack-sale';
 import { IShipSale } from '@/modules/sales/domain/entities/ship-sale';

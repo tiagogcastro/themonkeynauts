@@ -1,17 +1,13 @@
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-      
-import { FormHandles } from '@unform/core';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import axios from 'axios';
-
+import { toast } from 'react-toastify';
 import { Button, Input } from '@/components';
-
 import {
   PlayerType,
 } from '@/services/api';
 
-import { getValidationErrors } from '@/utils';
 import { useAuth, useBoolean } from '@/hooks';
 
 import logo from '@/assets/images/logo.png';
@@ -22,7 +18,6 @@ import {
   MainContent,
   FormContainer
 } from './styles';
-import { toast } from 'react-toastify';
 import { COLORS } from '@/theme';
 import { ApiError } from '@/utils/apiError';
 
@@ -33,29 +28,19 @@ const schema = Yup.object().shape({
 
 export function Login() {
   const { signIn } = useAuth();
-  const formRef = useRef<FormHandles>(null);
-
   const loadingSignIn = useBoolean(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<PlayerType.AppLoginParams>({
+    resolver: yupResolver(schema),
+  });
 
   async function handleSignInPlayer(data: PlayerType.AppLoginParams) {
     loadingSignIn.changeToTrue();
 
     try {
-      formRef.current?.setErrors({});
-  
-      await schema.validate(data, {
-        abortEarly: false
-      });
-
       await signIn(data);
     } catch(error: any) {
       loadingSignIn.changeToFalse();
-
-      if(error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-        
-        return formRef.current?.setErrors(errors);
-      }
 
       const apiErrorResponse = ApiError(error);
 
@@ -80,24 +65,26 @@ export function Login() {
       <Content>
         <MainContent>
           <img src={logo} alt="App Logo" className="app_logo"/>
-          <FormContainer ref={formRef} onSubmit={handleSignInPlayer}>
+          <FormContainer onSubmit={handleSubmit(handleSignInPlayer)}>
             <h1 className="page_title">Login</h1>
             <div className="inputs">
-              <Input 
-                name="email" 
+              <Input
                 labelText="E-mail"
                 placeholder="E-mail..."
                 type="text"
+                error={errors.email?.message}
+                registration={register('email')}
               />
               <Input
-                name="password" 
                 labelText="Password"
                 placeholder="Password..."
                 type="password"
+                error={errors.password?.message}
+                registration={register('password')}
               />
             </div>
-            <Button 
-              className="button_submit" 
+            <Button
+              className="button_submit"
               type="submit"
               text="Login"
               loading={{
@@ -120,5 +107,5 @@ export function Login() {
         </MainContent>
       </Content>
     </Container>
-  )
+  );
 }

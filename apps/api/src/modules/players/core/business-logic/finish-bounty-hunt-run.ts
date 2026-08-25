@@ -1,14 +1,10 @@
 import { inject, injectable } from 'tsyringe';
-
 import { IGameParamsRepository } from '@/modules/game-params/domain/repositories/game-params-repositories';
 import { IInitBountyHuntTokenRepository } from '@/modules/players/domain/repositories/init-bounty-hunt-token-repository';
 import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import { IResourcesRepository } from '@/modules/players/domain/repositories/resources-repository';
-
 import { Either, left, right } from '@/shared/core/logic/either';
-
 import { HandleBountyHuntRankBusinessLogic } from './handle-bounty-hunt-rank';
-
 import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 import { InvalidActiveShipError } from './errors/invalid-active-ship-error';
 import { InvalidInitBountyHuntTokenError } from './errors/invalid-init-bounty-hunt-token-error';

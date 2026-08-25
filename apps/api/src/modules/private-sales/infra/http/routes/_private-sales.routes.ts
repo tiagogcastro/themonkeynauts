@@ -3,9 +3,7 @@ import { txHashRegExp } from '@/config/regexp';
 import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { createPrivateSaleController } from '../controllers/create-private-sale';
 
 const _privateSalesRouter = Router();

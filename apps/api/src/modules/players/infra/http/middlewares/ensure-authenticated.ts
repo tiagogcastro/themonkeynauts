@@ -1,7 +1,6 @@
 import { EnsureAuthenticatedBusinessLogic } from '@/modules/players/core/business-logic/ensure-authenticated';
 import { AppError } from '@/shared/errors/app-error';
 import { NextFunction, Request, Response } from 'express';
-
 import { container } from 'tsyringe';
 
 export async function ensureAuthenticated(

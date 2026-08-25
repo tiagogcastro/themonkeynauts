@@ -1,17 +1,9 @@
 import { RiAlertFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
-
-import {
-  Modal,
-  ModalProps
-} from '@tg0/react-modal';
-
+import { Modal, type ModalProps } from '@/components/Modal';
 import { api } from '@/services/api';
-
 import { Button } from '@/components';
-
 import { COLORS } from '@/theme';
-
 import {
   Container
 } from './styles';
@@ -19,9 +11,7 @@ import { useAuth } from '@/hooks';
 import { connectWallet } from '@/utils/wallet';
 import { ApiError } from '@/utils/apiError';
 
-export type ModalCustomProps = ModalProps & {
-  handleClose: () => void;
-};
+export type ModalCustomProps = ModalProps;
 
 export function Wallet({
   isOpen,
@@ -72,15 +62,9 @@ export function Wallet({
   }
 
   return (
-    <Modal 
+    <Modal
       isOpen={isOpen}
-      containerTag={{
-        style: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }
-      }}
+      handleClose={handleClose}
     >
       <Container>
         <div className="cubic cubic1" />

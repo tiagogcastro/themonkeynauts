@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-
 import dashboard_bg_1 from '@/assets/svg/dashboard_bg_1.svg';
 import dashboard_bg_2 from '@/assets/svg/dashboard_bg_2.svg';
 import dashboard_bg_3 from '@/assets/svg/dashboard_bg_3.svg';
 import dashboard_bg_4 from '@/assets/svg/dashboard_bg_4.svg';
-
 import background_1 from '@/assets/images/background_1.png';
 
 export const Container = styled.div`

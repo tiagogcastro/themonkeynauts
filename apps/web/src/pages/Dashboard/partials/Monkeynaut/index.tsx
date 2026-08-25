@@ -1,11 +1,8 @@
 import { AiFillHeart } from 'react-icons/ai';
 import { GiBroadsword } from 'react-icons/gi';
 import { BiRun, BiShieldQuarter, BiPlus } from 'react-icons/bi';
-
 import { UseBooleanTypes, useDashboardTabs } from '@/hooks';
-
 import { capitalize } from '@/utils';
-
 import {
   Title_1
 } from '@/styles/global';

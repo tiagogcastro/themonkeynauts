@@ -1,15 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-
 import { useAuth, useBoolean, UseBooleanTypes, useDashboardTabs } from '@/hooks';
-
 import { Monkeynaut } from '../Monkeynaut';
 import { baseApi, MonkeynautType } from '@/services/api';
 import { capitalize, replaceToShortString, verifyRole } from '@/utils';
-
 import { Loading } from '@/components';
-
 import { Title_1 } from '@/styles/global';
-import { 
+import {
   Container,
   ListMonkeynautsContainer,
   Content, 

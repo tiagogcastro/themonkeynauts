@@ -1,6 +1,5 @@
 import { Tab, Tabs } from '@/components/DashboardTab';
 import { OwnerSendPrivateP2P } from './SendPrivateP2P';
-
 import * as S from './styles';
 
 export function Owner() {

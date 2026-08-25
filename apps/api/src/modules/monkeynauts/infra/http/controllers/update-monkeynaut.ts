@@ -1,5 +1,4 @@
 import { container } from 'tsyringe';
-
 import { UpdateMonkeynautRequestDTO } from '@/modules/crews/dtos/update-monkeynaut-request';
 import { UpdateMonkeynautBusinessLogic } from '@/modules/monkeynauts/core/business-logic/update-monkeynaut';
 import { IController } from '@/shared/core/infra/controller';

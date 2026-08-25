@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
 import {
   IMonkeynautSale,
   MonkeynautSale,

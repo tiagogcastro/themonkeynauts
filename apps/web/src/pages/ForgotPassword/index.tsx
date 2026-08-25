@@ -1,56 +1,60 @@
-import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-      
-import { FormHandles } from '@unform/core';
-// import * as Yup from 'yup';
-// import axios from 'axios';
-
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { Button, Input } from '@/components';
-
-// import { getValidationErrors } from '@/utils';
-
+import { api, baseApi } from '@/services/api';
 import logo from '@/assets/images/logo.png';
-
 import {
   Container,
   Content,
   MainContent,
   FormContainer
 } from './styles';
-// import { toast } from 'react-toastify';
-// import { COLORS } from '@/theme';
 
-// const schema = Yup.object().shape({
-//   email: Yup.string().required('This field is required').email('Enter a valid email address'),
-// });
+const schema = Yup.object().shape({
+  email: Yup.string().required('This field is required').email('Enter a valid email address'),
+});
+
+type ForgotPasswordFormData = {
+  email: string;
+};
 
 export function ForgotPassword() {
-  const formRef = useRef<FormHandles>(null);
+  const { register, handleSubmit, formState: { errors } } = useForm<ForgotPasswordFormData>({
+    resolver: yupResolver(schema),
+  });
 
-  async function handleForgotPassword() {}
+  async function handleForgotPassword({ email }: ForgotPasswordFormData) {
+    try {
+      await baseApi.post('/players/forgot-password', { email });
+
+      void api;
+    } catch {
+      // silent: we do not reveal whether the email exists
+    }
+  }
 
   return (
     <Container>
       <Content>
         <MainContent>
           <img src={logo} alt="App Logo" className="app_logo"/>
-          <FormContainer ref={formRef} onSubmit={handleForgotPassword}>
+          <FormContainer onSubmit={handleSubmit(handleForgotPassword)}>
             <h1 className="page_title">Forgot password</h1>
             <div className="inputs">
-              <Input 
-                name="email" 
+              <Input
                 labelText="E-mail"
                 placeholder="E-mail..."
                 type="text"
+                error={errors.email?.message}
+                registration={register('email')}
               />
             </div>
-            <Button 
-              className="button_submit" 
+            <Button
+              className="button_submit"
               type="submit"
               text="Forgot password"
-              // loading={{
-              //   state: loadingSignIn.state,
-              // }}
             />
 
             <footer>
@@ -65,5 +69,5 @@ export function ForgotPassword() {
         </MainContent>
       </Content>
     </Container>
-  )
+  );
 }

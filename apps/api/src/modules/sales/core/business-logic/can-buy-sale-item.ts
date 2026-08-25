@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
 import { IMonkeynautsRepository } from '@/modules/monkeynauts/domain/repositories/monkeynauts-repositories';
 import { IPlayersRepository } from '@/modules/players/domain/repositories/players-repository';
 import { IMonkeynautSalesRepository } from '@/modules/sales/domain/repositories/monkeynaut-sales-repositories';

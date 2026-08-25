@@ -1,9 +1,6 @@
 import { inject, injectable } from 'tsyringe';
-
 import { PlayerAuth } from '@/modules/players/domain/entities/player-auth';
-
 import { AppError } from '@/shared/errors/app-error';
-
 import { IAppPlayerAuthRepository } from '@/modules/players/domain/repositories/app-player-auth-repository';
 import { ITokenProvider } from '@/shared/domain/providers/token-provider';
 import { IDateProvider } from '@/shared/domain/providers/date-provider';

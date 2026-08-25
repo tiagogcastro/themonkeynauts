@@ -1,10 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
-
 import { adaptRoute } from '@/shared/core/infra/adapters/express-route-adapter';
-
 import { validate } from '@/shared/infra/http/validation';
-
 import { createMonkeynautController } from '../controllers/create-monkeynaut';
 import { updateMonkeynautController } from '../controllers/update-monkeynaut';
 import { changePlayerOperatorMonkeynautController } from '../controllers/change-player-operator-monkeynaut';

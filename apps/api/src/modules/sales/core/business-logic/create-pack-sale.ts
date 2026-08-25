@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-
 import { IPackSale, PackSale } from '@/modules/sales/domain/entities/pack-sale';
 import { IPackSalesRepository } from '@/modules/sales/domain/repositories/pack-sales-repositories';
 import { CreatePackSaleRequestDTO } from '@/modules/sales/dtos/create-pack-sale-request';

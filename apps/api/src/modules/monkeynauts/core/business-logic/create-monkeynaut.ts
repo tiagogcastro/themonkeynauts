@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { inject, injectable } from 'tsyringe';
-
 import { getRandomInt } from '@/shared/helpers';
-
 import {
   IMonkeynaut,
   Monkeynaut,

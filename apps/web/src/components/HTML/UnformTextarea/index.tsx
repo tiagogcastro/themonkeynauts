@@ -1,56 +1,33 @@
-import { 
-  useEffect, 
-  useRef,
-} from 'react';
-import { useField } from '@unform/core';
-
+import { useRef } from 'react';
+import type { UseFormRegisterReturn } from 'react-hook-form';
 import { useBoolean } from '@/hooks';
-
 import {
   Container,
   Content
 } from './styles';
 
-export type TextareaProps = React.HTMLAttributes<HTMLTextAreaElement> & {
-  name: string;
+export type TextareaProps = Omit<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, 'ref'> & {
+  name?: string;
   labelText?: string;
-  containerProps?: React.HTMLAttributes<HTMLLabelElement>
+  error?: string;
+  containerProps?: React.HTMLAttributes<HTMLLabelElement>;
+  registration?: UseFormRegisterReturn;
 }
 
 export function UnformTextarea({
-  name,
   labelText,
+  error,
   containerProps,
+  registration,
   ...rest
 }: TextareaProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { fieldName, defaultValue, registerField, error, clearError } = useField(name)
 
   const isFocused = useBoolean(false);
 
   function handleFocusTextarea() {
-    isFocused.changeToTrue()
-
-    if(error) {
-      clearError();
-    }
+    isFocused.changeToTrue();
   }
-
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: textareaRef,
-      getValue: ref => {
-        return ref.current.value
-      },
-      setValue: (ref, value) => {
-        ref.current.value = value
-      },
-      clearValue: ref => {
-        ref.current.value = ''
-      },
-    })
-  }, [fieldName, registerField]);
 
   return (
     <Container className="textarea_label" {...containerProps} isError={!!error}>
@@ -58,18 +35,24 @@ export function UnformTextarea({
       <Content
         isFocused={isFocused.state}
         isError={!!error}
-        onClick={() => isFocused.changeToTrue()}
+        onClick={() => textareaRef.current?.focus()}
       >
-        <textarea 
-          name={name}
-          ref={textareaRef}
-          defaultValue={defaultValue}
+        <textarea
+          id={registration?.name}
+          ref={(element) => {
+            textareaRef.current = element;
+            registration?.ref(element);
+          }}
           onFocus={handleFocusTextarea}
-          onBlur={isFocused.changeToFalse}
+          onBlur={() => {
+            isFocused.changeToFalse();
+            registration?.onBlur(event as never);
+          }}
           {...rest}
+          {...(registration ? { onChange: registration.onChange, name: registration.name } : {})}
         />
       </Content>
       <span className="textarea_error">{error}</span>
     </Container>
-  )
+  );
 }

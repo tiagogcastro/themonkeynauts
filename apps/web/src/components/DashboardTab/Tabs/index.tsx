@@ -1,9 +1,7 @@
 import { useBoolean } from '@/hooks';
 import { useEffect, useState } from 'react';
-
 import { Menu } from '../Menu';
 import { TabTitle } from '../TabTitle';
-
 import {
   Container,
 } from './styles';
