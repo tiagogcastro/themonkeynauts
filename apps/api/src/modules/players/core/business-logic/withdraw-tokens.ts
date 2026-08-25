@@ -1,3 +1,4 @@
+import { balanceConfig } from '@config/balance';
 import { IPlayer } from '@modules/players/domain/entities/player';
 import { IResource } from '@modules/players/domain/entities/resource';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
@@ -58,7 +59,7 @@ class WithdrawTokensBusinessLogic {
     if (!resource) {
       return left(new ResourceNotFoundError());
     }
-    const minimumAmountNeededToWithdraw = 1000;
+    const minimumAmountNeededToWithdraw = balanceConfig.withdrawMinAmount;
 
     if (resource.spc < minimumAmountNeededToWithdraw) {
       return left(new AmountLessMinimumNeededAmountError());

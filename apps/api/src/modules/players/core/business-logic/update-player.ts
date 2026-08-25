@@ -1,5 +1,4 @@
 import { IPlayer } from '@modules/players/domain/entities/player';
-import { PlayerRole } from '@modules/players/domain/enums/player-role';
 import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { Either, right } from '@shared/core/logic/either';
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
@@ -9,7 +8,6 @@ import { inject, injectable } from 'tsyringe';
 export type UpdatePlayerRequestDTO = {
   playerId: string;
   nickname: string;
-  role?: PlayerRole;
 
   oldPassword?: string;
   newPassword?: string;
@@ -34,7 +32,6 @@ class UpdatePlayerBusinessLogic {
     newPassword,
     newPasswordConfirmation,
     oldPassword,
-    role,
   }: UpdatePlayerRequestDTO): Promise<UpdatePlayerResponse> {
     const player = await this.playersRepository.findById(playerId);
 
@@ -51,10 +48,6 @@ class UpdatePlayerBusinessLogic {
       }
 
       player.nickname = nickname.toLowerCase();
-    }
-
-    if (role) {
-      player.role = role;
     }
 
     if (oldPassword) {

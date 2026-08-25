@@ -49,9 +49,9 @@ class ResetPasswordBusinessLogic {
       throw new AppError('Token expired', 401);
     }
 
-    await this.hashProvider.generateHash(password);
+    const hashedPassword = await this.hashProvider.generateHash(password);
 
-    player.password = password;
+    player.password = hashedPassword;
 
     await this.playersRepository.save(player);
 

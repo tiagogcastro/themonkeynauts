@@ -17,6 +17,7 @@ import { ResourceNotFoundError } from './errors/resource-not-fount-error';
 export type DepositTokensRequestDTO = {
   playerId: string;
   txHash: string;
+  amount?: number;
 };
 
 type DepositTokensErrors = PlayerNotFoundError;
@@ -47,6 +48,7 @@ class DepositTokensBusinessLogic {
   async execute({
     playerId,
     txHash,
+    amount,
   }: DepositTokensRequestDTO): Promise<DepositTokensResponse> {
     const player = await this.playersRepository.findById(playerId);
 
@@ -65,6 +67,7 @@ class DepositTokensBusinessLogic {
         from: player.wallet as string,
         txHash,
         crypto: SaleCrypto.SPC,
+        amount,
       });
 
     if (confirmTransactionResult.isLeft()) {
@@ -73,9 +76,9 @@ class DepositTokensBusinessLogic {
       return left(error);
     }
 
-    const { amount } = confirmTransactionResult.value;
+    const { amount: confirmedAmount } = confirmTransactionResult.value;
 
-    const spcAmount = amount;
+    const spcAmount = confirmedAmount;
 
     resource.spc += spcAmount;
 

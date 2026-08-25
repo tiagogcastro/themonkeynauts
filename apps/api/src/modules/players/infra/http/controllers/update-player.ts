@@ -25,7 +25,6 @@ class UpdatePlayerController
     newPassword,
     newPasswordConfirmation,
     oldPassword,
-    role,
     player,
   }: UpdatePlayerControllerRequestDTO): Promise<HttpResponse> {
     const playerId = player.id;
@@ -40,7 +39,6 @@ class UpdatePlayerController
       newPassword,
       newPasswordConfirmation,
       oldPassword,
-      role,
     });
 
     if (result.isLeft()) {

@@ -26,6 +26,8 @@ class DisableEnablePlayerBusinessLogic {
 
     player.isEnabled = !player.isEnabled;
 
+    await this.playersRepository.save(player);
+
     return right(player);
   }
 }

@@ -29,6 +29,7 @@ class DepositTokensController
 {
   async handle({
     txHash,
+    amount,
     player,
     playerId,
   }: DepositTokensControllerRequestDTO): Promise<HttpResponse> {
@@ -39,6 +40,7 @@ class DepositTokensController
 
       const result = await depositTokensBusinessLogic.execute({
         txHash,
+        amount,
         playerId: playerId || player.id,
       });
 

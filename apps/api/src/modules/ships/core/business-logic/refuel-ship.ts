@@ -19,7 +19,7 @@ import {
 } from './errors';
 
 export type RefuelShipRequestDTO = {
-  shipId: string;
+  shipId?: string;
   playerId: string;
 };
 
@@ -62,7 +62,9 @@ class RefuelShipBusinessLogic {
       return left(new ResourceNotFoundError());
     }
 
-    const ship = await this.shipsRepository.findById(shipId, false);
+    const targetShipId = shipId || player.activeShipId;
+
+    const ship = await this.shipsRepository.findById(targetShipId as string, false);
 
     if (!ship) {
       return left(new CannotRefuelShipFoundError());

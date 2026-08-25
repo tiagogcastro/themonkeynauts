@@ -2,22 +2,25 @@ import { inject, injectable } from 'tsyringe';
 import { Ship } from '@modules/ships/domain/entities/ship';
 
 import { ShipNotFoundError } from '@modules/players/core/business-logic/errors/ship-not-fount-error';
+import { PlayerNotFoundError } from '@modules/players/core/business-logic/errors/player-not-fount-error';
 
 import { Either, left, right } from '@shared/core/logic/either';
 
 import { IGameParamsRepository } from '@modules/game-params/domain/repositories/game-params-repositories';
+import { IPlayersRepository } from '@modules/players/domain/repositories/players-repository';
 import { IShipsRepository } from '../../domain/repositories/ships-repositories';
 import { CannotConsumeFuelError } from './errors/cannot-consume-fuel';
 import { GameParamsNotFoundError } from './errors/game-params-not-found-error';
 
 export type ConsumeFuelRequestDTO = {
-  shipId: string;
+  shipId?: string;
   playerIp: string;
+  playerId?: string;
   action: 'Travel' | 'BountyHunt';
 };
 
 type ConsumeFuelResponse = Either<
-  ShipNotFoundError | CannotConsumeFuelError,
+  ShipNotFoundError | CannotConsumeFuelError | PlayerNotFoundError,
   {
     currentFuel: number;
     consumedNow: number;
@@ -32,13 +35,31 @@ class ConsumeFuelBusinessLogic {
 
     @inject('GameParamsRepository')
     private gameParamsRepository: IGameParamsRepository,
+
+    @inject('PlayersRepository')
+    private playersRepository: IPlayersRepository,
   ) {}
 
   async execute({
     shipId,
     action,
+    playerId,
   }: ConsumeFuelRequestDTO): Promise<ConsumeFuelResponse> {
-    const ship = await this.shipsRepository.findById(shipId, false);
+    let targetShipId = shipId;
+
+    if (!targetShipId) {
+      const player = playerId
+        ? await this.playersRepository.findById(playerId)
+        : null;
+
+      if (!player) {
+        return left(new PlayerNotFoundError());
+      }
+
+      targetShipId = player.activeShipId as string;
+    }
+
+    const ship = await this.shipsRepository.findById(targetShipId, false);
 
     if (!ship) {
       return left(new ShipNotFoundError());
