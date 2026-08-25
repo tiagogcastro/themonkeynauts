@@ -1,0 +1,16 @@
+{
+  "name": "themonkeynauts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Monkeynauts — space P2E game monorepo (web + api + contracts)",
+  "packageManager": "pnpm@11.23.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev:server",
+    "chain": "pnpm --filter contracts chain",
+    "deploy:contracts": "pnpm --filter contracts deploy:local"
+  }
+}
