@@ -10,7 +10,7 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev:server",
-    "chain": "pnpm --filter contracts chain",
-    "deploy:contracts": "pnpm --filter contracts deploy:local"
+    "chain": "pnpm --filter api chain",
+    "deploy:contracts": "pnpm --filter api deploy:mock-spc"
   }
 }

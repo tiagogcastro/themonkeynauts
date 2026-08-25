@@ -21,10 +21,10 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-# hardhat
-packages/contracts/artifacts/
-packages/contracts/cache/
-packages/contracts/deployments/localhost/
+# hardhat (apps/api)
+apps/api/artifacts/
+apps/api/cache/
+apps/api/deployments/
 
 # local-only files
 PLAN.local.md
