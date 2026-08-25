@@ -57,6 +57,10 @@ class ConsumeFuelBusinessLogic {
       }
 
       targetShipId = player.activeShipId as string;
+
+      if (!targetShipId) {
+        return left(new ShipNotFoundError());
+      }
     }
 
     const ship = await this.shipsRepository.findById(targetShipId, false);

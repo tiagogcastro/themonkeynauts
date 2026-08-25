@@ -64,6 +64,10 @@ class RefuelShipBusinessLogic {
 
     const targetShipId = shipId || player.activeShipId;
 
+    if (!targetShipId) {
+      return left(new CannotRefuelShipFoundError());
+    }
+
     const ship = await this.shipsRepository.findById(targetShipId as string, false);
 
     if (!ship) {

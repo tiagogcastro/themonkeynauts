@@ -6,6 +6,7 @@ interface IPlayersRepository {
   findByWallet(wallet: string): AsyncMaybe<IPlayer>;
   hasWallet(playerId: string): Promise<boolean>;
   findById(id: string): AsyncMaybe<IPlayer>;
+  findByIdIncludingDisabled(id: string): AsyncMaybe<IPlayer>;
   findByNickname(nickname: string): AsyncMaybe<IPlayer>;
   create(player: IPlayer): Promise<void>;
   save(player: IPlayer): Promise<void>;

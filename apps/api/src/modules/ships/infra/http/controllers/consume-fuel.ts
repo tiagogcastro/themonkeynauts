@@ -28,6 +28,7 @@ class ConsumeFuelController
 
     const result = await consumeFuelBusinessLogic.execute({
       ...data,
+      playerId: data.playerId || data.player.id,
     });
 
     if (result.isLeft()) {

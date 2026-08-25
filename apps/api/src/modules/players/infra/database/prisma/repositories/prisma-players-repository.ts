@@ -88,6 +88,20 @@ class PrismaPlayersRepository implements IPlayersRepository {
     return parsePlayer(player);
   }
 
+  async findByIdIncludingDisabled(playerId: string): AsyncMaybe<IPlayer> {
+    const player = await prisma.player.findFirst({
+      where: {
+        id: playerId,
+      },
+    });
+
+    if (!player) {
+      return null;
+    }
+
+    return parsePlayer(player);
+  }
+
   async create(player: IPlayer): Promise<void> {
     const { id: playerId, ...props } = player;
 

@@ -18,7 +18,10 @@ class DisableEnablePlayerBusinessLogic {
   ) {}
 
   async execute(playerId: string): Promise<DisableEnablePlayerResponse> {
-    const player = await this.playersRepository.findById(playerId);
+    // disabled players are invisible to findById, so the toggle must
+    // look them up without the isEnabled filter to be able to re-enable
+    const player =
+      await this.playersRepository.findByIdIncludingDisabled(playerId);
 
     if (!player) {
       return left(new PlayerNotFoundError());
