@@ -24,7 +24,7 @@ export const Content = styled.div`
 
   min-height: calc(100vh - 2.4rem);
 
-  margin: 0 auto 24px;
+  margin: 0 auto;
 
   padding: 0 3.2rem 12.8rem;
 
@@ -38,7 +38,11 @@ export const Content = styled.div`
   @media(min-width: 1024px) {
     max-width: 1024px;
 
-    min-height: 900px;
+    height: calc(100vh - 2.4rem);
+    min-height: unset;
+
+    display: flex;
+    flex-direction: column;
 
     padding-top: 32px;
 
@@ -60,6 +64,12 @@ export const MainContent = styled.main`
   }
 
   @media(min-width: 1024px) {
-    max-height: 90%;
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
   }
 `;
