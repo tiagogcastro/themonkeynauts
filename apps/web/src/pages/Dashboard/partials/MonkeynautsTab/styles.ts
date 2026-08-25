@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
-import { COLORS } from '@/theme';
 import bg_items from '@/assets/images/bg_items.png';
+import { COLORS } from '@/theme';
+import styled, { css } from 'styled-components';
 
 export type ListMonkeynautsPropsContainer = {
   loadingMonkeynauts: boolean;
@@ -22,7 +22,7 @@ export const ListMonkeynautsContainer = styled.div<ListMonkeynautsPropsContainer
   @media(min-width: 1400px) {
     max-width: 80%;
   }
-`; 
+`;
 
 export const Content = styled.section`
   overflow: auto;
