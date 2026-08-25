@@ -1,5 +1,5 @@
 import { IHashProvider } from '@shared/domain/providers/hash-provider';
-import { compare, compareSync, hash } from 'bcrypt';
+import { compare, compareSync, hash } from 'bcryptjs';
 
 class BCryptHashProvider implements IHashProvider {
   compareHashSync(payload: string, hashed: string): boolean {

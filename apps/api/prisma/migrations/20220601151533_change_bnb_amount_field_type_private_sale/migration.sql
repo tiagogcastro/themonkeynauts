@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "private_sales" ALTER COLUMN "bnbAmount" SET DATA TYPE DOUBLE PRECISION;

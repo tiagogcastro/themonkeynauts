@@ -1,6 +1,13 @@
+import { SignOptions } from 'jsonwebtoken';
+
 const authConfig = {
-  secret: process.env.APP_SECRET || '*',
-  expiresIn: '1d',
+  jwt: {
+    secret: process.env.APP_SECRET || 'change-me-in-development',
+    expiresIn: '1d',
+  } satisfies {
+    secret: string;
+    expiresIn: SignOptions['expiresIn'];
+  },
 };
 
 export { authConfig };

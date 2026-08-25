@@ -5,13 +5,13 @@ import { authConfig } from '../../../config/auth';
 
 export class JWTokenProvider implements ITokenProvider {
   verify<T = JwtPayload>(token: string): T {
-    const { secret } = authConfig;
+    const { secret } = authConfig.jwt;
 
     return verify(token, secret) as T;
   }
 
   generate(playerAuth: IPlayerAuth): string {
-    const { secret, expiresIn } = authConfig;
+    const { secret, expiresIn } = authConfig.jwt;
 
     const { payload: _, ...rest } = playerAuth;
 
